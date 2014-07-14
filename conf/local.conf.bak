@@ -4,7 +4,7 @@
 #db.default.user=postgres
 #db.default.password=1234abcd
 db.default.driver=org.postgresql.Driver
-db.default.url="postgres://alhuycjjdhznck:tuYkBDUn7Wg2bCeMDTELRvdpKv@ec2-54-243-49-82.compute-1.amazonaws.com:5432/d77s8d0sm962op"
+db.default.url="postgres://alhuycjjdhznck:SXSf4s2_M4ooYPPKk2aEpI7kH2@ec2-54-243-49-82.compute-1.amazonaws.com:5432/d77s8d0sm962op"
 
 #db.default.url="jdbc:postgresql:grabongo2"
 #db.default.user=postgres
