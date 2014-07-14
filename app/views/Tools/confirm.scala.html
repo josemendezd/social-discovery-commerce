@@ -1,0 +1,280 @@
+@(title: String,pn: String,purl: String,pil: String,currency:String,cp:Double,u:User )
+
+@inpfld(name:String,displayname:String,rq:Boolean=false)={
+<div class="control-group">
+  <label class="control-label"  for="@name">@displayname @if(rq){ @mandatory }:</label>
+  <div class="controls">
+	<input type="text" id="@name" name="@name" class="input-xlarge">
+  </div>
+</div>
+}
+
+@mandatory={<span style="color:red">*</span>}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta charset="UTF-8">
+    
+    <title>@title</title>
+    
+    <meta content="" name="keywords" />
+    <meta content="" name="description" />
+    
+    <script src="@routes.Assets.at("js/custom.js")"></script>
+    <script src="@routes.Assets.at("js/knockout-2.3.0.js")"></script>
+    <script src="@routes.Assets.at("js/knockout.mapping.js")"></script>    
+    <link media="screen" type="text/css" rel="stylesheet" href="@routes.Assets.at("style.css")" />
+    <link href="@routes.Assets.at("css/main.css")" media="screen" rel="stylesheet" />
+    @*
+    <script src="@routes.Assets.at("javascripts/global.js")"></script>
+    *@
+    <script src="@routes.Assets.at("js/global_no_coffee.js")"></script>
+    <link href="@routes.Assets.at("bl/css/fonts/fonts.css")" rel="stylesheet" type="text/css">
+    
+    <link href="@routes.Assets.at("css/bootstrap.css")" media="screen" rel="stylesheet" />
+    <link href="@routes.Assets.at("css/bootstrap-responsive.css")" media="screen" rel="stylesheet" />
+    <style>
+    body{padding-top: 0px;}
+    .text-nav {
+	    font-weight: bold;
+	}
+	.text-nav ul li a {
+	    cursor: pointer;
+	    border-bottom: 3px solid;
+	}
+	.text-nav ul li a:hover {
+	    cursor: pointer;
+	    text-decoration: none;
+	    border-bottom:none;
+	    color:green;
+	}
+	
+	</style>
+  
+  </head>
+
+  <body>
+  
+  
+  <div class="row">
+	<div>
+		<div class="pull-left" style="max-width:40%">
+			<div class="thumblimg-large">
+				<img title="@pn" class="logoicon" src="@pil" alt="Image Unavailable"/>
+			</div>
+		</div>
+		<div class="pull-left" style="width:60%;display: inline-block;">
+			<form class="form-horizontal searchposition" action="@routes.Useract.CreateProduct" method="post" data-bind="submit:verifyform">
+				
+				<input type="hidden" name="imagelocation" value="@pil">
+				<input id="categoryidentity" type="hidden" name="categoryid" value="0">
+				
+				@if(pn==null){ 
+					@inpfld("productname","ProductName",true) 
+				}else{
+					<input type="hidden" name="productname" value="@pn">
+				}
+				
+				<div class="control-group">
+				  <div class="controls">
+					<h2 class="textcutoverflow">@pn</h2>
+				  </div>
+				</div>
+				
+				
+				<div class="control-group">
+				  <label class="control-label"  for="price">Price & Currency @mandatory :</label>
+				  <div class="controls">
+					<input class="prependedInput" type="text" value="@cp" name="pricetag">
+					<select name="currency">
+					    <option @if(currency=="USD"){selected="selected"} value="$">$</option>
+					    <option @if(currency=="EUR"){selected="selected"} value="£">€</option>
+					    <option @if(currency=="GBP"){selected="selected"} value="£">£</option>
+					    <option @if(currency=="CAD"){selected="selected"} value="Can$">Can$</option>
+					    <option @if(currency=="AUD"){selected="selected"} value="$A">$A</option>
+					    <option @if(currency=="JPY"){selected="selected"} value="¥">¥</option>
+					</select>
+				  </div>
+				</div>
+				
+				<div class="control-group">
+				  <label class="control-label"  for="gender">Gender</label>
+				  <div class="controls">
+					<label class="radio">
+						<input type="radio" name="gender" id="genderoptionsRadios1" value="@DInitial.GENDER.FEMALE" @if(u.gender==DInitial.GENDER.FEMALE){ checked }>
+							Female
+					</label>
+					<label class="radio">
+						<input type="radio" name="gender" id="genderoptionsRadios2" value="@DInitial.GENDER.MALE" @if(u.gender==DInitial.GENDER.MALE){ checked }>
+							Male
+					</label> 
+					<label class="radio">
+						<input type="radio" name="gender" id="genderoptionsRadios3" value="@DInitial.GENDER.UNKNOWN" @if(u.gender==DInitial.GENDER.UNKNOWN){ checked }>
+							For Both
+					</label>
+				  </div>
+				</div>
+				
+				
+				
+				@if(purl==null){ 
+					@inpfld("capturesite","StoreURL") 
+				}else{
+					<input type="hidden" name="capturesite" value="@purl">
+				}
+				
+				@inpfld("location","Location")
+				
+				@*
+				
+				@inpfld("servicearea","Service Area")
+				
+				*@
+				
+				<div class="control-group">
+				  <label class="control-label"  for="description">Short Description :</label>
+				  <div class="controls">
+					<textarea name="description" rows="5" cols="120" maxlength="255" class="span4"></textarea>
+				  </div>
+				</div>
+				
+				
+				
+				<div id="categoryselector">				
+					<div class="control-group">
+					  <label class="control-label">Inside Category  @mandatory :</label>
+					  <div class="controls">
+						<div>						
+						  	<ul class="breadcrumb"  data-bind="foreach: pcatglist,visible:pcatglist().length > 0">
+						  		<li><a class="underline"  href="#" data-bind="click:pcatgclick,text:name"></a></li>
+						  		<span class="divider">/</span>
+						  	</ul>						  	
+					  	</div>
+					  	<div class="text-nav onnextline">
+							<ul class="inline"  data-bind="foreach: catglist,visible:catglist().length > 0">
+						  		<li><a data-bind="click:catgclick,text:name"></a></li>
+						  	</ul>
+						</div>					  	
+					  						  							
+					  </div>
+					</div>
+					
+					
+				</div>
+					
+					
+					  
+					
+					
+				  
+				
+				
+				
+				  
+				  
+				  
+				
+				
+				<div class="help-block text-center">
+					<button type="submit" class="btn btn-large btn-info">Add this Product</button>
+				</div>
+			</form>
+			
+			<div class="onnextline alert aert-danger" data-bind="visible:errormessage().length>0"><span data-bind="text:errormessage"></span></div>
+		</div>
+	</div>
+</div>
+  
+
+	
+  
+  
+  @Templates.su.jready{
+  
+  @Html(play.Routes.javascriptRouter("categoryloader",controllers.routes.javascript.Application.RetrieveCategoryList));
+  
+  function resizecbx()
+	{
+		try{
+		parent.$().cboxresize($( document ).width(),$( document ).height());
+		}catch(err){}
+	}
+  
+  resizecbx();
+  
+  function CategoryView() {	
+  		self.categoryid = ko.observable(1);	
+		self.catglist = ko.observableArray([]);
+		self.pcatglist = ko.observableArray([ko.mapping.fromJS(	@Html(Category.ChildJSON(0)))]);		
+		self.errormessage=ko.observable('');
+		
+		
+		self.catgclick=function(ctg)
+		{
+			self.categoryid(ctg.id());						
+			var srvrp=$().setresponse({url:categoryloader.controllers.Application.RetrieveCategoryList(ctg.id()).absoluteURL(),failans:false,successnode:"child"});
+		    if(srvrp===false){ return false; }
+		    self.pcatglist.push(ctg);
+		    self.catglist.removeAll();
+		 	$.each(srvrp,function(clcindex, clcattr){self.catglist.push(ko.mapping.fromJS(clcattr));});
+		 	return true;
+		}
+		
+		
+		self.pcatgclick=function(ctg)
+		{
+			if(self.catgclick(ctg))
+			{
+				
+				$indx=self.pcatglist.indexOf(ctg)+1;
+				$leng=self.pcatglist().length;
+				if($indx>0 && $leng>0)
+					self.pcatglist.splice($indx, $leng-$indx);
+				
+			}
+		}
+		self.loadinitcatg=function()
+		{
+			var inctglist=[@Html(Category.ChildJSON(Category.root().id))];
+			$.each(inctglist,function(clcindex, clcattr){self.catglist.push(ko.mapping.fromJS(clcattr));});
+		}
+		self.loadinitcatg();
+		
+		self.verifyform=function(){
+			if(self.categoryid()<=1)
+			{
+				self.errormessage("No Category Selected. Please select a category");
+				return false;
+			}
+			try{
+			if($('#productname').val() && $('#productname').val().trim().length<2)
+			{
+				self.errormessage("Enter valid product name");
+				return false;
+			}
+			}catch(err){}
+			return true;
+		}
+		
+		self.pform=ko.computed(function() {	
+	  			$('#categoryidentity').val(self.categoryid());
+				});
+		
+		
+	}
+	var thiscategoryview=new CategoryView();
+	
+	ko.applyBindings(thiscategoryview);
+	
+  }
+  
+  
+	
+  </body>
+</html>
+

@@ -1,0 +1,249 @@
+@(searchkey:String,index:Int =0,specificsearch:FSearch=null)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+@productsearch(key:String)={
+<div id="productgrid" class="onnextline">
+      <div id="headermessages" class="onnextline">
+        <!-- Begin .category-title -->
+               <div class="category-title">
+                  <div class="sort hidden-xs hidden-sm">
+                  	<form id="fastsearch" class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}"  role="form">
+                     <select data-bind="options: [1,2,3],optionsText: function(item) {ao=['Relevance','Newest','Most Loved'];return 'Sort By '+ ao[item-1];}, value: sortseq"></select>
+		             <select data-bind="options: [0,1,2,3,4,5],optionsText: function(item) {ao=['Any (Price Range)','$0 - $50','$51 - $500','$501 - $1000','$1001 - $10000','$10001 - Above'];return ao[item];}, value: pricerange"></select>             
+		             <div class="form-group">
+	                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search by typing a keyword ">
+	                 </div>
+                    </form>
+                    <div class="text-right padding-small" data-bind="visible: sfm().searchtext().length>0"><a href="javascript:void(0);" class="label padding-small" data-bind="click:updateFollowing,text:amIfollowing()?'Unfollow Search':'Follow Search',css:amIfollowing()?' label-warning':' label-default'"></a></div>
+                  </div>
+                  <div class="clearfix padding-small"></div>
+               </div>
+               <!-- End .category-title -->         
+      </div>
+     @Templates.su.panepbko() 
+      
+	<div class="hidden">
+      @Templates.su.dopbko()
+	</div>
+	
+</div>      
+<script>
+function PBDocInit(ldiv)
+{
+	function fms(ifs)
+	{
+		var self=this;
+		self.sortseq=ko.observable(ifs.srt);
+		self.gendercont=ko.observable(ifs.gend);
+		self.pricerange=ko.observable(ifs.prc);
+		self.searchtext=ko.observable(ifs.stext);
+		self.page=ifs.pgn; 
+		self.catgid=ko.observable(ifs.catg);
+		self.pagesize=ifs.ps;
+	};	
+	@Templates.js.pbactionjs("singletypesearchcontext"){
+		@if(specificsearch!=null){
+			self.fr=new fms({srt:1, gend:@specificsearch.genlow, prc:@specificsearch.GetPriceIndex(), stext:'@key',catg:0, pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE});	
+		}else{
+			self.fr=new fms({srt:1, gend:0, prc:0, stext:'@key',catg:0, pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE});			
+		}
+		self.totalproductcount=ko.observable(@Product.MatchedProductsCount(GHelp.filterSql(searchkey,0,0,0,"")));
+		self.sfm = ko.observable(self.fr);
+		self.moreloadtext = ko.observable('<i class="icon-download"></i>Load More');
+		self.amIfollowing = ko.observable(false);
+		
+		@Html(play.Routes.javascriptRouter("shoppageloader",controllers.routes.javascript.Useract.SaveMySearch,controllers.routes.javascript.Useract.FindthisSearch,controllers.routes.javascript.Application.SearchTotalProductCount));
+		
+		self.loadProd = function(jsonstring) {			
+			ldiv.display();
+			var sentsuccess=true;
+			var posting = $.post( "@routes.Application.ProductQuery",jsonstring,"json");
+			
+			posting.done(function( data ) {								
+				$prodselect=data['prodgrid'];
+				if(!data['hasmore']){self.fr.page=-1;}				
+				$.each($prodselect,function(prindex, prattr){self.prodList.push(ko.mapping.fromJS(prattr));ldiv.stillbusy();});
+				ldiv.loadcomplete();
+			});
+			posting.fail(function( data ) {
+				ldiv.loadcomplete();	
+				sentsuccess=false;
+			});
+			
+			return sentsuccess;						       
+		};
+		 
+		self.loadMore = function()
+		{
+			if(self.fr.page!==-1 && self.loadProd($.param(self.fr)))
+  				{self.fr.page++;}
+			else{self.moreloadtext('<i class="icon-upload"></i>Completed');}
+		}
+		
+		self.updateFollowing = function()
+		{
+			@subjectPresentOr(){
+				self.amIfollowing($().setresponse({url:shoppageloader.controllers.Useract.SaveMySearch(self.fr.searchtext() ,self.fr.gendercont() ,self.fr.pricerange()).absoluteURL(),failans:false}));
+				}{$().askforloginorsignup();}					    
+		}
+		
+		self.updateAmIFollowing = function()
+		{
+			self.amIfollowing($().setresponse({url:shoppageloader.controllers.Useract.FindthisSearch(self.fr.searchtext() ,self.fr.gendercont() ,self.fr.pricerange()).absoluteURL(),failans:false}));
+		}
+		 
+		self.pform=ko.computed(function() {	
+	  			self.fr.page=0;
+	  			self.prodList.removeAll();
+      				if(self.loadProd($.param(self.fr)))
+	  					self.fr.page++;
+      			self.totalproductcount($().setresponse({url:shoppageloader.controllers.Application.SearchTotalProductCount(self.fr.searchtext() ,self.fr.gendercont() ,self.fr.pricerange()).absoluteURL(),failans:0}));
+   				if(self.fr.searchtext().length>0)
+   				{
+   					self.updateAmIFollowing();
+   				}
+				}).extend({ throttle: 200 });
+	}
+	
+	return thisshopview;
+}
+</script>
+
+}
+
+@storesearch(key:String)={
+<div id="storegrid">
+@Templates.su.sbko()	
+</div>
+<script type="text/javascript">
+function SBDocInit(ldiv)
+{	
+	@Templates.js.sbaction(key=key,hiturl=routes.Application.KeySearch.url){ }{ }
+	return thisstoreview;
+}
+</script>
+
+}
+
+@usersearch(key:String)={
+<div id="usergrid">
+@Templates.su.ubko()	
+</div>
+<script type="text/javascript">
+function UBDocInit(ldiv)
+{	
+	@Templates.js.ubaction(key=key,hiturl=routes.Application.KeySearch.url){ }{ }
+	return thisuserview;
+}
+</script>
+}
+
+@blogsearch(key:String)={
+<div id="bloggrid">
+	<div class="blogsearchgrid" data-bind="foreach: blogList, visible: blogList().length > 0">
+		@Templates.su.bbko()
+	</div>		
+</div>
+<script type="text/javascript">
+function BBDocInit(ldiv)
+{	
+	@Templates.js.bbaction(key=key,hiturl=routes.Application.KeySearch.url){ }{ }
+	return thisblogview;
+}
+</script>
+}
+
+@collectionsearch(key:String)={
+<div id="collectiongrid">
+	<ul class="list-inline" data-bind="foreach: collList, visible: collList().length > 0">
+		@Templates.su.cbko()
+	</ul>
+</div>
+<script type="text/javascript">
+function CBDocInit(ldiv)
+{	
+	@Templates.js.cbaction(key=key,hiturl=routes.Application.KeySearch.url){ }{ }
+	return thiscollectionview;
+}
+</script>
+
+
+}
+
+@ps={
+
+@if(index==DInitial.SEARCH_BLOG){
+	<style>
+		.blogsearchgrid{
+		font-family: Calibri;
+		}
+		.blogsearchgrid .blogunit{margin: 20px,0,0,0;}
+		.blogsearchgrid .blogunit h4{
+			color: rgb(221, 75, 57);
+		}
+		.blogsearchgrid .blogunit .description{
+			margin-left: 40px;
+			font-size: 11px;
+		}
+		.desclabel{color:#808080;}
+		.desccontent{color:#696969;font-weight: bold;}	
+	</style>
+	@helper.javascriptRouter("blogsearch")(routes.javascript.Application.ContributorPage,routes.javascript.Application.GetBlogPage,routes.javascript.Application.GetBlogListByTag)
+}
+<style>
+	.button-margin{margin:15px;}
+</style>
+
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Search Results @Boozology"){@ps}
+}{
+	@Templates.pageheader(){
+	<div class="container">
+		<div class="row text-center">
+			<span>Showing search results for: </span><h2>"@searchkey"</h2>
+		</div>
+	</div>
+			
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){
+	  <div class="container smartcontainer">
+        <div class="row">
+	        <div class="clearfix padding-small"></div>
+	        <div id="singletypesearchcontext">		
+				<div class="text-center">
+	                <a class="btn btn-default btn-lg button-margin @if(index==DInitial.SEARCH_PRODUCT){active}" href="@routes.Application.RunSearch(searchkey,DInitial.SEARCH_PRODUCT)"><b data-bind="text:totalproductcount">@Product.MatchedProductsCount(GHelp.filterSql(searchkey,0,0,0,""))</b> Products</a>
+					<a class="btn btn-default btn-lg button-margin @if(index==DInitial.SEARCH_USER){active}" href="@routes.Application.RunSearch(searchkey,DInitial.SEARCH_USER)"><b>@Contributor.MatchedUsersCount(searchkey)</b> Users</a>
+					<a class="btn btn-default btn-lg button-margin @if(index==DInitial.SEARCH_COLLECTION){active}" href="@routes.Application.RunSearch(searchkey,DInitial.SEARCH_COLLECTION)"><b>@UserCollection.MatchedCollectionsCount(searchkey)</b> Collections</a>
+					<a class="btn btn-default btn-lg button-margin @if(index==DInitial.SEARCH_STORE){active}" href="@routes.Application.RunSearch(searchkey,DInitial.SEARCH_STORE)"><b>@Store.MatchedStoresCount(searchkey)</b> Stores</a>
+					<a class="btn btn-default btn-lg button-margin @if(index==DInitial.SEARCH_BLOG){active}" href="@routes.Application.RunSearch(searchkey,DInitial.SEARCH_BLOG)"><b>@Blog.SearchbytitleCount(searchkey)</b> BLOGS</a>
+	            </div>
+				<div class="clearfix padding-small"></div>
+				<div class="onnextline">
+				@if(index==DInitial.SEARCH_PRODUCT){@productsearch(searchkey)}
+				@if(index==DInitial.SEARCH_USER){@usersearch(searchkey)}
+				@if(index==DInitial.SEARCH_COLLECTION){@collectionsearch(searchkey)}
+				@if(index==DInitial.SEARCH_STORE){@storesearch(searchkey)}
+				@if(index==DInitial.SEARCH_BLOG){@blogsearch(searchkey)}
+				</div>
+			</div>
+		</div>
+	</div>
+		@Templates.su.jready{
+			var infscr=0;
+			@if(index==DInitial.SEARCH_PRODUCT){infscr=PBDocInit(ldiv);}
+			@if(index==DInitial.SEARCH_USER){infscr=UBDocInit(ldiv);}
+			@if(index==DInitial.SEARCH_COLLECTION){infscr=CBDocInit(ldiv);}
+			@if(index==DInitial.SEARCH_STORE){infscr=SBDocInit(ldiv);}
+			@if(index==DInitial.SEARCH_BLOG){infscr=BBDocInit(ldiv);}
+			@Templates.js.infinitescroll(false){infscr.loadMore();}			
+		}		
+	}
+}{
+	@Templates.pagefooter(){ }
+}			

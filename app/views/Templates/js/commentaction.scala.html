@@ -1,0 +1,65 @@
+@(idofpassed:Long,divid: String="commentdiv",hiturl:String,specific:Boolean=false,Ispost:Boolean=true)(PageContentParam: Html)(ClassExtension: Html)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+
+@if(specific){ @PageContentParam }else{
+function fms(ifs)
+{
+	var self=this;
+	self.cmnttxt=ko.observable(ifs.ct);
+	self.product=ifs.prdct;
+};
+var initcontent	={ct:'',prdct:@idofpassed};
+var urlforpostingcomment="@routes.Useract.PutcommentonProduct";
+}
+
+function CommentView(passedurl) {	
+	var self = this;
+	self.fr=new fms(initcontent);
+	self.sfm = ko.observable(self.fr);
+	
+	self.postbg = ko.observable('');
+	self.commentlist = ko.observableArray([]);
+	
+	self.postcomment = function(e){
+			@subjectPresentOr(){
+			self.postbg("");
+			var retnresp=$().setresponse({ispost:true,url:urlforpostingcomment,argdata:$.param(self.fr),failans:false});
+			if(retnresp===false){ 
+				$().giveWarnings();
+				self.postbg("lred");
+			}else{
+				self.commentlist.push(retnresp);
+				self.fr.cmnttxt('');
+			}
+			}{$().askforloginorsignup();}
+		}
+	
+	self.loadComment = function(jsonstring) {			
+		
+		var sentsuccess=true;
+		var posting = @if(Ispost){$.post( passedurl,jsonstring,"json");}else{ $.getJSON( passedurl,jsonstring);}
+		
+		posting.done(function( data ) {
+			$cmntselect=data['cmntgrid'];				
+			$.each($cmntselect,function(cmindex, cmattr){self.commentlist.push(cmattr);});			
+		});
+		posting.fail(function( data ) {	
+			sentsuccess=false;
+		});
+		
+		return sentsuccess;						       
+	};
+	
+	@ClassExtension
+	
+	self.loadComment();
+	 
+	self.pform=ko.computed(function() {	
+  			self.commentlist.removeAll();  			
+			}).extend({ throttle: 200 });
+}
+var thiscommentview=new CommentView("@hiturl");
+
+ko.applyBindings(thiscommentview,$('#@divid')[0]);

@@ -1,0 +1,40 @@
+@(newpageform: Form[_])
+
+@import helper._
+
+@ps={
+<script src="@routes.Assets.at("ckeditor/ckeditor.js")"></script>
+<style>
+dd.info{font-size: xx-small!important;color:gray;}
+dd.error{color:red!important;}
+</style>
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Edit Page @Boozology"){@ps}
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){
+		<div class="row">
+		  <div class="span6">
+		    <h2> Create a new Page </h2>
+		  </div>
+		</div>
+		
+		@helper.form(routes.Useract.AddContentPage) { 		
+		@inputText(field = newpageform("pagetitle"), args = 'size -> 255, 'placeholder -> "Page Title",'_label ->"Page Title",'class->"span9")		
+		@textarea(field = newpageform("pagecontent"), args = 'rows -> 75, 'cols -> 300 ,'class->"span9",'_label ->"Content")		
+		<input type="submit" value="CREATE PAGE" class="btn btn-primary brectangle">		
+		}
+		@Templates.su.jready{		
+		CKEDITOR.replace( 'pagecontent' );
+		}			
+	}
+}{
+	@Templates.pagefooter(){ }
+}	
+			

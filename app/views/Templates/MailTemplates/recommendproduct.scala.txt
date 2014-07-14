@@ -1,0 +1,7 @@
+@(targetuser:String,actinguser:String,producturl:String)
+Hi @targetuser
+@actinguser has recommended a product for you.
+Visit the page at @producturl to view the recommended product.
+ 
+Cheers From,
+Boozology Team

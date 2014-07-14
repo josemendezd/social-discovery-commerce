@@ -1,0 +1,22 @@
+@()
+<div class="blogunit text-left">
+	<a data-bind="attr:{href:blogsearch.controllers.Application.GetBlogPage(bid()).absoluteURL()}"><h2 data-bind="text:btitle"></h2></a>
+	<div class="description">
+		<ul class="list-inline">
+			<li class="desclabel">Author:</li>
+			<li class="desccontent"><a data-bind="text:bauthor,attr:{href:blogsearch.controllers.Application.ContributorPage(baid()).absoluteURL()}"></a></li>
+			<li></li>
+			<li class="desclabel">Posted:</li>
+			<li class="desccontent"><i class="icon-calendar"></i><span data-bind="text:$().getdate(bpost()).date"></span> &nbsp; <i class="icon-time"></i><span data-bind="text:$().getdate(bpost()).time"></span></li>
+			<li></li>
+			<li class="desclabel">Comments:</li>
+			<li class="desccontent" data-bind="text:bccnt"></li>
+		</ul>
+	</div>	
+	<div class="onnextline">
+		<ul class="list-inline" data-bind="foreach: tags, visible: tags().length > 0">
+			<li><a data-bind="text:tn,attr:{href:blogsearch.controllers.Application.GetBlogListByTag(tn()).absoluteURL()}"  class="label label-default"></a></li>
+		</ul>
+	</div>		
+</div>
+<div class="clearfix padding-small"></div>

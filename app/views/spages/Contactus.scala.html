@@ -1,0 +1,132 @@
+@(cntform:Form[_])
+
+@import net.tanesha.recaptcha.ReCaptcha
+@import net.tanesha.recaptcha.ReCaptchaFactory
+@import helper._
+@import Designs._
+
+@implicitField = @{ FieldConstructor(BLFieldConstructor.f) }
+
+@ps={}
+
+
+@Templates.MasterTemplate(){
+@Templates.pagehead("Administration @Boozology"){@ps}
+}{
+@Templates.pageheader(){		
+	}{ }	
+}{
+@Templates.pagemaincontent(){	
+
+<!-- Begin .container -->
+<div class="container">
+	<!-- Begin .row -->
+	<div class="row">
+		<!-- Begin .col-lg-12 -->
+		<div class="col-lg-12 col-12 col-md-12 col-xs-12 col-sm-12">
+			<div class="page-title">
+				<h1>Contact us</h1>
+				<p class="intro">There is a short list of our most <a href="">frequently asked questions</a>.However,in case you need more information about Boozology or if you need support, please contact us through this form.You can also mail us at support@@boozology.com</p>
+			</div>			
+		</div>
+		<!-- End .col-lg-12 -->
+
+		<!-- Begin .col-lg-9 -->
+		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 col-12">
+
+			<!-- Begin .contact-form-wrap -->
+		    <div class="contact-form-wrap">
+				@form(action = routes.Application.submitcontactus(), args = 'role->"form") {
+					
+					@helper.input(cntform("querytype"), 'class-> "form-control",'_class-> "form-group",'_label -> "Querytype",'_inline->"true") { (id, name, value, args) =>
+					    <select name="@name" id="@id" @toHtmlArgs(args)>
+					    	@for((key,value)<-DInitial.QueryType){
+					  		<option value="@key">@value</option>
+					  		}
+					    </select>
+					}
+					<div class="clearfix"></div>
+					@inputText(field = cntform("firstname"), args = 'size -> 255,'_label -> "First Name", 'placeholder -> "First Name", 'class-> "form-control",'_class-> "form-group",'_inline->"true")
+					<div class="clearfix"></div>
+					@inputText(field = cntform("lastname"), args = 'size -> 255,'_label -> "Last Name", 'placeholder -> "Last Name", 'class-> "form-control",'_class-> "form-group",'_inline->"true")
+					<div class="clearfix"></div>
+					@inputText(field = cntform("email"), args = 'size -> 255,'_label -> "Email", 'placeholder -> "Email", 'class-> "form-control",'_class-> "form-group",'_inline->"true")
+					<div class="clearfix"></div>
+					@inputText(field = cntform("subject"), args = 'size -> 255,'_label -> "Subject", 'placeholder -> "Subject", 'class-> "form-control",'_class-> "form-group",'_inline->"true")
+					<div class="clearfix"></div>
+					@textarea(field = cntform("content"), args = 'rows -> 10, 'cols -> 30,'_label -> "Message", 'placeholder -> "Message Content", 'class-> "form-control",'_class-> "form-group",'_inline->"true")
+					<div class="clearfix"></div>
+					@input(cntform("recaptcha_response_field"), 'class-> "form-control",'_class-> "form-group",'_label -> "Solve Captcha",'_inline->"true") { (id, name, value, args) =>
+						@defining(ReCaptchaFactory.newReCaptcha(controllers.Application.Captchapublic, controllers.Application.Captchaprivate, false)) { c =>
+							  @play.api.templates.Html.apply(c.createRecaptchaHtml(null, null))
+							}
+					}
+					
+					<div class="clearfix"></div>
+					<button type="submit" class="btn btn-default">Submit</button>
+					
+				}
+		
+			</div>
+			<!-- End .contact-form-wrap -->
+
+		</div>
+		<!-- End .col-lg-9 -->
+    
+    <!-- Begin .col-lg-3 -->
+    <div class="col-lg-3 col-md-3 col-sm-9 col-xs-12 col-12">
+        <!-- Begin .box -->
+        <div class="box">
+          <h4>Departments</h4>
+
+          <!-- Begin .quick-nav -->
+          <ul class="quick-nav">
+            <li><i class="icon-caret-right"></i><a href="#">Legal Department</a> </li>
+            <li><i class="icon-caret-right"></i><a href="#">Customer Services</a></li>
+            <li><i class="icon-caret-right"></i><a href="#">Bugs</a></li>
+            <li><i class="icon-caret-right"></i><a href="#">Media</a></li>
+          </ul>
+          <!-- .quick-nav -->
+
+        </div>  
+        <!-- End .box -->
+        
+        <!-- Begin .box -->
+        <div class="box">
+          <h4>Address</h4>
+        <p>Boozology</p>
+        <p>Str. Mihai Voda Iasi, Nr.2 Bl.B2 Romania Iasi</p>
+<p>Call Us: <span class="phone">(0040)  747 - 452321</span></p>
+        </div>
+        <!-- End .box -->
+
+  <!-- Begin .box -->
+        <div class="box">
+          <h4>Social</h4>
+
+          <!-- Begin .quick-nav -->
+          <ul class="quick-nav">
+            <li><i class="icon-caret-right"></i><a href="https://twitter.com/BOOZOLOGYdotCOM">Twitter</a></li>
+            <li><i class="icon-caret-right"></i><a href="https://www.facebook.com/boozologyOfficial">Facebook</a></li>
+            <li><i class="icon-caret-right"></i><a href="https://plus.google.com/+Boozology">Google +</a></li>
+          </ul>
+          <!-- .quick-nav -->
+
+        </div>  
+        <!-- End .box -->
+
+    </div>
+    <!-- col-lg-3 -->
+		
+	</div>
+	<!-- End .row -->
+</div>
+<!-- End .container -->			
+@Templates.su.jready{
+			
+}
+	
+}
+}{
+@Templates.pagefooter(){ }
+}	

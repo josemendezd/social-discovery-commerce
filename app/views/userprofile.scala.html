@@ -1,0 +1,800 @@
+@(userx:Contributor,selectedtab:Int=DInitial.USER_RELATION_QUERY.RECENT)(implicit session: play.mvc.Http.Session)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+@isactive(presentcontext:Int)={@if(presentcontext==selectedtab){ active }}
+
+@ps={
+<style>
+
+.profile-wall .nav-tabs li a {
+    padding: 6px 11px;
+}
+.profile-wall .nav-tabs {
+    border-width: 0px;
+}
+.follow span{
+	margin-right: 3px;
+	color:rgb(240, 87, 33);
+}
+.row .sort {
+    list-style: none outside none;
+    float: right;
+    margin-bottom: 10px;
+}
+.row .sort  select{
+	float:left;
+	margin-right:20px;
+	border:none;
+	color: rgb(177, 82, 82);
+}
+.row .sort input  {
+	margin-right:0px;
+}
+.row .sort select i {
+	color:#f6921e;
+}
+.row .sort select option {
+	color: maroon;
+}
+.nav.nav-tabs li{
+	text-align: center;
+}
+.nav.nav-tabs li span{
+	color: black;
+}
+.box ul li span{
+	color: brown;
+	margin-left: 5px;	
+}
+
+</style>
+@helper.javascriptRouter("UserLink")(routes.javascript.Useract.GetComplainForm)
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("User Profile @Boozology"){@ps}
+}{
+	@Templates.pageheader(){	}{ }	
+}{
+	@Templates.pagemaincontent(){
+	
+<!-- Begin .container -->
+<div class="container user-profile-page">
+   <!-- Begin .row -->
+   <div class="row">
+      <!-- Begin .col-lg-12 -->
+      <!-- End .col-lg-12 -->
+      <!-- Begin .col-lg-3 -->
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 col-12">
+         <div class="profile-sidebar">
+            <!-- Begin img-profile -->
+            <div class="img-profile">
+               <img src="@userx.user.getusersimage()" class="img-responsive" alt="@userx.user.name">
+            </div>
+            <!-- End img-profile -->
+            <h3 class="text-center">@userx.user.name</h3>
+            <div class="box">
+               <p>Quick Status:</p>
+               <ul class="follow">
+                  <li><span>@Contributor.LeadersCount(userx)</span>People being Followed</li>
+                  <li><span>@Contributor.FollowersCount(userx)</span>People are Followers</li>
+                  <li><span>@Follow.GetStoresCount(userx.id)</span>Stores are Followed</li>
+                  <li><span>@FSearch.UserFollowedSearchCount(userx)</span>Searches are Followed</li>
+                  <li><span>@userx.Liked.size</span>Products Loved</li>
+                  <li><span>@userx.Owned.size</span>Products Tried</li>
+                  <li><span>@userx.Wanted.size</span>Products Wanted</li>
+                  <li><span>@Contributor.UsersPersonalCollectionsCount(userx)</span>in Collection</li>
+                  
+               </ul>
+            </div>
+            <!-- End box -->
+            @if(GHelp.VerifyACL(DInitial.CURRENT_ACL.SELF_ONLY,userx.user)){
+            <div class="box">
+               <!-- Begin .quick-nav -->               
+               <ul class="quick-nav">
+                  <li><i class="icon-caret-right"></i><a href="@routes.Application.profile()">Settings</a></li>
+                  <!-- <li><i class="icon-caret-right"></i><a href="#">My Orders</a></li> -->
+                  <!-- <li><i class="icon-caret-right"></i><a href="#">Invites</a></li> -->
+                  <!-- <li><i class="icon-caret-right"></i><a href="#">My Credits</a></li> -->
+                  <li><i class="icon-caret-right"></i><a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout()">Log out</a></li>
+               </ul>
+               <!-- .quick-nav -->
+            </div>
+            }
+            <!-- End box -->
+         </div>
+         <!-- End profile-sidebar -->
+      </div>
+      <!-- End .col-lg-3 -->
+      <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 col-12">
+
+         <div class="profile-wall">
+         	<div id="pagecontrollerunit">
+         		<div class="pull-left">
+					<ul class="list-inline">
+					@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.SELF_ONLY,userx.user)){
+						<li><button  data-bind="click:createnewcollection" class="btn btn-default"><i class="icon-plus"></i> Create New Collection</button>
+							<div id="create_new_collection_box" class="collectioniframe">			          	
+				          		<div id="upnewcollectionformxloader" class="bgloaderico"><span class="full-width">&nbsp;</span></div>
+				          		<span id="upnewcollectionformxstatus" class="text-center onnextline"></span>
+				          		<form id="upnewcollectionform" class="onnextline padding-small" role="form">
+										<input type="text" placeholder="Enter Name" name="collectionname" class="form-control">
+										<div class="clearfix padding-small"></div>
+										<button type="submit" class="btn btn-default btn-info">Create New</button>
+								</form>
+				          	</div>
+						</li>
+						}else{
+						<li><button class="btn btn-default" data-bind="click: $root.follow,css:folstr()?'btn-primary':'btn-danger',text:folstr()?'Unfollow User':'Follow User'">Follow</button></li>
+						}
+					</ul>
+				 </div>
+				 <div class="pull-right">
+				 	<ul class="list-inline btn-sm">
+						@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,null)){
+							
+							@defining(userx.id){ uid =>
+								@if(models.SecurityRole.IsAdmin(userx)){
+									<li><a href="@routes.Application.ChangeUserRole(uid,Application.MODERATOR_ROLE)">Demote to Moderator</a></li>
+									<li><a href="@routes.Application.ChangeUserRole(uid,Application.USER_ROLE)">Demote to User</a></li>
+								}else{
+									@if(models.SecurityRole.IsModerator(userx)){
+										<li><a href="@routes.Application.ChangeUserRole(uid,Application.ADMIN_ROLE)">Promote to Admin</a></li>
+										<li><a href="@routes.Application.ChangeUserRole(uid,Application.USER_ROLE)">Demote to User</a></li>
+									}else{
+										@if(models.SecurityRole.IsUser(userx)){
+											<li><a href="@routes.Application.ChangeUserRole(uid,Application.ADMIN_ROLE)">Promote to Admin</a></li>
+											<li><a href="@routes.Application.ChangeUserRole(uid,Application.MODERATOR_ROLE)">Promote to Moderator</a></li>
+										}
+									}
+								}
+							}
+							
+						
+							<li><a class="underline" href="@routes.AdminControls.usercontrol_activatedeactivate(userx.id)"><i class="icon-flag"></i>@if(userx.user.active){ Deactivate } else{ Activate }</a></li>
+						}else{
+						@subjectPresent(){
+							<li>
+								<a class="underline" href="#"  onclick="javascript:$.colorbox({href:UserLink.controllers.Useract.GetComplainForm(@userx.id, @DInitial.REPORTABUSE.ON_USER, encodeURIComponent(window.location.href)).absoluteURL()})">
+									<i class="icon-flag"></i>Report Abuse
+								</a>
+							</li>
+							}
+						}
+						</ul>
+				 </div>
+				 <div class="clearfix"></div>
+	            <ul id="myTab" class="nav nav-tabs">
+	               @*<li class="@isactive(DInitial.USER_RELATION_QUERY.RECENT)"><a data-toggle="tab" href="#recent"><span data-bind="text:$().shortnumber(0)"></span><br>Recent</a></li>*@
+	               <li class="@isactive(DInitial.USER_RELATION_QUERY.LOVES)"><a data-bind="click:loveloader" data-toggle="tab" href="#profileproductdivisions"><span data-bind="text:$().shortnumber(@userx.Liked.size)"></span><br>Loves</a></li>
+	               <li class="@isactive(DInitial.USER_RELATION_QUERY.WANTS)"><a data-bind="click:wantloader" data-toggle="tab" href="#profileproductdivisions"><span data-bind="text:$().shortnumber(@userx.Wanted.size)"></span><br>Wants</a></li>
+	               <li class="@isactive(DInitial.USER_RELATION_QUERY.TRIED)"><a data-bind="click:triedloader" data-toggle="tab" href="#profileproductdivisions"><span data-bind="text:$().shortnumber(@userx.Owned.size)"></span><br>Tried</a></li>
+	               <li class="@isactive(DInitial.USER_RELATION_QUERY.COLLECTIONS)"><a data-bind="click:collectionloader" data-toggle="tab" href="#profilecollectiondivision"><span data-bind="text:$().shortnumber(@Contributor.UsersPersonalCollectionsCount(userx))"></span><br>Collections</a></li>
+	               <li class="@isactive(DInitial.USER_RELATION_QUERY.FOLLOWERS)"><a data-bind="click:followerloader" data-toggle="tab" href="#profileuserdivision"><span data-bind="text:$().shortnumber(@Contributor.FollowersCount(userx))"></span><br>Followers</a></li>
+	               <li class="@isactive(DInitial.USER_RELATION_QUERY.FOLLOWING)"><a data-bind="click:followingloader" data-toggle="tab" href="#profileuserdivision"><span data-bind="text:$().shortnumber(@Contributor.LeadersCount(userx))"></span><br>Following</a></li>
+	               <li class="@isactive(DInitial.USER_RELATION_QUERY.SEARCHES)"><a data-toggle="tab" href="#profilesearchdivision"><span data-bind="text:$().shortnumber(@FSearch.UserFollowedSearchCount(userx))"></span><br>Searches</a></li>
+	               <li class="@isactive(DInitial.USER_RELATION_QUERY.STORES)"><a data-bind="click:storeloader" data-toggle="tab" href="#profilestoredivision"><span data-bind="text:$().shortnumber(@Follow.GetStoresCount(userx.id))"></span><br>Stores</a></li>
+	            </ul>
+            </div>
+            <div id="myTabContent" class="tab-content">
+            @*
+               <div class="tab-pane fade in @isactive(DInitial.USER_RELATION_QUERY.RECENT) recent" id="recent">
+                  <!-- Begin activity -->
+                  <div class="activity">
+                     <!-- Comment-post -->
+                     <div class="comment-post">
+                        <div class="user-thumb">
+                           <img src="images/activity-thumb.png" class="img-responsive" alt="">
+                        </div>
+                        <div class="comment">
+                           <h4><a href="#">John Doe</a> commented on <a href="#">Product X</a></h4>
+                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                           <ul class="comment-act">
+                              <li><a href="#"><i class="icon-comments-alt"> </i>See Comment</a></li>
+                              <li><a href="#"><i class="icon-reply"> </i>Reply to comment</a></li>
+                              <li><a href="#"><i class="icon-user"> </i>Follow</a></li>
+                           </ul>
+                           <div class="clearfix"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                     </div>
+                     <!-- End comment-post -->
+                  </div>
+                  <!-- End activity -->
+                  <!-- Begin activity -->
+                  <div class="activity">
+                     <!-- Comment-post -->
+                     <div class="comment-post">
+                        <div class="user-thumb">
+                           <img src="images/activity-thumb.png" class="img-responsive" alt="">
+                        </div>
+                        <div class="comment">
+                           <h4><a href="#">John Doe</a> commented on <a href="#">Product X</a></h4>
+                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                           <ul class="comment-act">
+                              <li><a href="#"><i class="icon-comments-alt"> </i>See Comment</a></li>
+                              <li><a href="#"><i class="icon-reply"> </i>Reply to comment</a></li>
+                              <li><a href="#"><i class="icon-user"> </i>Follow</a></li>
+                           </ul>
+                           <div class="clearfix"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                     </div>
+                     <!-- End comment-post -->
+                  </div>
+                  <!-- End activity -->
+                  <!-- Begin activity -->
+                  <div class="activity">
+                     <p><a href="#">John Doesnt</a> started following <a href="#">Brother Joe</a></p>
+                  </div>
+                  <!-- End acitvity -->
+                  <!-- Begin activity -->
+                  <div class="activity">
+                     <!-- Comment-post -->
+                     <div class="comment-post">
+                        <div class="user-thumb">
+                           <img src="images/activity-thumb.png" class="img-responsive" alt="">
+                        </div>
+                        <div class="comment">
+                           <h4><a href="#">John Doe</a> commented on <a href="#">Product X</a></h4>
+                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                           <ul class="comment-act">
+                              <li><a href="#"><i class="icon-comments-alt"> </i>See Comment</a></li>
+                              <li><a href="#"><i class="icon-reply"> </i>Reply to comment</a></li>
+                              <li><a href="#"><i class="icon-user"> </i>Follow</a></li>
+                           </ul>
+                           <div class="clearfix"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                     </div>
+                     <!-- End comment-post -->
+                  </div>
+                  <!-- End activity -->
+                  <!-- Begin activity -->
+                  <div class="activity">
+                     <!-- Comment-post -->
+                     <div class="comment-post">
+                        <div class="user-thumb">
+                           <img src="images/activity-thumb.png" class="img-responsive" alt="">
+                        </div>
+                        <div class="comment">
+                           <h4><a href="#">John Doe</a> commented on <a href="#">Product X</a></h4>
+                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                           <ul class="comment-act">
+                              <li><a href="#"><i class="icon-comments-alt"> </i>See Comment</a></li>
+                              <li><a href="#"><i class="icon-reply"> </i>Reply to comment</a></li>
+                              <li><a href="#"><i class="icon-user"> </i>Follow</a></li>
+                           </ul>
+                           <div class="clearfix"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                     </div>
+                     <!-- End comment-post -->
+                  </div>
+                  <!-- End activity -->
+                  <!-- Begin activity -->
+                  <div class="activity">
+                     <!-- Comment-post -->
+                     <div class="comment-post">
+                        <div class="user-thumb">
+                           <img src="images/activity-thumb.png" class="img-responsive" alt="">
+                        </div>
+                        <div class="comment">
+                           <h4><a href="#">John Doe</a> commented on <a href="#">Product X</a></h4>
+                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                           <ul class="comment-act">
+                              <li><a href="#"><i class="icon-comments-alt"> </i>See Comment</a></li>
+                              <li><a href="#"><i class="icon-reply"> </i>Reply to comment</a></li>
+                              <li><a href="#"><i class="icon-user"> </i>Follow</a></li>
+                           </ul>
+                           <div class="clearfix"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                     </div>
+                     <!-- End comment-post -->
+                  </div>
+                  <!-- End activity -->
+               </div>
+            *@   
+               <div class="tab-pane fade in @isactive(DInitial.USER_RELATION_QUERY.LOVES) @isactive(DInitial.USER_RELATION_QUERY.WANTS) @isactive(DInitial.USER_RELATION_QUERY.TRIED)" id="profileproductdivisions">
+                  <div class="row">
+                  	 <div class="sort hidden-xs hidden-sm">
+	                  	<form id="fastsearch" class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}"  role="form">
+	                     <select data-bind="options: [0,1,2],optionsText: function(item) {ao=['Any (Gender)','Female','Male'];return ao[item];}, value: gendercont"></select>
+			             <select data-bind="options: [0,1,2,3,4,5],optionsText: function(item) {ao=['Any (Price Range)','$0 - $50','$51 - $500','$501 - $1000','$1001 - $10000','$10001 - Above'];return ao[item];}, value: pricerange"></select>             
+			             <div class="form-group">
+		                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search by typing a keyword ">
+		                 </div>
+	                    </form>
+	                  </div>
+	                  <div class="clearfix"></div>
+                     @Templates.su.panepbko(defaultsize=4)
+                  </div>
+               </div>
+               <div class="tab-pane fade in @isactive(DInitial.USER_RELATION_QUERY.COLLECTIONS)" id="profilecollectiondivision">
+                  <div class="row">
+                  	<div class="sort hidden-xs hidden-sm">
+	                 <form class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+				         <div class="form-group">
+		                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search by typing a keyword ">
+		                 </div> 
+				     </form>
+				    </div>
+                     <div class="onnextline text-left" id="collectiongrid">
+						<ul class="list-inline" data-bind="foreach: collList, visible: collList().length > 0">
+							@Templates.su.cbko()
+						</ul>
+					</div>
+                  </div>
+               </div>
+               <div class="tab-pane fade in @isactive(DInitial.USER_RELATION_QUERY.FOLLOWING) @isactive(DInitial.USER_RELATION_QUERY.FOLLOWERS)" id="profileuserdivision">
+                  <div class="row">
+                   <div class="sort hidden-xs hidden-sm">
+	                 <form class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+				         <div class="form-group">
+		                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search by typing a keyword ">
+		                 </div> 
+				     </form>
+				    </div>
+					<div class="onnextline text-left" id="usergrid">
+						@Templates.su.ubko()
+					</div>
+                  </div>
+               </div>
+               <div class="tab-pane fade in @isactive(DInitial.USER_RELATION_QUERY.STORES)" id="profilestoredivision">
+                  <div class="row">
+                   <div class="sort hidden-xs hidden-sm">
+	                 <form class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+				         <div class="form-group">
+		                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search by typing a keyword ">
+		                 </div> 
+				     </form>
+				    </div>
+					<div class="onnextline text-left" id="storegrid">
+						@Templates.su.sbko()
+					</div>
+                  </div>
+               </div>
+               <div class="tab-pane fade in @isactive(DInitial.USER_RELATION_QUERY.SEARCHES)" id="profilesearchdivision">
+                  <div class="row">
+                    <div class="sort hidden-xs hidden-sm">
+	                 <form class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+				         <div class="form-group">
+		                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search by typing a keyword ">
+		                 </div> 
+				     </form>
+				    </div>
+					<div class="onnextline text-center" id="searchgrid">
+						@Templates.su.fbko()
+					</div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- End .row -->
+</div>
+<!-- End .container -->
+	
+	
+	@*
+		<div id="shoppage" class="onnextline">
+			<div id="pagecontrollerunit">
+						<div class="pull-left text-left" style="width:60%;">
+							<img src="@userx.user.getusersimage()" class="userimg pull-left"></img>
+							<div class="pull-left spacecreater-medium"><h2>@userx.user.name</h2><br/><span class="underlineborder black bold"> @userx.user.firstName @userx.user.lastName</span></div>
+							<div class="onnextline simplefont userprofileinfo"><a class="bold black" href="@userx.user.website">@userx.user.website</a><br/><div class="underline black">@userx.user.location</div><br/><div class="georgia">@userx.user.biography</div></div>					
+						</div>
+						<div id="userfollowbinding" class="pull-right statusboxcontainer">
+						    <ul class="inline pull-right">
+						        <li class="text-center lteal tab @isactive(DInitial.USER_RELATION_QUERY.FOLLOWING)"  >
+						        	<a href="#profileuserdivision" data-bind="click:followingloader" data-toggle="tab">	
+							            <span class="btn-large">@Contributor.LeadersCount(userx)</span><br/>
+							            <span class="onnextline">Following</span>
+						            </a>
+						        </li>
+						        <li class="text-center llightblue tab @isactive(DInitial.USER_RELATION_QUERY.FOLLOWERS)" >
+						        	<a href="#profileuserdivision" data-bind="click:followerloader" data-toggle="tab">	
+							            <span class="btn-large">@Contributor.FollowersCount(userx)</span><br/>
+							            <span class="onnextline">Followers</span>
+							        </a>
+						        </li>
+						        <li class="text-center lhotpink tab @isactive(DInitial.USER_RELATION_QUERY.STORES)"  >
+						        	<a href="#profilestoredivision" data-bind="click:storeloader" data-toggle="tab">				        	
+						            	<span class="btn-large">@Follow.GetStoresCount(userx.id)</span><br/>
+						            	<span class="onnextline">Stores</span>
+						         	</a>
+						        </li>
+						        <li class="text-center ltan tab @isactive(DInitial.USER_RELATION_QUERY.SEARCHES)"  >
+						        	<a href="#profilesearchdivision" data-toggle="tab">	<!--  data-bind="click:searchloader" -->			        	
+						            	<span class="btn-large">@FSearch.UserFollowedSearchCount(userx)</span><br/>
+						            	<span class="onnextline">Searches</span>
+						         	</a>
+						        </li>	  
+						    </ul>
+						    <br/>
+						    <a data-bind="click: $root.follow,css:folstr()?'btn btn-small btn-primary verdana clearstyled  brectangle pull-right':'btn btn-small btn-success verdana clearstyled  brectangle pull-right',text:folstr()?'Unfollow User':'Follow User'"></a>
+						    
+						</div>
+						<div  class="onnextline buttonednavigation">
+							<div class="tabs">
+							    <ul>
+							      <li class="tab @isactive(DInitial.USER_RELATION_QUERY.LOVES)">
+							        <a data-bind="click:loveloader" href="#profileproductdivisions" data-toggle="tab">@userx.Liked.size <span>Loves</span></a>
+							      </li>
+							      <li class="tab @isactive(DInitial.USER_RELATION_QUERY.WANTS)">
+							        <a data-bind="click:wantloader" href="#profileproductdivisions" data-toggle="tab">@userx.Wanted.size <span>Wants</span></a>
+							      </li>
+							      <li class="tab @isactive(DInitial.USER_RELATION_QUERY.TRIED)" id="owns_tab">
+							        <a data-bind="click:triedloader" href="#profileproductdivisions" data-toggle="tab">@userx.Owned.size <span>Tried</span></a>
+							      </li>
+							      <li class="tab @isactive(DInitial.USER_RELATION_QUERY.COLLECTIONS)" id="collections_tab">
+							        <a  data-bind="click:collectionloader" href="#profilecollectiondivision" data-toggle="tab">@Contributor.UsersPersonalCollectionsCount(userx) <span>Collections</span></a>
+							      </li>
+							      @if(GHelp.VerifyACL(DInitial.CURRENT_ACL.SELF_ONLY,userx.user)){
+						          <li class="inlinedisplayblock">
+						          	<a data-bind="click:createnewcollection" href="#" class="violet" id="create_set_tab"><i class="icon-plus icon-white"></i> <span>Create New Collection</span></a>
+						          	
+						          	<div id="create_new_collection_box" class="collectioniframe">
+						          	
+						          		<div id="upnewcollectionformxloader" class="text-center spacecreater-small"><span class="text-center bgloaderico spacecreater-lateral"></span></div>
+						          		<h1 id="upnewcollectionformxstatus" class="text-center onnextline"></h1>
+						          		<form id="upnewcollectionform" class="inline-form spacecreater-medium form-search">
+												<div class="input-append">
+													<input type="text" placeholder="Enter Name" class="search-query input-small" name="collectionname">
+													<button class="btn btn-inverse" type="submit">Create New</button>
+												</div>
+										</form>
+						          	</div>
+						          </li>
+						          }
+						         </ul>
+							  </div>
+						
+							
+						</div>
+						@subjectPresent(){
+						<div class="pull-right btn-mini">
+						<ul class="inline">
+						@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,null)){
+							
+							@defining(userx.id){ uid =>
+								@if(models.SecurityRole.IsAdmin(userx)){
+									<li><a href="@routes.Application.ChangeUserRole(uid,Application.MODERATOR_ROLE)">Demote to Moderator</a></li>
+									<li><a href="@routes.Application.ChangeUserRole(uid,Application.USER_ROLE)">Demote to User</a></li>
+								}else{
+									@if(models.SecurityRole.IsModerator(userx)){
+										<li><a href="@routes.Application.ChangeUserRole(uid,Application.ADMIN_ROLE)">Promote to Admin</a></li>
+										<li><a href="@routes.Application.ChangeUserRole(uid,Application.USER_ROLE)">Demote to User</a></li>
+									}else{
+										@if(models.SecurityRole.IsUser(userx)){
+											<li><a href="@routes.Application.ChangeUserRole(uid,Application.ADMIN_ROLE)">Promote to Admin</a></li>
+											<li><a href="@routes.Application.ChangeUserRole(uid,Application.MODERATOR_ROLE)">Promote to Moderator</a></li>
+										}
+									}
+								}
+							}
+							
+						
+							<li><a class="gray underline" href="@routes.AdminControls.usercontrol_activatedeactivate(userx.id)"><i class="icon-flag"></i>@if(userx.user.active){ Deactivate } else{ Activate }</a></li>
+						}else{
+						@subjectPresent(){
+							<li>
+								<a class="gray underline" href="#"  onclick="javascript:$.colorbox({href:UserLink.controllers.Useract.GetComplainForm(@userx.id, @DInitial.REPORTABUSE.ON_USER, encodeURIComponent(window.location.href)).absoluteURL()})">
+									<i class="icon-flag"></i>Report Abuse
+								</a>
+							</li>
+							}
+						}
+						</ul>
+						</div>
+						}
+			</div>
+			
+			<div class="onnextline tab-content">
+			
+				<div id="profileproductdivisions" class="tab-pane @isactive(DInitial.USER_RELATION_QUERY.LOVES) @isactive(DInitial.USER_RELATION_QUERY.WANTS) @isactive(DInitial.USER_RELATION_QUERY.TRIED)">
+			      <div id="headermessages" class="onnextline">        
+			        <div class="onnextline text-center"></div>	        
+			        <div class="clearstyled">
+			        	<form class="inline-form" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+			              <select class="borderinvisible margin-lateral span2" data-bind="options: [0,1,2],optionsText: function(item) {ao=['Any (Gender)','Female','Male'];return ao[item];}, value: gendercont"></select>
+			              <select class="borderinvisible margin-lateral span2" data-bind="options: [0,1,2,3,4,5],optionsText: function(item) {ao=['Any (Price Range)','$0 - $50','$51 - $500','$501 - $1000','$1001 - $10000','$10001 - Above'];return ao[item];}, value: pricerange"></select>             
+			              <div class="input-prepend margin-lateral nomargin"><input class="borderinvisible  nomargin span3" data-bind="value: searchtext"  type="text"  placeholder="Search by typing a keyword"/><i class="icon-filter"></i></div> 
+			            </form>            
+			         </div>
+			      </div>
+			      		@Templates.su.panepbko()
+			      
+					<div class="hidden">
+				      @Templates.su.dopbko()
+					</div>
+				</div>
+				
+				<div id="profilecollectiondivision" class="tab-pane text-right @isactive(DInitial.USER_RELATION_QUERY.COLLECTIONS)">
+					<form class="inline-form" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+			              <div class="input-prepend margin-lateral nomargin"><input class="borderinvisible  nomargin span3" data-bind="value: searchtext"  type="text"  placeholder="Search by typing a keyword"/><i class="icon-filter"></i></div> 
+			        </form>
+					<div class="onnextline text-left" id="collectiongrid">
+						<ul class="inline" data-bind="foreach: collList, visible: collList().length > 0">
+							@Templates.su.cbko()
+						</ul>
+					</div>
+				</div>
+				
+				<div id="profileuserdivision" class="tab-pane text-right @isactive(DInitial.USER_RELATION_QUERY.FOLLOWING) @isactive(DInitial.USER_RELATION_QUERY.FOLLOWERS)">
+					<form class="inline-form" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+			              <div class="input-prepend margin-lateral nomargin"><input class="borderinvisible  nomargin span3" data-bind="value: searchtext"  type="text"  placeholder="Search by typing a keyword"/><i class="icon-filter"></i></div> 
+			        </form>
+					<div class="onnextline text-left" id="usergrid">
+						@Templates.su.ubko()
+					</div>
+				</div>
+				
+				<div id="profilestoredivision" class="tab-pane text-right @isactive(DInitial.USER_RELATION_QUERY.STORES)">
+					<form class="inline-form" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+			              <div class="input-prepend margin-lateral nomargin"><input class="borderinvisible  nomargin span3" data-bind="value: searchtext"  type="text"  placeholder="Search by typing a keyword"/><i class="icon-filter"></i></div> 
+			        </form>
+					<div class="onnextline text-left" id="storegrid">
+						@Templates.su.sbko()
+					</div>
+				</div>
+				
+				<div id="profilesearchdivision" class="tab-pane  text-right @isactive(DInitial.USER_RELATION_QUERY.SEARCHES)">
+					<form class="inline-form" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+			              <div class="input-prepend margin-lateral nomargin"><input class="borderinvisible  nomargin span3" data-bind="value: searchtext"  type="text"  placeholder="Search by typing a keyword"/><i class="icon-filter"></i></div> 
+			        </form>
+					<div class="onnextline text-center" id="searchgrid">
+						@Templates.su.fbko()
+					</div>
+				</div>
+				
+				
+			</div>
+			
+			
+			
+		</div>
+		*@      
+		
+		@Templates.su.jready{
+			var pxBDocInit=PBDocInit(ldiv);
+			var cxBDocInit=CBDocInit(ldiv);
+			var uxBDocInit=UBDocInit(ldiv);
+			var sxBDocInit=SBDocInit(ldiv);
+			var fxBDocInit=FBDocInit(ldiv);
+			
+			@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.SELF_ONLY,userx.user)){
+			
+				$("[id^='upnewcollectionformx']").hide();
+				$('#upnewcollectionform')[0].reset();
+				
+				$('#create_new_collection_box').hide();
+				
+				$('#upnewcollectionform').submit(function(event) {
+					event.preventDefault();
+					$msgbox=$('#upnewcollectionformxstatus');
+					$loader=$('#upnewcollectionformxloader');
+					$msgbox.show();$loader.show();
+					var retnresp=$().setresponse({ispost:true,url:"@routes.Useract.CreateCollection",argdata:$( this ).serialize(),failans:false,successnode:"ncn"});
+					$loader.hide();
+					if(retnresp===false){ $msgbox.html('<label class="alert-danger full-width">Failed</label>');}
+					else{
+						@Html(play.Routes.javascriptRouter("collectionpage",controllers.routes.javascript.Application.CollectionPage));
+						window.location.replace(collectionpage.controllers.Application.CollectionPage(retnresp.f1,false).absoluteURL());			
+					}
+					
+					this.reset();
+					$msgbox.hide(3000,function(){$('#create_new_collection_box').hide('slow');});		
+				});
+			
+			}
+		
+			
+			function PageControllerView(){
+				var self=this;
+				@subjectPresentOr(){
+				self.folstr = ko.observable(@if(Follow.IsFollower(userx.id,Application.getContributor(session).id)){true}else{false});
+				}{	self.folstr = ko.observable(false); }		
+					
+				self.follow = function(){
+					@subjectPresentOr(){ 
+					self.folstr($().setresponse({url:"@routes.Useract.FollowAct(DInitial.SEARCH_USER,userx.id)",failans:false}));}{
+					$().askforloginorsignup();}
+				}
+					
+				self.loveloader = function(){self.mi();self.activeloader=1;pxBDocInit.loveloader();};			
+				self.wantloader = function(){self.mi();self.activeloader=1;pxBDocInit.wantloader();};			
+				self.triedloader = function(){self.mi();self.activeloader=1;pxBDocInit.triedloader();};
+				self.collectionloader=function(){self.mi();self.activeloader=2;};
+				self.followingloader = function(){self.mi();self.activeloader=3;uxBDocInit.followingloader();};
+				self.followerloader = function(){self.mi();self.activeloader=3;uxBDocInit.followerloader();};
+				self.storeloader = function(){self.mi();self.activeloader=4;};
+				self.searchloader = function(){self.activeloader=5;};
+				self.recentloader = function(){self.activeloader=6;};
+				self.createnewcollection = function(){ $('#create_new_collection_box').toggle(); }
+				self.mi=function(){$('.tab').removeClass('active');}
+				self.activeloader=0;
+				self.setactive=function(){
+					var st=@selectedtab;
+					switch(st)
+					{
+					case @DInitial.USER_RELATION_QUERY.LOVES:
+					case @DInitial.USER_RELATION_QUERY.WANTS:
+					case @DInitial.USER_RELATION_QUERY.TRIED:
+						self.activeloader=1;break;
+					case @DInitial.USER_RELATION_QUERY.COLLECTIONS:
+						self.activeloader=2;break;
+					case @DInitial.USER_RELATION_QUERY.COMMENTS:
+					case @DInitial.USER_RELATION_QUERY.FOLLOWING:
+					case @DInitial.USER_RELATION_QUERY.FOLLOWERS:
+						self.activeloader=3;break;
+					case @DInitial.USER_RELATION_QUERY.SEARCHES:
+						self.activeloader=5;break;
+					case @DInitial.USER_RELATION_QUERY.STORES:
+						self.activeloader=4;break;
+					case @DInitial.USER_RELATION_QUERY.RECENT:
+						self.activeloader=6;break;
+					default:
+						self.activeloader=0;break;
+					}
+				}
+				self.setactive();
+			};
+			
+			var PCV=new PageControllerView()
+			ko.applyBindings(PCV,$('#pagecontrollerunit')[0]);
+			
+			@Templates.js.infinitescroll(false){
+				if(PCV.activeloader==1){pxBDocInit.loadMore();} 
+				if(PCV.activeloader==2){cxBDocInit.loadMore();}
+				if(PCV.activeloader==3){uxBDocInit.loadMore();}
+				if(PCV.activeloader==4){sxBDocInit.loadMore();}
+				if(PCV.activeloader==5){fxBDocInit.loadMore();}
+				}
+			
+		
+			
+		}
+		
+		<script>		
+		function FBDocInit(ldiv)
+		{
+			@Templates.js.fbaction(divid="profilesearchdivision",hiturl=routes.Application.ContributorSearch(userx.id).url,Ispost=false){ }{ }
+			return thissearchview;
+		}
+		
+		function SBDocInit(ldiv)
+		{
+			@Templates.js.sbaction(divid="profilestoredivision",hiturl=routes.Application.ContributorSearch(userx.id).url,Ispost=false,specific=true){
+				function fms(ifs)
+				{
+					var self=this;
+					self.searchtext=ko.observable(ifs.stext);
+					self.page=ifs.pgn;
+					self.subcat=ifs.st; 
+					self.pagesize=ifs.ps;
+				};
+				var initcontent	={stext:'',pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE,st:@DInitial.USER_RELATION_QUERY.STORES};
+			}{ }
+			return thisstoreview;
+		}
+		function UBDocInit(ldiv)
+		{
+			@Templates.js.ubaction(divid="profileuserdivision",hiturl=routes.Application.ContributorSearch(userx.id).url,Ispost=false,specific=true){
+				function fms(ifs)
+				{
+					var self=this;
+					self.searchtext=ko.observable(ifs.stext);
+					self.page=ifs.pgn;
+					self.subcat=ko.observable(ifs.st); 
+					self.pagesize=ifs.ps;
+				};
+				var initcontent	={stext:'',pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE,st:@DInitial.USER_RELATION_QUERY.FOLLOWING};
+			}{ 
+				
+				self.followingloader = function(){self.sfm().subcat(@DInitial.USER_RELATION_QUERY.FOLLOWING);}
+				self.followerloader = function(){self.sfm().subcat(@DInitial.USER_RELATION_QUERY.FOLLOWERS);}
+			}
+			return thisuserview;
+			
+		}
+		
+		
+		function CBDocInit(ldiv)
+		{
+		
+			@Templates.js.cbaction(divid="profilecollectiondivision",hiturl=routes.Application.ContributorSearch(userx.id).url,Ispost=false,specific=true){
+				function fms(ifs)
+				{
+					var self=this;
+					self.searchtext=ko.observable(ifs.stext);
+					self.page=ifs.pgn;
+					self.subcat=ifs.st; 
+					self.pagesize=ifs.ps;
+				};
+				var initcontent	={stext:'',pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE,st:@DInitial.USER_RELATION_QUERY.COLLECTIONS};
+			}{ }
+			return thiscollectionview;
+		};
+		
+		
+		
+		
+		
+		function PBDocInit(ldiv)
+		{
+		
+			function fms(ifs)
+			{
+				var self=this;
+				self.gendercont=ko.observable(ifs.gend);
+				self.pricerange=ko.observable(ifs.prc);
+				self.searchtext=ko.observable(ifs.stext);
+				self.subcat=ko.observable(ifs.subcat);
+				self.page=ifs.pgn;
+				self.pagesize=ifs.ps;
+			};
+			@Templates.js.pbactionjs("profileproductdivisions"){		
+				self.fr=new fms({subcat:@DInitial.USER_RELATION_QUERY.LOVES, gend:0, prc:0, stext:'',ps:@DInitial.GENERIC_PAGE_SIZE, pgn:0});
+				self.sfm = ko.observable(self.fr);
+				self.loadProd = function(jsonstring) {
+					
+					ldiv.display();
+					var sentsuccess=true;
+					var posting = $.get( "@routes.Application.ContributorSearch(userx.id)",jsonstring,"json");
+					posting.done(function( data ) {								
+						$prodselect=data['prodgrid'];
+						if(!data['hasmore'])
+							self.fr.page=-1;
+						
+						$.each($prodselect, 
+							function(prindex, prattr)
+							{
+								self.prodList.push(ko.mapping.fromJS(prattr));
+								ldiv.stillbusy();
+							}
+						);
+						ldiv.loadcomplete();
+					});
+					posting.fail(function( data ) {
+						ldiv.loadcomplete();	
+						sentsuccess=false;
+					});
+					
+					return sentsuccess;						       
+				};
+				 
+				self.loadMore = function()
+				{
+					if(self.fr.page!==-1 && self.loadProd($.param(self.fr)))
+		  				self.fr.page++;
+				}
+				
+		
+				self.loveloader = function(){self.sfm().subcat(@DInitial.USER_RELATION_QUERY.LOVES);}
+				self.wantloader = function(){self.sfm().subcat(@DInitial.USER_RELATION_QUERY.WANTS);}
+				self.triedloader = function(){self.sfm().subcat(@DInitial.USER_RELATION_QUERY.TRIED);}
+		
+				 
+				self.pform=ko.computed(function() {	
+			  			self.fr.page=0;
+			  			self.prodList.removeAll();
+		      				if(self.loadProd($.param(self.fr)))
+			  				self.fr.page++;
+			  			
+						}).extend({ throttle: 200 });
+			}
+			return thisshopview;
+		};
+		
+		</script>
+			
+		}
+}{
+	@Templates.pagefooter(){ }
+}	
+			

@@ -1,0 +1,587 @@
+@()
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+@ps={
+<style>
+
+
+.userintro{
+position:absolute;margin-top:400px;right:10px;z-index:5;font-size: 18px;
+}
+.userintro .usericon{
+width:70px;height:70px;vertical-align: baseline!important;
+}
+
+</style>
+<script src="@routes.Assets.at("bl/js/typeahead.min.js")"></script>
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Shop @Boozology"){@ps}
+}{
+	@Templates.pageheader(){		
+				
+	}{
+	
+	
+	@*
+	@defining(S3File.findfilelistcount(plugins.S3Plugin.s3Bucket, DInitial.WP)){totalwallpapers=>
+	
+		@if(totalwallpapers>0){
+			<div class="carousel slide onnextline" id="blhomecarousel">
+			  <ol class="carousel-indicators">
+			  @for(cnt <- 0 until totalwallpapers){ 
+			    <li data-slide-to="@cnt" data-target="#blhomecarousel" class=""></li>
+			  }
+			  </ol>
+			  
+				<div class="full-width text-center" style="position:absolute;margin-top:100px;z-index:1;">
+					<div class="wrapperlikeabsolute">
+						<h1><span class="darkcontent">And Here goes the great Text for the small Story</span></h1>
+						<form class="inline-form nomargin" data-bind="submit:closecarousel">
+							<div class="input input-prepend input input-append">
+								<div class="btn-group">
+					                <button type="button" data-toggle="dropdown" class="btn btn-inverse dropdown-toggle noborder btn-large"  style="padding:15px 10px;"><span data-bind="text:selectedcategory()=='All'?'Category':selectedcategory()">Category</span> <span class="caret"></span></button>
+					                <ul class="dropdown-menu" data-bind="foreach: catglist,visible:catglist().length > 0">
+					                  <li><a data-bind="click:$root.catgclick,text:name"></a></li>
+					                </ul>
+					                
+					                <ul class="dropdown-menu" data-bind="foreach: pcatglist,visible:catglist().length == 0">
+					                	<li><a href="javascript:void(0)" data-bind="visible:$index()==0">No More Subcategory<br/>Select one from below to go back</a></li>
+						        		<li><a class="underline" data-bind="click:$root.pcatgclick,text:name"></a></li>
+						        	</ul>
+						        			                
+				              	</div>
+								<input id="mainbigsearchbox" type="text" placeholder="Search here" class="search-query span6 noborder" style="padding:10px 0;height:30px;font-size:24px;">
+								<button class="btn btn-inverse inlinedisplay noborder noboxshadow btn-large" style="padding:15px 15px;" type="submit">Search</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				@subjectPresent(){
+		       	 @defining(Application.getLocalUser(session())){ presentuser=>
+					<div class="userintro">
+						<ul class="inline">
+							<li><a class="white">@presentuser.name</a></li>
+							<li><img class="usericon" src="@presentuser.getusersimagesmall()"></img></li>
+						</ul>
+					</div>
+					}
+				}
+			  <div class="carousel-inner">
+			  @for((wallpaper,cnt) <- S3File.findfilelist(plugins.S3Plugin.s3Bucket, DInitial.WP).zipWithIndex){
+			    <div class="item @if(cnt==0){active}">
+			      <img alt="" src="@wallpaper.getUrl()">
+			      
+			    </div>
+			    }
+			  </div>
+			</div>
+		
+		}
+		
+	
+		
+	}
+			
+		<div class="navbar navbar-inverse spacecreater-vertical-small">
+		  <div class="navbar-inner brectangle">
+		  	<div class="container tabs">
+			    <ul class="nav"  data-bind="foreach: topcatglist">
+			    	<li data-bind="css:$root.selectedcategory()==name()?'tab active':'tab'"><a data-toggle="tab" data-bind="click:$root.catgclickshort,attr:{href:'@routes.Application.shop'+'/'+encodeURIComponent(name())}"><i class="icon-heart icon-white" data-bind="visible:$index()==0"></i><span data-bind="text:name()=='All'?'Popular':name()"></span></a></li>
+			    </ul>
+		    </div>
+		  </div>
+		</div>
+	*@
+	 }
+	
+}{
+	@Templates.pagemaincontent(){	
+	
+	<div class="container main-categories">
+         <div class="row">
+            <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12 col-12">
+               <h2>Browse & Discover</h2>
+               <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+                     <!-- Begin .category-product -->
+                     <div class="category-product">
+                        <div class="title">
+                           <h3>Wine</h3>
+                        </div>
+                        <!-- Begin .category-list -->
+                        <div class="category-list">
+                           <ul>
+                              <li><a href="/discover?q=Wine">Wine</a></li>
+                              <li><a href="/discover?q=Wine Second">Wine Second</a></li>
+                              <li><a href="/discover?q=Wine New">Wine New</a></li>
+                              <li><a href="/discover?q=Old wine">Old wine</a></li>
+                              <li class="more"><a href="/discover?c=Wine">More...</a></li>
+                           </ul>
+                        </div>
+                        <!-- End .category-list -->
+                        @defining(controllers.HomePageImages.imagePathWine()) { imageSource=>
+                        <img src=@imageSource  class="img-responsive" alt="">
+                        }
+                     </div>
+                     <!-- End .category-product -->
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+                     <div class="category-product">
+                        <div class="title">
+                           <h3>Beer</h3>
+                        </div>
+                        <!-- Begin .category-list -->
+                        <div class="category-list">
+                           <ul>
+                              <li><a href="/discover?q=Wine">Wine</a></li>
+                              <li><a href="/discover?q=Wine Second">Wine Second</a></li>
+                              <li><a href="/discover?q=Wine New">Wine New</a></li>
+                              <li><a href="/discover?q=Old wine">Old wine</a></li>
+                              <li class="more"><a href="/discover?c=Beer">More...</a></li>
+                           </ul>
+                        </div>
+                        <!-- End .category-list -->
+                        @defining(controllers.HomePageImages.imagePathBeer()) { imageSource=>
+                        <img src=@imageSource class="img-responsive" alt="">
+                        }
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-12">
+                     <!-- Begin .category-product -->
+                     <div class="category-product">
+                        <div class="title">
+                           <h3> Liquor & Spirits</h3>
+                        </div>
+                        <!-- Begin .category-list -->
+                        <div class="category-list">
+                           <ul>
+                              <li><a href="/discover?q=Wine">Wine</a></li>
+                              <li><a href="/discover?q=Wine Second">Wine Second</a></li>
+                              <li><a href="/discover?q=Wine New">Wine New</a></li>
+                              <li><a href="/discover?q=Old wine">Old wine</a></li>
+                              <li class="more"><a href="/discover?c=Spirits">More...</a></li>
+                           </ul>
+                        </div>
+                        <!-- End .category-list -->
+                        @defining(controllers.HomePageImages.imagePathLiquor()) { imageSource=>
+                        <img src=@imageSource  class="img-responsive" alt="">
+                        }
+                     </div>
+                     <!-- End .category-product -->
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12">
+                     <!-- Begin .category-product -->
+                     <div class="category-product small">
+                        <div class="title">
+                           <h3>Mixology</h3>
+                        </div>
+                        <!-- Begin .category-list -->
+                        <div class="category-list">
+                           <ul>
+                              <li><a href="/discover?q=Wine">Wine</a></li>
+                              <li><a href="/discover?q=Wine Second">Wine Second</a></li>
+                              <li><a href="/discover?q=Wine New">Wine New</a></li>
+                              <li><a href="/discover?q=Old wine">Old wine</a></li>
+                              <li class="more"><a href="/discover?c=Mixology">More...</a></li>
+                           </ul>
+                        </div>
+                        <!-- End .category-list -->
+                        @defining(controllers.HomePageImages.imagePathMixology()) { imageSource=>
+                        <img src=@imageSource class="img-responsive" alt="">
+                        }
+                     </div>
+                     <!-- End .category-product -->
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
+                     <!-- Begin .category-product -->
+                     <div class="category-product">
+                        <div class="title">
+                           <h3>Gadgets</h3>
+                        </div>
+                        <!-- Begin .category-list -->
+                        <div class="category-list">
+                           <ul>
+                              <li><a href="/discover?q=Wine">Wine</a></li>
+                              <li><a href="/discover?q=Wine Second">Wine Second</a></li>
+                              <li><a href="/discover?q=Wine New">Wine New</a></li>
+                              <li><a href="/discover?q=Old wine">Old wine</a></li>
+                              <li class="more"><a href="/discover?c=Mixology">More...</a></li>
+                           </ul>
+                        </div>
+                        <!-- End .category-list -->
+                        @defining(controllers.HomePageImages.imagePathGadgets()) { imageSource=>
+                        <img src=@imageSource class="img-responsive" alt="">
+                        }
+                     </div>
+                     <!-- End .category-product -->
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12">
+                     <!-- Begin .category-product -->
+                     <div class="category-product small">
+                        <div class="title">
+                           <h3> Toys & Trinkets</h3>
+                        </div>
+                        <!-- Begin .category-list -->
+                        <div class="category-list">
+                           <ul>
+                              <li><a href="/discover?q=Wine">Wine</a></li>
+                              <li><a href="/discover?q=Wine Second">Wine Second</a></li>
+                              <li><a href="/discover?q=Wine New">Wine New</a></li>
+                              <li><a href="/discover?q=Old wine">Old wine</a></li>
+                              <li class="more"><a href="/discover?c=Toys %26 Trinkets">More...</a></li>
+                           </ul>
+                        </div>
+                        <!-- End .category-list -->
+                        @defining(controllers.HomePageImages.imagePathToys()) { imageSource=>
+                        <img src=@imageSource  class="img-responsive" alt="">
+                        }
+                     </div>
+                     <!-- End .category-product -->
+                  </div>
+                  <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-12">
+                     <!-- Begin .category-product -->
+                     <div class="category-product">
+                        <div class="title">
+                           <h3> Glassware</h3>
+                        </div>
+                        <!-- Begin .category-list -->
+                        <div class="category-list">
+                           <ul>
+                              <li><a href="/discover?q=Wine">Wine</a></li>
+                              <li><a href="/discover?q=Wine Second">Wine Second</a></li>
+                              <li><a href="/discover?q=Wine New">Wine New</a></li>
+                              <li><a href="/discover?q=Old wine">Old wine</a></li>
+                              <li class="more"><a href="/discover?c=Glassware">More...</a></li>
+                           </ul>
+                        </div>
+                        <!-- End .category-list -->
+                        @defining(controllers.HomePageImages.imagePathGlassWare()) { imageSource=>
+                        <img src=@imageSource class="img-responsive" alt="">
+                        }
+                     </div>
+                     <!-- End .category-product -->
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- End .row -->
+      </div>
+      <!-- /.container -->
+      
+      
+      <div class="section-title">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-12 col-12 col-md-12 col-sm-12 col-xs-12 col-12">
+                  <h2>Categories!</h2>
+                  <button type="button" class="navbar-toggle category-btn" data-toggle="collapse" data-target=".category-collapse">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
+      
+      <div class="container">
+         <div class="row">
+            <div class="col-lg-12 col-12 col-md-12 col-sm-12 col-xs-12 col-12">
+               <div class="collapse navbar-collapse category-collapse">
+                  <ul class="category-nav"  data-bind="foreach: topcatglist">
+                     <li data-bind="css:$root.selectedcategory()==name()?'active':''"><a  class="btn btn-default" data-bind="click:$root.catgclickshort,attr:{href:'@routes.Application.shop'+'/'+encodeURIComponent(name())}"><i class="icon-heart icon-white" data-bind="visible:$index()==0"></i><span data-bind="text:name()=='All'?'Popular':name()"></span></a></li>
+                  </ul>
+               </div>
+               <div class="clearfix"></div>
+               <!-- Begin .category-title -->
+               <div class="category-title">
+                  <h4>
+                  	<ul class="list-inline"  data-bind="foreach: pcatglist,visible:pcatglist().length > 0">
+		        		<li><a href="javascript:void(0)" data-bind="click:$root.pcatgclick,text:name"></a></li>
+		        		<span class="divider">/</span>
+		        	</ul>
+                  </h4>
+                  <div class="sort hidden-xs hidden-sm">
+                  	<form id="fastsearch" class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}"  role="form">
+                     <select data-bind="options: [1,2,3],optionsText: function(item) {ao=['Relevance','Newest','Most Loved'];return 'Sort By '+ ao[item-1];}, value: sortseq"></select>
+		             <select data-bind="options: [0,1,2,3,4,5],optionsText: function(item) {ao=['Any (Price Range)','$0 - $50','$51 - $500','$501 - $1000','$1001 - $10000','$10001 - Above'];return ao[item];}, value: pricerange"></select>             
+		             <div class="form-group">
+	                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search ">
+	                 </div>
+                    </form>
+                    <div class="text-right padding-small" data-bind="visible: sfm().searchtext().length>0"><a href="javascript:void(0);" class="label padding-small" data-bind="click:updateFollowing,text:amIfollowing()?'Unfollow Search':'Follow Search',css:amIfollowing()?' label-warning':' label-default'"></a></div>
+                  </div>
+                  <div class="clearfix"></div>
+               </div>
+               <!-- End .category-title -->
+               <!--  product include -->
+               @Templates.su.panepbko()
+               @*
+               <div class="row">
+               	
+                  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                     <div class="product-wrap">
+                        <!-- Begin .featured-product  -->
+                        <div class="featured-product">
+                           <!-- Begin .info-wrap -->
+                           <div class="info-wrap">
+                              <a href="#"><i class="icon-heart"></i>Like it!!</a>
+                           </div>
+                           <a href="#" class="btn btn-default view-product">View Product</a>
+                           <!-- End .info-wrap -->
+                           <img src="@routes.Assets.at("bl/images/featured-product.png")" class="img-responsive" alt="">
+                        </div>
+                        <!-- End .featured-product -->
+                        <h4>Product Name
+                           <span>added by <a href="#">Username</a>  at <a href="#">Amazon</a></span>
+                        </h4>
+                        <ul class="comments">
+                           <li><i class="icon-comment"></i>3</li>
+                           <li><i class="icon-heart"></i>14</li>
+                        </ul>
+                        <div class="clearfix"></div>
+                     </div>
+                     <!-- End product-wrap -->
+                     <!-- Begin .all-categories -->
+                     <div class="all-categories">
+                        <p>You can check here the entire popular products</p>
+                        <a href="#">View all products from this category</a>
+                     </div>
+                     <!-- End .all-categories -->
+                  </div>
+              
+                  
+               </div>
+               <!-- End .row -->
+               *@
+            </div>
+         </div>
+      </div>
+      
+	
+	
+	@*
+		<div id="shoppage" class="onnextline">
+		      <div id="headermessages" class="onnextline">        
+		        <div class="onnextline text-center"><!--<strong>Shop</strong> 2,778,297 Products from 118,617 Stores--></div> 
+		        <div class="onnextline">
+		        	<ul class="breadcrumb"  data-bind="foreach: pcatglist,visible:pcatglist().length > 0">
+		        		<li><a class="underline"  href="#" data-bind="click:$root.pcatgclick,text:name"></a></li>
+		        		<span class="divider">/</span>
+		        	</ul>
+		        </div>
+		        		               
+		        <div class="clearstyled">
+		        	<form id="fastsearch" class="inline-form" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+		              <select class="borderinvisible margin-lateral span2" data-bind="options: [1,2,3],optionsText: function(item) {ao=['Relevance','Newest','Most Loved'];return 'Sort By '+ ao[item-1];}, value: sortseq"></select>
+		              <select class="borderinvisible margin-lateral span2" data-bind="options: [0,1,2],optionsText: function(item) {ao=['Any (Gender)','Female','Male'];return ao[item];}, value: gendercont"></select>
+		              <select class="borderinvisible margin-lateral span2" data-bind="options: [0,1,2,3,4,5],optionsText: function(item) {ao=['Any (Price Range)','$0 - $50','$51 - $500','$501 - $1000','$1001 - $10000','$10001 - Above'];return ao[item];}, value: pricerange"></select>             
+		              <div class="input-prepend margin-lateral nomargin"><input class="borderinvisible  nomargin" data-bind="value: searchtext"  type="text"  placeholder="Search by typing a keyword"/><i class="icon-filter"></i></div> 
+		            </form>            
+		         </div>
+		         <div class="text-right" data-bind="visible: sfm().searchtext().length>0"><a class="badge spacecreater-vertical-small" data-bind="click:updateFollowing,text:amIfollowing()?'Unfollow Search':'Follow Search',css:amIfollowing()?' label-warning':' label-info'"></a></div>
+		      </div>
+		      
+		      @Templates.su.panepbko()
+		      
+			<div class="hidden">
+		      @Templates.su.dopbko()
+			</div>
+			<div class="hidden" id="earlyproductloader">
+				<div data-bind="foreach: earlyproductlist">
+					<img data-bind="attr:{src:pic}">
+				</div>
+			</div>
+			
+		</div>      
+		
+	*@	
+		@Templates.su.jready{
+			var pxBDocInit= PBDocInit(ldiv);
+				
+			@Templates.js.infinitescroll(false){ 
+				pxBDocInit.loadMore();
+			}
+			
+			@Templates.js.cartnotification() 
+			
+			
+			$('.carousel').carousel({
+				interval: 6000
+			});
+			@Html(play.Routes.javascriptRouter("querycomplete",controllers.routes.javascript.Application.QuerySuggestion))
+			
+			/*
+			$('#mainbigsearchbox').typeahead({		
+			    name: 'products',
+				prefetch: querycomplete.controllers.Application.QuerySuggestion(query,pxBDocInit.fr.catgid()).absoluteURL(),
+				limit: 10 
+			});
+			*/
+		}
+		<script>
+		function PBDocInit()
+		{
+			function fms(ifs)
+			{
+				var self=this;
+				self.sortseq=ko.observable(ifs.srt);
+				self.gendercont=ko.observable(ifs.gend);
+				self.pricerange=ko.observable(ifs.prc);
+				self.searchtext=ko.observable(ifs.stext);
+				self.page=ifs.pgn; 
+				self.catgid=ko.observable(ifs.catg);
+				self.pagesize=ifs.ps;
+			};
+			
+			@Templates.js.pbactionjs("boozologybody"){		
+				self.fr=new fms({srt:1, gend:0, prc:0, stext:'',catg:@Category.root().id, pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE});
+				self.sfm = ko.observable(self.fr);
+				self.catglist = ko.observableArray([]);
+				self.topcatglist = ko.observableArray([]);
+				self.pcatglist = ko.observableArray([ko.mapping.fromJS(	@Html(Category.ChildJSON(0)))]);
+				self.selectedcategory=ko.observable('@Category.root().cname');
+				self.amIfollowing = ko.observable(false);
+				self.earlyproductlist =  new Array();
+				
+				@Html(play.Routes.javascriptRouter("shoppageloader",controllers.routes.javascript.Application.RetrieveCategoryList,controllers.routes.javascript.Useract.SaveMySearch,controllers.routes.javascript.Useract.FindthisSearch));
+				
+				self.catgclick=function(ctg)
+				{
+					$.each(self.earlyproductlist,function(prindex, prattr){self.prodList.push(ko.mapping.fromJS(prattr));})			
+					self.sfm().catgid(ctg.id());			
+					var srvrp=$().setresponse({url:shoppageloader.controllers.Application.RetrieveCategoryList(ctg.id()).absoluteURL(),failans:false,successnode:"child"});
+				    if(srvrp===false){ return false; }
+				    self.pcatglist.push(ctg);
+				    self.selectedcategory(ctg.name());
+				    self.catglist.removeAll();
+				 	$.each(srvrp,function(clcindex, clcattr){self.catglist.push(ko.mapping.fromJS(clcattr));});
+				 	return true;
+				}
+				
+				self.catgclickshort=function(ctg){
+					var $indx=1,$leng=self.pcatglist().length;
+					if($indx>0 && $leng>0)
+						self.pcatglist.splice($indx, $leng-$indx);
+					if(!ctg.pid())
+						self.pcatglist.splice(0, $leng);
+					self.catgclick(ctg);
+				}		
+				
+				self.pcatgclick=function(ctg)
+				{
+					if(self.catgclick(ctg))
+					{
+						$indx=self.pcatglist.indexOf(ctg)+1;
+						$leng=self.pcatglist().length;
+						if($indx>0 && $leng>0)
+							self.pcatglist.splice($indx, $leng-$indx);
+					}
+				}
+				
+				self.loadinitcatg=function()
+				{
+					var inctglist=[@Html(Category.ChildJSON(Category.root().id))];
+					$.each(inctglist,function(clcindex, clcattr){
+						self.catglist.push(ko.mapping.fromJS(clcattr));
+					});
+					
+					self.topcatglist(self.catglist().slice(0));
+					var root=self.pcatglist()[0]
+					if(root)
+						self.topcatglist.unshift(root);
+					
+					
+					/*
+					
+					
+					*/
+					var getpreloads=$.getJSON("@routes.Application.PreloadProducts()");
+					getpreloads.done(
+							function(data){
+								var $prodselect=data['prodgrid'];
+								$.each($prodselect,function(prindex, prattr){self.earlyproductlist.push(ko.mapping.fromJS(prattr));});
+							}
+					);
+				}
+				self.loadinitcatg();
+				
+				self.loadProd = function(jsonstring) {			
+					ldiv.display();
+					var sentsuccess=true;
+					var posting = $.post( "@routes.Application.ProductQuery",jsonstring,"json");
+					
+					posting.done(function( data ) {								
+						$prodselect=data['prodgrid'];
+						self.prodList.removeAll(self.earlyproductlist);
+						if(!data['hasmore']){self.fr.page=-1;}				
+						$.each($prodselect,function(prindex, prattr){self.prodList.push(ko.mapping.fromJS(prattr));ldiv.stillbusy();});
+						ldiv.loadcomplete();
+					});
+					posting.fail(function( data ) {
+						ldiv.loadcomplete();	
+						sentsuccess=false;
+					});
+					
+					return sentsuccess;						       
+				};
+				 
+				self.loadMore = function()
+				{
+					if(self.fr.page!==-1 && self.loadProd($.param(self.fr)))
+		  				self.fr.page++;
+				}
+				
+				self.updateFollowing = function()
+				{
+					@subjectPresentOr(){
+						self.amIfollowing($().setresponse({url:shoppageloader.controllers.Useract.SaveMySearch(self.fr.searchtext() ,self.fr.gendercont() ,self.fr.pricerange()).absoluteURL(),failans:false}));
+						}{$().askforloginorsignup();}					    
+				}
+				
+				self.updateAmIFollowing = function()
+				{
+					@subjectPresent(){
+					self.amIfollowing($().setresponse({url:shoppageloader.controllers.Useract.FindthisSearch(self.fr.searchtext() ,self.fr.gendercont() ,self.fr.pricerange()).absoluteURL(),failans:false}));
+					}
+				}
+				
+				self.closecarousel =function(){self.fr.searchtext($('#mainbigsearchbox').val());@*$('#blhomecarousel').hide('slow');*@}
+				 
+				self.pform=ko.computed(function() {	
+			  			self.fr.page=0;
+			  			self.prodList.removeAll();
+			  			$.each(self.earlyproductlist,function(prindex, prattr){
+			  				if(self.sfm().catgid()==prattr.tlc())
+			  					self.prodList.push(prattr);
+			  				});
+		      				if(self.loadProd($.param(self.fr)))
+			  				self.fr.page++;
+		      			if(self.fr.searchtext().length>0)
+		      				{
+		      					self.updateAmIFollowing();
+		      				}
+			  			
+						}).extend({ throttle: 200 });
+			}
+			return thisshopview;
+		}
+		</script>
+		
+	}
+}{
+	@Templates.pagefooter(){ }
+}	
+			
+

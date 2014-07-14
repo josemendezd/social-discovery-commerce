@@ -1,0 +1,41 @@
+@(id: String)
+@ps={
+<style>
+
+</style>
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("CheckOut"){@ps}
+}{
+	@Templates.pageheader(){
+	}{ }
+<div class="container">
+	<!-- Begin .row -->
+	<div class="row">
+	@if(id != null) {
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
+		    <div class="checkout-wrap-form">
+				<h3><b>Transaction Successfully Done</b></h3>
+				<h3><b>Transaction id is @id</b></h3>
+			</div>
+		</div>
+	} else {
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
+		    <div class="checkout-wrap-form">
+				<h3>Sorry something went wrong</h3>
+			</div>
+		</div>
+	}
+	</div>
+</div>	
+	
+}{
+	@Templates.pagemaincontent(){
+	@Templates.su.jready{	}
+	
+	}
+}{
+	@Templates.pagefooter(){	}
+}

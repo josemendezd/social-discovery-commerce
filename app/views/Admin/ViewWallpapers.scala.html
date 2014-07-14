@@ -1,0 +1,71 @@
+@(wallpaperarray: List[S3File])
+@import helper._
+@import helper.twitterBootstrap._
+
+@ps={ }
+
+
+@Templates.MasterTemplate(){
+@Templates.pagehead("View Wallpapers @Boozology"){@ps}
+}{
+@Templates.pageheader(){		
+	}{ }	
+}{
+@Templates.pagemaincontent(){
+
+
+	
+
+<div class="row-fluid">
+    <ul class="thumbnails">
+    @for((wp,cntn)<-wallpaperarray.zipWithIndex){
+      <li class="span4">
+        <a class="thumbnail" href="#">        	
+        	<img alt="" src="@wp.getUrl()">
+        	<br/>
+        	<a href="@routes.Application.RemoveWallpapers(wp.id)" class="btn btn-danger brectangle">Delete</a>
+        	<br/>			
+        </a>
+      </li>
+     }
+	</ul>
+	
+	<div class="onnextline">
+		
+		
+	  	@form(action = routes.Application.UploadWallpapers, 'enctype -> "multipart/form-data",'class->"form-horizontal") {    
+		    
+			<div class="control-group">  
+				<div class="controls text-left"> 
+				 	Upload Image:					
+					<div class="inlinedisplay">
+						<input type="file" id="upload_input" name="picture" class="fileinput-button"  onchange="readName(this);"  />
+					</div>		   
+				    <p class="inlinedisplay spacecreater-lateral">                        
+				        <input type="submit" value="Upload" class="lred underline spacecreater-small">
+				    </p> 
+					<br/>
+					<span class="btn-small">Size Limit: <b>5 MB</b></span><br/>
+					<span class="btn-small">Image Quality: <b>1080p/1600X900</b></span><br/>
+					<div id="fileinformation"  class="borderinvisible span4" style="display:none;margin:0;'"></div>					  
+				</div>  
+			</div>
+		}
+		
+	</div>			
+</div>	
+<script>
+	document.getElementById('upload_input').onchange = function () {
+		var textp=document.getElementById('fileinformation');
+		textp.innerHTML='Selected file: ' + (function(x){if(x.length>1){return x}else{ return 'None !!';}})(this.value);
+		if(this.value.length > 0) {textp.style.display = 'block';}
+	};
+</script>		
+@Templates.su.jready{
+			
+}
+	
+}
+}{
+@Templates.pagefooter(){ }
+}	

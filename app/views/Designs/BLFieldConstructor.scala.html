@@ -1,0 +1,28 @@
+@(elements: views.html.helper.FieldElements)
+
+@import play.api.i18n._
+@import views.html.helper._
+
+
+@defining(elements.args.get('_inline).getOrElse("false")){ inline=>
+@if(inline=="false"){
+
+<div class="@elements.args.get('_class) @if(elements.hasErrors) {has-error}" id="@elements.args.get('_id).getOrElse(elements.id + "_field")">
+    <label for="@elements.id">@elements.label(elements.lang)</label> 
+    <div class="clearfix"></div>   
+    @elements.input        
+    <span class="help-block btn-sm">@elements.infos(elements.lang).mkString(", ")</span>
+    @if(elements.hasErrors){<span class="help-block">@elements.errors(elements.lang).mkString(", ")</span>}
+</div>
+
+}else{
+<div class="@elements.args.get('_class) @if(elements.hasErrors) {has-error}" id="@elements.args.get('_id).getOrElse(elements.id + "_field")">
+    <label for="@elements.id" class="col-lg-4 col-md-2 col-sm-2 control-label" >@elements.label(elements.lang)</label>
+    <div class="col-lg-8 col-md-10 col-sm-10">
+	    @elements.input
+	    <p class="help-block btn-sm">@elements.infos(elements.lang).mkString(", ")</p>
+	    @if(elements.hasErrors){<span class="help-block">@elements.errors(elements.lang).mkString(", ")</span>}
+	 </div>    
+</div>
+}
+}

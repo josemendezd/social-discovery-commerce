@@ -1,0 +1,149 @@
+# Override default Play's validation messages
+
+# --- Constraints
+constraint.required=Obligatoire
+constraint.min=Valeur minimale: {0}
+constraint.max=Valeur maximale: {0}
+constraint.minLength=Longueur minimale: {0}
+constraint.maxLength=Longueur maximale: {0}
+constraint.email=Email
+
+# --- Formats
+format.date=Date (''{0}'')
+format.numeric=Numérique
+format.real=Réel
+
+# --- Errors
+error.invalid=Valeur non autorisée
+error.required=Champ obligatoire
+error.number=Seul les valeurs numériques sont autorisées
+error.real=Seul les valeurs réelles sont autorisées
+error.min=Doit être plus grand ou égal à {0}
+error.max=Doit être plus petit ou égal à 0}
+error.minLength=Longueur minimale: {0}
+error.maxLength=Longueur maximale: {0}
+error.email=Un email valide est obligatoire
+error.pattern=Doit satisfaire: {0}
+
+### --- play-authenticate START
+
+# play-authenticate: Initial translations
+
+boozology.accounts.link.success=Comptes liés avec succès
+boozology.accounts.merge.success=Comptes unifiés avec succès
+
+boozology.verify_email.error.already_validated=Votre email a déjà été validé.
+boozology.verify_email.error.set_email_first=Vous devez d'abord fournir un email.
+boozology.verify_email.message.instructions_sent=Les instructions pour valider votre email ont été envoyé à l'adresse {0}.
+boozology.verify_email.success=L'adresse E-mail  ({0}) a été validée avec succès.
+
+boozology.reset_password.message.instructions_sent=Les instructions pour changer votre mot de passe ont été envoyées à l'adresse: {0}.
+boozology.reset_password.message.email_not_verified=Votre email doit d'abord être vérifié, des instructions ont été envoyées. Réessayez ensuite.
+boozology.reset_password.message.no_password_account=Votre utilisateur n'est pas configuré pour utiliser un mot de passe.
+boozology.reset_password.message.success.auto_login=Votre mot de passe a été changé.
+boozology.reset_password.message.success.manual_login=Votre mot de passe a été changé. Veillez vous connecter avec votre nouveau mot de passe.
+
+boozology.change_password.error.passwords_not_same=Les mots de passe ne correspondent pas.
+boozology.change_password.success=Mot de passe changé avec succès.
+
+boozology.password.signup.error.passwords_not_same=Les mots de passe ne correspondent pas.
+boozology.password.login.unknown_user_or_pw=Utilisateur et mot de passe inconnus.
+
+boozology.password.verify_signup.subject=PlayAuthenticate: Finaliser votre enregistrement
+boozology.password.verify_email.subject=PlayAuthenticate: Confirmer votre email
+boozology.password.reset_email.subject=PlayAuthenticate: Comment changer votre mot de passe.
+
+# play-authenticate: Additional translations
+
+boozology.login.email.placeholder=Votre adresse email
+boozology.login.password.placeholder=Choisir un mot de passe
+boozology.login.password.repeat=Réitérer votre mot de passe
+boozology.login.title=Login
+boozology.login.password.placeholder=Mot de passe
+boozology.login.now=Se connecter maintenant
+boozology.login.forgot.password=Mot de passe oublié?
+boozology.login.oauth=ou connectez-vous avec un de ces fournisseurs:
+
+boozology.signup.title=Enregistrement
+boozology.signup.name=Votre nom
+boozology.signup.now=S'enregistrer maintenant
+boozology.signup.oauth=ou enregistrez-vous avec un de ces fournisseurs:
+
+boozology.verify.account.title=Vérification par email obligatoire
+boozology.verify.account.before=Avant de spécifier un mot de passe, vous devez
+boozology.verify.account.first=d'abord vérifier votre email
+
+boozology.change.password.title=Changer votre mot de passe ici
+boozology.change.password.cta=Changer votre mot de passe
+
+boozology.merge.accounts.title=Unifier des comptes
+boozology.merge.accounts.question=Voulez-vous unifier le compte ({0}) avec le compte: {1}?
+boozology.merge.accounts.true=Oui, unifier les deux comptes
+boozology.merge.accounts.false=Non, quitter la session et se connecter avec un autre compte
+boozology.merge.accounts.ok=OK
+
+boozology.link.account.title=Lier les comptes
+boozology.link.account.question=Lier ({0}) avec votre utilisateur?
+boozology.link.account.true=Oui, lier ce compte
+boozology.link.account.false=Non, quitter la session et créer un nouveau compte
+boozology.link.account.ok=OK
+
+# play-authenticate: Signup folder translations
+
+boozology.verify.email.title=Verifier votre e-mail
+boozology.verify.email.requirement=Avant d'utiliser PlayAuthenticate, vous devez d'abord vérifier votre email.
+boozology.verify.email.cta=Un email a été envoyé à votre adresse avec des instructions pour vous connecter.
+
+boozology.password.reset.title=Changer votre mot de passe
+boozology.password.reset.cta=Changer votre mot de passe
+
+boozology.password.forgot.title=Mot de passe oublié
+boozology.password.forgot.cta=Envoyer les instructions pour changer le mot de passe
+
+boozology.oauth.access.denied.title=Accès OAuth refusé
+boozology.oauth.access.denied.explanation=Si vous voulez utiliser PlayAuthenticate avec OAuth, vous devez accepter la connexion.
+boozology.oauth.access.denied.alternative=Si vous ne préférez pas accepter la connexion, vous pouvez toujours
+boozology.oauth.access.denied.alternative.cta=vous enregistrer avec un nouveau compte.
+
+boozology.token.error.title=Erreur de token
+boozology.token.error.message=Le token reçu est soit trop vieux, soit il n'existe pas.
+
+boozology.user.exists.title=L'utilisateur existe déjà
+boozology.user.exists.message=Cet utilisateur existe déjà.
+
+# play-authenticate: Navigation
+boozology.navigation.profile=Profile
+boozology.navigation.link_more=Lier d'autres fournisseurs
+boozology.navigation.logout=Se Déconnecter
+boozology.navigation.login=Se Connecter
+boozology.navigation.home=Page Principale
+boozology.navigation.restricted=Page Protégée
+boozology.navigation.signup=S'enregister
+
+# play-authenticate: Handler
+boozology.handler.loginfirst=Vous devez vous connecter pour accéder à: ''{0}''
+
+# play-authenticate: Profile
+boozology.profile.title=Profile d'utilisateur
+boozology.profile.mail=Votre nom est {0} et votre adresse email {1}!
+boozology.profile.unverified=non vérifiée - cliquer pour vérifier
+boozology.profile.verified=vérifiée
+boozology.profile.providers_many=Il y a {0} fournisseurs liés à ce compte:
+boozology.profile.providers_one =Il y a un fournisseur lié à ce compte:
+boozology.profile.logged=Vous êtes connecté avec:
+boozology.profile.session=Votre ID d'utilisateur est {0} et votre session se termine le {1}
+boozology.profile.session_endless=Votre ID d'utilisateur est {0} et votre session ne se terminera jamais
+boozology.profile.password_change=Changer le mot de passe de votre compte
+
+# play-authenticate - sample: Index page
+boozology.index.title=Bienvenu sur Play Authenticate
+boozology.index.intro=Play Authenticate démo
+boozology.index.intro_2=Ceci est un modèle d'application avec authentification.
+boozology.index.intro_3=Essayez la barre de navigation pour voir les fonctions d'authentification.
+boozology.index.heading=Entête
+boozology.index.details=Voir les détails
+
+# play-authenticate - sample: Restricted page
+boozology.restricted.secrets=Ils nous cachent la vérité!
+
+### --- play-authenticate END

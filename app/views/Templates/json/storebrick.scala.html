@@ -1,0 +1,21 @@
+@(sstore: Store)(implicit session: play.mvc.Http.Session) 
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+{
+	"sl":"@routes.Application.StorePage(sstore.id,false)",
+	"sn":"@sstore.name",
+	"sfc":@Store.FollowersCount(sstore),
+	"spc":@sstore.allproducts.size(),
+	"scc":@sstore.collectlist.size(),
+	"sfurl":"@routes.Useract.FollowAct(DInitial.SEARCH_STORE,sstore.id)",
+	@subjectPresentOr(){"sfs":@Follow.IsStoreFollower(sstore.id,Application.getContributor(session).id)}{"sfs":false},
+	"someprod":[	
+	@for((productx,cntn)<-Store.RecentProducts(sstore,4).zipWithIndex){@if(cntn!=0){,}
+			{			
+				"pl":"@routes.Application.ProductPage(productx.id,false)",
+				"pi":"@productx.getproductimagethumb()",
+				"pn":"@productx.productname"			
+			}
+		}
+	]
+}

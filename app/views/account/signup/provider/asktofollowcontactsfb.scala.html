@@ -1,0 +1,106 @@
+@(contactfetchurl:String)
+
+@ps={}
+
+
+@Templates.MasterTemplate(){
+@Templates.pagehead("Administration @Boozology"){@ps}
+}{
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    // init the FB JS SDK
+    FB.init({
+      appId      : '@Social.ConfStrings.FBC.FBCliendID',                        // App ID from the app dashboard
+      status     : true,                                 // Check Facebook Login status
+      xfbml      : true                                  // Look for social plugins on the page
+    });
+
+    // Additional initialization code such as adding Event Listeners goes here
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+   
+   function invite() {
+    FB.ui({
+        method: "apprequests",
+        message: "Check out the great Boozology App."
+    }, inviteCallback);
+	}
+
+	function inviteCallback(response) {
+		//console.log(response);
+		if(response){ $().msgbox("<h3 style='color:green'>Invitation Sent!!!</h3>",2000);
+		}else{
+			$().msgbox("<h3 style='color:red'>Invitation Sending failed!!!</h3>",2000);	
+		}
+	}
+</script>
+
+<div class="calibri">
+	@Templates.AlertMessages()	
+</div>	
+}{
+@Templates.pagemaincontent(){	
+
+
+<div class="container">
+	   <!-- Begin .row -->
+	<div class="row">
+	<div id="legend">
+    	<legend>We were able to get only these friends.</legend>
+    </div>
+    <br/>
+    <div class="logout blbanner">
+		<div class="message"><span class="bold">Invite your friends on facebook to checkout Boozology. -> </span></div>
+		<div class="options">
+			<div class="option"><a class="btn btn-danger brectangle btn-sm" href="#" onclick="invite();">Invite</a></div>
+		</div>
+	</div>
+	<br/>
+    <div class="onnextline text-right">
+    	@*<a href="@routes.Signup.SetUsersContactList("chooseall")" class="btn btn-success brectangle">Follow All</a>*@
+    	<a href="@routes.Signup.SetUsersContactList("done")" class="btn btn-success brectangle">Done</a>
+    </div>
+    <div class="onnextline" id="usergrid">
+    	<span>Total Users Found: <span data-bind="text:userList().length"></span></span>
+    	<br/>
+    	@Templates.su.ubko()
+    </div>				
+</div>
+</div>	
+<script>var postregistering=true</script>
+@Templates.su.jready{
+var uxBDocInit=UBDocInit(ldiv);
+@*
+@Templates.js.infinitescroll(false){uxBDocInit.loadMore();}	
+*@		
+}
+
+<script>
+function UBDocInit(ldiv)
+{
+	@Templates.js.ubaction(divid="usergrid",hiturl=contactfetchurl,Ispost=false,specific=true){
+		function fms(ifs)
+		{
+			var self=this;
+		};
+		var initcontent	={};
+	}{ }
+	return thisuserview;
+	
+}
+</script>
+
+	
+}
+}{
+@Templates.pagefooter(){ }
+}	

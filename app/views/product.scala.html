@@ -1,0 +1,693 @@
+@(productx: Product,isajax: Boolean)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+@contentdescription={Grabbed by @productx.Founder.name from @productx.pstore.name ,loved by @productx.Likers.size() Members }
+
+@pagestyles={
+
+
+<!-- OPENGRAPH -->
+<meta name="title" content="@productx.productname">
+<meta property="og:type" content="product">
+<meta property="og:title" content="@productx.productname">
+<meta property="og:site_name" content="Boozology">
+@defining(contentdescription){ cd =>
+<meta name="description" content="@cd">
+<meta property="og:description" content="@cd"> }
+<meta property="og:url" content="@routes.Application.ProductPage(productx.id,false).absoluteURL(request())">
+<meta property="og:image"  content="@productx.getproductimagethumb()">
+
+<meta property="fb:app_id" content="192289607614196">
+
+<meta name="twitter:card" content="photo">
+<link rel="canonical" href="@routes.Application.ProductPage(productx.id,false).absoluteURL(request())">
+<!-- /OPENGRAPH -->
+
+  
+<style>
+.choicebuttons{
+width:90%;
+margin-left:5%;
+margin-right:5%;
+}
+
+
+
+</style>
+
+} 
+
+@ajaxdiv(pasid:String)={@if(isajax){ajaxified_@pasid}else{standalone_@pasid}}
+
+@theloadmorestyle(contextarray:String)={
+<div class="clearfix padding-small"></div>
+<!-- <div class="btn btn-default onnextline margin-small" data-bind="click:$root.loadMore,html:$root.moreloadtext, visible: @{contextarray}().length >= 0"></div> -->
+<div class="clearfix padding-small"></div>
+}
+
+@scriptcontent={
+
+	
+	@Templates.js.submissions(bindtoelement="#"+ajaxdiv("recommendthisproduct_link").toString,genericid=ajaxdiv("recommendthisproductx").toString,containerid=ajaxdiv("recommendthisproduct_container").toString,formid=ajaxdiv("recommendthisproduct_form").toString,urlbase=routes.Useract.RecommendProduct(productx.id).url)
+	
+	@Templates.js.submissions(bindtoelement="#"+ajaxdiv("mailthisproduct_link").toString,genericid=ajaxdiv("mailthisproductx").toString,containerid=ajaxdiv("mailthisproduct_container").toString,formid=ajaxdiv("mailthisproduct_form").toString,urlbase=routes.Useract.MailRecommendProduct(productx.id).url)
+	
+	function CurrentProd(ldiv)
+	{
+		@Templates.js.pbactionjs(ajaxdiv("currentproddiv").toString){
+		self.presentprod=ko.mapping.fromJS(@Templates.json.productbrick(productx));
+		@*
+		self.loadProd = function(){
+			self.prodList.push(ko.mapping.fromJS(@Templates.json.productbrick(productx)));
+			}
+		self.loadProd();
+		*@
+		}
+	}
+	
+	function SameStoreProduct(ldiv)
+	{		
+		@Templates.js.pbactionjs(ajaxdiv("sameshopproduct").toString){
+			
+			self.loadProd = function(jsonstring) {			
+				ldiv.display();
+				var sentsuccess=true;
+				var posting = $.get("@routes.Application.ProductGetRelated(productx.id)",jsonstring,"json");
+				posting.done(function( data ) {								
+					$prodselect=data['prodgrid'];					
+					$.each($prodselect, 
+						function(prindex, prattr)
+						{
+							self.prodList.push(ko.mapping.fromJS(prattr));
+							ldiv.stillbusy();
+						}
+					);
+					ldiv.loadcomplete();
+					setTimeout(function(){ $.colorbox.resize();},5000);
+				});
+				posting.fail(function( data ) {
+					ldiv.loadcomplete();	
+					sentsuccess=false;
+					$.colorbox.resize();
+				});
+				
+				return sentsuccess;						       
+			};
+			 
+			self.pform=ko.computed(function(){	  			
+	  			self.prodList.removeAll();
+	     		self.loadProd('');  				  			
+			}).extend({ throttle: 200 });	
+			
+		}
+
+	}
+	
+	
+	function UBDocInit(ldiv)
+	{	
+		@Templates.js.ubaction(divid=ajaxdiv("lovediv").toString,hiturl=routes.Application.ProductSearch(productx.id,DInitial.PRODUCT_RELATION_QUERY.LOVERS).url,specific=true,Ispost=false){
+			
+			function fms(ifs)
+			{
+				var self=this;
+				self.page=ifs.pgn; 
+				self.pagesize=ifs.ps;
+				self.searchtext=ko.observable(ifs.stext);
+				self.gendercont=ko.observable(ifs.gend);
+			};
+			var initcontent	={stext:'',gend:0,pgn:0,ps:10};
+			
+		 }{		 
+		  }
+		  
+			ko.applyBindings(new UserView("@routes.Application.ProductSearch(productx.id,DInitial.PRODUCT_RELATION_QUERY.WANTERS).url"),$('#@ajaxdiv("wantdiv")')[0]);
+			ko.applyBindings(new UserView("@routes.Application.ProductSearch(productx.id,DInitial.PRODUCT_RELATION_QUERY.CONSUMERS).url"),$('#@ajaxdiv("trieddiv")')[0]);
+		
+	}
+	
+	
+	
+	function CBDocInit(ldiv)
+	{	
+		@Templates.js.cbaction(divid=ajaxdiv("collectdiv").toString,hiturl=routes.Application.ProductSearch(productx.id,DInitial.PRODUCT_RELATION_QUERY.COLLECTIONS).url,specific=true,Ispost=false){
+			function fms(ifs)
+			{
+				var self=this;
+				self.page=ifs.pgn; 
+				self.pagesize=ifs.ps;
+				self.searchtext=ko.observable(ifs.stext);
+			};
+			var initcontent	={stext:'',pgn:0,ps:10};
+		
+		 }{ }
+	}
+	
+	
+	function CMTDocInit(ldiv)
+	{	
+		@Templates.js.commentaction(idofpassed=productx.id,divid=ajaxdiv("commentdiv").toString,hiturl=routes.Application.ProductSearch(productx.id,DInitial.PRODUCT_RELATION_QUERY.COMMENTATORS).url,Ispost=false){
+		}{
+			self.deletecomment =function(cmnt){
+				var retnresp=$().setresponse({url:UserLink.controllers.Useract.Removecomment(cmnt.cid).absoluteURL(),failans:false});
+				if(retnresp===false)
+				{
+					$().msgbox("<h1 class='lred'>Failed</h1>",2000);
+				}
+				else
+				{
+					self.commentlist.remove(cmnt);
+				}
+			}
+		 }
+	}
+	
+	
+	CurrentProd(ldiv);
+	//SameStoreProduct(ldiv);	
+	UBDocInit(ldiv);
+	CBDocInit(ldiv);
+	CMTDocInit(ldiv);
+
+}
+
+
+
+
+@productmainbody={
+<!-- Begin .container -->
+    <div id="@ajaxdiv("productdiv")" class="container single-product">
+      <!-- Begin .row -->
+		<div class="row">
+        
+        
+		<!-- Begin .col-lg-8 -->
+		  <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-12">
+			<div class="product-info-wrap">
+			  <!-- Begin .featured-product  -->
+              <div class="standalone-product">
+                 <!-- Begin .info-wrap -->
+                 
+                 <!-- End .info-wrap -->
+                 <img src="@productx.getproductimage()" class="img-responsive" alt="@productx.productname" title="@productx.productname">
+              </div>
+              <!-- End .featured-product  -->
+              <div class="clearfix padding-small"></div>
+              
+              	<div id="@ajaxdiv("currentproddiv")" class="onnextline">
+		
+				@subjectPresent(){
+						<div class="pull-right btn-sm">
+						
+							@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_MODERATOR,null)){
+							<a class="gray underline" href="@routes.AdminControls.productcontrol_activatedeactivate(productx.id)"> 
+								<i class="icon-flag"></i>Deactivate
+							</a>
+							}else{
+							<a class="gray underline" href="javascript:void(0)" onclick="javascript:$.colorbox({href:UserLink.controllers.Useract.GetComplainForm(@productx.id, @DInitial.REPORTABUSE.ON_PRODUCT, encodeURIComponent(window.location.href)).absoluteURL()})">
+								<i class="icon-flag"></i>Report Abuse
+							</a>
+							}
+						</div>
+						}
+					<div class="pull-left" style="position: relative;top:0;left:0;">
+					<ul class="list-inline" data-bind="with: presentprod">
+						<li><a href="javascript:void(0);" data-bind="click: $parent.lovestate,text: lovetext,css:lovetext()=='Love'?'btn btn-default':'btn btn-warning brectangle' "></a></li>
+						<li><a href="javascript:void(0);" data-bind="click: $parent.wantstate, clickBubble: false,text: wanttext,css:wanttext()=='Want'?'btn btn-default':'btn btn-warning brectangle' "></a></li>
+		                <li><a href="javascript:void(0);" data-bind="click: $parent.triedstate, clickBubble: false,text: triedtext,css:triedtext()=='Tried'?'btn btn-default':'btn btn-warning brectangle' "></a></li>
+		                <li><a class="btn btn-default" href="javascript:void(0);" data-bind="click: $parent.collectstate, clickBubble: false">Collect</a></li>
+		                @*<li><a class="label label-inverse spacecreater-vertical-small" href="@routes.Application.PageRedirection(productx.siteurl)">Visit the Page</a></li>*@
+		            </ul>
+		            </div>
+		            @Templates.su.collpopko(){ }            
+				</div>
+              
+              
+              <div class="clearfix"></div>
+			  <!-- Begin .comments-wrap -->
+			  <div id="@ajaxdiv("commentdiv")" class="comments-wrap">
+			  
+				@Templates.su.commentko()
+				@if(controllers.Carts.productPostView()) {
+				<!-- begin .post-comment-form -->
+				<div class="post-comment-form">
+				  <form role="form" data-bind="submit:postcomment,with:sfm">
+	                  <div class="form-group">
+	                    <label for="blogcomment">Post a comment</label>
+	                    <div class="clearfix"></div>
+	                    <textarea name="" id="" cols="30" rows="5"  data-bind="value: cmnttxt"></textarea>
+	                  </div>                  
+	                  <button type="submit" class="btn btn-default orange">Send</button>
+                	</form>
+				</div>
+				<!-- End post-comment-form -->
+				}
+			  </div>
+			  <!-- End .comments-wrap -->
+			</div>
+			
+		  </div>
+		  <!-- End .col-lg-8 -->
+		  
+		  <!-- Begin .col-lg-4 -->
+		  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12">
+			<!-- begin .product-sidebar-wrap -->
+			<div class="product-sidebar-wrap">
+			  <h2>
+				@productx.productname 
+				<span class="clearfix"></span>
+				<span class="price"><sup>@productx.Currency</sup>@productx.Pricetag</span>
+			  </h2>
+			  <!-- Begin tab nav -->
+			  <ul id="myTab" class="nav nav-tabs item-description-nav">
+				<li class="active">
+				  <a href="#overview" data-toggle="tab">
+					Overview
+				  </a>
+				</li>
+				@*
+				<li>
+				  <a href="#shipping" data-toggle="tab">
+					Shipping
+				  </a>
+				</li>
+				*@
+			  </ul>
+			  <!-- End tab-nav -->
+			  
+			  <!-- Begin .tab content -->
+			  <div id="item-description" class="tab-content">
+				
+				<div class="tab-pane fade in active" id="overview">
+				  <p>
+					@productx.description
+				  </p>
+				</div>
+				@*
+				<div class="tab-pane fade" id="shipping">
+				  <p>
+					Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
+				  </p>
+				</div>
+				*@
+				
+			  </div>
+			  <!-- end tab-content -->
+			  <!-- Begin buy-wrap -->
+			  @*
+			  <div class="buy-wrap">
+				  <ul class="quantity" >
+					<li>
+					  Quantity
+					</li>
+					<li>
+					  <input type="number" value="1" id="quantity">
+					</li>
+				  </ul>
+				  <div class="clearfix">
+				  </div>
+				  <input type="button" id="addToCart" class="btn btn-default buy-green" value="Add to cart">
+				<div class="clearfix">
+				</div>
+			  </div>
+			  <div class="clearfix">
+			  </div>
+			  *@
+			  <!-- End .buy-wrap -->
+			  @*
+			  <div class="box slider-nav">
+				<ol class="carousel-indicators">
+				  <li data-target="#carousel-example-generic" data-slide-to="0" class="">
+					<img src="images/item-thumb.png" class="img-responsive" alt="">
+				  </li>
+				  <li data-target="#carousel-example-generic" data-slide-to="1" class="">
+					<img src="images/item-thumb.png" class="img-responsive" alt="">
+				  </li>
+				  <li data-target="#carousel-example-generic" data-slide-to="2" class="active">
+					<img src="images/item-thumb.png" class="img-responsive" alt="">
+				  </li>
+				</ol>
+				<div class="clearfix">
+				</div>
+			  </div>
+			  *@
+			  <!-- BEgin product-social -->
+			  <div class="product-social">
+				<p>
+				  Recommend
+				</p>
+				<ul class="social">
+				  <li><a href="#"  title="Share on Facebook" 
+							onclick="window.open(
+									'https://www.facebook.com/sharer.php?u='+encodeURIComponent('@routes.Application.ProductPage(productx.id,false).absoluteURL(request())'),
+											'facebook-share-dialog',
+											'width=626,height=436');return false;"><i class="icon-facebook"></i></a></li>
+				  <li><a  title="Share on Twitter" href="https://twitter.com/intent/tweet?text=Loves%20%20@helper.urlEncode(routes.Application.ProductPage(productx.id,false).absoluteURL(request()))"
+							onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="icon-twitter"></i></a></li>
+				  <li><a href="https://plus.google.com/share?url=@helper.urlEncode(routes.Application.ProductPage(productx.id,false).absoluteURL(request()))" 
+							onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="icon-google-plus"></i></a></li>
+				  <li>
+				  	<a id="@ajaxdiv("mailthisproduct_link")" href="javascript:void(0);"><i class="icon-envelope"></i></a>
+				  	@subjectPresent(){
+							@Templates.su.ajaxforms(genericid=ajaxdiv("mailthisproductx").toString,containerid=ajaxdiv("mailthisproduct_container").toString,formid=ajaxdiv("mailthisproduct_form").toString,inputname="useremail",stext="Enter E-mail",extracontent="<br/>Hi, I like this product.<br/> You might also like this.")
+					}
+				  </li>				  
+				  <li>
+				  	<a id="@ajaxdiv("recommendthisproduct_link")" href="javascript:void(0);"><i class="icon-exchange"></i></a>
+				  	@subjectPresent(){
+							@Templates.su.ajaxforms(genericid=ajaxdiv("recommendthisproductx").toString,containerid=ajaxdiv("recommendthisproduct_container").toString,formid=ajaxdiv("recommendthisproduct_form").toString,inputname="username",stext="Submit User Name")
+					}
+				  </li>
+				  
+				</ul>
+				<div class="clearfix">
+				</div>
+			  </div>
+			  <!-- End product-social -->
+			  
+			</div>
+			<!-- End .product-sidebar-wrap -->
+			
+		  </div>
+		  <div class="clearfix">
+		  </div>
+		  
+		  
+		  
+		  <!-- End .col-lg-4 -->
+		  <div id="@ajaxdiv("sameshopproduct")" class="col-lg-10 col-lg-offset-1 col-md-12 col-xs-12 col-sm-12 col-12">
+		  </div>
+
+		  <div class="clearfix padding-small"></div>
+		  <!-- End .col-lg-4 -->
+		  
+		  <div  id="@ajaxdiv("lovediv")" class="col-lg-10 col-lg-offset-1 col-md-12 col-xs-12 col-sm-12 col-12">
+			<h2 data-bind="visible: userList().length > 0">
+			  Likers
+			</h2>
+			<div class="row">
+				@Templates.su.ubko()
+				@theloadmorestyle("userList")
+			</div>			
+		  </div>
+		  <div class="clearfix padding-small"></div>
+		  <!-- End .col-lg-4 -->
+		  <div id="@ajaxdiv("wantdiv")" class="col-lg-10 col-lg-offset-1 col-md-12 col-xs-12 col-sm-12 col-12">
+			<h2 data-bind="visible: userList().length > 0">
+			  Wanters
+			</h2>
+			<div class="row">
+			 	@Templates.su.ubko()
+				@theloadmorestyle("userList")
+			</div>			
+		  </div>
+		  <div class="clearfix padding-small"></div>
+		  <!-- End .col-lg-4 -->
+		  <div id="@ajaxdiv("trieddiv")" class="col-lg-10 col-lg-offset-1 col-md-12 col-xs-12 col-sm-12 col-12">
+			<h2 data-bind="visible: userList().length > 0">
+			  consumers
+			</h2>
+			<div class="row">
+			 	@Templates.su.ubko()
+				@theloadmorestyle("userList")
+			</div>			
+		  </div>
+		  <div class="clearfix padding-small"></div>
+		  <!-- End .col-lg-4 -->
+		  <div id="@ajaxdiv("collectdiv")" class="col-lg-10 col-lg-offset-1 col-md-12 col-xs-12 col-sm-12 col-12">
+			<h2 data-bind="visible: collList().length > 0">
+			  In Collections
+			</h2>
+			<div class="row">
+			 	<ul class="list-inline" data-bind="foreach: collList, visible: collList().length > 0">
+						@Templates.su.cbko()						
+				</ul>
+				@theloadmorestyle("collList")
+			</div>			
+		  </div>
+			
+		  
+		</div>
+  <!-- End .row -->
+    </div>
+    <!-- End .container -->
+@*
+<div id="@ajaxdiv("productdiv")" class="mainpopcont theme-white">
+		<div class="locheader bold">@productx.productname</div>
+		
+		
+		<div class="text-center"> 
+		
+			<ul class="breadcrumb" style="background-color: white;">
+					<li><span>Inside :</span></li>
+	        		<li><a class="underlineborder"  href="#" >Products</a></li>
+	        		<span class="divider">/</span>
+	        		<li><a class="underlineborder"  href="#" >@DInitial.gender.get(productx.gender)</a></li>
+	        		<span class="divider">/</span>
+	        		@for((ctgry,cnt) <- Category.Ancestors(productx.category).zipWithIndex){
+	        			@if(cnt!=0){<span class="divider">/</span>}
+	        			<li><a class="underlineborder"  href="#" >@ctgry.cname</a></li>
+	        		}
+	        </ul>
+        </div>
+		
+		<br/>
+		<div class="imagecontainer">
+			<a href="@routes.Application.ProductPage(productx.id,false)"><img class="fdmiddle"  alt="@productx.productname" src="@productx.getproductimage()" /></a>
+				<div class="socialdiv clearstyled">
+					<ul class="inline">
+						<li>
+							<a  title="Share on Twitter" href="https://twitter.com/intent/tweet?text=Loves%20%20@helper.urlEncode(routes.Application.ProductPage(productx.id,false).absoluteURL(request()))"
+							onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+							<img alt="Twitter" src="@routes.Assets.at("img/t.png")"/>
+							</a>
+						</li>
+						<li>
+							<a href="#"  title="Share on Facebook" 
+							onclick="window.open(
+									'https://www.facebook.com/sharer.php?u='+encodeURIComponent('@routes.Application.ProductPage(productx.id,false).absoluteURL(request())'),
+											'facebook-share-dialog',
+											'width=626,height=436');return false;"> 
+								<img src="@routes.Assets.at("img/fb.png")"/>
+							</a>
+						</li>
+						<li><a href="https://plus.google.com/share?url=@helper.urlEncode(routes.Application.ProductPage(productx.id,false).absoluteURL(request()))" 
+							onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+								<img  src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/>
+							</a>
+  						</li>
+						<li><a href="#" 
+						onclick="window.open(
+						'http://www.tumblr.com/share/photo?source='+encodeURIComponent('@productx.getproductimagethumb()')+'&caption='+encodeURIComponent('@productx.productname')+'&click_thru='+encodeURIComponent('@routes.Application.ProductPage(productx.id,false).absoluteURL(request())'),
+						'Share the pic on Tumblr',
+						'width=626,height=436');return false;" 
+											title="Share on Tumblr"><img src="@routes.Assets.at("img/tb.png")"/></a></li>
+						<!-- <li><a><img src="@routes.Assets.at("img/flickr.png")"/></a></li>-->
+						<li>
+							<a  title="Share on Pinterest" href="#" data-pin-do="buttonPin" data-pin-config="above"><img src="@routes.Assets.at("img/pin.png")" 
+							onclick="javascript:window.open('http://pinterest.com/pin/create/button/?url=@helper.urlEncode(routes.Application.ProductPage(productx.id,false).absoluteURL(request()))&media='+escape('@productx.getproductimagethumb()')+'&description=@helper.urlEncode("@productx.productname")','', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"/>
+							</a>
+						</li>
+						<li><a id="@ajaxdiv("mailthisproduct_link")" class="btn btn-small btn-warning brectangle"><i class="icon-envelope"></i></a>
+						@subjectPresent(){
+							@Templates.su.ajaxforms(genericid=ajaxdiv("mailthisproductx").toString,containerid=ajaxdiv("mailthisproduct_container").toString,formid=ajaxdiv("mailthisproduct_form").toString,inputname="useremail",stext="Enter E-mail",extracontent="<br/>Hi, I like this product.<br/> You might also like this.")
+						}
+						</li>
+						<li><a id="@ajaxdiv("recommendthisproduct_link")" class="btn btn-small btn-info brectangle">Recommend</a>
+						@subjectPresent(){
+							@Templates.su.ajaxforms(genericid=ajaxdiv("recommendthisproductx").toString,containerid=ajaxdiv("recommendthisproduct_container").toString,formid=ajaxdiv("recommendthisproduct_form").toString,inputname="username",stext="Submit User Name")
+						}
+						</li>
+					</ul>
+				</div>
+		</div>
+		<div id="@ajaxdiv("currentproddiv")" class="onnextline choicebuttons">
+		
+		@subjectPresent(){
+				<div class="pull-right btn-mini">
+				<a class="gray underline" href="#" onclick="javascript:$.colorbox({href:UserLink.controllers.Useract.GetComplainForm(@productx.id, @DInitial.REPORTABUSE.ON_PRODUCT, encodeURIComponent(window.location.href)).absoluteURL()})">
+					@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,null)){	<i class="icon-flag"></i>Deactivate/Delete
+					}else{
+					@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_MODERATOR,null)){ <i class="icon-flag"></i>Deactivate
+					}else{<i class="icon-flag"></i>Report Abuse }
+					}
+				</a>
+				</div>
+				}
+			<div class="pull-left" style="position: relative;top:0;left:0;">
+			<ul class="inline" data-bind="with: presentprod">
+				<li><a class="white underline" href="javascript:void(0);"  class="btn btn-danger" data-bind="click: $parent.lovestate,text: lovetext,css:lovetext()=='Love'?'lmaroon btn brectangle':'lblack btn brectangle' "></a></li>
+				<li><a class="white underline" href="javascript:void(0);" data-bind="click: $parent.wantstate, clickBubble: false,text: wanttext,css:wanttext()=='Want'?'lmaroon btn brectangle':'lblack btn brectangle' "></a></li>
+                <li><a class="white underline" href="javascript:void(0);" data-bind="click: $parent.triedstate, clickBubble: false,text: triedtext,css:triedtext()=='Tried'?'lmaroon btn brectangle':'lblack btn brectangle' "></a></li>
+                <li><a class="white underline" href="javascript:void(0);" data-bind="click: $parent.collectstate, clickBubble: false,css:'lblack btn brectangle'">Collect</a></li>
+                <li><a class="label label-inverse spacecreater-vertical-small" href="@routes.Application.PageRedirection(productx.siteurl)">Visit the Page</a></li>
+            </ul>
+            </div>
+            @Templates.su.collpopko(){ }            
+		</div>
+		<div class="onnextline btn-large spacecreater-medium black"><i class="icon-tag"></i>@productx.Currency <span class="underline">@productx.Pricetag</span></div>
+		<div><span class="onnextline btn-large spacecreater-medium gray">Product Id: @productx.id</span></div>
+		<div class="onnextline btn-large spacecreater-medium">Found by the User:- <a href="@routes.Application.ContributorPage(productx.Founder.id,false,true)" class="underline"><img alt="@productx.Founder.name" src="@productx.Founder.getusersimagesmall()">@productx.Founder.name</a></div>
+		<div class="onnextline btn-large spacecreater-medium">From the Store:- <a href="@routes.Application.StorePage(productx.pstore.id,false)" class="underline">@productx.pstore.name</a></div>
+
+		<div class="clearstyled">
+			<div class="clearstyled">
+				<ul class="inline">
+					<li class="liststyle lred"><a class="white" href="#@ajaxdiv("lovediv")"><span class="bold btn-large">@productx.Likers.size()</span> <br/>Lovers</a></li>
+					<li class="liststyle lgreen"><a class="white" href="#@ajaxdiv("wantdiv")"><span class="bold btn-large">@productx.Wanters.size()</span> <br/>Wants</a></li>
+					<li class="liststyle llightblue"><a class="white" href="#@ajaxdiv("trieddiv")"><span class="bold btn-large">@productx.Owners.size()</span> <br/>Consumers</a></li>
+					<li class="liststyle lviolet"><a class="white" href="#@ajaxdiv("collectdiv")"><span class="bold btn-large">@productx.collectlist.size()</span> <br/>Collections</a></li>
+					<li class="liststyle lolive"><a class="white" href="#@ajaxdiv("commentdiv")"><span class="bold btn-large">@productx.commentlist.size()</span> <br/>Comments</a></li>
+				</ul>
+			</div>
+			
+			
+			<div  id="@ajaxdiv("commentdiv")" class="clearstyled inajaxcont">
+				<div class="widget wolive">
+					<div class="widget-head">
+						<div class="pull-left">Comments</div>
+						<div class="clearfix"></div>
+					</div> 
+					<div style="display: block;" class="widget-content">
+						<div class="padd">
+								@Templates.su.commentko()
+						</div>
+					</div>
+					<!-- Widget footer -->
+					<div class="widget-foot">				  				<!-- Chat input box -->				  
+						<form class="form-inline" data-bind="submit:postcomment,with:sfm">
+							<input type="hidden" value="@productx.id" name="product">
+							<textarea name="cmnttxt" maxlength="255"  class="span4" rows="3" placeholder="Type your message"  data-bind="value: cmnttxt"></textarea>
+							<button type="submit" class="btn btn-info">Send</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			
+			
+			
+			<div id="@ajaxdiv("sameshopproduct")"  class="onnextline">
+			<div class="textleft searchposition"><i class="btn-large georgia bold" style="color:green"  data-bind="visible: prodList().length > 0">Other related products :</i></div>
+				@Templates.su.panepbko(hasloadernode=false,isajax=isajax) 		      
+				<div class="hidden">
+			      @Templates.su.dopbko()
+				</div>
+			</div>
+			
+			<div id="@ajaxdiv("lovediv")" class="clearstyled inajaxcont">
+				<div class="widget">
+					<div class="widget-head lred">
+						<div class="pull-left">Lovers</div>
+						<div class="clearfix"></div>
+					</div> 
+					<div style="display: block;" class="widget-content">
+						<div class="onnextline">					        
+							@Templates.su.ubko()
+					        @theloadmorestyle("userList")
+					    </div>	
+					</div>	
+				</div>
+			</div>
+			
+			<div  id="@ajaxdiv("wantdiv")" class="clearstyled inajaxcont">
+				<div class="widget">
+					<div class="widget-head lgreen">
+						<div class="pull-left">Wanters</div>
+						<div class="clearfix"></div>
+					</div> 
+					<div style="display: block;" class="widget-content">
+						<div class="onnextline">
+					        @Templates.su.ubko()
+					        @theloadmorestyle("userList")
+					    </div>						
+					</div>	
+				</div>
+			</div>
+			
+			<div  id="@ajaxdiv("trieddiv")" class="clearstyled inajaxcont">
+				<div class="widget">
+					<div class="widget-head llightblue">
+						<div class="pull-left">Consumers</div>
+						<div class="clearfix"></div>
+					</div> 
+					<div style="display: block;" class="widget-content">
+						<div class="onnextline">
+					        @Templates.su.ubko()
+					        @theloadmorestyle("userList")
+					    </div>						
+					</div>	
+				</div>
+			</div>
+			
+			<div  id="@ajaxdiv("collectdiv")" class="clearstyled inajaxcont">
+				<div class="widget">
+					<div class="widget-head lviolet">
+						<div class="pull-left">In Collections</div>
+						<div class="clearfix"></div>
+					</div> 
+					<div style="display: block;" class="widget-content">
+						<div class="onnextline">
+							<ul class="inline" data-bind="foreach: collList, visible: collList().length > 0">
+								@Templates.su.cbko()
+							</ul>
+							@theloadmorestyle("collList")
+						</div>
+					</div>	
+				</div>
+			</div>
+					
+		</div>
+		
+</div>
+
+*@
+@Templates.su.socialscripts()
+}
+
+@if(!isajax){
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Product @Boozology"){@pagestyles}
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){
+	
+		<div class="onnextline">
+		@productmainbody
+		</div>
+		@helper.javascriptRouter("UserLink")(routes.javascript.Application.ContributorPage,routes.javascript.Useract.Removecomment,routes.javascript.Useract.GetComplainForm)
+		
+		@Templates.su.jready{
+		
+		@Templates.js.add_cart_action(productx.id)
+			
+			function resizecbx()
+			{
+				try{
+				parent.$().cboxresize($( document ).width(),$( document ).height());
+				}catch(err){}
+			}
+			
+			@scriptcontent
+			
+			resizecbx();
+		}		
+	}
+}{
+	@Templates.pagefooter(){ }
+}	
+
+}else{ 
+@productmainbody
+
+@helper.javascriptRouter("UserLink")(routes.javascript.Application.ContributorPage,routes.javascript.Useract.Removecomment,routes.javascript.Useract.GetComplainForm)
+<script type="text/javascript">
+@scriptcontent
+</script>
+
+}

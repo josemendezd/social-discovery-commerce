@@ -1,0 +1,27 @@
+@()(PageContentParam: Html)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+	@subjectPresent(){
+	@*
+	<div data-bind="click:function(){return false;},clickBubble: false,css:'collectioniframe '+clctnode.bg(),style:{top:Math.round((clctnode.y()-$($element.parentNode).offset().top))+'px',left:Math.round((clctnode.x()-$($element.parentNode).offset().left))+'px'}">
+	*@
+	<div class="collectioniframe" data-bind="attr:{nonesense:(function(a){return ' ';})(currentcn.guest=$element)},click:function(){return false;},clickBubble: false,css:clctnode.bg">	
+		<div style="margin-top: 5%;"><a href="javascript:void(0);" data-bind="click:colpopnewclc"><span class="padding-small">New Collection</span><i style="float: right;padding-top: 5px;" data-bind="css:clctnode.newclc"></i></a></div>
+		
+			<form data-bind="css:clctnode.nct" class="form-inline padding-small" onsubmit="return (function(z){ $(z).find('button').trigger('click');return false;})(this)">
+					<div class="input-group">
+						<input type="text" name="collectionname" class="form-control" placeholder="Enter Name"/>
+						<span class="input-group-btn">
+							<button type="button" data-bind="click:newclcsubmit" class="btn btn-default">Create New</button>
+						</span>	
+					</div>
+			</form>
+			
+		<ul data-bind="foreach: userclist, visible: userclist().length > 0" class="list-unstyled text-left underline">			
+			<li><div style="float:left;width: 100%;margin-bottom: 5%;"><span style="margin-left: 3%;width: 40%;float: left;" class="margin-small black" data-bind="text:f2"></span><a href="javascript:void(0);"  style="float: left;" data-bind="click:$root.toggleslctn"><i style="padding-top: 5px;float: left;" data-bind="css:f3()?'icon-minus-sign':'icon-plus-sign tred'" class="icon-ok"></i><p style="float: left;" data-bind="text:f3()?'Remove':'Add'"></p></a></div></li>
+		</ul>
+		<div class="text-center onnextline" data-bind="visible:clctnode.bg()=='lred'">FAILED!!!</div>
+	</div>
+	}
+	@PageContentParam

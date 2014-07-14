@@ -1,0 +1,16 @@
+@(scriptcontent: Html=Html(" "))
+
+
+<script>
+			$(document).ready(function(){
+				//Examples of how to assign the Colorbox event to elements
+				
+				
+				ldiv=new loaderdiv('.loaderimagediv','#loadertext');
+				ldiv.initdiv();				
+				@jsglobals()
+				@scriptcontent
+				
+				
+			});
+</script>

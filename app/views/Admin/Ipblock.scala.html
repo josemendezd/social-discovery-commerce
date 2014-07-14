@@ -1,0 +1,149 @@
+@(currentPage: com.avaje.ebean.Page[models.Admin.Ipblacklist], currentSortBy: String, currentOrder: String)	@*	VARIATION POINT	*@
+@import helper._
+
+@****************************************
+* Helper generating navigation links    *
+****************************************@
+@link(newPage:Int, newSortBy:String) = @{
+    
+    var sortBy = currentSortBy
+    var order = currentOrder
+    
+    if(newSortBy != null) {
+        sortBy = newSortBy
+        if(currentSortBy == newSortBy) {
+            if(currentOrder == "asc") {
+                order = "desc"
+            } else {
+                order = "asc"
+            }
+        } else {
+            order = "asc"
+        }
+    }
+    
+    // Generate the link
+    routes.AdminControls.ipblacklistcontrol_view(newPage, sortBy, order)  
+    //@*	VARIATION POINT	*@
+    
+}
+
+@**********************************
+* Helper generating table headers *
+***********************************@
+@header(key:String, title:String) = {
+    <th class="header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
+        <a href="@link(0, key)">@title</a>
+    </th>
+}
+
+
+@ps={ }
+
+
+@Templates.MasterTemplate(){
+@Templates.pagehead("Blocked ips @Boozology"){@ps}
+}{
+@Templates.pageheader(){		
+	}{ }	
+}{
+@Templates.pagemaincontent(){
+
+
+<h1 id="homeTitle">Showing the List of @currentPage.getTotalRowCount entities</h1>
+
+    <div id="actions">
+        
+        <form id="newblacklistform" action="@routes.AdminControls.ipblacklistcontrol_create" method="POST">		@*	VARIATION POINT INSIDE	*@
+            <input type="text" id="create_lowerip" name="lowerip" placeholder="Enter Lower address to blacklist" class="nomargin">
+            <input type="text" id="create_upperip" name="upperip" placeholder="Enter Upper address to blacklist" class="nomargin">
+            <input type="text" id="create_description" name="description" placeholder="Enter description" class="nomargin">
+            <input type="submit" id="create_upperip" value="Add new Blacklist" class="btn btn-primary displayinline">
+        </form>
+        
+    </div>
+    
+    @if(currentPage.getTotalRowCount == 0) {
+        
+        <div class="well">
+            <em>Nothing to display</em>
+        </div>
+        
+    } else {
+        
+        <table  class="table">
+            <thead>
+                <tr>
+                    @header("id", "Id")				@*	VARIATION POINT	*@
+                    @header("author", "Administrator")				@*	VARIATION POINT	*@
+                    @header("lowerip", "Lower IP")			@*	VARIATION POINT	*@
+                    @header("upperip", "Upper IP")				@*	VARIATION POINT	*@
+                    @header("range", "Range")				@*	VARIATION POINT	*@
+                    @header("description", "Description")				@*	VARIATION POINT	*@
+                    @header("datecreated", "Date Created")				@*	VARIATION POINT	*@
+                    <th class="header">
+				        <a href="#">Action</a>
+				    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @for(ipblck <- currentPage.getList) {				@*	VARIATION POINT INSIDE	*@
+                    <tr>
+                        <td><a>@ipblck.id</a></td>
+                        <td><a href="@routes.Application.ContributorPage(ipblck.author.id, false, true)">@ipblck.author.name</a></td>
+                        <td><a>@models.Admin.Ipblacklist.Longtoip(ipblck.lowerip)</a></td>
+                        <td><a>@models.Admin.Ipblacklist.Longtoip(ipblck.upperip)</a></td>
+                        <td><a>@models.Admin.Ipblacklist.Longtoip(ipblck.range)</a></td>
+                        <td>
+                            @if(ipblck.description == null) {
+                                <em>-</em>
+                            } else {
+                                @ipblck.description
+                            }
+                        </td>
+                        <td><a>@ipblck.datecreated</a></td>
+                        <td><a class="label label-danger" href="@routes.AdminControls.ipblacklistcontrol_delete(ipblck.id,currentPage.getPageIndex)" class="todelete">Delete</a></td>                        
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+        <div id="pagination" class="pagination">
+            <ul>
+                @if(currentPage.hasPrev) {
+                    <li class="prev">
+                        <a href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
+                    </li>
+                } else {
+                    <li class="prev disabled">
+                        <a>&larr; Previous</a>
+                    </li>
+                }
+                <li class="current">
+                    <a>Displaying @currentPage.getDisplayXtoYofZ(" to "," of ")</a>
+                </li>
+                @if(currentPage.hasNext) {
+                    <li class="next">
+                        <a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
+                    </li>
+                } else {
+                    <li class="next disabled">
+                        <a>Next &rarr;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        
+    }
+        
+        	
+		@Templates.su.jready{
+					
+		}
+	
+}
+}{
+@Templates.pagefooter(){ }
+}	

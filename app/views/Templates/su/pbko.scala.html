@@ -1,0 +1,96 @@
+@(extracontent:Html=Html(" "),defaultsize:Int =3)
+
+<div class="col-lg-@defaultsize col-md-@defaultsize col-sm-12 col-xs-12">
+ <div class="product-wrap thumb">
+	<!-- Begin .featured-product  -->
+	<div class="featured-product">
+	   <!-- Begin .info-wrap -->
+	   <div class="dropdown"  data-bind="css:lovetext()=='Love'?'info-wrap':'info-wrap deactivated'">
+		  <a href="javascript:void(0);" data-bind="click: $parent.lovestate" class="whitelink"><i  data-bind="css:lovetext()=='Love'?'icon-heart':'icon-thumbs-down'"></i><span  data-bind="text: lovetext()=='Love'?'Like It!':lovetext()"></span></a><a href="javascript:void(0);" data-toggle="dropdown" role="button"><b class="caret"></b></a>
+		  <ul role="menu" class="dropdown-menu">
+            <li><a href="javascript:void(0);" data-bind="click: $parent.wantstate, clickBubble: false,text: wanttext,css:wanttext()=='Want'?'':'tred'">Want</a></li>
+            <li><a href="javascript:void(0);" data-bind="click: $parent.triedstate, clickBubble: false,text: triedtext(),css:triedtext()=='Tried'?'':'tred'">Own</a></li>
+            <li><a href="javascript:void(0);" data-bind="click: $parent.collectstate, clickBubble: false">Collect</a></li>
+          </ul>
+	   </div>
+	   <a  data-bind="attr:{href:prlink}" class="btn btn-default view-product">View Product</a>
+	   <!-- End .info-wrap -->
+	   <img data-bind="attr:{src:pic,alt:name}" class="img-responsive">
+	</div>
+	<div class="pull-left productmetadata productcomlike">
+		@*
+		<a data-bind="attr:{href:usrlink,title:discoverer}" class="user-thumb pull-right">
+			<img data-bind="attr:{alt:discoverer,src:usrpic}" class="img-responsive">
+		</a>
+		*@
+		<h4 class="ellipsis"><a data-bind="attr:{href:prlink},text:name"></a></h4>
+		@* 
+		<div class="clearfix"></div>
+		<span data-bind="html:cncy()+$().cat(Math.round(cost()),8)"></span>
+		<ul class="list-inline pull-right">
+		   <li><i class="icon-comment"></i><i data-bind="text: love"></i></li>
+		   <li><i class="icon-heart"></i><i data-bind="text: comment"></i></li>
+		</ul>
+		*@
+	</div>
+	
+	<div class="ellipsis pull-left productmetadata userstoreinfo">
+		<div class="pull-right"><span data-bind="html:cncy()+$().cat(Math.round(cost()),8)"></span></div>
+		<ul class="list-unstyled width-70per">
+		   <li class="ellipsis"> 
+		   		<a class="user-thumb" data-bind="attr:{href:usrlink,title:discoverer}">
+					<img class="inlineimage" data-bind="attr:{alt:discoverer,src:usrpic}">
+					<span data-bind="text:discoverer"></span>
+				</a>
+		   </li>
+		   <li class="padding-small"><a data-bind="attr:{href:storeaddr},text:store"></a></li>
+		</ul>
+	</div>
+	
+	<div class="clearfix"></div>
+ </div>
+ <!-- End .featured-product -->
+</div>
+
+@*
+<li class="thumbsli">
+	@extracontent
+	
+    <div class="thumbslink thumbslinkmedium" data-bind="click: $root.brickinvoked,attr:{id:id}">
+        <a data-bind="attr:{href:prlink}"><img class="thumblimg" data-bind="attr:{src:pic,alt:name}"></a>
+        <div class="thumbldiv disonhover">
+            <span data-bind="text: $().cat(name(),50)"></span>
+        </div>
+    </div>
+    <div class="floatlike disonhover">
+        <div class="btn-group">
+            <button class="brectangle" data-bind="click: $parent.lovestate,text: lovetext,css:lovetext()=='Love'?'btn btn-danger':'btn btn-inverse' "></button><button class="brectangle" data-toggle="dropdown" data-bind="css:lovetext()=='Love'?'btn btn-danger dropdown-toggle':'btn btn-inverse dropdown-toggle'"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a href="javascript:void(0);" data-bind="click: $parent.wantstate, clickBubble: false,text: wanttext">Want</a></li>
+                <li><a href="javascript:void(0);" data-bind="click: $parent.triedstate, clickBubble: false,text: triedtext">Own</a></li>
+                <li><a href="javascript:void(0);" data-bind="click: $parent.collectstate, clickBubble: false">Collect</a></li>
+            </ul>
+        </div>
+    </div>
+    <span class="like">
+    <div>
+        <div class="disonhover">
+            <div class="user-info user-hover">
+                <div class="user-gravatar40">
+                    <a data-bind="attr:{href:usrlink}"><img data-bind="css:'likeimage',attr:{href:usrlink,alt:discoverer,src:usrpic}"></a>
+                </div>
+                <div class="user-details spacecreater-lateral-small">
+                    Found by: <a class="black" data-bind="attr:{href:usrlink}"><b data-bind="text: $().cat(discoverer())"></b></a><br>
+                    at: <a class="black" data-bind="attr:{href:storeaddr}"><b  data-bind="text: $().cat(store())"></b></a>
+                </div>
+            </div>
+        </div>
+        <div class="user-details goinvonhov thumbtextmaxwidth textcutoverflow">
+            <span data-bind="text:name"></span><br>
+            <div class="textcutoverflow"><b class="black" data-bind="html:cncy()+$().cat(Math.round(cost()),8)"></b> ,<span data-bind="text: love"></span> Loves,<span data-bind="text: comment"></span> Comments </div>
+        </div>
+    </div>
+    </span>
+</li>
+*@
+   

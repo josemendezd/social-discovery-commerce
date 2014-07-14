@@ -1,0 +1,19 @@
+@(bindtoelement:String,genericid:String,containerid:String,formid:String,urlbase:String)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+$("@bindtoelement").click(function () { @subjectPresentOr(){$('#@{containerid}').toggle();}{$().askforloginorsignup();} return false;});
+@subjectPresent(){
+$("[id^='@genericid']").hide();$('#@{formid}')[0].reset();$('#@{containerid}').hide();
+$('#@{formid}').submit(function(event) {
+	event.preventDefault();
+	$msgbox=$('#@{genericid}status');$loader=$('#@{genericid}loader');
+	$msgbox.show();$loader.show();
+	var retnresp=$().setresponse({ispost:true,url:"@urlbase",argdata:$( this ).serialize(),failans:false});
+	$loader.hide();
+	if(retnresp===false){ $msgbox.html('<label class="alert-danger"><b class="underline">Failed</b></label>');}
+	else{$msgbox.html('<label class="alert-success"> <b>Done!!</b> </label>');}
+	this.reset();
+	$msgbox.hide(2000,function(){$('#@{containerid}').hide('slow');});
+});
+}
+

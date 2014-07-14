@@ -1,0 +1,9 @@
+@(hasloadernode: Boolean=true,loadernode:String="prloadmorestyle hidden",isajax: Boolean=false,extracontent:Html=Html(" "),defaultsize:Int =3)
+<div>
+    <div class="row" data-bind="foreach: prodList, visible: prodList().length > 0">	
+    		      <!--  product include -->	
+        @Templates.su.pbko(extracontent,defaultsize)
+    </div>
+    @if(hasloadernode){<div id="prloadmore" class="@loadernode" data-bind="click:loadMore,html:$root.moreloadtext, visible: prodList().length > 0"></div>}
+	@Templates.su.collpopko(){ }
+</div>

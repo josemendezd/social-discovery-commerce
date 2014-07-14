@@ -1,0 +1,35 @@
+@()
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+<div id="popproduct" class="mainpopcont"  data-bind="with:highProd">
+	<div class="locheader bold"  data-bind="text:name"></div>
+	<div class="text-center">Inside : <i  data-bind="html:location"></i></div>
+	<br/>
+	<div class="imagecontainer">
+		<a data-bind="attr:{href:'/product/page/'+id()}"><img class="fdmiddle" data-bind="attr:{src:pic,alt:name}" /></a>
+			<div class="socialdiv clearstyled">
+				<ul class="inline">
+					<li><a><img alt="Twitter" src="@routes.Assets.at("img/t.png")"/></a></li>
+					<li><a><img src="@routes.Assets.at("img/fb.png")"/></a></li>
+					<li><a><img src="@routes.Assets.at("img/g.png")"/></a></li>
+					<li><a><img src="@routes.Assets.at("img/tb.png")"/></a></li>
+					<li><a><img src="@routes.Assets.at("img/flickr.png")"/></a></li>
+					<li><a><img src="@routes.Assets.at("img/pin.png")"/></a></li>
+					<li><a class="btn btn-small btn-info">Recommend</a></li>
+				</ul>
+			</div>
+	</div>
+	<div class="clearstyled">
+		<div class="clearstyled">
+			<ul class="inline">
+				<li class="liststyle lred"><span class="bold"  data-bind="text:love"></span> <br/>Lovers</li>
+				<li class="liststyle lgreen"><span class="bold"  data-bind="text:want"></span> <br/>Wants</li>
+				<li class="liststyle llightblue"><span class="bold"  data-bind="text:tried"></span> <br/>Consumers</li>
+				<li class="liststyle lviolet"><span class="bold"  data-bind="text:collect"></span> <br/>Collection</li>
+				<li class="liststyle lolive"><span class="bold"  data-bind="text:comment"></span> <br/>Comments</li>
+			</ul>
+		</div>
+		<div class="coveringloader text-center">@subjectPresentOr(){<span>LOADING...</span><br><img src="@routes.Assets.at("img/loading.gif")" class="clearstyled">}{<span>Please login to view More</span>}</div>
+	</div>
+</div>

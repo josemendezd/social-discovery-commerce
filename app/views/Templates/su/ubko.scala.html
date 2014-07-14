@@ -1,0 +1,114 @@
+@(solitary:Boolean=false) 
+
+@singleunit={
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
+	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+       	<ul class="list-inline simplefont">
+               <li>
+                   <ul class="list-unstyled">
+                       <li><a  data-bind="attr:{href:ul}"><img  data-bind="attr:{src:ui,alt:un}" class="img-circle"></a></li>
+                       <li>&nbsp;</li>
+                       <li><button data-bind="click: $parent.follow,css:ufs()?'btn btn-sm btn-primary brectangle':'btn btn-sm btn-danger brectangle',text:ufs()?'Unfollow':'Follow'">Follow</button></li>                        
+                       <li>&nbsp;</li>
+                   </ul>
+               </li>
+               <li>
+                   <ul class="list-unstyled ellipsis">
+                       <li><a data-bind="attr:{href:ul}"><strong class="underline"  data-bind="text:un"></strong></a></li>
+                       <li><span data-bind="text:ufic"></span> Following</li>
+                       <li><span data-bind="text:ufc"></span> Followers</li>
+                       <li><span data-bind="text:upc"></span> Loved Items</li>
+                       <li><span data-bind="text:ucc"></span> Collections</li>
+                   </ul>
+               </li>
+           </ul>
+		
+           
+	</div>
+	<div class="text-center" data-bind="visible:someprod().length == 0"><h2>No Likes!!</h2></div>
+	<div data-bind="foreach: someprod,visible:someprod().length > 0">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+	       	<a  data-bind="attr:{href:pl}" class="thumbnail shortproduct">
+	             <img data-bind="attr:{src:pi,alt:pn,title:pn}">
+	        </a>
+		</div>
+	</div>	
+    <div class="clearfix padding-small"></div>
+</div>
+
+@*
+<li class="onnextline">
+
+
+	<ul class="inline" style="margin-top:40px;min-height: 160px;">
+	
+		<li class="pull-left  text-left  textcutoverflow  gray simplefont" style="max-width:200px;margin-right: 10px;">
+			<ul class="inline searchposition">
+				<li class="pull-left"><a data-bind="attr:{href:ul}">
+					<img data-bind="attr:{src:ui,alt:un}" class="likeimagelarge"></a>
+					<br/>
+					<br/>
+					<a style="padding:2px 15px;" data-bind="click: $parent.follow,css:ufs()?'btn btn-small btn-primary verdana clearstyled brectangle':'btn btn-small btn-danger verdana clearstyled brectangle',text:ufs()?'Unfollow':'Follow'"></a>
+				</li>
+				<li class="textcutoverflow">
+					<a data-bind="attr:{href:ul}"><span class="black underline bold"  data-bind="text:un"></span></a>
+					<br/>
+			    	<span data-bind="text:ufic"></span> Following
+			    	<br/>
+					<span data-bind="text:ufc"></span> Followers
+					<br/>
+					<span data-bind="text:upc"></span> Loved Items
+					<br/>
+					<span data-bind="text:ucc"></span> Collections
+				</li>
+			</ul>
+			<!--
+				<div>
+				    <div class="text-left">				       
+							<a class="notmiddleimg" data-bind="attr:{href:ul}">
+								<div>
+									<img data-bind="attr:{src:ui,alt:un}" class="likeimagelarge">
+								    <span class="verdana black underline bold inlinedisplay"  data-bind="text:un"></span>
+							    </div>
+							</a>					
+						    <ul class="unstyled georgia black onnextline">
+						    	<li><b class="verdana" data-bind="text:ufic"></b>&nbsp;&nbsp;<i>Following</i></li>
+								<li><b class="verdana" data-bind="text:ufc"></b>&nbsp;&nbsp;<i>Followers</i></li>
+								<li><b class="verdana" data-bind="text:upc"></b>&nbsp;&nbsp;<i>Loved Items</i></li>
+								<li><b class="verdana" data-bind="text:ucc"></b>&nbsp;&nbsp;<i>Collections</i></li>					
+								<li><a style="padding:2px 30px;" data-bind="click: $parent.follow,css:ufs()?'btn btn-small btn-primary verdana clearstyled':'btn btn-small btn-danger verdana clearstyled',text:ufs()?'Unfollow':'Follow'"></a></li>
+							</ul>			
+				    </div>
+				</div>
+			  -->
+		</li>
+		<li>
+			<ul class="inline" data-bind="foreach: someprod,visible:someprod().length > 0">
+				<li class="user-store-tile theme-white">
+					<div class="thumbslink">
+						<a data-bind="attr:{href:pl}">
+							<div class="feedtitle feedtitletext underline text-center gray theme-white"></div>
+							<img class="thumblimgsmall"  data-bind="attr:{src:pi,alt:pn,title:pn}">
+						</a>
+					</div>
+				</li>				
+			</ul>
+		</li>
+	</ul>
+	
+</li>
+*@
+}
+
+@if(solitary){	@singleunit
+}else{
+<div class="row"  data-bind="foreach: userList,visible:userList().length > 0">
+	@singleunit
+</div>
+@*
+<ul class="unstyled text-left" style="margin-top:-20px;" data-bind="foreach: userList,visible:userList().length > 0">
+	@singleunit
+</ul>
+*@
+} 

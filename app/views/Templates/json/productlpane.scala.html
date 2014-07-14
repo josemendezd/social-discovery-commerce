@@ -1,0 +1,9 @@
+@(productlist: List[Product])
+{
+"prodgrid":[
+@for((productx,cnt) <- productlist.zipWithIndex) {
+@if(cnt!=0){,}
+@Templates.json.productbrick(productx)
+}
+]
+}

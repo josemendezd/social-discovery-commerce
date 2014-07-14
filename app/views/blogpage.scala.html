@@ -1,0 +1,96 @@
+@(blgpg:com.avaje.ebean.Page[Blog])
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import Templates._
+
+@pst={
+<link href="@routes.Assets.at("css/blog.css")"  rel='stylesheet' type='text/css' />
+<script src="@routes.Assets.at("js/sticky-kit.min.js")"></script>  
+<script src="@routes.Assets.at("js/readmore.min.js")"></script>  
+<script src="@routes.Assets.at("js/stickykit.js")"></script>  
+}
+
+@MasterTemplate(){
+	@pagehead("Blog @Boozology"){@pst}
+}{
+	@pageheader(){
+		@subjectPresent(){
+	<div class="container smartcontainer">
+		<div class="row">
+			<div class="logout blbanner">
+				<div class="message"><span class="bold">Need to write a blog?? </span></div>
+				<div class="options">
+					<div class="option"><a class="btn btn-danger brectangle btn-small" href="@routes.Application.GetAddBlog()">Write New Blog</a></div>
+				</div>
+			</div>
+		</div>
+	</div>
+		}
+	}{ }
+	
+}{
+	@pagemaincontent(){
+	
+	@defining(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,Application.getLocalUser(session()))) { isadmin=>
+			
+				
+				@for((blg,cnt) <- blgpg.getList.zipWithIndex){
+					@Templates.su.Singleblog(blg,true,cnt)
+				}
+			
+			
+			@*
+			<div id="blogpage" class="onnextline majorblogunit">
+			@for((blg,cnt) <- blgpg.getList.zipWithIndex){
+				@Templates.su.Singleblog(blg,true,cnt)
+			}
+			</div>
+			*@
+		}
+		@*
+		<div class="minorblogunit textcutoverflow blogsidebar">
+			<div class="accordion" id="accordion2">
+			  <div class="accordion-group">
+			    <div class="accordion-heading">
+			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+			        Archive
+			      </a>
+			    </div>
+			    <div id="collapseOne" class="accordion-body collapse">
+			      <div class="accordion-inner">
+			        <ul class="unstyled text-center">
+			        @for(blg <- Blog.RecentBlogPage(0,40).getList){
+			        	<li class="textcutoverflow"><a href="@routes.Application.GetBlogPage(blg.id)">@blg.title</a></li>
+			        }
+			        </ul>
+			        <a href="#" class="gray underline pull-right">See All</a>
+			      </div>
+			    </div>
+			  </div>
+			  <div class="accordion-group">
+			    <div class="accordion-heading">
+			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+			        Tags
+			      </a>
+			    </div>
+			    <div id="collapseTwo" class="accordion-body collapse">
+			      <div class="accordion-inner">
+			        <ul class="unstyled text-center">
+				        @for(blglb<- BlogLabels.RecentBlogLabels(0,40).getList){
+				        	<li class="textcutoverflow"><a href="#">@blglb.tag</a></li>
+				        }
+			        </ul>
+			        <a href="#" class="gray underline pull-right">See All</a>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		</div>		
+		
+		*@
+		@Templates.su.jready{ }
+		
+	}
+}{
+@pagefooter(){ }
+}		

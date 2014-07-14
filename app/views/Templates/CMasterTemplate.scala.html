@@ -1,0 +1,18 @@
+@()(headpart: Html)(headerpart: Html)(mainbody: Html)(footerpart: Html)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+<!DOCTYPE html>
+<html lang="en">
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+	@headpart
+  </head>
+
+  <body id="boozologybody" class="theme-white">
+  	@headerpart
+  	@mainbody
+  	@footerpart
+	<div id="divstore" class="hidden"></div> 
+	
+  </body>
+</html>
+

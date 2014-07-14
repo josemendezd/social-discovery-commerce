@@ -1,0 +1,18 @@
+@(ssearch: FSearch)(implicit session: play.mvc.Http.Session) 
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+{
+	"fl":"@routes.Application.SearchPage(ssearch.id,false)",
+	"fn":"@ssearch.skey",
+	"ffurl":"@routes.Useract.CopySearch(ssearch.id)",
+	@subjectPresentOr(){"ffs":@{ssearch.IsFollowingSearch(Application.getContributor(session))!=null} }{"ffs":false},
+	"someprod":[	
+	@for((productx,cntn)<-FSearch.RecentProducts(ssearch,4).zipWithIndex){@if(cntn!=0){,}
+			{			
+				"pl":"@routes.Application.ProductPage(productx.id,false)",
+				"pi":"@productx.getproductimagethumb()",
+				"pn":"@productx.productname"			
+			}
+		}
+	]
+}

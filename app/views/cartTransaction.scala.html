@@ -1,0 +1,161 @@
+@(amount: Double)
+@ps={
+<style>
+.labelStyling {
+	float: left;
+	width: 30%;
+}
+.inputStyling {
+	width: 65%;
+	margin-top: 3%;
+}
+.message {
+	margin-left: 30%;
+}
+</style>
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("CheckOut"){@ps}
+}{
+	@Templates.pageheader(){
+	}{ }
+}{
+	@Templates.pagemaincontent(){
+	@Templates.su.jready{	}
+	
+<script type="text/javascript" src="@routes.Assets.at("js/jquery.form.min.js")"></script>	
+<script type="text/javascript" src="@routes.Assets.at("js/jquery.validate.min.js")"></script>
+
+	
+<div class="container">
+		<!-- Begin .row -->
+		<div class="row">
+
+	  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
+		    <div class="checkout-wrap-form">
+				<h3>Confirm Payment $ @amount</h3>
+				<form action="/cart/checkout/transaction" method="POST" class="form-horizontal" id="checkOutPaymentForm" enctype="multipart/form-data">
+  					<div class="control-group">
+        				<div class="controls">
+    						<label for="cardNumber" class="labelStyling">Card Number</label>
+    						<input type="text" name="cardNumber" class="form-control inputStyling" id="cardNumber" required="true">
+  						</div>
+  					</div>	
+	  				<div class="control-group">
+        				<div class="controls">
+	    					<label for="expirationDate" style="width: 29%;">Expiration Date</label>
+	    					<select name="month" style="margin-top: 4%;">
+	    					<option value="1">1</option>
+	    					<option value="2">2</option>
+	    					<option value="3">3</option>
+	    					<option value="4">4</option>
+	    					<option value="5">5</option>
+	    					<option value="6">6</option>
+	    					<option value="7">7</option>
+	    					<option value="8">8</option>
+	    					<option value="9">9</option>
+	    					<option value="10">10</option>
+	    					<option value="11">11</option>
+	    					<option value="12">12</option>
+	    					</select> / 
+	    					<select name="year">
+	    					<option value="2013">2013</option>
+	    					<option value="2014">2014</option>
+	    					<option value="2015">2015</option>
+	    					<option value="2016">2016</option>
+	    					<option value="2017">2017</option>
+	    					<option value="2018">2018</option>
+	    					<option value="2019">2019</option>
+	    					<option value="2020">2020</option>
+	    					<option value="2021">2021</option>
+	    					<option value="2022">2022</option>
+	    					<option value="2023">2023</option>
+	    					<option value="2024">2024</option>
+	    					</select>
+	  					</div>
+	  				</div>	
+	  				<div class="control-group">
+        				<div class="controls">
+	    					<label for="securityCode" class="labelStyling">Security Code</label>
+	    					<input type="password" name="securityCode" class="form-control inputStyling" id="securityCode" required="true" style="width: 15%;">
+	  					</div>
+	  				</div>	
+	  				<div class="control-group">
+        				<div class="controls">
+	    					<label for="nameOnCard" class="labelStyling">Name on Card</label>
+	    					<input type="text" name="nameOnCard" class="form-control inputStyling" id="nameOnCard" required="true">
+	  					</div>
+					</div>
+	  				<button type="submit" id="submitButton" class="btn btn-default orange" style="margin-top: 4%;">Submit</button>
+				</form>
+			</div>
+		</div>
+	</div>
+		<!-- End .row -->
+</div>
+
+<script>
+	$(document).ready(function(){
+		
+		$('#checkOutPaymentForm').submit(function(){
+			if($("#checkOutPaymentForm").valid()) {
+				document.getElementById("submitButton").disabled="true";
+			}
+			return true;
+		});
+		
+		$.validator.addMethod('integerCheck', function(value, element, param) {
+            return (value != 0) && (value == parseInt(value, 10));
+        }, 'Please enter a non zero integer value!');
+		
+		$("#checkOutPaymentForm").validate({
+			rules : {
+				cardNumber : {
+					required : true,
+					integerCheck : true,
+					creditcard : true
+				},
+				securityCode : {
+					required : true,
+					integerCheck : true,
+					maxlength : 3
+				}
+			},
+			
+			messages : {
+				cardNumber : {
+					required : "Enter your card number",
+					integerCheck : "Enter only nonzero integers",
+					creditcard : "Enter a valid card number"
+					
+				},
+				securityCode : {
+					required : "Enter your CVV number",
+					integerCheck : "Enter only nonzero integers",
+					maxlength : "CVV number cannot be more than 3 digits"
+				}
+			},
+			
+			errorClass : "message",
+			errorElement : "span",
+			highlight: function (element) {
+			    $(element).closest('.control-group').removeClass('success').addClass('error');
+			},
+			success: function(element) {
+			     element
+			        .addClass('valid')
+			        .closest('.control-group').removeClass('error').addClass('success');
+			}
+				
+		});
+	});
+</script>
+
+
+
+	}
+}{
+	@Templates.pagefooter(){	}
+}

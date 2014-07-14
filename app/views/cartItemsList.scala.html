@@ -1,0 +1,216 @@
+
+@ps={
+<style>
+.quantitySelectStyling {
+width: 35%;
+text-align: center;
+}
+</style>
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("My Cart items"){@ps}
+}{
+	@Templates.pageheader(){
+	}{ }
+}{
+	@Templates.pagemaincontent(){
+	@Templates.su.jready{
+	}
+	<!-- Begin .container -->
+<div class="container">
+	<!-- Begin .row -->
+	<div class="row">
+		<div class="col-lg-12 col-12 col-md-12 col-xs-12 col-sm-12">
+			<div class="page-title checkout">
+				<h1>Shopping Cart</h1>
+			</div>
+		</div>
+     
+	<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 col-12">
+    
+    <!-- Begin .checkout-cart -->
+    <div class="checkout-cart">
+
+    <!-- Begin .table-responsive -->
+  <div class="table-responsive">
+    <table class="table table-bordered ">
+          <thead>
+            <tr>
+              <th style="text-align: center">Item</th>
+              <th style="text-align: center">Name</th>
+              <th style="text-align: center">Description</th>
+              <th style="text-align: center">Unit Price</th>
+              <th style="text-align: center">Quantity</th>
+              <th style="text-align: center">Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id='cartItems' data-bind="foreach: itemList">
+            <tr style="text-align: center">
+              <td><img data-bind="{attr: {src: url}}" class="img-responsive"></td>
+              <td data-bind="text: name"></td>
+              <td data-bind="text: description"></td>
+              <td data-bind="text: price"></td>
+              <td onchange="changeInCart(this)">
+              	<input type="hidden" data-bind="value: id">
+              	<input type="number"  data-bind="value: quantity" class="quantitySelectStyling">
+              </td>
+              <td data-bind="text: amount"></td>
+              <td onclick="deleteFromCart(this)">
+              		<input type="hidden" data-bind="value: id">
+              		<span class="remove-item"><a href="#"><i class="icon-remove-sign"></i></a></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+     </div>
+        <!-- End table-responsive -->
+        </div>
+        <!-- End checkout cart -->
+		</div>
+		<!-- End .col-lg-9 -->
+
+<!-- Begin .col-lg-3 -->
+<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 col-12">
+    <!-- Begin .cart-summary -->
+   <div class="cart-summary">
+    <!-- Begin .box -->
+    <div class="box" id="grandTotalData" data-bind="foreach: grandTotal">
+      <h3>Shopping cart summary</h3>
+
+      <ul class="summary">
+        <li> Shipping </span> <span>Free Shipping</span></li>
+        <li> Sub Total <span data-bind="text: amount"> </span></li>
+      </ul>
+	<p class="total">Grand Total<span data-bind="text: amount"></span></p>
+
+    </div>
+    <!-- End box -->
+<!-- Begin cart-act -->
+<div class="cart-act">
+      <ul>
+        <li><a href="@routes.Carts.checkOutPage()" class="btn btn-default orange">Proceed to Checkout</a></li>
+        <li><a href="/">Continue shopping</a></li>
+      </ul>
+
+</div>
+    <!-- End cart-act -->
+    </div>
+    <!-- cart-summary -->
+</div>
+    <!-- End .col-lg-3 -->
+		
+	</div>
+	<!-- End .row -->
+</div>
+
+<script>
+	var itemList;
+	var grandTotal;
+
+	function deleteFromCart(_this) {
+		var id = $(_this).find('input:hidden').val();
+		
+		$.ajax({
+			type: "POST",
+			url: "/cart/delete/item",
+			data:{id: id },
+			success: function(data){
+				itemList.removeAll();
+				grandTotal.removeAll();
+				if(data.length>0) {
+					var _amount = 0;
+					$('#cartCount').show();
+					$('.noti_bubble').empty();
+					$('.noti_bubble').append("<a>"+data.length+"</a>");
+					for(var i=0; i<data.length; i++) {
+						itemList.push(data[i]);					
+						_amount = _amount + data[i].amount;
+					}
+					var amount = {amount:_amount};
+					grandTotal.push(amount)
+				}
+			}
+		});
+	}
+
+
+	function changeInCart(_this) {
+		var id = $(_this).find('input:hidden').val();
+		var quantity = $(_this).find('.quantitySelectStyling').val();
+		if(quantity == 0) {
+			alert("Quantity cannot be zero")
+		} else {
+			$.ajax({
+				type: "POST",
+				url: "/cart/update/item",
+				data: { id : id,
+					    quantity: quantity 
+					},
+				success: function(data){
+					itemList.removeAll();
+					grandTotal.removeAll();
+					if(data.length>0) {	
+						var _amount = 0;
+						$('#cartCount').show();
+						$('.noti_bubble').empty();
+						$('.noti_bubble').append("<a>"+data.length+"</a>");
+						for(var i=0; i<data.length; i++) {
+							itemList.push(data[i]);					
+							_amount = _amount + data[i].amount;
+						}
+						var amount = {amount:_amount};
+						grandTotal.push(amount)
+					}
+				}
+			});
+		}	
+	}
+
+
+$(document).ready(function(){
+
+	itemList = ko.observableArray();
+	grandTotal = ko.observableArray();
+	ko.applyBindings(itemList, document.getElementById('cartItems'));
+	ko.applyBindings(grandTotal, document.getElementById('grandTotalData'));
+	loadCart();
+	
+	function loadCart(){
+ 		$.ajax({
+			type: "GET",
+			url: "/cart/item/lists",
+			success: function(data){
+				itemList.removeAll();
+				grandTotal.removeAll();
+				if(data.length>0) {
+					ldiv.loadcomplete();
+					var _amount = 0;
+					$('#cartCount').show();
+					$('.noti_bubble').empty();
+					$('.noti_bubble').append("<a>"+data.length+"</a>");
+					for(var i=0; i<data.length; i++) {
+						itemList.push(data[i]);
+						_amount = _amount + data[i].amount;
+					}
+					var amount = {amount:_amount};
+					grandTotal.push(amount)	
+				}
+			}
+		});
+ 	}
+	
+});
+
+</script>
+
+
+
+	}
+}{
+	@Templates.pagefooter(){ 
+	
+	}
+}

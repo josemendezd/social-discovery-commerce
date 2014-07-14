@@ -1,0 +1,89 @@
+@(divid: String="shoppage")(PageContentParam: Html)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+function ShopView() {
+	
+	// Data
+	var self = this;					
+	self.prodList = ko.observableArray([]);
+	self.highProd = ko.observable();
+
+	// Behaviours
+	@subjectPresent(){	@Templates.js.collaction(){ }	}				
+	
+	self.brickinvoked = function(prod)
+	{ 
+		self.highProd(prod);
+		$.colorbox({inline:true,href:'#popproduct'});
+		@subjectPresent(){$.get(prod.prlinkajax(), function(data){$.colorbox({html:data, innerWidth:"840px",top:"10px"});});}	
+	};
+	 
+	 
+	 self.lovestate = function(prod,e)
+	 {
+	  @subjectPresentOr(){
+	  	 $().apld($(e.target));
+		 $.getJSON('/'+prod.lovetext().toLowerCase()+'/'+prod.id(), function(data)
+			{
+			 ko.mapping.fromJS(data,prod);
+			}
+		 );	
+		 }{$().askforloginorsignup();}					 
+	 };
+	 self.wantstate = function(prod,e)
+	 {
+	  @subjectPresentOr(){
+	  	$().apld($(e.target));
+		 $.getJSON('/'+prod.wanttext().toLowerCase()+'/'+prod.id(), function(data)
+			{
+			 ko.mapping.fromJS(data,prod);
+			}
+		 );
+		 }{$().askforloginorsignup();}						 
+	 };
+	 self.triedstate = function(prod,e)
+	 {
+	  @subjectPresentOr(){
+	  	$().apld($(e.target));
+		 $.getJSON('/'+prod.triedtext().toLowerCase()+'/'+prod.id(), function(data)
+					{
+					 ko.mapping.fromJS(data,prod);
+					}
+				 );		
+		}{$().askforloginorsignup();}				 
+	};
+	
+	
+	self.collectstate = function(prod,e){
+	 @subjectPresentOr(){
+	 	self.initcolpop(prod,e,"#@divid");
+	 	/*
+	 	ko.mapping.fromJS({clcsrc:self.clctnode.clcsrc(),x:(e.pageX),y:(e.pageY),bg:"bgloaderico"},self.clctnode);
+	    var srvrp=$().setresponse({url:prod.cllink(),failans:false,successnode:"collectionlist"});
+	    if(srvrp===false)
+	    { self.clctnode.bg(" lred");return false;}
+	 	self.clctnode.bg("");
+	 	self.clctnode.clcsrc(srvrp);
+	 	//alert("Event Raised: "+'{clcsrc:'+self.clctnode.clcsrc()+',x:'+self.clctnode.x()+',y:'+self.clctnode.y()+',bg:'+self.clctnode.bg()+'}'); 
+		$("body").one("click", "#@divid", function(){		
+			
+			ko.mapping.fromJS(initclctnode,self.clctnode);
+			//alert("Dead: "+'{clcsrc:'+self.clctnode.clcsrc()+',x:'+self.clctnode.x()+',y:'+self.clctnode.y()+',bg:'+self.clctnode.bg()+'}');
+		});
+	 */
+	 
+	 }{$().askforloginorsignup();}
+	
+	};
+	
+	
+	@PageContentParam
+	
+	
+	
+};
+var thisshopview=new ShopView();
+				
+ko.applyBindings(thisshopview,$('#@divid')[0]);
+	

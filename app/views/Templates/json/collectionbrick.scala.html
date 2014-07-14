@@ -1,0 +1,15 @@
+@(collect: UserCollection)(implicit session: play.mvc.Http.Session) 
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+{
+	"colladdress":"@routes.Application.CollectionPage(collect.id,false)","collid":"@collect.id","colname":"@GHelp.EHtml(collect.colname)","prodcount":"@collect.productlist.size()","adminname":"@collect.contributor.user.name","userlink":"@routes.Application.ContributorPage(collect.contributor.id,false)","cfurl":"@routes.Useract.FollowAct(DInitial.SEARCH_COLLECTION,collect.id)",
+	@subjectPresentOr(){"cfs":@Follow.IsCollectionFollower(collect.id,Application.getContributor(session).id)}{"cfs":false},
+	
+	"someprod":[ 
+	@defining(UserCollection.RecentProducts(collect,10)){totprod=>
+	@if(totprod.size==0){ @if(collect.coverimage==null){ {"pi":"@{Application.WebAddress}@{routes.Assets.at(DInitial.DEFAULTIMAGES.EMPTY_COLLECTION)}","pn":"Empty Collection"} }else{ {"pi":"@collect.coverimage","pn":"@GHelp.EHtml(collect.colname)"} } }
+	@for((productx,cntn)<-totprod.zipWithIndex){ 
+		@if(cntn!=0){,}else{ @if(collect.coverimage!=null){	{"pi":"@collect.coverimage","pn":"@GHelp.EHtml(collect.colname)"}, } }
+		{"pi":"@productx.getproductimagethumb()","pn":"@productx.productname"}}]
+	}
+}

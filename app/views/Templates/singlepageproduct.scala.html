@@ -1,0 +1,21 @@
+@(divid: String)(ProductList: List[Product])
+<div id="@divid" class="onnextline">
+        <ul id="pbrick" class="thumbnails"  data-bind="foreach: prodList, visible: prodList().length > 0">		
+           @Templates.su.pbko()
+        </ul>
+</div>
+<div class="hidden">
+		@Templates.su.dopbko()	
+</div>
+<script>
+@Templates.js.pbactionjs(){	
+	self.prodselect={@for((productx,cnt) <- ProductList.zipWithIndex) {@if(cnt!=0){,} @Templates.json.productbrick(productx)}}
+	
+	self.loadAll = function(){$.each(self.prodselect,function(prindex, prattr){	self.prodList.push(ko.mapping.fromJS(prattr));});}
+	 
+	self.pform=ko.computed(function(){self.loadAll();}).extend({ throttle: 200 });	
+	
+}
+
+
+</script>

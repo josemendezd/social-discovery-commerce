@@ -1,0 +1,32 @@
+@()
+
+<li class="thumbnail" style="width:200px;background-color: white;margin:10px;border:none;">
+	<div>
+		
+			<div data-interval="5000" class="carousel slide collectionthumb"  data-bind="attr:{id:'collection'+collid()}"> 
+				
+				<div style="position: absolute;right: 0;top:10px;z-index:1000" class="disonhover"><a  data-bind="click: $parent.follow,css:cfs()?'btn btn-primary':'btn btn-default',text:cfs()?'Unfollow':'Follow'"></a></div>
+				<a  data-bind="attr:{href:colladdress}" >
+					<div class="carousel-inner" data-bind="foreach: someprod">
+					  <div data-bind="css: $index()==0?'item active':'item'">
+					  
+						<img style="max-height:200px;max-width:200px; margin-left:auto;margin-right:auto;" data-bind="attr:{src:pi,alt:pn}">
+						<div class="carousel-caption text-center disonhover">
+						  <span data-bind="text: pi"></span>	  
+						</div>
+					  </div>  
+					</div>
+				</a>
+				<a  class="left carousel-control disonhover" data-bind="attr:{href:'#collection'+collid()}" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+				<a  class="right carousel-control disonhover" data-bind="attr:{href:'#collection'+collid()}" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+				
+				
+			</div>
+			
+						
+		<ul class="list-unstyled text-center simplefont collctnribbon">
+			<li><a class="bold black underlineborder" data-bind="text:$().cat(colname(),25),attr:{href:colladdress}"></a> (<span style="color:#888888;" data-bind="text: prodcount"></span>) </li>
+			<li>By: <a class="black underline tahoma" data-bind="attr:{href:userlink},text: adminname"></a></li>
+		</ul>
+	</div>					
+</li>

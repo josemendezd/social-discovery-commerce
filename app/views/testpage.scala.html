@@ -1,0 +1,21 @@
+@(blgpg:com.avaje.ebean.Page[Blog])
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import Templates._
+
+@pst={
+<link href="@routes.Assets.at("css/blog.css")"  rel='stylesheet' type='text/css' />
+}
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Blog @Boozology"){@pst}
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){		
+	}
+}{
+	@Templates.pagefooter(){ }
+}		

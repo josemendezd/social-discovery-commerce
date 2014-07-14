@@ -1,0 +1,364 @@
+@(localUser: models.User = null)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import helper._
+
+@pagestl={
+<style>
+
+.form-group:hover .disonhover{
+	display:inline-block;
+}
+.profileeditpane{
+	width: 60%;
+	margin-left: auto;
+	margin-right: auto;		
+}
+.loaderspan{
+padding:0 30px;
+color:green;
+}
+
+.profileiframestyle{
+border:none; 
+min-height:250px;
+width:100%;
+overflow: hidden;
+}
+.controls input[type="checkbox"]{
+margin: 0 4px 0 0 !important;
+}
+.lviolet
+{
+	background: none repeat scroll 0% 0% rgb(147, 42, 182) !important;
+	color: rgb(255, 255, 255) !important;
+	border: 0px none !important;
+}
+.bgloadericoleft{background-image:url('@routes.Assets.at("bl/images/slold.gif")');background-position: left top;background-repeat:no-repeat;min-width:16px;min-height:16px;}
+.thumblimgsmall {
+    max-height: 140px;
+    max-width: 140px;
+}
+</style>
+}
+
+@textfield(formid:Int,contentname:String,originalvalue:String="",inputtype:String="text")(fieldname:Html)(helpertext:Html)={
+<form class="profilesetform form-horizontal" action="@routes.Application.setmyprofile" method="post" role="form">
+<div class="form-group">
+    <label for="@contentname" class="col-sm-2 control-label">@fieldname:</label>
+    <div class="col-sm-10">
+	    <input type="text" class="form-control"  name="@contentname" type="@inputtype"  value="@originalvalue" id="@contentname" >
+	    <input type="hidden" value="@formid" name="indicator" /> 
+	    <div class="pull-right padding-small">
+		    <button class="btn btn-sm lviolet disonhover" type="submit">Save</button>			
+			<span class="bgloadericoleft inlinedisplay loaderspan pull-right">Loading...</span>
+		</div>
+	    <p class="help-block btn-sm">@helpertext</p>
+    </div>
+</div>
+@*
+	<div class="control-group">  
+		<label class="control-label" for="input01">@fieldname:</label>  
+		<div class="controls">  
+			<input class="input-xlarge borderinvisible" name="@contentname" type="@inputtype"  value="@originalvalue" />
+			<input type="hidden" value="@formid" name="indicator" /> 
+			<button class="btn-mini lviolet disonhover" type="submit">Save</button>			
+			<span class="bgloadericoleft inlinedisplay loaderspan pull-right">Loading...</span>
+			<p class="help-block btn-small">@helpertext</p>  
+		</div>  
+	</div>
+*@
+</form>
+<div class="clearfix"></div>
+}
+
+@passwordfield={
+<form class="profilesetform form-horizontal" id="passwordresetform"  action="@routes.Account.doChangePassword" method="post" role="form">
+	<div class="form-group">  
+		<label for="password" class="col-sm-2 control-label">Password:</label>  
+		<div class="col-sm-10">  
+			<input name="password" type="password" class="form-control" id="password">		
+			<p class="help-block btn-small">Password should be 5 to 15 digits</p>  
+		</div>  
+	</div>
+	<div class="clearfix"></div>
+	<div class="form-group">  
+		<label class="col-sm-2 control-label" for="repeatPassword">Confirm Password:</label>  
+		<div class="col-sm-10">  
+			<input id="repeatPassword" name="repeatPassword" type="password" class="form-control">			 
+			<div class="pull-right padding-small">
+			    <button class="btn btn-sm lviolet disonhover" type="submit">Save</button>			
+				<span class="bgloadericoleft inlinedisplay loaderspan pull-right">Loading...</span>
+			</div>
+			<p class="help-block btn-small">&nbsp;</p>  
+		</div>  
+	</div>
+</form>
+<div class="clearfix"></div>
+@*
+<form class="profilesetform" id="passwordresetform"  action="@routes.Account.doChangePassword" method="post">
+	<div class="control-group">  
+		<label class="control-label" for="input01">Password:</label>  
+		<div class="controls">  
+			<input name="password" type="password" class="input-xlarge borderinvisible">			
+			<button class="btn-mini lviolet disonhover" type="submit">Save</button>			
+			<p class="help-block btn-small">Password should be 5 to 15 digits</p>  
+		</div>  
+	</div>
+	<div class="control-group">  
+		<label class="control-label" for="input01">Confirm Password:</label>  
+		<div class="controls">  
+			<input name="repeatPassword" type="password" class="input-xlarge borderinvisible">			 
+			<button class="btn-mini lviolet disonhover" type="submit">Save</button>			
+			<span class="bgloadericoleft inlinedisplay loaderspan pull-right">Loading...</span>
+			<p class="help-block btn-small"></p>  
+		</div>  
+	</div>
+</form>
+*@
+}
+
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Settings @Boozology"){@pagestl}
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(pc="theme-grey",pcw="theme-white"){
+		<div class="text-center searchposition">
+			<div class="profileeditpane">
+				<div class="text-left">
+					<div class="form-horizontal">
+						@*
+						<iframe class="profileiframestyle" src="@routes.Application.showprofileimage">
+							
+						</iframe>
+						*@
+						@form(action = routes.Application.setprofileimage, 'enctype -> "multipart/form-data",'class->"form-horizontal") { 
+						<div class="form-group">  
+								<label class="col-sm-2 control-label" for="biography">User Image:</label>  
+								<div class="col-sm-10"> 
+									<img class="thumblimgsmall" src="@localUser.getusersimage()" alt="@localUser.name">
+									<div class="clearfix"></div>					
+									<input type="file" id="upload_input" name="picture" class="fileinput-button"/>
+									<div class="clearfix"></div>		   
+								    <span class="help-block btn-sm">Size Limit: <b>2 MB</b></span>
+								    <div class="clearfix"></div>
+									<input type="submit" value="Upload" class="btn btn-default"> 
+								</div>  
+							</div>
+						}
+						
+						@textfield(DInitial.PROFILE_SETTINGS.FIRSTNAME,"firstname",localUser.firstName){ FirstName }{ Alphabets only }
+						@textfield(DInitial.PROFILE_SETTINGS.LASTNAME,"lastname",localUser.lastName){ LastName }{ Alphabets only }
+						@textfield(DInitial.PROFILE_SETTINGS.USERNAME,"username",localUser.name){ UserName }{ Unique and can have numerics too }
+						@textfield(DInitial.PROFILE_SETTINGS.EMAIL,"email",localUser.email,"email"){ E-mail }{ Should not be registered earlier }
+						@passwordfield
+						@textfield(DInitial.PROFILE_SETTINGS.SOCIAL_IMAGE,"socialimage",localUser.profileimage){ ProfileImage from URL }{ Enter the URL }
+						@textfield(DInitial.PROFILE_SETTINGS.WEBSITE,"website",localUser.website){ Website }{ Enter the URL }
+						@textfield(DInitial.PROFILE_SETTINGS.LOCATION,"location",localUser.location){ Location }{ Allowed spaces,comma and dashes }
+						<!-- <input type="email" -->
+						<form class="profilesetform form-horizontal"  action="@routes.Application.setmyprofile" method="post" role="form">
+							<div class="form-group">  
+								<label class="col-sm-2 control-label" for="biography">Short biography:</label>  
+								<div class="col-sm-10"> 
+									<textarea class="form-control" id="biography" rows="10" cols="50" name="biography" maxlength="255">@localUser.biography</textarea>
+									<input type="hidden" value="@DInitial.PROFILE_SETTINGS.BIOGRAPHY" name="indicator" /> 
+									<div class="pull-right padding-small">
+									    <button class="btn btn-sm lviolet disonhover" type="submit">Save</button>			
+										<span class="bgloadericoleft inlinedisplay loaderspan pull-right">Loading...</span>
+									</div>
+									<p class="help-block btn-small">Max 255 chars.</p>  
+								</div>  
+							</div>
+						</form>
+						<div class="clearfix"></div>
+						
+						<form class="profilesetform form-horizontal"  action="@routes.Application.setmyprofile" method="post" role="form">
+							<div class="form-group">  
+								<label class="col-sm-2 control-label" for="gender">Gender:</label>  
+								<div class="col-sm-10">
+								 @defining(localUser.gender) { gender =>
+									 <select name="gender" id="gender"  class="form-control">
+										 <option value="@DInitial.GENDER.UNKNOWN" @if(gender==DInitial.GENDER.UNKNOWN){ selected="selected" }>Others</option>
+										 <option value="@DInitial.GENDER.FEMALE"  @if(gender==DInitial.GENDER.FEMALE){ selected="selected" }>Female</option>
+										 <option value="@DInitial.GENDER.MALE" @if(gender==DInitial.GENDER.MALE){ selected="selected" }>Male</option>
+									 </select>
+									}
+									<input type="hidden" value="@DInitial.PROFILE_SETTINGS.GENDER" name="indicator" /> 
+									<div class="pull-right padding-small">
+									    <button class="btn btn-sm lviolet disonhover" type="submit">Save</button>			
+										<span class="bgloadericoleft inlinedisplay loaderspan pull-right">Loading...</span>
+									</div>
+									<p class="help-block btn-small">&nbsp;</p>  
+								</div>  
+							</div>
+						</form>
+						<div class="clearfix"></div>
+						
+						<form class="profilesetform form-horizontal"  action="@routes.Application.setmyprofile" method="post" role="form">
+						@defining(Notifications.UserSubscriptions.getsubscriptions(localUser.contrib)) { gu =>
+							<div class="form-group">
+								<input type="hidden" value="@DInitial.PROFILE_SETTINGS.EMAIL_NOTIFICATION" name="indicator" /> 
+								
+								<label class="col-sm-2 control-label">Email Notifications:</label> 
+								<div class="col-sm-10">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="advertisements" @if(gu.advertisements){ checked="checked" }>Send Occasionally about great products!!														  
+										</label>
+									</div>
+									<div class="clearfix"></div>
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="sofollows" @if(gu.sofollows){ checked="checked" }>When somebody starts following me.
+										</label>
+									</div>
+									<div class="clearfix"></div>									
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="socommentpr" @if(gu.socommentpr){ checked="checked" }>When someone comments on my product.
+										</label>
+									</div>
+									<div class="clearfix"></div>
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="socommentco" @if(gu.socommentco){ checked="checked" }>When someone comments on my collection.
+										</label>
+									</div>
+									<div class="clearfix"></div>
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="sorecommends" @if(gu.sorecommends){ checked="checked" }>When someone recommends me a product.
+										</label>
+									</div>
+									<div class="clearfix"></div>
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="sosuggestsco" @if(gu.sosuggestsco){ checked="checked" }>When someone suggest a product for my collection.
+										</label>
+									</div>
+									<div class="clearfix"></div>
+									<div class="pull-right padding-small">
+									    <button class="btn btn-sm lviolet disonhover" type="submit">Save</button>			
+										<span class="bgloadericoleft inlinedisplay loaderspan pull-right">Loading...</span>
+									</div>
+									<p class="help-block btn-small">&nbsp;</p>	
+											
+								</div> 
+								
+								
+								  
+							</div>
+						}
+						</form>
+						<div class="clearfix"></div>
+						
+						
+						<div class="onnextline"> 
+						<div class="form-group">  
+								<label class="col-sm-2 control-label">Linked Accounts:</label>  
+								<div class="col-sm-10">
+									@_providerPartial(socialmessage="Link Accounts") 
+								</div> 
+						</div>
+							
+							
+				     </div>
+				</div>
+			</div>
+		</div>
+		@Templates.su.jready{
+		$('.loaderspan').hide();
+		$.each($(".profilesetform"),function(i, f){f.reset();});
+		$(".profilesetform").submit(function(event) {
+			event.preventDefault();
+			
+			var formname=this.id;						
+			var $form = $( this );
+			var $formcontent = $form.serialize();
+			var $url = $form.attr( 'action' );
+			var $mes = $form.find('.loaderspan');
+			$mes.show();
+			if(!$mes.hasClass('bgloadericoleft')){$mes.addClass('bgloadericoleft');}
+			$mes.html('<label>loading.....</label>');						
+			var retnresp=$().setresponse({ispost:true,url:$url,argdata:$formcontent,failans:false,failreq:true,failnode:'responseText'});
+			if(retnresp.Issuccess==false){
+				var reply=$.parseJSON(retnresp.retresp);
+				var Errormsgs='';
+				$.each(reply, function(eron, errmsg){Errormsgs+=eron +" - "+errmsg+".";});
+				$mes.html($().cat('<label style="color:red;float:right;">Failed!!'+Errormsgs+'</label>',100));
+			}
+			else
+			{$mes.html('<label style="color:green">'+retnresp.retresp+'</label>');}
+			if($mes.hasClass('bgloadericoleft')){$mes.removeClass('bgloadericoleft');}
+		});
+		}
+			
+	}
+}{
+	@Templates.pagefooter(){ }
+}	
+
+			
+
+
+
+
+
+
+
+
+
+@*
+
+@import com.feth.play.module.pa.views.html._
+
+@main(Messages("boozology.profile.title"),"profile") {
+    
+    <h1>@Messages("boozology.profile.title")</h1>
+    <p>
+    Your name is @localUser.name and your email address is @localUser.email!
+    <i>
+    @if(!localUser.emailValidated) {
+      (<a href="@routes.Account.verifyEmail">unverified - click to verify</a>)
+    } else {
+      (verified)
+    }</i>
+    <br />
+    Your first name is @localUser.firstName and your last name is @localUser.lastName
+    <br/>
+    @defining(localUser.getProviders()) { providers =>
+        @if(providers.size() > 0) {
+        @if(providers.size() ==1) {
+            @Messages("boozology.profile.providers_one")
+        } else {
+            @Messages("boozology.profile.providers_many",providers.size().toString())
+        }
+        @for(p <- providers) {
+            @_providerIcon(p)
+        }
+        <br/>
+        }
+    }
+    
+    <br/>
+    @currentAuth() { auth =>
+        @Messages("boozology.profile.logged") @_providerIcon(auth.getProvider())<br/>
+        @if(auth.expires() != -1){
+            @Messages("boozology.profile.session", auth.getId(), Application.formatTimestamp(auth.expires()))
+        } else {
+            @Messages("boozology.profile.session_endless", auth.getId())
+        }
+    }
+    <br/>
+    <ul>
+    	<li><a href="@routes.Account.changePassword">@Messages("boozology.profile.password_change")</a></li>
+    </ul>
+    </p>
+}
+
+*@

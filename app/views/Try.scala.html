@@ -1,0 +1,289 @@
+@()
+
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>Tryit Editor v1.7 - ready</title>
+      <link rel="stylesheet" type="text/css" href="/assets/Try_files/tryit.css">
+      <meta name="description" content="Tryit Editor v1.7 is an online HTML tester that is downloadable, as well as being able to be used online.">
+      <meta name="keywords" content="HTML,CSS,JavaScript,Tryit Editor,Tryit,HTML editor,JavaScript,Tryit Editor,Tryit Editor v1.7, Tryit Editor v1.6, Tryit Editor v1.8">
+      <meta name="author" content="Perilbrain">
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <script type="text/javascript" src="/assets/Try_files/engine.js"></script>
+      <script src="/assets/Try_files/codemirror.js"></script>
+      <script src="/assets/Try_files/closetag.js"></script>
+      <script src="/assets/Try_files/closebrackets.js"></script>
+      <script src="/assets/Try_files/searchcursor.js"></script>
+      <script src="/assets/Try_files/match-highlighter.js"></script>
+      <script src="/assets/Try_files/xml.js"></script>
+      <script src="/assets/Try_files/css.js"></script>
+      <script src="/assets/Try_files/javascript.js"></script>
+      <script src="/assets/Try_files/htmlmixed.js"></script>
+      
+      <script type="text/javascript" src="/assets/Try_files/FileSaver.txt" async=""></script>
+      <link rel="stylesheet" href="/assets/Try_files/codemirror.css">
+      <link rel="stylesheet" href="/assets/Try_files/eclipse.css">
+      <link rel="shortcut icon" href="favicon.ico">
+   </head>
+   <body>
+      <table class="maintable" summary="Main UI">
+         <tbody>
+            <tr>
+               <td style="width:50%;">
+                  <button style="margin-bottom:5px;" id="submit" onclick="startit()" accesskey="x">Edit and Click Me&gt;&gt;</button>
+                  <textarea style="display: none;" class="code_input" id="code1" cols="40" rows="21" spellcheck="false">
+                      
+                      
+                      
+                      
+                    <!DOCTYPE html>
+					<html>
+						<head>
+							<base href="http://localhost:9000"/>
+							<title>
+								Hello World
+							</title>
+							<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+					    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+					    <meta http-equiv="Pragma" content="no-cache" />
+					    <meta http-equiv="Expires" content="0" />
+					    
+					    <meta charset="UTF-8">
+					    <title>GrabonGo</title>
+					    
+					    
+					    <meta content="" name="keywords" />
+					    <meta content="" name="description" />
+					    <script src="/assets/js/custom.js"></script>
+					    <script src="/assets/js/knockout.js"></script>
+					    <script src="/assets/js/knockout.mapping.js"></script>    
+					    <link media="screen" type="text/css" rel="stylesheet" href="/assets/style.css" />
+					    <link href="/assets/css/bootstrap.min.css" media="screen" rel="stylesheet" />
+					    <link href="/assets/css/bootstrap-responsive.min.css" media="screen" rel="stylesheet" />
+					    <link rel="stylesheet" href="/assets/css/colorbox.css" /> 
+					    <script src="/assets/javascript/routes.js" defer="defer"></script>
+					    
+						</head>
+						<body>
+							<div>
+								
+							</div>
+							<script>
+							
+								webload=function(e){var t=this;t.failreq=typeof e.failreq!=="undefined"?e.failreq:false;t.retresp=e.failans;$.ajaxSetup({async:false});var n=$.getJSON(e.url,typeof e.argdata!=="undefined"?e.argdata:"");n.done(function(n){t.retresp=n[typeof e.successnode!=="undefined"?e.successnode:"answer"]});n.fail(function(n){if(t.failreq){alert("popped");t.retresp=n[typeof e.failnode!=="undefined"?e.failnode:"answer"]}});$.ajaxSetup({async:true});return t.retresp};
+								$('div').text(JSON.stringify(webload({url:'http://localhost:9000/store/search',failreq:true,argdata:'id=12&gendercont=0&pricerange=0&searchtext=&page=0&pagesize=40&storeid=12',successnode:"prodgrid"})));
+							</script>
+						</body>
+					</html>
+					
+					
+
+
+
+
+                  
+                  </textarea>
+                  <div class="CodeMirror CodeMirror-wrap cm-s-eclipse"  style="display:none;">
+                     <div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 265px; left: 242px;"><textarea tabindex="0" autocapitalize="off" autocorrect="off" wrap="off" style="position: absolute; padding: 0px; width: 1px; height: 1em; outline: medium none;">m</textarea></div>
+                     <div style="left: 29px;" class="CodeMirror-hscrollbar">
+                        <div style="height: 1px;"></div>
+                     </div>
+                     <div class="CodeMirror-vscrollbar">
+                        <div style="width: 1px;"></div>
+                     </div>
+                     <div class="CodeMirror-scrollbar-filler"></div>
+                     <div draggable="true" tabindex="-1" class="CodeMirror-scroll">
+                        <div style="position: relative; min-height: 100%;">
+                           <div style="margin-left: 29px; min-height: 320px;" class="CodeMirror-sizer">
+                              <div style="position: relative; top: 0px;">
+                                 <div class="CodeMirror-lines">
+                                    <div style="position: relative; outline: medium none;">
+                                       <div class="CodeMirror-measure">
+                                          <pre><span><span class="cm-tab">  </span></span><span><span class="cm-tab">  </span></span><span><span class="cm-tab">  </span></span><span>T</span><span>h</span><span>i</span><span>s</span><span> </span><span>i</span><span>s</span><span> </span><span>a</span><span> </span><span>t</span><span>e</span><span>s</span><span>t</span><span> </span><span>p</span><span>a</span><span>g</span><span>e</span><span>m</span></pre>
+                                       </div>
+                                       <div style="position: relative; z-index: 1; display: none;"></div>
+                                       <div style="">
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">1</div>
+                                             </div>
+                                             <pre><span class="cm-meta">&lt;!DOCTYPE html&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">2</div>
+                                             </div>
+                                             <pre><span class="cm-tag">&lt;html&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">3</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tag">&lt;head&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">4</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tag">&lt;title&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">5</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tab">  </span>Hello World</pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">6</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tag">&lt;/title&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">7</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tag">&lt;script</span> <span class="cm-attribute">type</span>=<span class="cm-string">"text/javascript"</span><span class="cm-tag">&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">8</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tab">  </span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">9</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tag">&lt;/script&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">10</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tag">&lt;style&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">11</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tag">h1</span> {</pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">12</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-property">text-align</span><span class="cm-operator">:</span> <span class="cm-string-2">center</span>;</pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">13</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tab">  </span>}</pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">14</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tag">&lt;/style&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">15</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tag">&lt;/head&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">16</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tag">&lt;body&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">17</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tag">&lt;h1&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">18</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tab">  </span>Hello World!</pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">19</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tag">&lt;/h1&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">20</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tag">&lt;p&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">21</div>
+                                             </div>
+                                             <div class="activeline CodeMirror-linebackground">&nbsp;</div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tab">  </span>This is a test pagem</pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">22</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tab">  </span><span class="cm-tag">&lt;/p&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">23</div>
+                                             </div>
+                                             <pre><span class="cm-tab">  </span><span class="cm-tag">&lt;/body&gt;</span></pre>
+                                          </div>
+                                          <div style="position: relative;">
+                                             <div style="position: absolute; left: -29px;">
+                                                <div style="left: 0px; width: 20px;" class="CodeMirror-linenumber CodeMirror-gutter-elt">24</div>
+                                             </div>
+                                             <pre><span class="cm-tag">&lt;/html&gt;</span></pre>
+                                          </div>
+                                       </div>
+                                       <div style="left: 212px; top: 260px; height: 13px;" class="CodeMirror-cursor">&nbsp;</div>
+                                       <div style="display: none;" class="CodeMirror-cursor CodeMirror-secondarycursor">&nbsp;</div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div style="position: absolute; height: 30px; top: 320px;">&nbsp;</div>
+                           <div class="CodeMirror-gutters">
+                              <div style="width: 28px;" class="CodeMirror-gutter CodeMirror-linenumbers"></div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </td>
+               <td style="width:50%;">
+                  <div class="centered"><span id="titletext">Page Title:&nbsp;Hello World</span></div>
+                  <iframe class="result_output" id="view" name="view" src="javascript:''" style="frameborder:0;">Sorry, you need iframes to use Tryit Editor.</iframe>
+               </td>
+            </tr>
+            <tr>
+               <td style="text-align:left;" class="bottomtext">status: <span id="statusline"><span style="color:#000000;">ready</span></span></td>
+               <td style="text-align:right;" class="bottomtext"><a href="http://tryiteditor.webs.com/">tryiteditor.webs.com</a> - Tryit Editor v1.7</td>
+            </tr>
+         </tbody>
+      </table>
+      <br>
+      <span id="unlockBG"><button id="unlock" onclick="lock();" accesskey="l">Lock code pane</button></span>
+      <span id="resetBG"><button onclick="reset();" id="reset" accesskey="c">Reset code value</button></span>
+      <span id="saveBG"><button onclick="save();" id="save" accesskey="s">Save code</button></span>
+      <span id="saveLocalBG"><button onclick="saveLocal(codeMirror.getValue());" id="saveLocal">Save to local disk (BUGGY)</button></span>
+      <span id="restoreBG"><button onclick="restore();" id="restore" accesskey="r">Restore code</button></span>
+      
+      <span id="disableTitleBG"><input id="disunable" onclick="disenable();" accesskey="t" style="display:none;" type="checkbox"><label for="disunable" class="start end" id="titleLabel">Disable title</label></span>
+      <span id="syntaxHiliteBG"><input id="syntaxHilite" onclick="toggleCodeMirror()" accesskey="m" style="display:none;" type="checkbox"><label for="syntaxHilite" class="start end" id="editorLabel">Disable syntax highlighting</label></span>
+      <br><br><!-- -->
+   </body>
+</html>
+

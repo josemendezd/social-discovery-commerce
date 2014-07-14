@@ -1,0 +1,41 @@
+@(loginForm: Form[_])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@ps={
+
+<script>
+@Html(play.Routes.javascriptRouter("jsRoutes",controllers.routes.javascript.Signup.forgotPassword));
+</script>
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Login @Boozology"){@ps}
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){
+	<div class="container user-profile-page">
+	   <!-- Begin .row -->
+	   <div class="row">	
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					@if(loginForm.hasGlobalErrors) { 
+			          <p class="error">
+			            <span class="label label-important">@loginForm.globalError.message</span>
+			          </p>
+			        }		
+					@Templates.su.signin(true)
+			</div>
+		</div>
+	</div>
+		@Templates.su.jready{
+			$('#signinModal').remove();		
+		}		
+	}
+}{
+	@Templates.pagefooter(){ }
+}	

@@ -1,0 +1,24 @@
+@(con: Contributor)(implicit session: play.mvc.Http.Session) 
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+{
+	"ul":"@routes.Application.ContributorPage(con.id,false)",
+	"un":"@con.user.name",
+	"ui":"@con.user.getusersimagesmall()",
+	"ufc":@Contributor.FollowersCount(con),
+	"ufic":@Contributor.LeadersCount(con),
+	"upc":@con.Liked.size(),
+	"ucc":@con.UCollections.size(),
+	"ufurl":"@routes.Useract.FollowAct(DInitial.SEARCH_USER,con.id)",
+	@subjectPresentOr(){"ufs":@Follow.IsFollower(con.id,Application.getContributor(session).id)}{"ufs":false},
+	"someprod":[
+	
+	@for((productx,cntn)<-Contributor.RecentLikedProducts(con,4).zipWithIndex){@if(cntn!=0){,}
+			{			
+				"pl":"@routes.Application.ProductPage(productx.id,false)",
+				"pi":"@productx.getproductimagethumb()",
+				"pn":"@productx.productname"			
+			}
+		}
+	]
+}

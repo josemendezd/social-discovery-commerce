@@ -1,0 +1,63 @@
+@(solitary:Boolean=false)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@singleunit={
+
+<div class="comment-post">
+	<div class="user-thumb">
+	  <img data-bind="attr:{src:ui,alt:un}" class="img-responsive">
+	</div>
+	<div class="comment">
+	  <h4><a data-bind="text:un,attr:{href:UserLink.controllers.Application.ContributorPage(uid).absoluteURL()}"></a></h4>
+	  <p data-bind="text:ct"></p>
+	  <ul class="post-meta">
+		<li><i class="icon-calendar"></i><span data-bind="text:$().getdate(cd).date"></span></li>
+		<li><i class="icon-time"></i><span data-bind="text:$().getdate(cd).time"></span></li>
+		<li>
+		@subjectPresent(){
+					<span data-bind="visible:(uid==@Application.getContributor(session()).id)||@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_MODERATOR,null)){ true }else{ false }">
+						<a class="delete-button" href="javascript:void(0);" data-bind="click:$root.deletecomment" title="delete this comment"><i class="icon-remove"></i></a>
+					</span>
+					}
+		</li>
+	  </ul>
+	  <div class="clearfix">
+	  </div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+@*
+	<li class="by-me">
+		<div class="user-gravatar40 pull-left">
+			<img data-bind="attr:{src:ui,alt:un}" class="likeimagelarge">
+		</div>
+		<div class="chat-content">
+			<div class="chat-meta">
+				<div class="pull-left">
+					<a data-bind="text:un,attr:{href:UserLink.controllers.Application.ContributorPage(uid).absoluteURL()}"></a> 
+				</div>
+				<div style="text-align:right"> 
+					<span class="chat-small" data-bind="text:cd"></span>
+					@subjectPresent(){
+					<span data-bind="visible:(uid==@Application.getContributor(session()).id)||@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_MODERATOR,null)){ true }else{ false }"><a href="javascript:void(0);" data-bind="click:$root.deletecomment" title="delete this comment"><i class="icon-remove"></i></a></span>
+					}
+				</div>
+			</div>
+			<p  data-bind="text:ct"></p>
+			<div class="clearfix">
+			</div>
+		</div>
+	</li>
+*@
+}
+
+@if(solitary){	@singleunit
+}else{
+<h3 data-bind="visible:commentlist().length > 0">Comments</h3>
+<div data-bind="foreach: commentlist,visible:commentlist().length > 0">@singleunit</div>
+@*
+<ul class="chats" data-bind="foreach: commentlist,visible:commentlist().length > 0">
+	@singleunit
+</ul>
+*@
+} 

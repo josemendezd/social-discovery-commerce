@@ -1,0 +1,3 @@
+@(currentPage: com.avaje.ebean.Page[Store])(implicit session: play.mvc.Http.Session) 
+{"storegrid":[@for((store,cnt) <- currentPage.getList.zipWithIndex){@if(cnt!=0){,}
+@Templates.json.storebrick(store)}],"hasmore":@currentPage.hasNext}

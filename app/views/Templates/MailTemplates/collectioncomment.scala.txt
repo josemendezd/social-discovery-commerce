@@ -1,0 +1,10 @@
+@(targetuser:String,actinguser:String,collectionname:String,collectionurl:String,cmntbody:String)
+Hi @targetuser
+@actinguser has posted a comment on your collection @collectionname.
+Visit the comment page at @collectionurl to view the message.
+ 
+The Comment is as follows:-
+@cmntbody
+ 
+Cheers From,
+Boozology Team

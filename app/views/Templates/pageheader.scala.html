@@ -1,0 +1,199 @@
+@()(appendcontentinheader: Html)(appendcontentafterheader: Html)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import net.tanesha.recaptcha.ReCaptcha
+@import net.tanesha.recaptcha.ReCaptchaFactory
+
+
+
+<nav class="navbar navbar-default navbar-fixed-top cbp-af-header " role="navigation">
+<div class="cbp-af-inner">
+<div class="container">
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <div>	
+     <a class="navbar-brand dropdown-toggle" data-toggle="dropdown" href="@routes.Application.home()" data-target="#"><img src="@routes.Assets.at("bl/images/logo.png")"   alt="Boozology"><b class="caret"></b></a>
+     <ul class="dropdown-menu">
+     	<li><a href="@routes.Application.home()"><i class="icon-home"></i>Home</a></li>
+        <li><a href="@routes.SPages.aboutus()">About Us</a></li>
+        <li><a href="@routes.SPages.contactus()">Contact</a></li>
+        <li><a href="@routes.SPages.helpme()">Help</a></li>
+      </ul>
+    </div> 
+  </div>
+  
+  
+        
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+  
+    <ul class="nav navbar-nav navbar-right">
+      <li>	
+	     <a data-toggle="dropdown" href="@routes.Application.shop()">Browse<b class="caret"></b></a>
+	     <ul class="dropdown-menu">
+			<li><a href="@routes.Application.cshop("All")">Popular</a></li>
+			@subjectPresent(){
+			<li><a href="@routes.Useract.myfriendsfeed">Friends</a></li>
+			}
+			<li class="menu"><a href="@routes.Application.cshop("Wine")">Wine</a>
+				<ul class="submenu" style="display: none;">
+					<li><a href="@routes.Application.cshop("Merlot")">Merlot</a></li>
+					<li><a href="@routes.Application.cshop("Shiraz")">Shiraz</a></li>
+					<li><a href="@routes.Application.cshop("Grenache")">Grenache</a></li>
+					<li><a href="@routes.Application.cshop("Pinot Noir")">Pinot Noir</a></li>
+				</ul>
+			</li>
+			<li class="menu"><a href="@routes.Application.cshop("Beer")">Beer</a>
+				<ul class="submenu" style="display: none;">
+					<li><a href="@routes.Application.cshop("Blonde")">Blonde</a></li>
+					<li><a href="@routes.Application.cshop("Brown")">Brown</a></li>
+					<li><a href="@routes.Application.cshop("Cream")">Cream</a></li>
+					<li><a href="@routes.Application.cshop("Dark")">Dark</a></li>
+				</ul>
+			</li>
+			<li class="menu"><a href="@routes.Application.cshop("Spirits")">Spirits</a>
+				<ul class="submenu" style="display: none;">
+					<li><a href="@routes.Application.cshop("Rum")">Rum</a></li>
+					<li><a href="@routes.Application.cshop("Vodka")">Vodka</a></li>
+					<li><a href="@routes.Application.cshop("Tequila")">Tequila</a></li>
+					<li><a href="@routes.Application.cshop("Whisky")">Whiskey</a></li>
+				</ul>
+			</li>
+			<li class="menu"><a href="@routes.Application.cshop("Mixology")">Mixology</a>
+				<ul class="submenu" style="display: none;">
+					<li><a href="@routes.Application.cshop("Latest Trends")">Latest Trends</a></li>
+					<li><a href="@routes.Application.cshop("Classics")">Classics</a></li>
+					<li><a href="@routes.Application.cshop("Bar Tools")">Bar	Tools</a></li>
+					<li><a href="@routes.Application.cshop("Recipes")">Recipes</a></li>
+				</ul>
+			</li>
+			<li class="menu"><a href="@routes.Application.cshop("Gadgets")">Gadgets</a>
+				<ul class="submenu" style="display: none;">
+					<li><a href="@routes.Application.cshop("Small Appliances")">Small Appliances</a></li>
+					<li><a href="@routes.Application.cshop("Cutlery")">Cutlery</a></li>
+					<li><a href="@routes.Application.cshop("Storage")">Storage</a></li>
+					<li><a href="@routes.Application.cshop("On the Go")">On the Go</a></li>
+				</ul>
+			</li>
+			<li class="menu"><a href="@routes.Application.cshop("Toys & Trinkets")">Toys & Trinkets</a>
+				<ul class="submenu" style="display: none;">
+					<li><a href='@routes.Application.cshop("Bar	Sets")'>Bar Sets</a></li>
+					<li><a href="@routes.Application.cshop("Corkscrews")">Corkscrews</a></li>
+					<li><a href="@routes.Application.cshop("Ice Molds")">Ice Molds</a></li>
+					<li><a href="@routes.Application.cshop("Shakers")">Shakers</a></li>
+				</ul>
+			</li>
+			<li class="menu"><a href="@routes.Application.cshop("Glassware")">Glassware</a>
+				<ul class="submenu" style="display: none;">
+					<li><a href="@routes.Application.cshop("Tumblers")">Tumblers</a></li>
+					<li><a href="@routes.Application.cshop("Wine Glass")">Wine Glasses</a></li>
+					<li><a href="@routes.Application.cshop("Drinkware")">Drinkware</a></li>
+					<li><a href="@routes.Application.cshop("Shot Glass")">Shot glasses</a></li>
+				</ul>
+			</li>
+			<li><a href="@routes.Application.cshop("Fun")">Fun</a></li>
+	      </ul> 
+      </li>
+      <li>@subjectPresentOr(){ <a class="fromiframe cboxElement" href="@routes.Useract.addoptions()">Add</a>}{ <a data-toggle="modal" href="#signinupModel">Add</a>}</li>
+	        
+	        <li><a href="@routes.Application.GetBlogList()">Buzz</a></li>
+	        <li><a href="@routes.Application.discover">Discover</a></li>
+	      	
+	      @subjectPresentOr(){
+	       	 @defining(Application.getLocalUser(session())){ presentuser=>
+	       	 	<li><a href="@routes.Application.ContributorSelecttabPage(presentuser.id,DInitial.USER_RELATION_QUERY.COLLECTIONS)">Collections</a></li>
+      <li>
+      @if(presentuser.firstName != null) {
+      		@if(presentuser.firstName.length() > 7) {
+      			<a data-toggle="dropdown" href="@routes.Application.ContributorPage(presentuser.id,false,true)"><img class="userssmrndimg" src="@presentuser.getusersimagesmall()">@presentuser.firstName.substring(0,7)<b class="caret"></b></a>
+      		} else {
+      			<a data-toggle="dropdown" href="@routes.Application.ContributorPage(presentuser.id,false,true)"><img class="userssmrndimg" src="@presentuser.getusersimagesmall()">@presentuser.firstName<b class="caret"></b></a>
+      		}
+       } else {
+       		@if(presentuser.name.length() > 7) {
+       		<a data-toggle="dropdown" href="@routes.Application.ContributorPage(presentuser.id,false,true)"><img class="userssmrndimg" src="@presentuser.getusersimagesmall()">@presentuser.name.substring(0,7)<b class="caret"></b></a>
+       		} else {
+       		<a data-toggle="dropdown" href="@routes.Application.ContributorPage(presentuser.id,false,true)"><img class="userssmrndimg" src="@presentuser.getusersimagesmall()">@presentuser.name<b class="caret"></b></a>
+       		}
+       }
+				  <ul class="dropdown-menu">
+				    <li><a href="@routes.Application.ContributorPage(presentuser.id,false,true)">My Page</a></li>        
+				    <li><a href="@routes.Application.profile()">Settings</a></li>
+				    <!-- <li><a href="/find_people">Find People</a></li>-->
+				    <li><a href="@routes.Application.BookMarkTool()">Buy Later Button</a></li>
+				    <!-- <li><a href="@routes.Application.GetContentPage("Extras")">Extras</a></li>-->
+				    <li><a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout()"><i class="icon-off icon-white"></i>Sign out</a></li>
+				  </ul>
+				</li>      
+	         }
+	         }{
+	        <li><a data-toggle="modal" href="#signinModal">Log In</a></li>
+      		<li class="sign-up"><a href="@routes.Application.signup">Sign Up</a></li>      		
+	        }
+			@*<li style="display:none;" id="cartCount"><a href="@routes.Carts.cartListIndex()"><i class="icon-shopping-cart h2"></i><span class="padding-small"></span><div class="noti_bubble"></div></a></li>*@
+      
+     
+    </ul>
+   <div class="pull-right col-lg-3 col-mg-3 col-sm-3 col-xs-12">
+    <form action="@routes.Application.RunSearch()" method="get" class="navbar-form navbar-center" role="search" >
+		<div class="input-group">
+			<input type="text" name="searchkey" class="form-control" placeholder="Search">
+			<span class="input-group-btn">
+				<button type="submit" class="btn btn-default"><i class="icon-search"></i></button>
+		    </span>				
+		</div>
+	</form>
+	</div>
+  </div><!-- /.navbar-collapse -->
+  </div>
+  <!-- End col -->
+</div>
+<!-- End container  -->
+</div>
+
+</nav>
+<!-- End nav -->
+@AlertMessages()
+	@subjectNotPresent(){
+	<div class="container smartcontainer">
+		<div class="row">
+			<div class="logout blbanner">
+				<div class="message"><span class="bold">@Messages("boozology.headline.message")</span></div>
+				<div class="options">
+					<a class="btn btn-danger brectangle" href="@routes.Application.signup">Join</a>
+					<span class="padding-small"></span>
+					<a class="btn italic btn-warning brectangle" href="@routes.Application.login">Login</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	}
+	
+	@appendcontentinheader
+@appendcontentafterheader
+
+@*
+@if(controllers.Carts.cartViewPage()) {
+			@Templates.cartTemplate()
+}
+*@
+
+<script>
+$( ".menu" ).mouseover(function() {
+	$(this).find(".submenu").css("display", "block");
+})
+
+$( ".menu" ).mouseout(function() {
+	$(this).find(".submenu").css("display", "none");
+})
+
+</script>

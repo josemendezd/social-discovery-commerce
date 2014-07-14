@@ -1,0 +1,496 @@
+@(stor:Store)(implicit session: play.mvc.Http.Session)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+
+
+@ps={
+
+<style>
+
+.storeheading{
+color: rgb(13, 120, 25);
+font-size: 30px;
+border-bottom: 1px solid #EEEEEE;
+}
+
+
+.statusboxcontainer ul li{padding:10px;min-width:60px;background-color: white!important;}
+.statusboxcontainer ul li:hover{background-color: rgb(242,240,240)!important;}
+.statusboxcontainer ul li a span{color: rgb(150, 150, 150);font-size:25px;font-weight:bold}
+.statusboxcontainer ul li a h3{color:rgb(221, 75, 57)!important;border-bottom: 1px solid rgb(221, 75, 57);margin:0;font-size: 14px!important;}
+.statusboxcontainer ul li a:hover{text-decoration:none;}
+.statusboxcontainer ul li:hover a h3{	
+	border-bottom: none;text-decoration:none;
+}
+.row .sort {
+    list-style: none outside none;
+    float: right;
+    margin-bottom: 10px;
+}
+.row .sort  select{
+	float:left;
+	margin-right:20px;
+	border:none;
+	color: rgb(177, 82, 82);
+}
+.row .sort input  {
+	margin-right:0px;
+}
+.row .sort select i {
+	color:#f6921e;
+}
+.row .sort select option {
+	color: maroon;
+}
+.brectanglewb{
+	border-radius: 0px!important;
+}
+
+
+/*
+
+.storeheading{
+color: rgb(221, 75, 57);
+font-size: 30px;
+font-family: Calibri;
+border-bottom: 1px solid #EEEEEE;
+}
+
+.statusboxcontainer ul li{padding:10px;min-width:60px;}
+.statusboxcontainer ul li a{color:white;}
+.statusboxcontainer ul li a:hover{text-decoration:none;}
+.statusboxcontainer ul li:hover a span.onnextline{
+	border-bottom: 1px solid white;
+}
+.statusboxcontainer ul li.active{ background-color:#222222 !important; }
+.paddthetop{padding-top:20px;}
+*/
+
+
+</style>
+@helper.javascriptRouter("UserLink")(routes.javascript.Useract.GetComplainForm)
+}
+
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead(stor.name+" @Boozology"){@ps}
+}{
+	@Templates.pageheader(){
+	@*
+	<div class="container smartcontainer">
+		<div class="row">
+			<div class="logout blbanner">
+				<div class="message"><span class="bold">Do you own/run this Store??? Click to claim it today.</span></div>
+				<div class="options">
+					<div class="option"><a class="btn btn-danger brectangle btn-small" href="@routes.Useract.ClaimStore(stor.id)">Claim Store</a></div>
+				</div>
+			</div>	
+		</div>
+	</div>
+	*@	
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){	
+	
+<!-- Begin .container -->
+<div class="container user-profile-page">
+   <!-- Begin .row -->
+   <div class="row">
+				<div id="shoppage" class="onnextline">
+			<div id="pagecontrollerunit">
+				<div style="width:50%;" class="pull-left text-left">
+					<span class="storeheading">@stor.name</span>
+					 
+					<ul class="onnextline list-unstyled storecontent searchposition">
+						<li><span class="gray">Website: </span><a href="/store/redirectto?url=@stor.storeurl" class="storecontent underlineborder">@stor.storeurl</a></li>
+						<li><span class="gray">First Appeared On:</span><span> @stor.firstappearance</span></li>
+						@if(stor.location!=null){
+						<li><b>Location:</b><span> Tokyo  </span> </li>}
+						@if(stor.servicearea!=null){
+						<li><b>Service Area:</b><span> Asia Pacific</span></li>}
+					</ul>
+					 <ul class="list-inline onnextline padding-small">
+				        <li><a class="brectanglewb" data-bind="click: $root.follow,css:folstr()?'btn btn-default btn-primary':'btn btn-default btn-success ',text:folstr()?'Unfollow':'Follow'"></a></li>
+				        <li><a class="brectanglewb" data-bind="click: $root.setcustomer,css:customerstat()?'btn btn-default btn-primary':'btn btn-default',text:customerstat()?'Sorry I misunderstood':'I have been a customer'"></a></li> 
+				    </ul>
+				</div>
+				
+				<div class="pull-right statusboxcontainer">
+				    <ul class="list-inline pull-right">				
+				        <li class="text-center lviolet tab active"  >
+				        	<a href="#storeproductdivisions" data-bind="click:itemloader" data-toggle="tab">	
+					            <span class="btn-lg">@stor.allproducts.size()</span><br/>
+					            <h3 class="onnextline">Products</h3>
+				            </a>
+				        </li>
+				        <li class="text-center lviolet tab" >
+				        	<a href="#storeuserdivision" data-bind="click:followerloader" data-toggle="tab">	
+					            <span class="btn-lg">@Store.FollowersCount(stor)</span><br/>
+					            <h3 class="onnextline">Followers</h3>
+					        </a>
+				        </li>
+				        <li class="text-center lviolet tab" >
+				        	<a href="#storeuserdivision" data-bind="click:customerloader" data-toggle="tab">	
+					            <span class="btn-lg">@stor.customers.size()</span><br/>
+					            <h3 class="onnextline">Customers</h3>
+					        </a>
+				        </li>
+				        <li class="text-center lviolet tab" >
+				        	<a href="#storecollectiondivision" data-bind="click:collectionloader" data-toggle="tab">	
+					            <span class="btn-lg">@stor.collectlist.size()</span><br/>
+					            <h3 class="onnextline">Collections</h3>
+					        </a>
+				        </li>	  
+				    </ul>
+				    
+				    
+				    
+				</div>		
+				
+			</div>
+		
+			<div class="onnextline tab-content">
+			
+				<div id="storeproductdivisions" class="tab-pane active">
+					<div class="row">
+                  	 <div class="sort hidden-xs hidden-sm">
+	                  	<form id="fastsearch" class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}"  role="form">
+	                     <select data-bind="options: [0,1,2],optionsText: function(item) {ao=['Any (Gender)','Female','Male'];return ao[item];}, value: gendercont"></select>
+			             <select data-bind="options: [0,1,2,3,4,5],optionsText: function(item) {ao=['Any (Price Range)','$0 - $50','$51 - $500','$501 - $1000','$1001 - $10000','$10001 - Above'];return ao[item];}, value: pricerange"></select>             
+			             <div class="form-group">
+		                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search by typing a keyword ">
+		                 </div>
+	                    </form>
+	                  </div>
+	                  <div class="clearfix"></div>
+						@Templates.su.panepbko()
+					</div>
+				</div>
+				
+				<div id="storeuserdivision" class="tab-pane">
+					<div class="row">
+	                   <div class="sort hidden-xs hidden-sm">
+		                 <form class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+					         <div class="form-group">
+			                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search by typing a keyword ">
+			                 </div> 
+					     </form>
+					    </div>
+						<div class="onnextline text-left" id="usergrid">
+							@Templates.su.ubko()
+						</div>
+	                  </div>
+				</div>
+				
+				
+				<div id="storecollectiondivision" class="tab-pane">
+					<div class="row">
+                  	<div class="sort hidden-xs hidden-sm">
+	                 <form class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+				         <div class="form-group">
+		                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search by typing a keyword ">
+		                 </div> 
+				     </form>
+				    </div>
+                     <div class="onnextline text-left" id="collectiongrid">
+						<ul class="list-inline" data-bind="foreach: collList, visible: collList().length > 0">
+							@Templates.su.cbko()
+						</ul>
+					</div>
+                  </div>
+				</div>
+			</div>
+			@subjectPresent(){
+			<div class="pull-right btn-sm onnextline">
+				<a class="gray underline" href="#" onclick="javascript:$.colorbox({href:UserLink.controllers.Useract.GetComplainForm(@stor.id, @DInitial.REPORTABUSE.ON_STORE, encodeURIComponent(window.location.href)).absoluteURL()})">
+						@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,null)){	<i class="icon-flag"></i>Deactivate/Delete
+						}else{
+						@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_MODERATOR,null)){	<i class="icon-flag"></i>Deactivate
+						}else{<i class="icon-flag"></i>Report Abuse }
+						}
+				</a>
+			</div>
+			}	
+		</div> 
+	
+   </div>
+   <!-- End .row -->
+</div>
+<!-- End .container -->		
+	 
+	
+@*
+		<div id="shoppage" class="onnextline">
+			<div id="pagecontrollerunit">
+				<div style="width:50%;" class="pull-left text-left">
+					<span class="storeheading">@stor.name</span>
+					 
+					<ul class="onnextline unstyled storecontent searchposition">
+						<li><span class="gray">Website: </span><a href="/store/redirectto?url=@stor.storeurl" class="storecontent underlineborder">@stor.storeurl</a></li>
+						<li><span class="gray">First Appeared On:</span><span> @stor.firstappearance</span></li>
+						@if(stor.location!=null){
+						<li><b>Location:</b><span> Tokyo  </span> </li>}
+						@if(stor.servicearea!=null){
+						<li><b>Service Area:</b><span> Asia Pacific</span></li>}
+					</ul>
+					 <ul class="inline onnextline spacecreater-small">
+				        <li><a class="brectangle" data-bind="click: $root.follow,css:folstr()?'btn btn-small btn-primary verdana clearstyled':'btn btn-small btn-success verdana clearstyled',text:folstr()?'Unfollow':'Follow'"></a></li>
+				        <li><a class="brectangle" data-bind="click: $root.setcustomer,css:customerstat()?'btn btn-small btn-primary verdana clearstyled':'btn btn-small verdana clearstyled',text:customerstat()?'Sorry I misunderstood':'I have been a customer'"></a></li> 
+				    </ul>
+				</div>
+				
+				<div class="pull-right statusboxcontainer">
+				    <ul class="inline pull-right">				
+				        <li class="text-center lviolet tab active"  >
+				        	<a href="#storeproductdivisions" data-bind="click:itemloader" data-toggle="tab">	
+					            <span class="btn-large">@stor.allproducts.size()</span><br/>
+					            <h3 class="onnextline">Products</h3>
+				            </a>
+				        </li>
+				        <li class="text-center lviolet tab" >
+				        	<a href="#storeuserdivision" data-bind="click:followerloader" data-toggle="tab">	
+					            <span class="btn-large">@Store.FollowersCount(stor)</span><br/>
+					            <h3 class="onnextline">Followers</h3>
+					        </a>
+				        </li>
+				        <li class="text-center lviolet tab" >
+				        	<a href="#storeuserdivision" data-bind="click:customerloader" data-toggle="tab">	
+					            <span class="btn-large">@stor.customers.size()</span><br/>
+					            <h3 class="onnextline">Customers</h3>
+					        </a>
+				        </li>
+				        <li class="text-center lviolet tab" >
+				        	<a href="#storecollectiondivision" data-bind="click:collectionloader" data-toggle="tab">	
+					            <span class="btn-large">@stor.collectlist.size()</span><br/>
+					            <h3 class="onnextline">Collections</h3>
+					        </a>
+				        </li>	  
+				    </ul>
+				    
+				    
+				    
+				</div>		
+				
+			</div>
+		
+			<div class="onnextline tab-content">
+			
+				<div id="storeproductdivisions" class="tab-pane active">
+					<div id="headermessages" class="onnextline">        
+					  <div class="onnextline text-center"></div>
+					  
+					  <div class="clearstyled">
+					  	<form id="fastsearch" class="inline-form" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+					        <select class="borderinvisible margin-lateral" data-bind="options: [0,1,2],optionsText: function(item) {ao=['Any (Gender)','Female','Male'];return ao[item];}, value: gendercont"></select>
+					        <select class="borderinvisible margin-lateral" data-bind="options: [0,1,2,3,4,5],optionsText: function(item) {ao=['Any (Price Range)','$0 - $50','$51 - $500','$501 - $1000','$1001 - $10000','$10001 - Above'];return ao[item];}, value: pricerange"></select>             
+					        <div class="input-prepend margin-lateral nomargin"><input class="borderinvisible  nomargin" data-bind="value: searchtext"  type="text"  placeholder="Search by typing a keyword"/><i class="icon-filter"></i></div>
+					      </form>            
+					   </div>
+					</div>
+					@Templates.su.panepbko() 		      
+					<div class="hidden">
+						@Templates.su.dopbko()	
+					</div>
+				</div>
+				
+				<div id="storeuserdivision" class="tab-pane text-right">
+					<form class="inline-form" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+				             <div class="input-prepend margin-lateral nomargin"><input class="borderinvisible  nomargin" data-bind="value: searchtext"  type="text"  placeholder="Search by typing a keyword"/><i class="icon-filter"></i></div> 
+				       </form>
+					<div class="onnextline text-left" id="usergrid">
+						@Templates.su.ubko()
+					</div>
+				</div>
+				
+				
+				<div id="storecollectiondivision" class="tab-pane text-right">
+					<form class="inline-form" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+			              <div class="input-prepend margin-lateral nomargin"><input class="borderinvisible  nomargin span3" data-bind="value: searchtext"  type="text"  placeholder="Search by typing a keyword"/><i class="icon-filter"></i></div> 
+			        </form>
+					<div class="onnextline text-left" id="collectiongrid">
+						<ul class="inline" data-bind="foreach: collList, visible: collList().length > 0">
+							@Templates.su.cbko()
+						</ul>
+					</div>
+				</div>
+			</div>
+			@subjectPresent(){
+			<div class="pull-right btn-mini onnextline">
+				<a class="gray underline" href="#" onclick="javascript:$.colorbox({href:UserLink.controllers.Useract.GetComplainForm(@stor.id, @DInitial.REPORTABUSE.ON_STORE, encodeURIComponent(window.location.href)).absoluteURL()})">
+						@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,null)){	<i class="icon-flag"></i>Deactivate/Delete
+						}else{
+						@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_MODERATOR,null)){	<i class="icon-flag"></i>Deactivate
+						}else{<i class="icon-flag"></i>Report Abuse }
+						}
+				</a>
+			</div>
+			}	
+		</div> 
+*@
+
+		     
+		@Templates.su.jready{
+								
+			var pxBDocInit=PBDocInit(ldiv);
+			var cxBDocInit=CBDocInit(ldiv);
+			var uxBDocInit=UBDocInit(ldiv);
+			
+			
+			function PageControllerView(){
+				var self=this;
+				
+				@subjectPresentOr(){
+					self.folstr = ko.observable(@if(Follow.IsStoreFollower(stor.id,Application.getContributor(session).id)){true}else{false});
+					self.customerstat = ko.observable(@if(stor.customers.contains(Application.getContributor(session))){true}else{false});
+					}{
+						self.folstr = ko.observable(false);
+						self.customerstat = ko.observable(false);
+					}			
+					
+				self.follow = function(){
+					@subjectPresentOr(){
+					self.folstr($().setresponse({url:"@routes.Useract.FollowAct(DInitial.SEARCH_STORE,stor.id)",failans:false}));
+					}{$().askforloginorsignup();}
+				}
+				
+				self.setcustomer = function(sg){
+					@subjectPresentOr(){
+						self.customerstat($().setresponse({url:"@routes.Useract.SetCustomer(stor.id)",failans:false}));
+						}{$().askforloginorsignup();}
+					}
+					
+				self.itemloader = function(){self.activeloader=1;};
+				self.collectionloader = function(){self.activeloader=2;};
+				self.followerloader = function(){self.activeloader=3;uxBDocInit.followerloader();};
+				self.customerloader = function(){self.activeloader=3;uxBDocInit.customerloader();};
+				self.activeloader=1;
+			};
+			var PCV=new PageControllerView()
+			ko.applyBindings(PCV,$('#pagecontrollerunit')[0]);
+			
+			@Templates.js.infinitescroll(false){
+				if(PCV.activeloader==1){pxBDocInit.loadMore();} 
+				if(PCV.activeloader==2){cxBDocInit.loadMore();}
+				if(PCV.activeloader==3){uxBDocInit.loadMore();}
+				}
+			
+		
+			
+		}
+		
+		<script>
+		function PBDocInit()
+		{
+			function fms(ifs)
+			{
+				var self=this;
+				self.gendercont=ko.observable(ifs.gend);
+				self.pricerange=ko.observable(ifs.prc);
+				self.searchtext=ko.observable(ifs.stext);
+				self.subcat=ko.observable(ifs.subcat);
+				self.page=ifs.pgn; 
+				self.pagesize=ifs.ps;
+				
+			};
+			
+			
+			@Templates.js.pbactionjs("storeproductdivisions"){
+				
+				self.fr=new fms({subcat:@DInitial.USER_RELATION_QUERY.PRODUCTS, gend:0, prc:0, stext:'',ps:@DInitial.GENERIC_PAGE_SIZE, pgn:0});
+				self.sfm = ko.observable(self.fr);
+				
+				
+				
+				
+				
+				self.loadProd = function(jsonstring) {			
+					ldiv.display();
+					var sentsuccess=true;
+					var posting = $.get("@routes.Application.StoreSearch(stor.id)",jsonstring,"json");
+					posting.done(function( data ) {								
+						$prodselect=data['prodgrid'];
+						if(!data['hasmore'])
+							self.fr.page=-1;
+						
+						$.each($prodselect, 
+							function(prindex, prattr)
+							{
+								self.prodList.push(ko.mapping.fromJS(prattr));
+								ldiv.stillbusy();
+							}
+						);
+						ldiv.loadcomplete();
+					});
+					posting.fail(function( data ) {
+						ldiv.loadcomplete();	
+						sentsuccess=false;
+					});
+					
+					return sentsuccess;						       
+				};
+				 
+				self.loadMore = function()
+				{
+					if(self.fr.page!==-1 && self.loadProd($.param(self.fr)))
+		  				self.fr.page++;
+				}
+				 
+				self.pform=ko.computed(function() {	
+			  			self.fr.page=0;
+			  			self.prodList.removeAll();
+		      				if(self.loadProd($.param(self.fr)))
+			  				self.fr.page++;
+			  			
+						}).extend({ throttle: 200 });			
+			
+				
+				
+			}
+		}
+		
+		
+		function UBDocInit(ldiv)
+		{
+			@Templates.js.ubaction(divid="storeuserdivision",hiturl=routes.Application.StoreSearch(stor.id).url,Ispost=false,specific=true){
+				function fms(ifs)
+				{
+					var self=this;
+					self.searchtext=ko.observable(ifs.stext);
+					self.page=ifs.pgn;
+					self.subcat=ko.observable(ifs.st); 
+					self.pagesize=ifs.ps;
+				};
+				var initcontent	={stext:'',pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE,st:@DInitial.USER_RELATION_QUERY.FOLLOWERS};
+			}{ 
+				self.followerloader = function(){self.sfm().subcat(@DInitial.USER_RELATION_QUERY.FOLLOWERS);}
+				self.customerloader = function(){self.sfm().subcat(@DInitial.USER_RELATION_QUERY.CUSTOMERS);}
+			}
+			return thisuserview;
+			
+		}
+		
+		
+		function CBDocInit(ldiv)
+		{
+			@Templates.js.cbaction(divid="storecollectiondivision",hiturl=routes.Application.StoreSearch(stor.id).url,Ispost=false,specific=true){
+				function fms(ifs)
+				{
+					var self=this;
+					self.searchtext=ko.observable(ifs.stext);
+					self.page=ifs.pgn;
+					self.subcat=ifs.st; 
+					self.pagesize=ifs.ps;
+				};
+				var initcontent	={stext:'',pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE,st:@DInitial.USER_RELATION_QUERY.COLLECTIONS};
+			}{ }
+			return thiscollectionview;
+		};
+		</script>	
+	}
+}{
+	@Templates.pagefooter(){ }
+}	
+		

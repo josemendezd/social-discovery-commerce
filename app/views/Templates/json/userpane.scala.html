@@ -1,0 +1,3 @@
+@(currentPage: com.avaje.ebean.Page[Contributor])(implicit session: play.mvc.Http.Session)
+{"usergrid":[@for((contr,cnt) <- currentPage.getList.zipWithIndex){@if(cnt!=0){,}
+@Templates.json.userbrick(contr)}],"hasmore":@currentPage.hasNext}

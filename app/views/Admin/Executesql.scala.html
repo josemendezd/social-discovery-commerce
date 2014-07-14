@@ -1,0 +1,35 @@
+@(SQL: String)
+@import helper._
+@import helper.twitterBootstrap._
+
+@ps={ }
+
+
+@Templates.MasterTemplate(){
+@Templates.pagehead("Execute SQL @Boozology"){@ps}
+}{
+@Templates.pageheader(){		
+	}{ }	
+}{
+@Templates.pagemaincontent(){
+
+
+	
+
+<div class="onnextline">
+
+<form id="newblacklistform" action="@routes.AdminControls.sqlcontrol_update" method="POST">		@*	VARIATION POINT INSIDE	*@
+            <textarea rows="50" cols="400" name="sqltext" class="span9"></textarea>
+            <input type="submit" id="create_upperip" value="Run SQL" class="btn btn-primary displayinline">
+        </form>
+
+</div>	
+		
+@Templates.su.jready{
+			
+}
+	
+}
+}{
+@Templates.pagefooter(){ }
+}	

@@ -1,0 +1,24 @@
+@(localUser: models.User = null)
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("NotFound @Boozology"){ }
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(pc="theme-grey",pcw="theme-white"){	
+		<div class="text-center searchposition">
+			<div class="container">
+				<h1>Sorry Your are not Authorized to view this page... :(</h1>
+			</div>
+		</div>
+		@Templates.su.jready{
+						
+		}	
+	}
+}{
+	@Templates.pagefooter(){ }
+}
+			
+

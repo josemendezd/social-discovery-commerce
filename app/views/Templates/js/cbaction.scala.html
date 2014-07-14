@@ -1,0 +1,68 @@
+@(divid: String="collectiongrid",key: String="",hiturl:String,specific:Boolean=false,Ispost:Boolean=true)(PageContentParam: Html)(ClassExtension: Html)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+
+@if(specific){ @PageContentParam }else{
+function fms(ifs)
+{
+	var self=this;
+	self.searchtext=ko.observable(ifs.stext);
+	self.page=ifs.pgn;
+	self.searchtype=ifs.st; 
+	self.pagesize=ifs.ps;
+};
+var initcontent	={stext:'@key',pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE,st:@DInitial.SEARCH_COLLECTION};
+}	
+function CollectionView(passedurl) {	
+	var self = this;
+	self.fr=new fms(initcontent);
+	self.sfm = ko.observable(self.fr);
+	self.moreloadtext = ko.observable('<i class="icon-download"></i>Load More');
+	self.collList = ko.observableArray([]);
+	
+	self.follow = function(cg){
+			@subjectPresentOr(){
+			cg.cfs($().setresponse({url:cg.cfurl(),failans:false}));
+			}{$().askforloginorsignup();}
+		}
+	
+	self.loadProd = function(jsonstring) {			
+		ldiv.display();
+		var sentsuccess=true;
+		var posting = @if(Ispost){$.post( passedurl,jsonstring,"json");}else{ $.getJSON( passedurl,jsonstring);}
+		
+		posting.done(function( data ) {								
+			$prodselect=data['collgrid'];
+			if(!data['hasmore']){self.fr.page=-1;}				
+			$.each($prodselect,function(prindex, prattr){self.collList.push(ko.mapping.fromJS(prattr));ldiv.stillbusy();});
+			ldiv.loadcomplete();
+		});
+		posting.fail(function( data ) {
+			ldiv.loadcomplete();	
+			sentsuccess=false;
+		});
+		
+		return sentsuccess;						       
+	};
+	 
+	self.loadMore = function()
+	{
+		if(self.fr.page!==-1 && self.loadProd($.param(self.fr)))
+ 				{self.fr.page++;}
+		else{self.moreloadtext('<i class="icon-upload"></i>Completed');}
+	}
+	
+	@ClassExtension
+	 
+	self.pform=ko.computed(function() {	
+  			self.fr.page=0;
+  			self.collList.removeAll();
+     				if(self.loadProd($.param(self.fr)))
+  				self.fr.page++;
+  			
+			}).extend({ throttle: 200 });
+}
+var thiscollectionview=new CollectionView("@hiturl");
+
+ko.applyBindings(thiscollectionview,$('#@divid')[0]);

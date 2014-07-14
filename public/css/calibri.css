@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'Calibri';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Calibri'), local('Calibri'), url(fonts/Calibri/Calibri.woff) format('woff');
+}
+@font-face {
+  font-family: 'Calibri';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Calibri Semibold'), local('Calibri-Semibold'), url(fonts/Calibri/Calibri_Semibold.woff) format('woff');
+}

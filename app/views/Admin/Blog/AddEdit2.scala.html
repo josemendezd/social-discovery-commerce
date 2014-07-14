@@ -1,0 +1,104 @@
+@(newblogform: Form[_],isedit:Boolean=true)
+
+@import helper._
+
+@ps={
+<style>
+dd.info{font-size: xx-small!important;color:gray;}
+dd.error{color:red!important;}
+textarea { width: 100%; height:200px; padding: 4px; }
+</style>
+
+
+
+<link rel="stylesheet" type="text/css" href="@routes.Assets.at("bootstrapeditor/src/bootstrap-wysihtml5.css")">
+<link rel="stylesheet" type="text/css" href="@routes.Assets.at("bootstrapeditor/lib/css/wysiwyg-color.css")">
+<script src="@routes.Assets.at("bootstrapeditor/lib/js/wysihtml5-0.3.0.js")"></script>
+<script src="@routes.Assets.at("bootstrapeditor/src/bootstrap-wysihtml5.js")"></script>
+<script src="@routes.Assets.at("bootstrapeditor/rtedit.js")"></script>
+
+}
+
+@hiturl=@{routes.Useract.AddBlog }
+
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Edit Blog @Boozology"){@ps}
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){	
+	
+	<div class="row">
+		  <div class="span6">
+		    <h2>@if(isedit){ Now Editing: <span class="underline gray">@newblogform("blogtittle").value</span> }else{ ---Create a new Blog }</h2>
+		  </div>
+	</div>	
+		
+	
+		
+		<div class="jumbotron" style="margin-top:40px;">
+				<div class="row">	
+				<div class="col-sm-8">
+		@helper.form(hiturl, 'enctype -> "multipart/form-data") {		
+			@inputText(field = newblogform("blogtittle"), args = 'size -> 255, 'placeholder -> "Blog Title",'_label ->"Blog Title",'class->"form-control")			
+			@textarea(field = newblogform("blogtext"), args = 'rows -> 75, 'cols -> 300 ,'class->"textarea",'_label ->"Blog Content")			
+			@inputText(field = newblogform("tags"), args = 'size -> 255, 'placeholder -> "Tags",'_label ->"Blog Tags",'class->"form-control")			
+			
+			<input onchange="selectedImage()" style="display:none;" type="file" multiple="multiple" name="fileUpload" id="fileupload" class="btn btn-default btn-elg">
+			<input onchange="selectedVideo()" style="display:none;" type="file" multiple="multiple" name="fileUpload2" id="fileupload2" class="btn btn-default btn-elg">
+		
+			@if(isedit){
+			<input type="hidden" name="blogid" id="blogid" value="@newblogform("blogid").value">
+			}
+			<input type="submit" value="POST IT!!" class="btn btn-primary">		
+			
+			
+		}	
+		</div>
+		
+			<div class="col-sm-4">
+						<button style="width:160px;height:160px;" onclick="getFiles()" type="button" class="btn btn-default btn-elg" style="margin-bottom:10px;">
+							<span class="glyphicon glyphicon-picture"></span><br>Add Image<br/>
+							<span id="numfile">0</span> files
+						</button>
+						<br>
+						<button style="width:160px;height:160px;" onclick="getVideos()" type="button" class="btn btn-default btn-elg">
+							<span class="glyphicon glyphicon-facetime-video"></span><br>Add Video<br/>
+							<span id="numfile2">0</span> files
+						</button>
+					</div>
+		</div>
+		</div>
+		
+		<div class="row" id="imgHolder">
+  			
+		</div>	
+		}
+		
+	
+		@Templates.su.jready{		
+			$('.textarea').wysihtml5();
+			$('.loaderimagediv').hide();
+			
+			$.getJSON("images/all/?id=@newblogform("blogid").value", function(json)
+			 {
+			 var imgst = "";
+				$.each(json.images, function(i,img)
+        				{
+        					imgst += '<div class="col-xs-5 col-sm-3">'+
+        							'<img src="' + img.url + '" class="img-responsive"/>' +        							
+        							'</div>';
+        				});
+        		$("#imgHolder").append(imgst);
+			 });
+		}	
+			
+	
+}{
+	@Templates.pagefooter(){ }
+}	
+		

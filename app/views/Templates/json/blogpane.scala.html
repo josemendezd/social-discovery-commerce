@@ -1,0 +1,3 @@
+@(currentPage: com.avaje.ebean.Page[Blog])(implicit session: play.mvc.Http.Session) 
+{"bloggrid":[@for((blogs,cnt) <- currentPage.getList.zipWithIndex){@if(cnt!=0){,}
+@Templates.json.blogbrick(blogs)}],"hasmore":@currentPage.hasNext}

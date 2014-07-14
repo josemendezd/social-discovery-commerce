@@ -1,0 +1,49 @@
+@()
+
+@ps={}
+
+
+@Templates.MasterTemplate(){
+@Templates.pagehead("Administration @Boozology"){@ps}
+}{
+<div class="calibri">
+	@Templates.AlertMessages()	
+</div>	
+}{
+@Templates.pagemaincontent(){	
+
+
+<div class="container">
+	   <!-- Begin .row -->
+	<div class="row">
+		<div id="legend">
+	    	<legend>Discover more friends over here,invite many others.</legend>
+	    </div>
+	    <div class="onnextline text-right">
+	    	<a href="@routes.Signup.SetUsersContactList("skip")" class="btn btn-danger brectangle">Skip</a>
+	    </div>
+	    <div class="clearstyled">
+	    	<ul class="list-inline">
+	    	<li>
+	    		<a title="facebook (you should be signed in with twitter)" class="btn btn-lg brectangle socialbutton-facebook" href="@routes.Social.GetFBAccessCode(java.net.URLEncoder.encode(routes.Social.getfbfriends().absoluteURL(request()),"UTF-8"))">
+	    			<i class="icon-facebook"></i>
+	    		</a>
+	    	</li>
+	    	<li>
+		    	<a title="twitter (you should be signed in with twitter)" class="btn btn-lg brectangle socialbutton-twitter" href="@routes.Social.gettwitterfriends">
+			    	<i class="icon-twitter"></i>
+		    	</a>
+	    	</li>
+	    	</ul>
+	    </div>			
+	</div>
+</div>
+<script>var postregistering=true</script>			
+@Templates.su.jready{
+			
+}
+	
+}
+}{
+@Templates.pagefooter(){ }
+}	

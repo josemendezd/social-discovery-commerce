@@ -1,0 +1,81 @@
+@(selector:Int,Extras:Boolean=false)
+
+@import net.tanesha.recaptcha.ReCaptcha
+@import net.tanesha.recaptcha.ReCaptchaFactory
+
+
+
+@if((selector&1)>0){
+
+<div class="form-group">
+  <!-- Username -->
+  <label class="col-sm-2 control-label"  for="username">Username</label>
+  <div class="col-sm-10">
+	<div class="input-group"><span class="input-group-addon"><i class="icon-user"></i></span><input type="text" id="name" name="name" class="form-control" placeholder="Ex. yourname (Letters,numbers but no space)"></div>
+  </div>
+</div>
+
+}
+
+@if((selector&2)>0){
+<div class="form-group">
+  <!-- E-mail -->
+  <label class="col-sm-2 control-label" for="email">E-mail</label>
+  <div class="col-sm-10">
+	 <div class="input-group">
+		<span class="input-group-addon"><i class="icon-envelope"></i></span>
+		<input  id="email" name="email" type="text" placeholder="user@@myemail.com" class="form-control">
+	</div>
+	@if(Extras){
+	
+	}
+  </div>
+</div>
+}
+
+@if((selector&4)>0){
+
+<div class="form-group">
+  <!-- Password-->
+  <label class="col-sm-2 control-label" for="password">Password</label>
+  <div class="col-sm-10">
+   <div class="input-group">
+		<span class="input-group-addon"><i class="icon-asterisk"></i></span>
+		<input  type="password" id="password" name="password" placeholder="Password (Atleast 5 chars)" class="form-control">
+	</div>
+	@if(Extras){
+	
+	}
+  </div>
+</div>
+
+}
+
+@if((selector&8)>0){
+
+<div class="form-group">
+  <!-- Password -->
+  <label class="col-sm-2 control-label"  for="repeatPassword">Password (Confirm)</label>
+  <div class="col-sm-10">
+  	<div class="input-group">
+		<span class="input-group-addon"><i class="icon-asterisk"></i></span>
+		<input type="password" id="repeatPassword" name="repeatPassword" placeholder="Confirm Password (Atleast 5 chars)" class="form-control">
+	</div>
+	@if(Extras){
+	
+	}
+  </div>
+</div>
+}
+
+@if((selector&16)>0){
+<div class="form-group captcha-box">
+  <!-- Captcha-->
+  <label class="col-sm-2 control-label" for="captcha">Solve Captcha</label>
+  <div class="col-sm-10">
+	@defining(ReCaptchaFactory.newReCaptcha(controllers.Application.Captchapublic, controllers.Application.Captchaprivate, false)) { c =>
+	  @play.api.templates.Html.apply(c.createRecaptchaHtml(null, null))
+	}
+  </div>
+</div>
+}

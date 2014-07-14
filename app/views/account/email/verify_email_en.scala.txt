@@ -1,0 +1,8 @@
+@(verificationUrl: String, token: String, name: String, email: String)Hi @name, 
+
+
+To verify your e-mail address, follow this link now:
+@verificationUrl
+
+Cheers,
+The Boozology Team

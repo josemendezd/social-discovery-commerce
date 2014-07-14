@@ -1,0 +1,17 @@
+@()(headpart: Html)(headerpart: Html)(mainbody: Html)(footerpart: Html)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+<!DOCTYPE html>
+<html lang="en">
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+	@headpart
+  </head>
+
+  <body ng-app="bl-master">
+  	@headerpart
+  	@mainbody
+  	@footerpart	
+  </body>
+ <script src="@routes.Assets.at("bl/js/app/app-master.js")"></script> 
+ <script src="@routes.Assets.at("bl/js/app/controller-master.js")"></script> 
+</html>

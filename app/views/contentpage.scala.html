@@ -1,0 +1,69 @@
+@(infp:models.Admin.Infopage)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+@pst(isadmin:Boolean)={
+@if(isadmin){
+<script src="@routes.Assets.at("ckeditor/ckeditor.js")"></script>
+}
+}
+
+@allcontent={
+	@Html(infp.content)
+}
+
+@defining(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,Application.getLocalUser(session()))) { isadmin=>
+
+	@Templates.MasterTemplate(){
+		@Templates.pagehead("Create a new Page @Boozology"){@pst(isadmin)}
+	}{
+		@Templates.pageheader(){		
+		}{ }
+		
+	}{
+		@Templates.pagemaincontent(){
+		
+				@if(isadmin){
+		
+		<div id="admincontentpageedit" contenteditable="true">
+		    @allcontent
+		</div>
+		<div class="onnextline">
+			<button id="admincontentpageeditsave" class="btn lviolet">Save</button>			
+		</div>
+						
+		}else{ @allcontent }
+	
+		@Templates.su.jready{
+		
+		@if(isadmin){
+		
+			    CKEDITOR.disableAutoInline = true;
+	    		CKEDITOR.inline( 'admincontentpageedit' );
+	    		
+	    		$('#admincontentpageeditsave').click(function() {
+					var newcontents = CKEDITOR.instances.admincontentpageedit.getData();
+					var ptitle = "@GHelp.EHtml(infp.title)";
+	    			var pushdata = $.param({id:'@infp.id',pagetitle:ptitle,pagecontent:newcontents});
+	    			
+	    			var retnresp=$().setresponse({ispost:true,url:"@routes.Useract.SaveContentPage()",argdata:pushdata,failans:false,failreq:true,failnode:'responseText'});
+					if(retnresp.Issuccess==false){
+						var reply=$.parseJSON(retnresp.retresp);
+						var Errormsgs='';
+						$.each(reply, function(eron, errmsg){Errormsgs+=eron +" - "+errmsg+".";});
+						$().msgbox('<label class="error lred">Failed!! '+Errormsgs+'</label>',1000);
+					}
+					else
+					{$().msgbox('<label class="success">Saved</label>',1000);}
+	
+	    			
+				});
+			
+    		}
+			
+		}		
+		}
+	}{
+		@Templates.pagefooter(){ }
+	}
+}			

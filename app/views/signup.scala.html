@@ -1,0 +1,38 @@
+@(signupForm: Form[_])
+
+
+@import net.tanesha.recaptcha.ReCaptcha
+@import net.tanesha.recaptcha.ReCaptchaFactory
+
+
+@ps={
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Register @Boozology"){@ps}
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){	
+	<div class="container user-profile-page">
+	   <!-- Begin .row -->
+	   <div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		@if(signupForm.hasGlobalErrors) { 
+		          <p class="error">
+		            <span class="label label-important">@signupForm.globalError.message</span>
+		          </p>
+		        }	
+			@Templates.su.signup(true)	
+		</div>
+		</div>
+	</div>
+		@Templates.su.jready{			
+		}	
+	}
+}{
+	@Templates.pagefooter(){ }
+}

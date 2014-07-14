@@ -1,0 +1,67 @@
+@(title: String="Boozology")(appendcontent: Html)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import net.tanesha.recaptcha.ReCaptcha
+@import net.tanesha.recaptcha.ReCaptchaFactory
+
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.png">
+
+    <title>@title</title>
+	<link href="@routes.Assets.at("bl/css/fonts/fonts.css")" rel="stylesheet" type="text/css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="@routes.Assets.at("bl/css/bigvideo.css")">
+    <link rel="stylesheet" href="@routes.Assets.at("bl/css/bootstrap.css")">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="@routes.Assets.at("bl/css/style.css")">
+    <link rel="stylesheet" href="@routes.Assets.at("bl/css/font-awesome.css")">
+    <link rel="stylesheet" href="@routes.Assets.at("css/colorbox.css")" /> 
+    @**<link media="screen" type="text/css" rel="stylesheet" href="@routes.Assets.at("style.css")" />**@
+    
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css">
+	<![endif]-->
+	
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	  <script src="js/html5shiv.js"></script>
+	  <script src="js/respond.min.js"></script>
+	<![endif]-->
+	
+	<script src="@routes.Assets.at("bl/js/jquery.min.js")"></script>
+	<script src="@routes.Assets.at("bl/js/knockout-3.0.0.debug.js")"></script>
+	<script src="@routes.Assets.at("js/knockout.mapping.js")"></script>
+	<script src="@routes.Assets.at("bl/js/jquery-ui-1.10.3.custom.min.js")"></script>
+    <script src="@routes.Assets.at("bl/js/bootstrap.min.js")"></script>
+
+    <script src="@routes.Assets.at("bl/js/angular.min.js")"></script> 
+    <script src="@routes.Assets.at("bl/js/ui-bootstrap.min.js")"></script>
+	<script src="@routes.Assets.at("bl/js/ui-bootstrap-tpls.min.js")"></script>
+    <!-- BigVideo Dependencies -->
+    <script src="@routes.Assets.at("javascripts/classie.min.js")"></script>
+	<script src="@routes.Assets.at("javascripts/cbpAnimatedHeader.min.js")"></script>    
+    <script type="text/javascript" src="@routes.Assets.at("bl/js/modernizr-2.5.3.min.js")"></script> 
+    <script src="@routes.Assets.at("bl/js/custom.js")"></script>@*coffee had ldiv problems*@
+    @*
+    <script src="@routes.Assets.at("javascripts/global.js")"></script>
+    *@
+    <script src="@routes.Assets.at("js/global_no_coffee.js")"></script>
+    <!-- BigVideo -->
+	 
+
+	@appendcontent 
+
+	<script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===e.location.protocol?"https:":"http:")+'//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f);b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==
+	typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");for(g=0;g<i.length;g++)f(c,i[g]);
+	b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);
+	mixpanel.init("2d0ef58cbd852b3169bf4749bcea5988");</script>
+	
+	
+	

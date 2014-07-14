@@ -1,0 +1,12 @@
+$.ajax({
+		type: "GET",
+		url: "/cart/count",
+		success: function(data){
+			if(data.length>0) {
+			$('#cartCount').show();
+			$('.noti_bubble').empty();
+			$('.noti_bubble').append("<a>"+data.length+"</a>")
+		}	
+	}
+});
+		 	

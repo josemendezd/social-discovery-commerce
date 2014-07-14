@@ -1,0 +1,15 @@
+@(currentPage: com.avaje.ebean.Page[Product])
+
+
+{
+"prodgrid":[
+@for((productx,cnt) <- currentPage.getList.zipWithIndex) {
+	   @if(cnt!=0){,}
+
+@Templates.json.productbrick(productx)
+
+}
+
+],
+"hasmore":@currentPage.hasNext
+}

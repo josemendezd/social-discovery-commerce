@@ -1,0 +1,307 @@
+@(localcontributor:Contributor)
+@ps={
+<style>
+.feed-thumbsli
+{
+	position: relative;
+	display: inline-block;
+	background:white;
+	text-align:left;
+	min-width: 200px;
+	max-width: 540px;
+	min-height: 290px;
+}
+.feed-thumblimg{ max-width:520px; }
+
+.feed-thumbtextmaxwidth{max-width: 100%;}
+
+.feed-thumbslinkmedium{	min-height:226px; }
+
+.feed-thumbsli:hover .goinvonhov{display:none;}
+.feed-thumbsli:hover .disonhover{display:block;}
+.profileblock{width:195px;text-align: left;}
+
+.profileblock .profile {background: none repeat scroll 0 0 #F4F4F4;padding: 20px 20px 40px;}
+.profileblock .profile .portrait {
+    display: inline-block;
+    height: 100px;
+    width: 100px;
+}
+.profileblock .profile .portrait img{
+    max-height: 100px;
+    max-width: 100px;
+}
+.profileblock .profile h2 {
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 30px;
+}
+.profileblock .profile a {color:black;}
+.profileblock .profile p {
+    color: #171717;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 300;
+}
+.profileblock .profile ul {
+    margin-top: 2px;
+}
+.profileblock .profile ul li {
+    font-size: 14px;
+    margin: 5px 0 0;
+}
+.profileblock .profile ul li a {
+	color:black !important;
+    border-bottom: 1px solid #BEBEBE;
+}
+.profileblock .profile ul li a:hover {
+	text-decoration:none !important;
+    border-bottom: none;
+}
+.profileblock .links {
+    margin-top: 20px;
+}
+.profileblock .links li {
+    margin-bottom: 2px;
+}
+.profileblock .links li a {
+    color: #ADADAD;
+    font-size: 14px;
+    border-bottom:1px solid gray;
+}
+.profileblock .links li a:hover{text-decoration: none;border-bottom: none;}
+.feed-headerblock{float: left;width: 600px;text-align: left;color: black;}
+.feed-headerblock h2{display: block;font-size: 18px;font-weight: normal;}
+.feed-headerblock h1{
+    display: block;
+    font-size: 42px;
+    font-weight: bold;
+    line-height: 45px;
+    margin-bottom: 5px;}
+</style>
+
+}
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("My Feed @Boozology"){@ps}
+}{
+	@Templates.pageheader(){
+	
+	@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,Application.getLocalUser(session()))){
+	<div class="container smartcontainer">
+		<div class="row">
+			<div class="logout blbanner">
+				<div class="message"><span class="bold">Welcome Admin, Move to your Page -> </span></div>
+				<div class="options">
+					<div class="option"><a class="btn btn-danger brectangle btn-small" href="@routes.Application.GetAdminPage()">Admin Page</a></div>
+				</div>
+			</div>
+		</div>
+	</div>
+		}
+				
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){	
+	
+	<div class="container">
+         <div class="row">
+            <div class="col-lg-12 col-12 col-md-12 col-sm-12 col-xs-12 col-12">
+               <div class="clearfix"></div>
+               <!-- Begin .category-title -->
+               <div class="category-title">
+                  <h2>
+                  	Your Product feed
+                  </h2>
+                  <div class="clearfix"></div>
+               </div>
+               <!-- End .category-title -->
+               
+               @Templates.su.panepbko()
+
+            </div>
+         </div>
+      </div>
+      
+	
+	
+	@*
+			<div id="shoppage" class="onnextline">
+			  
+			  <div class="onnextline text-center">
+			  
+			  <div class="feed-headerblock">
+				<h1>Your Feed</h1>
+				<h2>Great products from people and stores you follow.</h2>
+			  </div>
+			  <div class="clearstyled">
+					<form id="fastsearch" class="inline-form" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+					  <select class="borderinvisible margin-lateral" data-bind="options: [0,1,2,3],optionsText: function(item) {ao=['All (Category)','Relevance','Newest','Most Loved'];return  ao[item];}, value: catgid"></select>
+					  <select class="borderinvisible margin-lateral" data-bind="options: [0,1,2,3,4,5],optionsText: function(item) {ao=['Any (Price Range)','$0 - $50','$51 - $500','$501 - $1000','$1001 - $10000','$10001 - Above'];return ao[item];}, value: pricerange"></select>             
+					  <div class="input-prepend margin-lateral nomargin"><input class="borderinvisible  nomargin" data-bind="value: searchtext"  type="text"  placeholder="Search by typing a keyword"/><i class="icon-filter"></i></div> 
+					</form>            
+				 </div>
+			  
+			  <div class="pull-right profileblock">
+				<div class="profile">
+					<a class="portrait" href="@routes.Application.ContributorPage(localcontributor.id)"><img src="@localcontributor.user.getusersimagesmall()"></a>
+					<a href="@routes.Application.ContributorPage(localcontributor.id,false)"><h2>@localcontributor.user.name</h2></a>
+					<p>You are following:</p>
+					<ul class="unstyled">
+					  <li><a href="@routes.Application.ContributorSelecttabPage(localcontributor.id,DInitial.USER_RELATION_QUERY.FOLLOWING)">@Contributor.LeadersCount(localcontributor) People</a></li>
+					  <li><a href="@routes.Application.ContributorSelecttabPage(localcontributor.id,DInitial.USER_RELATION_QUERY.STORES)">@Follow.GetStoresCount(localcontributor.id) Stores</a></li>
+					  <li><a href="@routes.Application.ContributorSelecttabPage(localcontributor.id,DInitial.USER_RELATION_QUERY.SEARCHES)">@FSearch.UserFollowedSearchCount(localcontributor) Searches</a></li>
+					</ul>
+				  </div>
+				  <!-- 
+				  <div class="links">
+					<ul class="unstyled">
+					  <li><a href="/find_people">Find People to Follow</a></li>
+					</ul>
+				  </div>     
+					-->
+			  </div>
+				
+			  
+				<ul class="thumbnails inlinedisplay"  data-bind="foreach: prodList, visible: prodList().length > 0">
+				
+					<li class="feed-thumbsli" style="margin-top:30px;" data-bind="css:$index()==0?'':'onnextline'">
+						<div data-bind="css:(['btn-warning','btn-info','btn-success','btn-inverse'])[signify()-1]" class="feedtitle feedtitletext text-center white bold">
+								<span data-bind="text: brdtxt"></span>&nbsp;
+								<a class="white bold underline" data-bind="text: $().cat(agent(),20),attr:{href:agenturl}"></a>
+						</div> 
+						<div class="thumbslink feed-thumbslinkmedium text-left" data-bind="click: $root.brickinvoked,attr:{id:id}">
+							<a data-bind="attr:{href:prlink}"><img class="feed-thumblimg" data-bind="attr:{src:pic,alt:name}"></a>
+							<div class="thumbldiv disonhover">
+								<span data-bind="text: name()"></span>
+							</div>
+						</div>
+						<div class="floatlike disonhover">
+							<div class="btn-group">
+								<button class="brectangle" data-bind="click: $parent.lovestate,text: lovetext,css:lovetext()=='Love'?'btn btn-danger':'btn btn-inverse' "></button><button class="brectangle"  data-toggle="dropdown" data-bind="css:lovetext()=='Love'?'btn btn-danger dropdown-toggle':'btn btn-inverse dropdown-toggle'"><span class="caret"></span></button>
+								<ul class="dropdown-menu">
+									<li><a href="javascript:void(0);" data-bind="click: $parent.wantstate, clickBubble: false,text: wanttext">Want</a></li>
+									<li><a href="javascript:void(0);" data-bind="click: $parent.triedstate, clickBubble: false,text: triedtext">Own</a></li>
+									<li><a href="javascript:void(0);" data-bind="click: $parent.collectstate, clickBubble: false">Collect</a></li>
+								</ul>
+							</div>
+						</div>
+						<span class="like">
+						<div>
+							<div class="disonhover">
+								<div class="user-info user-hover">
+									<div class="user-gravatar40">
+										<a data-bind="attr:{href:usrlink}"><img data-bind="css:'likeimage',attr:{href:usrlink,alt:discoverer,src:usrpic}"></a>
+									</div>
+									<div class="user-details">
+										Found By: <a data-bind="attr:{href:usrlink}"><b data-bind="text:discoverer"></b></a><br>
+										Found At: <a data-bind="attr:{href:storeaddr}"><b  data-bind="text: store()"></b></a>
+									</div>
+								</div>
+							</div>
+							<div class="user-details goinvonhov feed-thumbtextmaxwidth textcutoverflow">
+								<span data-bind="text:name"></span><br>
+								<div class="textcutoverflow"><b class="black" data-bind="html:cncy()+Math.round(cost())"></b> ,<span data-bind="text: love"></span> Loves,<span data-bind="text: comment"></span> Comments </div>
+							</div>
+						</div>
+						</span>
+					</li>
+
+					
+				 
+				</ul>
+				<div id="prloadmore" class="hidden" data-bind="click:loadMore"><i class="icon-download"></i> Load More</div>
+				@Templates.su.collpopko(){ }
+			  </div>
+			  
+			<div class="hidden">
+				  @Templates.su.dopbko()
+			</div>
+			
+		</div>      
+		
+	*@	
+		@Templates.su.jready{
+
+			$.ajaxSetup({ cache: false });				
+			var pxBDocInit=PBDocInit(ldiv);
+			
+			@Templates.js.infinitescroll(false){
+				pxBDocInit.loadMore();
+				}
+
+			
+		}
+
+	<script>
+		function PBDocInit()
+		{
+			function fms(ifs)
+			{
+				var self=this;
+				self.gendercont=ko.observable(ifs.gend);
+				self.pricerange=ko.observable(ifs.prc);
+				self.searchtext=ko.observable(ifs.stext);
+				self.page=ifs.pgn; 
+				self.catgid=ko.observable(ifs.catg);
+				self.pagesize=ifs.ps;
+			};
+			
+			@Templates.js.pbactionjs(){		
+				self.fr=new fms({gend:0, prc:0, stext:'',catg:0, pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE});
+				self.sfm = ko.observable(self.fr);
+				
+				// Behaviours
+				self.loadProd = function(jsonstring) {
+					
+					ldiv.display();
+					var sentsuccess=true;
+					var posting = $.post( "@routes.Useract.MyWatchListJson",jsonstring,"json");
+					posting.done(function( data ) {								
+						$prodselect=data['prodgrid'];
+						if(!data['hasmore'])
+							self.fr.page=-1;
+						
+						$.each($prodselect, 
+							function(prindex, prattr)
+							{
+								self.prodList.push(ko.mapping.fromJS(prattr));
+								ldiv.stillbusy();
+							}
+						);
+						ldiv.loadcomplete();
+					});
+					posting.fail(function( data ) {
+						ldiv.loadcomplete();	
+						sentsuccess=false;
+					});
+					
+					return sentsuccess;						       
+				};
+				
+				 
+				self.loadMore = function()
+				{
+					if(self.fr.page!==-1 && self.loadProd($.param(self.fr)))
+						self.fr.page++;
+				}
+				 
+				self.pform=ko.computed(function() {	
+						self.fr.page=0;
+						self.prodList.removeAll();
+							if(self.loadProd($.param(self.fr)))
+							self.fr.page++;
+						
+						}).extend({ throttle: 200 });
+			}
+			return thisshopview;
+		}
+
+					
+		</script>
+		
+	}
+}{
+	@Templates.pagefooter(){ }
+}

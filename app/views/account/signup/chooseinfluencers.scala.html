@@ -1,0 +1,57 @@
+@(localuser:User)
+
+@ps={}
+
+
+@Templates.MasterTemplate(){
+@Templates.pagehead("Administration @Boozology"){@ps}
+}{
+<div class="calibri">
+	@Templates.AlertMessages()	
+</div>	
+}{
+@Templates.pagemaincontent(){	
+
+
+<div class="container">
+	   <!-- Begin .row -->
+	<div class="row">
+		<div id="legend">
+	    	<legend>Select a few influencers, best in selected categories.</legend>
+	    </div>
+	    <div class="onnextline text-right">
+	    	<a href="@routes.Signup.SetUsersInfluencers("skip")" class="btn btn-danger brectangle">Skip</a>
+	    	<a href="@routes.Signup.SetUsersInfluencers("done")" class="btn btn-success brectangle">Done</a>
+	    </div>
+	    <div class="onnextline" id="usergrid">
+	    	@Templates.su.ubko()
+	    </div>				
+	</div>	
+</div>	
+<script>var postregistering=true</script>	
+@Templates.su.jready{
+var uxBDocInit=UBDocInit(ldiv);
+@Templates.js.infinitescroll(false){uxBDocInit.loadMore();}			
+}
+
+<script>
+function UBDocInit(ldiv)
+{
+	@Templates.js.ubaction(divid="usergrid",hiturl=routes.Signup.selectinfluencersjson().url,Ispost=false,specific=true){
+		function fms(ifs)
+		{
+			var self=this;
+			self.page=ifs.pgn; 
+			self.pagesize=ifs.ps;
+		};
+		var initcontent	={pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE};
+	}{ }
+	return thisuserview;
+	
+}
+</script>
+	
+}
+}{
+@Templates.pagefooter(){ }
+}	

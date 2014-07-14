@@ -1,0 +1,7 @@
+@(targetuser:String,actinguser:String,profileurl:String)
+Hi @targetuser,
+@actinguser has started following you on Boozology.
+Take a look on your Profile at @profileurl to find who else is following.
+ 
+Cheers From,
+Boozology Team

@@ -1,0 +1,76 @@
+<style>
+.cartTemplate tbody > tr > td {
+	padding: 1px;
+	font-size: small;
+	border-top: 1px solid #dddddd;
+}
+
+.cartTemplate thead > tr > th {
+	padding: 1px;
+	font-size: small;
+	border-top: 1px solid #dddddd;
+}
+</style>
+<div class="container" id="cartTemplate-container"style="padding-top: 5px;margin-bottom: -30px; display:none;">
+	<div style="display:none;" class="cartTemplate" id="cartTemplate">
+		<div class="table-responsive">
+		    <table class="table table-bordered ">
+		          <thead style="background-color: black;color: white;font-size: small;opacity: 0.5;
+		          ">
+		            <tr>
+		              <th style="text-align: center">Name</th>
+		              <th style="text-align: center">Description</th>
+		              <th style="text-align: center">Unit Price</th>
+		              <th style="text-align: center">Quantity</th>
+		              <th style="text-align: center">Subtotal</th>
+		              <th style="text-align: center">Grand Total</th>
+		              <th style="width: 1%;"></th>
+		            </tr>
+		          </thead>
+		          <tbody id='cart' data-bind="foreach: observableProduct">
+		            <tr style="text-align: center">
+		              <td data-bind="text: name"></td>
+		              <td data-bind="text: description"></td>
+		              <td data-bind="text: price"></td>
+		              <td data-bind="text: quantity"></td>
+		              <td data-bind="text: amount"></td>
+		              <td data-bind="text: total"></td>
+		              <td><a href="@routes.Carts.cartListIndex()"><input type="button" class="btn-small btn-success" value="Proceed to Checkout"></a></td>
+		            </tr>
+		        </tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<script>
+var observableProduct;
+$(document).ready(function(){
+	observableProduct = ko.observableArray();
+	ko.applyBindings(observableProduct, document.getElementById('cart'));	
+	loadCart();
+	
+	function loadCart(){
+ 		$.ajax({
+			type: "GET",
+			url: "/cart/items",
+			success: function(data){
+				observableProduct.removeAll();
+				if(data.length>0) {
+					$('#cartTemplate-container').show();
+					$('#cartTemplate').show();
+					$('#navigation-navbar-default').css('padding-top', '36px');
+					$('#cartCount').show();
+					$('.noti_bubble').empty();
+					$('.noti_bubble').append("<a>"+data.length+"</a>")
+					observableProduct.push(data[0]);
+				}	else {
+					$('#navigation-navbar-default').css('padding-top', '0px');
+					$('#cartTemplate-container').hide();
+					
+				}
+			}
+		});
+ 	}
+});
+
+</script>

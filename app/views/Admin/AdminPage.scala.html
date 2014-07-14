@@ -1,0 +1,29 @@
+@()
+
+@ps={}
+
+
+@Templates.MasterTemplate(){
+@Templates.pagehead("Administration @Boozology"){@ps}
+}{
+@Templates.pageheader(){		
+	}{ }	
+}{
+@Templates.pagemaincontent(){	
+
+<div class="calibri">
+	<ul class="inline">
+	<li><a class="underline" href="@routes.Application.GetAddContent()">Create New Content Page</a></li>
+	<li><a class="underline" href="@routes.Application.GetAllWallpapers()">Wallpapers</a></li>
+	<li><a class="underline" href="@routes.AdminControls.ipblacklistcontrol_view()">Blocked IP</a></li>
+	<li><a class="underline" href="@routes.AdminControls.sqlcontrol_view()">Execute Sql</a></li>
+	</ul>			
+</div>			
+@Templates.su.jready{
+			
+}
+	
+}
+}{
+@Templates.pagefooter(){ }
+}	

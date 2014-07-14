@@ -1,0 +1,46 @@
+@(newblogform: Form[_],isedit:Boolean=true)
+
+@import helper._
+
+@ps={
+<script src="@routes.Assets.at("ckeditor/ckeditor.js")"></script>
+<style>
+dd.info{font-size: xx-small!important;color:gray;}
+dd.error{color:red!important;}
+</style>
+}
+
+@hiturl=@{routes.Useract.AddBlog }
+
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Edit Blog @Boozology"){@ps}
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){	
+		<div class="row">
+		  <div class="span6">
+		    <h2>@if(isedit){ Now Editing: <span class="underline gray">@newblogform("blogtittle").value</span> }else{ ---Create a new Blog }</h2>
+		  </div>
+		</div>		
+		@helper.form(hiturl) {		
+			@inputText(field = newblogform("blogtittle"), args = 'size -> 255, 'placeholder -> "Blog Title",'_label ->"Blog Title",'class->"span9")			
+			@textarea(field = newblogform("blogtext"), args = 'rows -> 75, 'cols -> 300 ,'class->"span9",'_label ->"Blog Content")			
+			@inputText(field = newblogform("tags"), args = 'size -> 255, 'placeholder -> "Tags",'_label ->"Blog Tags",'class->"span6")			
+			@if(isedit){
+			<input type="hidden" name="blogid" id="blogid" value="@newblogform("blogid").value">
+			}
+			<input type="submit" value="POST IT!!" class="btn btn-primary">		
+		}				
+		@Templates.su.jready{		
+		CKEDITOR.replace( 'blogtext' );
+		}		
+	}
+}{
+	@Templates.pagefooter(){ }
+}	
+		

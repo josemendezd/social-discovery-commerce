@@ -1,0 +1,57 @@
+
+
+
+
+.user-info .user-gravatar40 {
+	float: left;    
+    margin-bottom: 5px;
+}
+.user-details {
+    color: rgb(136, 136, 136);
+    line-height: 15px;
+    margin-left: 5px;
+    float: left;
+	margin-bottom: 5px;
+}
+
+.reputation-score {
+    font-weight: bold;
+    color: rgb(68, 68, 68);
+    font-size: 100%;
+    margin-right: 2px;
+}
+.cardclearmargin { 
+clear: left;
+margin: 0px;
+padding: 10px 10px 8px;
+}
+.centeredcontent 
+{
+	table-layout: fixed;
+	width:100%;
+	margin-top: 2px;
+}
+.centeredcontent td 
+{
+	text-align:center;
+	vertical-align:middle;
+	width: 20%;
+	z-index:1;
+}
+
+.centeredcontent td  input
+{
+	height:16px;
+	width:16px;
+	
+}
+
+
+
+.newlinecontainer{clear: left;}
+.iconbutton{display:block;z-index:1;text-align:center;}
+.iconlabel{position:absolute;display:none;z-index:999;text-align:center;}
+
+.productcard:hover .iconlabel{display:block;}
+.productcard:hover .iconbutton{	display:none;}
+

@@ -1,0 +1,20 @@
+@(title: String=Messages("boozology.index.title"),nav: String="")(content: Html)
+
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead(title){ }
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){
+		@content
+		@Templates.su.jready()		
+	}
+}{
+	@Templates.pagefooter(){ }
+}

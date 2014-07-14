@@ -1,0 +1,392 @@
+@(blg:Blog,isgrouped:Boolean=false,blgcnt:Int=0)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+@pst(isadmin:Boolean)={
+	@if(isadmin){
+	<style>
+	.blogdeletebutton{
+	color:rgb(221, 75, 57);		
+	}
+	</style>
+	}
+	<link href="//vjs.zencdn.net/4.5/video-js.css" rel="stylesheet">
+	<script src="//vjs.zencdn.net/4.5/video.js"></script>
+	
+	<style>
+		.video-js {padding-top: 56.25%}
+		.vjs-fullscreen {padding-top: 0px}
+	</style>
+}
+
+@singleunit(isadmin:Boolean)={
+
+
+    <!-- Begin .container -->
+    <div class="container blog" data-sticky_parent>
+      <!-- Begin .row -->
+      <div class="row" >
+		
+        <!-- Begin blog-post -->
+        <div class="blog-post"  id="Blog@{blg.id}" >
+          <!-- Begin .col-lg-12 -->
+          <div class="col-lg-4 col-12 col-md-4 col-xs-12 col-sm-12" data-sticky_column>
+            <!-- Begin .box -->
+            <div class="box">
+                            
+		               <p class="meta pull-left">   
+		               	<a href="@routes.Application.ContributorPage(blg.author.id)">    
+		                  		@*<img src="@routes.Assets.at("images/1.jpg")" class="user-thumb img-responsive" alt="@blg.author.user.name" title="@blg.author.user.name" style="width: 70px;height: 70px;"/>*@
+		                  		 <img src="@blg.author.user.getusersimagesmall()" class="user-thumb img-responsive" alt="@blg.author.user.name" title="@blg.author.user.name" style="width: 70px;height: 70px;"/> 
+		                  	</a>
+		                </p>
+		            
+              <ul class="meta pull-right">
+                <li>
+                	<a href="@routes.Application.ContributorPage(blg.author.id)">                  
+		               <p>   
+		                  		
+		                  		<div class="pull-right"> <h4>@blg.author.user.name</h4></div>
+		                </p>
+		            </a>
+		            <div class="clearfix">
+              		</div>
+                </li>
+                <li style="font-size: 12px;">Posted on</li>
+                <li class="date" style="font-size: 12px;">@blg.postedAt</li>
+                <li class="comm-meta" style="font-size: 12px;"><a href="#blog_comment_@{blg.id}">@BlogComment.CommentCount(blg)</a> comments</li>
+              </ul>
+               <div class="clearfix">
+              		</div>
+              <!-- Begin .social -->
+              <ul class="social" style="margin-bottom: 15px;">
+                <li><a  href="#"  title="Share on Facebook" 
+											onclick="window.open(
+													'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('@routes.Application.GetBlogPage(blg.id).absoluteURL(request())'),
+															'facebook-share-dialog',
+															'width=626,height=436');return false;"><i class="icon-facebook"></i></a></li>
+                <li><a title="Share on Twitter" href="https://twitter.com/intent/tweet?text=Has%20Read%20%20@helper.urlEncode(routes.Application.GetBlogPage(blg.id).absoluteURL(request()))"
+											onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="icon-twitter"></i></a></li>
+                <li><a title="Share on Google +" href="https://plus.google.com/share?url=@helper.urlEncode(routes.Application.GetBlogPage(blg.id).absoluteURL(request()))" 
+											onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><i class="icon-google-plus"></i></a></li>
+              </ul>
+              <div class="clearfix">
+              </div>
+              <!-- End .social -->
+            </div>
+            <!-- end .box -->
+            
+            
+             <!-- Begin .title-wrap -->
+            <div class="title-wrap">
+              <h3>
+                <a title="@blg.title" href="@routes.Application.GetBlogPage(blg.id)">@blg.title</a>
+              </h3>
+            </div>
+            <!-- End .title-wrap -->
+            @*
+            <!-- Begin post-image -->
+            <div class="post-image">
+              <img src="images/post-img.png" class="img-responsive" alt="">
+            </div>
+            *@
+            <!-- End post-image -->
+            
+            <!-- Begin post-excerpt -->
+            <div class="post-excerpt readmore">
+              @Html(blg.content)
+            </div>
+            <!-- End post-excerpt -->
+            
+            @*
+            <!-- Begin .comments-wrap -->
+            <div id="blog_comment_@{blg.id}" class="comments-wrap">
+              
+             @Templates.su.commentko()
+              
+              <!-- begin .post-comment-form -->
+              <div class="post-comment-form">
+                <form role="form" data-bind="submit:postcomment,with:sfm">
+                  <div class="form-group">
+                    <label for="blogcomment">Post a comment</label>
+                    <div class="clearfix"></div>
+                    <textarea name="" id="" cols="20" rows="3" style="width:80%;"  data-bind="value: cmnttxt"></textarea>
+                  </div>                  
+                  <button type="submit" class="btn btn-default orange">Send</button>
+                </form>
+              </div>
+              <!-- End post-comment-form -->
+            </div>
+            <!-- End .comments-wrap -->
+            *@
+          </div>
+          <!-- End .col-lg-12 -->
+          
+          @if(blg.getImages()!=null){
+          <!-- Begin .col-lg-8 images...-->
+          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-12" style="margin-bottom: 50px;" data-sticky_column>
+           @for(img <- blg.getImages()) {
+           		@if(img.isVideo==false){
+           			<img src="@img.getURL()" class="img-responsive" style="padding-bottom: 10px;"/>
+           		}else{
+           			<div class="wrapper">
+						 <div class="videocontent">
+						  <div id="myvideo_videojs1" class="video-js vjs-default-skin vjs-playing vjs-fullscreen">
+			           			<video style="width:100%;height:100%;max-height: 400px;" id="myvideo" class="video-js vjs-default-skin" controls
+			 						preload="auto" 
+									data-setup="{}">
+			 						<source src="@img.getURL()" type="@img.fileType">
+								</video>
+							</div>
+						</div>
+					</div>
+           		}
+  				
+			} 
+			
+          </div>
+          <!-- End .col-lg-8 -->
+          }
+          
+          @*<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-12 col-md-offset-4 col-lg-offset-4 ">
+            
+            
+          </div>*@
+          
+          
+          <div class="clearfix">
+          </div>
+          
+          
+          
+        </div>
+        
+        <!-- end .blog-post -->
+        
+      </div>
+      <!-- End .row -->
+    </div>
+    <!-- End .container -->
+    
+    
+
+@*	
+		<div class="post" id="Blog@{blg.id}">
+			<h2 class="title">
+				<a title="@blg.title" href="@routes.Application.GetBlogPage(blg.id)">
+				@blg.title
+				</a>
+			</h2>@if(isadmin){ <a class="gray btn-small" href="@routes.Application.GetEditBlog(blg.id)"><i class="icon-edit"></i>Edit this</a>} @if(isadmin && !isgrouped){ <a class="blogdeletebutton gray btn-small underline" href="javascript:void(0);" data-link="@routes.Useract.RemoveBlog(blg.id)"><i class="icon-remove"></i>Delete</a> }
+			<div class="post-header">
+				<div class="published">
+					<ul class="inline">
+						<li><span class="gray">Posted: </span><span>@blg.postedAt</span></li>
+						<li><span class="gray">Author: </span><a class="underlineborder" href="@routes.Application.ContributorPage(blg.author.id)">@blg.author.user.name</a></li>
+						<li class="pull-right hidonhover"><span class="gray underlineborder">Share This</span></li>
+						<li class="pull-right">	
+							<div class="share socialdiv disonhover">							
+									<ul class="inline">
+										<li>
+											<a  title="Share on Twitter" href="https://twitter.com/intent/tweet?text=Has%20Read%20%20@helper.urlEncode(routes.Application.GetBlogPage(blg.id).absoluteURL(request()))"
+											onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+											<img alt="Twitter" src="@routes.Assets.at("img/t.png")"/>
+											</a>
+										</li>
+										<li>
+											<a href="#"  title="Share on Facebook" 
+											onclick="window.open(
+													'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('@routes.Application.GetBlogPage(blg.id).absoluteURL(request())'),
+															'facebook-share-dialog',
+															'width=626,height=436');return false;"> 
+												<img src="@routes.Assets.at("img/fb.png")"/>
+											</a>
+										</li>
+										<li><a href="https://plus.google.com/share?url=@helper.urlEncode(routes.Application.GetBlogPage(blg.id).absoluteURL(request()))" 
+											onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+												<img  src="https://www.gstatic.com/images/icons/gplus-16.png" alt="Share on Google+"/>
+											</a>
+				  						</li>
+										<li><a href="#"	
+										onclick="window.open('http://www.tumblr.com/share/link?url='+encodeURIComponent('@routes.Application.GetBlogPage(blg.id).absoluteURL(request())')+'&name='+encodeURIComponent('@blg.title')+'&description='+encodeURIComponent('Boozology Blogs'),'Share on Tumblr','width=626,height=436');return false;"
+										title="Share on Tumblr"><img src="@routes.Assets.at("img/tb.png")"/></a>
+										</li>
+										
+									</ul>
+							</div>
+						</li>
+					</ul>			
+				</div>			
+			</div>			
+			<div class="post-content">
+				@Html(blg.content)
+			</div>
+			<div class="onnextline spacecreater-small bold">
+				<ul class="inline">
+				@for((tags,cnt) <- blg.labels.zipWithIndex){ <li><a class="label" href="@routes.Application.GetBlogListByTag(tags.tag)"> @tags.tag </a></li>	}
+				</ul>
+			</div>	
+			<div class="post-footer">
+			@subjectPresent(){
+			<div class="pull-right btn-mini onnextline">
+				<a class="gray underline" href="#" onclick="javascript:$.colorbox({href:UserLink.controllers.Useract.GetComplainForm(@blg.id, @DInitial.REPORTABUSE.ON_BLOG, encodeURIComponent(window.location.href)).absoluteURL()})">
+						
+						@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,null)){	
+						}else{ <i class="icon-flag"></i>Report Abuse }
+				</a>
+			</div>
+			}
+			<!-- 
+				<blockquote>
+					<p class="btn-small">This is a comment</p>
+					<small>By rocky</small>
+				</blockquote>
+			-->
+				<div class="onnextline">
+					<div style="display: block;" class="widget-content">
+						<div class="padd">
+								@Templates.su.commentko()
+						</div>
+					</div>
+				</div>
+				<div class="onnextline">
+					<form class="form-inline" data-bind="submit:postcomment,with:sfm">
+						<textarea name="cmnttxt" maxlength="255"  class="span4" rows="3" placeholder="Type your message"  data-bind="value: cmnttxt"></textarea>
+						<button type="submit" class="btn btn-info">Send</button>
+					</form>
+				</div>
+			</div>
+		</div>
+*@
+		
+}
+
+@sidebar(isadmin:Boolean)={
+
+@*
+<div class="minorblogunit textcutoverflow blogsidebar">
+
+	<div class="accordion" id="accordion2">
+	  <div class="accordion-group">
+	    <div class="accordion-heading">
+	      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+	        Archive
+	      </a>
+	    </div>
+	    <div id="collapseOne" class="accordion-body collapse">
+	      <div class="accordion-inner">
+	        <ul class="unstyled text-center">
+	        @for(blg <- Blog.RecentBlogPage(0,40).getList){
+	        	<li class="textcutoverflow"><a href="@routes.Application.GetBlogPage(blg.id)">@blg.title</a></li>
+	        }
+	        </ul>
+	        <a href="#" class="gray underline pull-right">See All</a>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="accordion-group">
+	    <div class="accordion-heading">
+	      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+	        Tags
+	      </a>
+	    </div>
+	    <div id="collapseTwo" class="accordion-body collapse">
+	      <div class="accordion-inner">
+	        <ul class="unstyled text-center">
+		        @for(blglb<- BlogLabels.RecentBlogLabels(0,40).getList){
+		        	<li class="textcutoverflow"><a href="#">@blglb.tag</a></li>
+		        }
+	        </ul>
+	        <a href="#" class="gray underline pull-right">See All</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+*@
+
+}
+
+@pagescript(isadmin:Boolean)={
+	<script>var allblogidlist=[];</script>
+	
+	
+	@Templates.su.jready{
+		@if(isadmin){
+		$('.blogdeletebutton').click(function() {
+			$().msgbox('<div class="onnextline text-center"><span>Are you sure to Delete this Blog Post? </span><br/><a class="btn btn-danger" href="'+$(this).attr( "data-link" )+'">Yes</a></div>',60000);
+			});
+		}
+		
+		@Templates.js.commentaction(idofpassed=blg.id,divid="Blog"+blg.id,hiturl=routes.Application.GetBlogComments(blg.id).url,Ispost=false,specific=true){
+			function fms(ifs)
+			{
+				var self=this;
+				self.cmnttxt=ko.observable(ifs.ct);
+				self.blog=ifs.prdct;
+			};
+			var initcontent	={ct:'',prdct:@blg.id};
+			var urlforpostingcomment="@routes.Useract.AddBlogComment";
+		}{
+			self.deletecomment =function(cmnt){
+				var retnresp=$().setresponse({url:UserLink.controllers.Useract.RemoveBlogComment(cmnt.cid).absoluteURL(),failans:false});
+				if(retnresp===false)
+				{
+					$().msgbox("<h1 class='lred'>Failed</h1>",2000);
+				}
+				else
+				{
+					self.commentlist.remove(cmnt);
+				}
+			}
+		 }
+		 
+		 $.each(allblogidlist, function(index, idofblog) {
+		 			var newcv=new CommentView(UserLink.controllers.Application.GetBlogComments(idofblog).absoluteURL())
+		 			newcv.fr.blog=idofblog;
+		 			ko.applyBindings(newcv,$('#Blog'+idofblog)[0]);
+				});
+				
+	}
+}
+
+@defining(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_SELF, blg.author.user)) { isadmin=>
+	@if(isgrouped){
+			@singleunit(isadmin)
+			@if(blgcnt==0){	
+				@helper.javascriptRouter("UserLink")(routes.javascript.Application.ContributorPage,routes.javascript.Useract.RemoveBlogComment,routes.javascript.Application.GetBlogComments,routes.javascript.Useract.GetComplainForm)
+				@pagescript(isadmin)
+				}
+			@if(blgcnt>0){
+			<script>allblogidlist.push(@blg.id);</script>
+			}
+	}else{	
+		@Templates.MasterTemplate(){
+			@Templates.pagehead("Blog @Boozology"){@pst(isadmin)}
+		}{
+			@Templates.pageheader(){		
+			}{ }
+			
+		}{
+			@Templates.pagemaincontent(){		
+					@singleunit(isadmin)
+					@*
+				<div id="blogpage" class="onnextline majorblogunit">
+					@singleunit(isadmin)
+				</div> 
+					@sidebar(isadmin)
+					*@
+					
+					@if(blgcnt==0){
+						@helper.javascriptRouter("UserLink")(routes.javascript.Application.ContributorPage,routes.javascript.Useract.RemoveBlogComment,routes.javascript.Application.GetBlogComments,routes.javascript.Useract.GetComplainForm)
+						@pagescript(isadmin)
+						}
+					@if(blgcnt>0){
+						ko.applyBindings(new CommentView("@routes.Application.GetBlogComments(blg.id).url"),$('#Blog@{blg.id}')[0]);
+					}		
+			}
+		}{
+			@Templates.pagefooter(){ }
+		}	
+	}
+
+}		

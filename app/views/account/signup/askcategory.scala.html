@@ -1,0 +1,61 @@
+@(topcategory:List[Category],localuser:User)
+
+@ps={}
+
+
+@Templates.MasterTemplate(){
+@Templates.pagehead("Administration @Boozology"){@ps}
+}{
+<div class="calibri">
+@Templates.AlertMessages()	
+</div>	
+}{
+@Templates.pagemaincontent(){	
+
+<div class="container">
+	   <!-- Begin .row -->
+	<div class="row">
+		<form id='categoryselector' action="@routes.Signup.SetUsersPreferredCategory" method="post">
+			<fieldset>
+	      
+		        <div id="legend">
+		        	<legend class="">Please select categories of your choice</legend>
+		        </div>
+		        <a href="#" class="underline" onclick="checkUncheck('categoryselector', true);"> Check All </a> <span> / </span>
+				<a href="#" class="underline" onclick="checkUncheck('categoryselector', false);"> Uncheck All </a>
+				<br/>
+				<br/>
+				@for(ctg <- topcategory){
+				<label class="checkbox">
+					<input type='checkbox' name='categories[]' value='@ctg.id' checked="checked">@ctg.cname<br>
+				</label>
+				}
+				<br>
+				<input type='submit' class="btn btn-success btn-lg brectangle" value='Proceed'>
+				
+			</fieldset>
+		</form>				
+	</div>
+</div>
+
+<script>
+function checkUncheck(form, setTo) {
+    var c = document.getElementById(form).getElementsByTagName('input');
+    for (var i = 0; i < c.length; i++) {
+        if (c[i].type == 'checkbox') {
+            c[i].checked = setTo;
+        }
+    }
+}
+</script>
+
+<script>var postregistering=true</script>
+			
+@Templates.su.jready{
+			
+}
+	
+}
+}{
+@Templates.pagefooter(){ }
+}	

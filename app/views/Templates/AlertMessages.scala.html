@@ -1,0 +1,17 @@
+@()
+@if(flash.contains(Application.FLASH_ERROR_KEY)) {
+<div class="onnextline">
+    <div id="alertheader" class="alert alert-danger nomargin">
+     <button type="button" class="close" data-dismiss="alert">&times;</button>
+     @flash().get(Application.FLASH_ERROR_KEY)
+    </div>
+</div>
+}
+@if(flash.contains(Application.FLASH_MESSAGE_KEY)) {
+<div class="onnextline">
+  <div id="alertheader" class="alert alert-success nomargin">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    @flash().get(Application.FLASH_MESSAGE_KEY)
+  </div>
+</div>
+}

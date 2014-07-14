@@ -1,0 +1,91 @@
+@( )(PageContentParam: Html)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+	var initclctnode = {newclc:"icon-plus",nct:"hidden",prid:0,x:10000,y:10000,bg:"hidden"};
+	self.clctnode = ko.mapping.fromJS(initclctnode);
+	self.userclist = ko.observableArray([]);
+	self.currentcn= {host:"",guest:""};
+	
+	self.cleanup=function()
+	{
+			ko.mapping.fromJS(initclctnode,self.clctnode);
+			self.userclist.removeAll();
+			//.........................//
+			
+			$(self.currentcn.guest).insertAfter($(self.currentcn.host));
+			self.currentcn.host= "";
+			//...................................................//		
+	}
+	
+	self.initcolpop=function(linkobj,cord,zone)
+	{
+		if(self.userclist().length>0)
+		{
+			self.cleanup();
+			return false;
+		}
+		ko.mapping.fromJS({newclc:"icon-plus",nct:"hidden",prid:linkobj.id(),x:(cord.pageX),y:(cord.pageY),bg:"bgloaderico"},self.clctnode);
+		//...........................................................
+		self.currentcn.host=self.currentcn.guest.parentNode;
+		$(self.currentcn.guest).insertAfter($(cord.target.parentNode));		
+		//...........................................................
+		var srvrp=$().setresponse({url:linkobj.cllink(),failans:false,successnode:"collectionlist"});
+	    if(srvrp===false){ self.clctnode.bg(" lred");return false;}
+	 	self.clctnode.bg("");
+	 	$.each(srvrp,function(clcindex, clcattr){self.userclist.push(ko.mapping.fromJS(clcattr));});	 	
+	 	 
+		$("body").one("click", zone, function(){
+		self.cleanup();	
+		});
+	}
+	
+	self.colpopnewclc=function(pob,e)
+	{
+		if(self.clctnode.nct()==""){self.clctnode.newclc("icon-plus");
+		self.clctnode.nct("hidden");}else{
+		self.clctnode.newclc("icon-minus");
+		self.clctnode.nct("");}
+	}
+	
+	self.newclcsubmit=function(pob,e)
+	{
+		self.clctnode.newclc("bgloadericoleft pull-left");
+		var retnresp=$().setresponse({ispost:true,url:"@routes.Useract.CreateCollection",argdata:$(e.target).closest("form").serialize(),failans:false,successnode:"ncn"});
+		if(retnresp===false){ self.clctnode.bg("lred");return false;}
+		self.clctnode.newclc("icon-plus");
+		self.clctnode.nct("hidden");
+		self.clctnode.bg("");
+		self.userclist.push(ko.mapping.fromJS(retnresp));
+		$.each($("form"),function(i, f){f.reset();});
+		return false;
+	/*
+		self.clctnode.newclc("bgloadericoleft");
+		alert($(e.target).serialize());
+		//$.post(@routes.Useract.CreateCollection,$(E).serialize(),"json");
+		self.clctnode.newclc("icon-plus-sign");
+		self.clctnode.nct("hidden");
+		*/
+	}
+	
+	@Html(play.Routes.javascriptRouter("collectiondiscarder",controllers.routes.javascript.Useract.DiscardFromMyCollections));
+	
+	self.toggleslctn=function(pob,e)
+	{
+		var params = { prid:self.clctnode.prid(), Collectionid:pob.f1() };
+		$argparam=jQuery.param(params);
+		self.clctnode.bg("bgloaderico");
+		if(pob.f3())
+		{
+			var retnresp=$().setresponse({url:collectiondiscarder.controllers.Useract.DiscardFromMyCollections(self.clctnode.prid(),pob.f1()).absoluteURL(),failans:false});
+			if(retnresp===false){ self.clctnode.bg("lred");}else{pob.f3(false);}
+		}
+		else{
+			var retnresp=$().setresponse({ispost:true,url:"@routes.Useract.AddToMyCollections",argdata:$argparam,failans:false});
+			if(retnresp===false){ self.clctnode.bg("lred");}else{pob.f3(true);}
+		}
+		self.clctnode.bg("");
+	}
+		
+	
+	@PageContentParam

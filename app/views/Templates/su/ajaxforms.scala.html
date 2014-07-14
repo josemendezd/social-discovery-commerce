@@ -1,0 +1,15 @@
+@(genericid:String,containerid:String,formid:String,inputname:String,stext:String,extracontent:String="")
+
+
+<div id="@containerid" class="collectioniframe padding-small @(containerid)_class">
+	<div id="@{genericid}loader" class="bgloaderico"><span class="full-width">&nbsp;</span></div>
+    <span id="@{genericid}status" class="text-center onnextline"></span>
+    <form id="@formid" class="onnextline padding-small" role="form">
+		<div class="input-group">
+			<input type="text" placeholder="Enter Name" class="form-control" name="@inputname">
+			<div class="clearfix padding-small"></div>
+			<button class="btn btn-default btn-info" type="submit">@stext</button>
+		</div>
+		@Html(extracontent)
+	</form>
+</div>

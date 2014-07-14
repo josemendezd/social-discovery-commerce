@@ -1,0 +1,242 @@
+@(userAddress : UserAddress)
+@ps={
+<style>
+.labelStyling {
+	float: left;
+	width: 30%;
+}
+.inputStyling {
+	width: 50%;
+	margin-top: 2%;
+}
+.messageClass {
+	margin-left: 30%;
+}
+</style>
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("CheckOut"){@ps}
+}{
+	@Templates.pageheader(){
+	}{ }
+}{
+	@Templates.pagemaincontent(){
+	@Templates.su.jready{	}
+	
+<script type="text/javascript" src="@routes.Assets.at("js/jquery.validate.min.js")"></script>
+	<!-- Begin .container -->
+<div class="container">
+<!-- Begin .row -->
+	<div class="row">
+		<!-- Begin .col-lg-12 -->
+		<div class="col-lg-12 col-12 col-md-12 col-xs-12 col-sm-12">
+			<div class="page-title checkout">
+				<h1>Checkout Billing Information</h1>
+					<p class="intro">Issues Checking Out? You may call us at 619-564-1333 to pay by credit/debit card over the phone.</p>
+			</div>
+		</div>
+		<!-- End .col-lg-12 -->
+
+	
+	<!-- Begin .col-lg-6 -->
+	<form action="/cart/user/details" method="POST" class="form-horizontal" id="checkOutDetailsForm">
+		<div class="col-lg-8 col-md-6 col-sm-6 col-xs-12 col-12">
+		  			  <!-- Begin checkout-wrap-form -->
+			    
+			<div class="checkout-wrap-form billing">
+				
+				<h3>Billing Address</h3>
+				<div class="control-group">
+        			<div class="controls">
+        			<label for="firstName" class="labelStyling">First Name:</label>
+        			@if(userAddress != null) {
+        				@if(userAddress.firstName != null) {
+				    		<input type="text" value="@userAddress.firstName" name="firstName" class="form-control inputStyling" id="firstName" required="true">
+				    	}	
+				    } else {
+				    		<input type="text" name="firstName" class="form-control inputStyling" id="firstName" required="true">
+				    	}
+				  	</div>
+		  		</div>
+				<div class="control-group">
+        			<label for="lastName" class="labelStyling">Last Name:</label>
+        			<div class="controls">	
+        			@if(userAddress != null) {		
+        				@if(userAddress.lastName != null) {			    
+					    <input type="text" value="@userAddress.lastName" name="lastName" class="form-control inputStyling" id="lastName" required="true">
+					    }
+					} else {
+						<input type="text" name="lastName" class="form-control inputStyling" id="lastName" required="true">
+					}    
+					</div>
+				</div>
+				<div class="control-group">
+        			<label for="address1" class="labelStyling">Address 1:</label>
+        			<div class="controls">
+        			@if(userAddress != null) {
+        				@if(userAddress.address1 != null) {
+					    <input type="text" value="@userAddress.address1" name="address1" class="form-control inputStyling" id="address1" required="true">
+					    }
+					} else {
+						<input type="text" name="address1" class="form-control inputStyling" id="address1" required="true">
+					}
+					</div>
+				</div>
+				<div class="control-group">
+        			<label for="address2" class="labelStyling">Address 2:</label>
+        			<div class="controls">
+        			@if(userAddress != null) {
+        				@if(userAddress.address2 != null) {
+					    <input type="text" value="@userAddress.address2" name="address2" class="form-control inputStyling" id="address2" required="true">
+					    }
+					} else {
+						<input type="text" name="address2" class="form-control inputStyling" id="address2" required="true">
+					}    
+					</div>
+				</div>
+				<div class="control-group">
+        			<label for="city" class="labelStyling">City:</label>
+        			<div class="controls">
+        			@if(userAddress != null) {
+        				@if(userAddress.city != null) {
+				    	<input type="text" value="@userAddress.city" name="city" class="form-control inputStyling" id="city" required="true">
+				    	}
+				    } else {
+				    	<input type="text" name="city" class="form-control inputStyling" id="city" required="true">
+				    }		
+				  	</div>	
+		  		</div>
+				<div class="control-group">
+					<label for="province" class="labelStyling">State/Province:</label>
+        			<div class="controls">
+        			@if(userAddress != null) {
+				    	@if(userAddress.province != null) {
+				    		<input type="text" value="@userAddress.province" name="province" class="form-control inputStyling" id="province" required="true">
+				    	}	
+				    } else {
+				    		<input type="text" name="province" class="form-control inputStyling" id="province" required="true">
+				    	}	
+				  	</div>
+		  		</div>
+				<div class="control-group">
+					<label for="zip" class="labelStyling">Zip Postal Code:</label>
+        			<div class="controls">
+        			@if(userAddress != null) {
+				    	@if(userAddress.zip != null) {
+					    	<input type="text" value="@userAddress.zip" name="zip" class="form-control inputStyling" id="zip" required="true">
+					    }	
+					} else {
+					    	<input type="text" name="zip" class="form-control inputStyling" id="zip" required="true">
+					    }	
+				  	</div>
+		  		</div>
+				<div class="control-group">
+					<label for="country" class="labelStyling">Country:</label>
+        			<div class="controls">
+        			@if(userAddress != null) {
+				    	@if(userAddress.country != null) {
+				    		<input type="text" value="@userAddress.country" name="country" class="form-control inputStyling" id="country" required="true">
+				    	}
+				    } else {
+				    		<input type="text" name="country" class="form-control inputStyling" id="country" required="true">
+				    	}	
+				  	</div>
+		  		</div>
+				<div class="control-group">
+					<label for="phone" class="labelStyling">Phone:</label>
+        			<div class="controls">
+        			@if(userAddress != null) {
+					    @if(userAddress.phone != null) {
+					    	<input type="text" value="@userAddress.phone" name="phone" class="form-control inputStyling" id="phone" required="true">
+					    }	
+					} else {
+					    	<input type="text" name="phone" class="form-control inputStyling" id="phone" required="true">
+					    }
+				  	</div>
+		  		</div>	
+			  	<div>
+					<button type="submit" class="btn btn-default orange" style="margin-top: 5%;">Proceed with purchase </button>			  	
+			  	</div>	
+			</div>
+			<!-- End .checkout-wrap-form -->
+			
+		</div>
+				<!-- End .col-lg-6 -->
+	</form>
+		
+	</div>
+	<!-- End .row -->
+</div>
+
+
+<script>
+	$(document).ready(function(){
+		
+		$.validator.addMethod('integerCheck', function(value, element, param) {
+            return (value != 0) && (value == parseInt(value, 10));
+        }, 'Please enter a non zero integer value!');
+		
+		$("#checkOutDetailsForm").validate({
+			rules : {
+				zip : {
+					required : true,
+					integerCheck : true,
+					maxlength : 5
+				},
+				phone : {
+					required : true,
+					integerCheck : true,
+					maxlength : 10
+				},
+				cemail : {
+					equalTo : "#email"
+				},
+				cpassword : {
+					equalTo : "#password"
+				}
+				
+			},
+			
+			messages : {
+				zip : {
+					required : "Enter your postal zip-code",
+					integerCheck : "Enter only nonzero integers",
+					maxlength : "Zip cannot be more than 5 digits"
+					
+				},
+				phone : {
+					required : "Enter your contact number",
+					integerCheck : "Enter only nonzero integers",
+					maxlength : "Contact Number cannot be more than 10 digits"
+				},
+				cemail : {
+					equalTo : "confirm email-id does not match"					
+				},
+				cpassword : {
+					equalTo : "Confirm password does not match"
+				}
+			},
+			
+			errorClass : "messageClass",
+			errorElement : "span",
+			highlight: function (element) {
+			    $(element).closest('.control-group').removeClass('success').addClass('error');
+			},
+			success: function(element) {
+			     element
+			        .addClass('valid')
+			        .closest('.control-group').removeClass('error').addClass('success');
+			}
+				
+		});
+	});
+</script>
+
+	
+	
+	}
+}{
+	@Templates.pagefooter(){	}
+}

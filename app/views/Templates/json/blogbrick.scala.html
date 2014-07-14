@@ -1,0 +1,13 @@
+@(blg: Blog)(implicit session: play.mvc.Http.Session) 
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+{
+"bid":"@blg.id",
+"btitle":"@GHelp.EHtml(blg.title)",
+"bpost":"@Application.timezoneformat(blg.postedAt)",
+"bauthor":"@blg.author.user.name",
+"baid":"@blg.author.id",
+"bccnt":"@BlogComment.CommentCount(blg)",	
+"tags":[ @for((tags,cnt) <- blg.labels.zipWithIndex){ @if(cnt!=0){,}
+{"tn":"@tags.tag"} } ]
+}

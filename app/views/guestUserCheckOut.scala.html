@@ -1,0 +1,84 @@
+
+@ps={
+<style>
+
+</style>
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("CheckOut"){@ps}
+}{
+	@Templates.pageheader(){
+	}{ }
+}{
+	@Templates.pagemaincontent(){
+	@Templates.su.jready{	}
+	
+<script type="text/javascript" src="@routes.Assets.at("js/jquery.validate.min.js")"></script>
+	
+<!-- Begin .container -->
+<div class="container">
+		<!-- Begin .row -->
+		<div class="row">
+			<!-- Begin .col-lg-12 -->
+			<div class="col-lg-12 col-12 col-md-12 col-xs-12 col-sm-12">
+				<div class="page-title checkout">
+					<h1>Checkout</h1>
+					<p class="intro">Issues Checking Out? You may call us at 619-564-1333 to pay by credit/debit card over the phone.</p>
+				</div>
+			</div>
+			<!-- End .col-lg-12 -->
+	
+			<!-- Begin .col-lg-6 -->
+			<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
+			    <!-- Begin checkout-wrap-form -->
+			    <div class="checkout-wrap-form">
+					<h3>I already have an account</h3>
+					<form action="/cart/checkout/login" method="POST" class="form-horizontal" id="checkOutLoginForm">
+		  				<div class="form-group">
+		    					<label for="email">Email address</label>
+		    					<input type="email" name="email" class="form-control" id="email" required="true">
+		  				</div>
+		  				<div class="form-group">
+		    					<label for="password">Password</label>
+		    					<input type="password" name="password" class="form-control" id="password" required="true">
+		  				</div>
+		
+		  				<button type="submit" class="btn btn-default orange">Submit</button>
+		  				<a href="javascript:void(0);" onclick="window.location.href = forgotpassword.controllers.Signup.forgotPassword($('#email').val() || null).absoluteURL();" style="margin-left: 14%;">Lost password?</a>
+					</form>
+				</div>
+	<!-- End .checkout-wrap-form -->
+			</div>
+
+	<!-- End .col-lg-6 -->
+	
+	<!-- Begin .col-lg-6 -->
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-12">
+		<div class="new-account">
+		    <h3>I'm new here</h3>
+	   		 <div class="row">
+	    		<div class="col-lg-6">
+	    			<p>Creating an account with <a href="#">Boozology</a> is quick and easy, and will allow you to move through our checkout quicker. </p>
+				</div>
+				<div class="col-lg-6">
+				    <a href="@routes.Carts.createUserCheckoutPage()" class="btn btn-default orange">Create and Proceed</a>
+				    <a href="@routes.Carts.guestcheckOutPage()" class="btn btn-default grey">Checkout as Guest</a>
+				</div>
+	  		</div>
+	  	</div>
+	</div>
+	
+	    <!-- End .col-lg-6 -->
+			
+	</div>
+		<!-- End .row -->
+</div>
+<!-- End .container -->
+
+	
+	}
+}{
+	@Templates.pagefooter(){	}
+}

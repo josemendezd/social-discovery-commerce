@@ -1,0 +1,686 @@
+@(colcn:UserCollection)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import helper._
+@import Designs._
+
+@implicitField = @{ FieldConstructor(BLFieldConstructor.f) }
+
+@ps={
+<style>
+.profile-wall .nav-tabs li a {
+    padding: 6px 20px;
+}
+.profile-wall .nav-tabs {
+    border-width: 0px;
+}
+.box a{
+	margin-right: 3px;
+	color:rgb(240, 87, 33);
+}
+
+.box ul li{
+	margin-bottom: 5px;	
+}
+.box ul li span{
+	color: brown;
+	margin-left: 5px;	
+}
+.row .sort {
+    list-style: none outside none;
+    float: right;
+    margin-bottom: 10px;
+}
+.row .sort  select{
+	float:left;
+	margin-right:20px;
+	border:none;
+	color: rgb(177, 82, 82);
+}
+.row .sort input  {
+	margin-right:0px;
+}
+.row .sort select i {
+	color:#f6921e;
+}
+.row .sort select option {
+	color: maroon;
+}
+.paddthetop{padding-top:20px;}
+.fileinput-div{position: relative;overflow: hidden;width: 160px;height: 20px;}
+.fileinput-button{height: 40px !important;width: 160px !important;opacity: 0;filter:alpha(opacity: 0);position: absolute;top: -10px;left: -10px;}
+.filechoosebutton{width: 180px;position: relative;top: 0px; left: 0px;}
+.nav.nav-tabs li{
+	text-align: center;
+}
+.nav.nav-tabs li span{
+	color: black;
+}
+</style>
+}
+
+@rempro={
+@if(UserCollection.IsCollectionAdmin(colcn,Application.getContributor(session()))){
+<div class="disonhover" style="top:0;left:0;position:absolute;">
+<button class="btn lred" data-bind="click:$root.rpfromcollection">X</button>
+</div>
+}
+}
+
+@ajaxforms(genericid:String,containerid:String,formid:String,inputname:String,stext:String)={
+
+<div id="@containerid" class="collectioniframe">
+	<div id="@{genericid}loader" class="bgloaderico"><span class="full-width">&nbsp;</span></div>
+    <span id="@{genericid}status" class="text-center onnextline"></span>
+    <form id="@formid" class="onnextline padding-small" role="form">
+		<div class="input-append">
+			<input type="text" placeholder="Enter Name" class="form-control" name="@inputname">
+			<div class="clearfix padding-small"></div>
+			<button class="btn btn-default btn-info" type="submit">@stext</button>
+		</div>
+	</form>
+</div>
+}
+
+@submissions(genericid:String,containerid:String,formid:String,urlbase:String)={
+	$("[id^='@genericid']").hide();
+	$('#@{formid}')[0].reset();
+	
+	$('#@{containerid}').hide();
+	
+	$('#@{formid}').submit(function(event) {
+		event.preventDefault();
+		$msgbox=$('#@{genericid}status');
+		$loader=$('#@{genericid}loader');
+		$msgbox.show();$loader.show();
+		var retnresp=$().setresponse({ispost:true,url:"@urlbase",argdata:$( this ).serialize(),failans:false,successnode:"ncn"});
+		$loader.hide();
+		if(retnresp===false){ $msgbox.html('<label class="alert-danger"><b class="underline">Failed</b></label>');}
+		else{
+			$msgbox.html('<label class="alert-success"> <b>Done!!</b> </label>');			
+		}
+		
+		this.reset();
+		$msgbox.hide(2000,function(){$('#@{containerid}').hide('slow');});
+	});
+
+}
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("My Collection @Boozology"){@ps}
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){	
+	
+	
+<!-- Begin .container -->
+<div class="container user-profile-page">
+   <!-- Begin .row -->
+   <div class="row">
+      <!-- Begin .col-lg-12 -->
+      <!-- End .col-lg-12 -->
+      <!-- Begin .col-lg-3 -->
+      <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 col-12">
+         <div class="profile-sidebar"  data-ng-controller="CollectionImageSelectionController">
+         	<div class="img-profile">
+         		@if(colcn.coverimage != null){
+			 	   <img id="colcn_coverimage" src="@colcn.coverimage" class="img-responsive" alt="@colcn.colname">
+				}
+			</div>
+         	@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_MODERATOR,null)||UserCollection.IsCollectionAdmin(colcn,Application.getContributor(session()))){
+						@form(action = routes.Useract.SetCollectionCoverImage(colcn.id), 'enctype -> "multipart/form-data",'class->"form-horizontal") {    
+						    <div class="form-group">
+						    	<label class="control-label" for="email">Upload Cover:</label>  
+						    	<div class="clearfix padding-small"></div>
+								<input type="file" id="upload_input" name="picture"  onchange="readName(this);"  />
+								<div id="fileinformation" style="display:none;margin:0;'"></div>
+								<span class="help-block btn-sm">Size Limit: <b>2 MB</b></span>
+								<input type="submit" value="Upload" class="btn btn-default">
+								<input type="button" value="Choose" 
+									
+								    data-ng-init="fdata.ofId = @colcn.id" 
+								    data-ng-click="collectiongallery()" 
+								    class="btn btn-primary">
+								@*
+								<div class="text-left">									
+									<br/>
+									<br/>					
+									<div class="inlinedisplay fileinput-div">
+										<button class="filechoosebutton llightblue underline spacecreater-small"><i class="icon-plus icon-white"></i><span class="white">Choose CoverImage</span></button>
+										<input type="file" id="upload_input" name="picture" class="fileinput-button"  onchange="readName(this);"  />
+									</div>		   
+								    <p class="inlinedisplay spacecreater-lateral" >                        
+								         <input type="submit" value="Upload" class="lred underline spacecreater-small">
+								         
+										 
+								    </p> 
+									<br/>
+									<span class="btn-small">Size Limit: <b>2 MB</b></span><br/>
+									<div id="fileinformation"  class="borderinvisible span4" style="display:none;margin:0;'"></div>					  
+								</div> 
+								*@ 
+							</div>
+						}
+						
+						<script>
+							document.getElementById('upload_input').onchange = function () {
+								var textp=document.getElementById('fileinformation');
+								textp.innerHTML='Selected file: ' + (function(x){if(x.length>1){return x}else{ return 'None !!';}})(this.value);
+								if(this.value.length > 0) {textp.style.display = 'block';}
+							};
+						</script>
+					}
+            
+            <h3 class="text-center">@colcn.colname</h3>
+            <div class="clearfix padding-small"></div>
+            <div class="box">
+               <p>Quick Status:</p>
+               <ul class="list-unstyled">  
+                  <li>Created By:<a href="@routes.Application.ContributorPage(colcn.contributor.id)">@colcn.contributor.user.name</a></li>
+                  <li>Date:<i class="icon-calendar"></i><span id="collectioncreatedate"></span></li>
+                  <li>Time:<i class="icon-time"></i><span id="collectioncreatetime"></span></li>
+                  <li>Administered by:
+                  <span>
+                  	<a href="@routes.Application.ContributorPage(colcn.contributor.id)"><b style="color:purple;">@colcn.contributor.user.name</b></a>
+                  		@for((an,cntn)<-colcn.collectionadmin.zipWithIndex){ <a href="@routes.Application.ContributorPage(an.id)">, <b style="color:purple;">@an.user.name</b></a> }
+                  </span>
+                  </li>
+                  <li>Total Items:<span>@UserCollection.ProductCount(colcn)</span></li>
+                  <li>Total Stores:<span>NA</span></li>
+                  <li>Users Following:<span>@UserCollection.FollowersCount(colcn)</span></li>                  
+               </ul>
+            </div>            
+         </div>
+         <!-- End profile-sidebar -->
+      </div>
+      <!-- End .col-lg-3 -->
+      <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 col-12">
+
+         <div class="profile-wall">
+         	<div id="pagecontrollerunit">
+	         	<div class="pull-left">
+		         	<ul class="list-inline">
+					@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_MODERATOR,null)||UserCollection.IsCollectionAdmin(colcn,Application.getContributor(session()))){
+						<li class="padding-small"><a class="btn btn-sm btn-primary brectangle" data-bind="click:addmoreadmin">Add more Administrators</a>
+						@ajaxforms(genericid="addmoreadministratorsx",containerid="addmoreadministrators_container",formid="addmoreadministrators_form",inputname="username",stext="Add")
+						</li>
+					}			
+						<li class="padding-small"><a class="btn btn-sm btn-info brectangle" data-bind="click:copycol">Copy from this collection</a></li>
+					@ajaxforms(genericid="copytocollectionx",containerid="copytocollection_container",formid="copytocollection_form",inputname="colname",stext="Copy to Collection")
+				
+					@if(!UserCollection.IsCollectionAdmin(colcn,Application.getContributor(session()))){
+						<li class="padding-small"><a class="btn btn-sm btn-info brectangle" data-bind="click:suggestaproduct">Suggest a product</a></li>
+						@subjectPresent(){
+							@ajaxforms(genericid="suggestaproductx",containerid="suggestaproduct_container",formid="suggestaproduct_form",inputname="productid",stext="Submit Product Id")
+						}
+					}
+					</ul>
+				</div>
+	         	<div class="pull-right">
+					<ul class="list-unstyled">
+						<li><a data-bind="click: $root.follow,css:folstr()?'btn btn-sm btn-primary verdana clearstyled  brectangle pull-right':'btn btn-sm btn-success verdana clearstyled  brectangle pull-right',text:folstr()?'Unfollow Collection':'Follow Collection'"></a></li>
+						<li>
+							<ul class="list-inline onnextline padding-small">
+							@subjectPresent(){
+								@if(UserCollection.IsCollectionAdmin(colcn,Application.getContributor(session()))){
+					            <li><a class="btn btn-sm btn-default black" data-bind="click:toggleprivacy"><i data-bind="css:privacy()?'icon-volume-off':'icon-volume-up'"></i> <span data-bind="text:privacy()?'Private':'Public'"></span></a></li>
+					            }
+					        }
+								
+					            @*
+					            <li><a class="btn btn-sm btn-default black" data-bind="click:embed">Embed</a></li>
+					            <li><a class="btn btn-sm btn-default black" data-bind="click:share"><i class="icon-share"></i> Share</a></li>
+					            *@
+					            @subjectPresent(){
+									@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,null)||colcn.contributor.id==(Application.getContributor(session()).id)){	
+								<li><a class="btn btn-sm btn-danger brectangle" data-bind="click:delcol">Delete</a></li>
+									            }
+					            }
+							</ul>
+						</li>
+					</ul>
+				 </div>
+				 <div class="clearfix"></div>
+	            <ul id="myTab" class="nav nav-tabs">
+	               <li class="active"><a href="#collectionproductdivisions" data-bind="click:itemloader" data-toggle="tab"><span data-bind="text:$().shortnumber(@UserCollection.ProductCount(colcn))"></span><br>Items</a></li>
+	               <li><a href="#collectionuserdivision" data-bind="click:followerloader" data-toggle="tab"><span data-bind="text:$().shortnumber(@UserCollection.FollowersCount(colcn))"></span><br>Followers</a></li>
+	            </ul>
+            </div>
+            <div id="myTabContent" class="tab-content">
+               <div class="tab-pane fade in active" id="collectionproductdivisions">
+                  <div class="row">
+                  	 <div class="sort hidden-xs hidden-sm">
+	                  	<form id="fastsearch" class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}"  role="form">
+	                     <select data-bind="options: [0,1,2,3,4,5,6],optionsText: function(item) {ao=['Any (Price Range)','$0 - $50','$51 - $500','$501 - $1000','$1001 - $10000','$10001 - $100000','$100001 - Above'];return ao[item];}, value: pricerange"></select>             
+			             <div class="form-group">
+		                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search by typing a keyword ">
+		                 </div>
+	                    </form>
+	                  </div>
+	                  <div class="clearfix"></div>
+                     @Templates.su.panepbko(defaultsize=4)
+                  </div>
+               </div>
+               <div class="tab-pane fade in" id="collectionuserdivision">
+                  <div class="row">
+                   <div class="sort hidden-xs hidden-sm">
+	                 <form class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+				         <div class="form-group">
+		                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search by typing a keyword ">
+		                 </div> 
+				     </form>
+				    </div>
+					<div class="onnextline text-left" id="usergrid">
+						@Templates.su.ubko()
+					</div>
+                  </div>
+               </div>
+            </div>
+         
+         	<div  id="commentdiv" class="clearstyled inajaxcont">
+				@Templates.su.commentko()				
+			</div>
+		
+         </div>
+      </div>
+   </div>
+   <!-- End .row -->
+</div>
+<!-- End .container -->
+	
+	
+	
+	
+	@*
+	
+		<div id="shoppage" class="onnextline">
+			<div id="pagecontrollerunit">			
+				<div class="pull-left text-left" style="width:60%;">
+					<h2 class="black">@colcn.colname</h2>
+					@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_MODERATOR,null)||UserCollection.IsCollectionAdmin(colcn,Application.getContributor(session()))){
+						@form(action = routes.Useract.SetCollectionCoverImage(colcn.id), 'enctype -> "multipart/form-data",'class->"form-horizontal") {    
+						    <div class="control-group">  
+								 
+								<div class="text-left"> 
+									@if(colcn.coverimage!=null){
+								 	<img class="thumblimgsmall" src="@colcn.coverimage" alt="@colcn.colname">}
+									<br/>
+									<br/>					
+									<div class="inlinedisplay fileinput-div">
+										<button class="filechoosebutton llightblue underline spacecreater-small"><i class="icon-plus icon-white"></i><span class="white">Choose CoverImage</span></button>
+										<input type="file" id="upload_input" name="picture" class="fileinput-button"  onchange="readName(this);"  />
+									</div>		   
+								    <p class="inlinedisplay spacecreater-lateral">                        
+								        <input type="submit" value="Upload" class="lred underline spacecreater-small">
+								    </p> 
+									<br/>
+									<span class="btn-small">Size Limit: <b>2 MB</b></span><br/>
+									<div id="fileinformation"  class="borderinvisible span4" style="display:none;margin:0;'"></div>					  
+								</div>  
+							</div>
+						}
+						<script>
+							document.getElementById('upload_input').onchange = function () {
+								var textp=document.getElementById('fileinformation');
+								textp.innerHTML='Selected file: ' + (function(x){if(x.length>1){return x}else{ return 'None !!';}})(this.value);
+								if(this.value.length > 0) {textp.style.display = 'block';}
+							};
+						</script>
+					}						
+					<ul class="onnextline unstyled gray">
+						<li><span>Created By:</span><a href="@routes.Application.ContributorPage(colcn.contributor.id)"><b style="color:green;"> @colcn.contributor.user.name</b></a></li>
+						<li><span>On:</span><b style="color:brown;"> @colcn.timeofadd</b></li>
+						<li><span>Administered by: </span><a href="@routes.Application.ContributorPage(colcn.contributor.id)"><b style="color:purple;">@colcn.contributor.user.name</b></a> @for((an,cntn)<-colcn.collectionadmin.zipWithIndex){ <a href="@routes.Application.ContributorPage(an.id)">, <b style="color:purple;">@an.user.name</b></a> } </li>
+					</ul>
+					<br/>
+					<ul class="onnextline inline">
+					@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_MODERATOR,null)||UserCollection.IsCollectionAdmin(colcn,Application.getContributor(session()))){
+						<li><a class="btn btn-small btn-primary  brectangle" data-bind="click:addmoreadmin">Add more Administrators</a>
+						@ajaxforms(genericid="addmoreadministratorsx",containerid="addmoreadministrators_container",formid="addmoreadministrators_form",inputname="username",stext="Add")
+						</li>
+					}
+					
+					<li><a class="btn btn-small btn-info  brectangle" data-bind="click:copycol">Copy from this collection</a></li>
+					@ajaxforms(genericid="copytocollectionx",containerid="copytocollection_container",formid="copytocollection_form",inputname="colname",stext="Copy to Collection")
+				
+					@if(!UserCollection.IsCollectionAdmin(colcn,Application.getContributor(session()))){
+						<li><a class="btn btn-small btn-info  brectangle" data-bind="click:suggestaproduct">Suggest a product</a></li>
+						@subjectPresent(){
+							@ajaxforms(genericid="suggestaproductx",containerid="suggestaproduct_container",formid="suggestaproduct_form",inputname="productid",stext="Submit Product Id")
+						}
+					}
+					</ul>
+				</div>
+				<div class="pull-right statusboxcontainer">
+				    <ul class="inline pull-right">				
+				        <li class="text-center lviolet tab active"  >
+				        	<a href="#collectionproductdivisions" data-bind="click:itemloader" data-toggle="tab">	
+					            <span class="btn-large">@UserCollection.ProductCount(colcn)</span><br/>
+					            <span class="onnextline">Items</span>
+				            </a>
+				        </li>
+				        <li class="text-center lviolet tab" >
+				        	<a href="#collectionuserdivision" data-bind="click:followerloader" data-toggle="tab">	
+					            <span class="btn-large">@UserCollection.FollowersCount(colcn)</span><br/>
+					            <span class="onnextline">Followers</span>
+					        </a>
+				        </li>	  
+				    </ul>
+				    <br/>
+				    <a data-bind="click: $root.follow,css:folstr()?'btn btn-small btn-primary verdana clearstyled  brectangle pull-right':'btn btn-small btn-success verdana clearstyled  brectangle pull-right',text:folstr()?'Unfollow Collection':'Follow Collection'"></a>
+				    
+				</div>
+				<ul class="inline onnextline pull-right">
+						@subjectPresent(){
+							@if(UserCollection.IsCollectionAdmin(colcn,Application.getContributor(session()))){
+				            <li><a class="btn btn-small brectangle black" data-bind="click:toggleprivacy"><i data-bind="css:privacy()?'icon-volume-off':'icon-volume-up'"></i><span data-bind="text:privacy()?'Private':'Public'"></span></a></li>
+				            }
+				        }
+				            <li><a class="btn btn-small brectangle black" data-bind="click:embed">Embed</a></li>
+				            <li><a class="btn btn-small brectangle black" data-bind="click:share"><i class="icon-share"></i>Share</a></li>
+				            @subjectPresent(){
+								@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,null)||colcn.contributor.id==(Application.getContributor(session()).id)){	
+								            <li><a class="btn btn-small btn-danger black" data-bind="click:delcol">Delete</a></li>
+								            }
+				            }
+				 </ul>
+			</div>
+			<div class="onnextline tab-content paddthetop">
+			
+				<div id="collectionproductdivisions" class="tab-pane active">
+			    	<div id="headermessages" class="onnextline">        
+				        <div class="onnextline text-center"></div>
+				        
+				        <div class="clearstyled">
+				        	<form id="fastsearch" class="inline-form" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+				              <select class="borderinvisible margin-lateral" data-bind="options: [0,1,2],optionsText: function(item) {ao=['Any (Gender)','Female','Male'];return ao[item];}, value: gendercont"></select>
+				              <select class="borderinvisible margin-lateral" data-bind="options: [0,1,2,3,4,5,6],optionsText: function(item) {ao=['Any (Price Range)','$0 - $50','$51 - $500','$501 - $1000','$1001 - $10000','$10001 - $100000','$100001 - Above'];return ao[item];}, value: pricerange"></select>             
+				              <div class="input-prepend margin-lateral nomargin"><input class="borderinvisible  nomargin" data-bind="value: searchtext"  type="text"  placeholder="Search by typing a keyword"/><i class="icon-filter"></i></div> 
+				            </form>            
+				         </div>
+		      		</div>
+		     		@Templates.su.panepbko(extracontent=rempro)
+		      
+					<div class="hidden">
+					     @Templates.su.dopbko()
+					</div>
+				</div>
+				
+				<div id="collectionuserdivision" class="tab-pane text-right">
+					<form class="inline-form" action="json" data-bind="with: sfm ,submit:function(){return false;}">
+			              <div class="input-prepend margin-lateral nomargin"><input class="borderinvisible  nomargin" data-bind="value: searchtext"  type="text"  placeholder="Search by typing a keyword"/><i class="icon-filter"></i></div> 
+			        </form>
+					<div class="onnextline text-left" id="usergrid">
+						@Templates.su.ubko()
+					</div>
+				</div>
+				
+				 
+			</div>
+			<div  id="commentdiv" class="clearstyled inajaxcont">
+				<div class="widget wolive">
+					<div class="widget-head">
+						<div class="pull-left">Comments</div>
+						<div class="clearfix"></div>
+					</div> 
+					<div style="display: block;" class="widget-content">
+						<div class="padd">
+								@Templates.su.commentko()
+						</div>
+					</div>
+					<!-- Widget footer -->
+					<div class="widget-foot">				  				<!-- Chat input box -->				  
+						<form class="form-inline" data-bind="submit:postcomment,with:sfm">
+							<input type="hidden" value="@colcn.id" name="collection">
+							<textarea name="cmnttxt" maxlength="255"  class="span4" rows="3" placeholder="Type your message"  data-bind="value: cmnttxt"></textarea>
+							<button type="submit" class="btn btn-info">Send</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>     
+	*@	
+		@helper.javascriptRouter("UserLink")(routes.javascript.Application.ContributorPage,routes.javascript.Useract.RemoveCollectioncomment)
+		
+		
+		@Templates.su.jready{	
+			
+			
+			@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_MODERATOR,null)||UserCollection.IsCollectionAdmin(colcn,Application.getContributor(session()))){	
+				@submissions(genericid="addmoreadministratorsx",containerid="addmoreadministrators_container",formid="addmoreadministrators_form",urlbase=routes.Useract.AddAdmintoCollection(colcn.id).url)
+			}
+			
+			@submissions(genericid="copytocollectionx",containerid="copytocollection_container",formid="copytocollection_form",urlbase=routes.Useract.CopytoCollection(colcn.id).url)
+		
+			@if(!UserCollection.IsCollectionAdmin(colcn,Application.getContributor(session()))){
+				@subjectPresent(){
+					@submissions(genericid="suggestaproductx",containerid="suggestaproduct_container",formid="suggestaproduct_form",urlbase=routes.Useract.Suggestaproduct(colcn.id).url)
+				}
+			}			
+			
+			
+			var pxBDocInit=PBDocInit(ldiv);
+			var uxBDocInit=UBDocInit(ldiv);
+			//var sxBDocInit=SBDocInit(ldiv);
+			
+			//$('#create_new_collection_box').hide();
+		
+			$('#collectioncreatedate').text($().getdate('@Application.timezoneformat(colcn.timeofadd)').date);
+			$('#collectioncreatetime').text($().getdate('@Application.timezoneformat(colcn.timeofadd)').time);
+			function PageControllerView(){
+				var self=this;
+				
+				@subjectPresentOr(){
+					self.folstr = ko.observable(@if(Follow.IsCollectionFollower(colcn.id,Application.getContributor(session).id)){true}else{false});
+					self.privacy = ko.observable(@colcn.isprivate);	
+				}{ self.folstr = ko.observable(false);self.privacy = ko.observable(false); }			
+					
+				self.follow = function(){
+					@subjectPresentOr(){
+					self.folstr($().setresponse({url:"@routes.Useract.FollowAct(DInitial.SEARCH_COLLECTION,colcn.id)",failans:false}));
+					}{$().askforloginorsignup();}
+				}
+				
+				self.toggleprivacy = function(){
+					@subjectPresentOr(){
+					self.privacy($().setresponse({url:"@routes.Useract.TogglePrivacy(colcn.id)",failans:false}));
+					}{$().askforloginorsignup();}
+				}
+				
+				self.suggestaproduct = function(){
+					@subjectPresentOr(){
+						$().msgbox("<h1 style='color:olive'>Dont know how is it significant!!!</h1>");
+					}{$().askforloginorsignup();}
+				}
+				
+				self.embed = function(){
+					@subjectPresentOr(){
+						$().msgbox("<h1 style='color:green'>Will be implemented Soon!!!</h1>",2000);
+					}{$().askforloginorsignup();}
+				}
+				
+				self.share = function(){
+					@subjectPresentOr(){
+						$().msgbox("<h1 style='color:green'>Will be implemented Soon!!!</h1>",2000);
+					}{$().askforloginorsignup();}
+				}
+				
+				@subjectPresent(){
+				
+					@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,null)||colcn.contributor.id==(Application.getContributor(session()).id)){
+					
+						self.delcol = function(){
+							var userpage="@routes.Application.ContributorPage(colcn.contributor.id)";
+							var retnresp=$().setresponse({url:"@routes.Useract.DeleteCollection(colcn.id)",failans:false});
+							if(retnresp===false){
+								$().msgbox("<h1 style='color:red'>Failed</h1>",2000);
+								}else{
+									$().msgbox("<h1 style='color:green'>Deleted!!!</h1>",2000);
+									setTimeout(function(){window.location.replace(userpage);},2200);
+									}
+								
+						}
+					}
+				}
+				
+				
+					
+				self.itemloader = function(){self.activeloader=1;};
+				self.followerloader = function(){self.activeloader=3;};
+				//self.storeloader = function(){self.mi();self.activeloader=4;};
+				self.addmoreadmin = function(){ $('#addmoreadministrators_container').toggle(); }
+				self.copycol = function(){
+					@subjectPresentOr(){
+						$('#copytocollection_container').toggle();
+					}{$().askforloginorsignup();}
+				 }
+				self.suggestaproduct = function(){
+					@subjectPresentOr(){
+						$('#suggestaproduct_container').toggle();
+					}{$().askforloginorsignup();}
+				 }
+				
+				self.activeloader=1;
+			};
+			var PCV=new PageControllerView()
+			ko.applyBindings(PCV,$('#pagecontrollerunit')[0]);
+			
+			@Templates.js.infinitescroll(false){
+				if(PCV.activeloader==1){pxBDocInit.loadMore();}
+				if(PCV.activeloader==3){uxBDocInit.loadMore();}
+				//if(PCV.activeloader==4){sxBDocInit.loadMore();}
+				}
+			
+		
+		
+			function UBDocInit(ldiv)
+			{
+				@Templates.js.ubaction(divid="collectionuserdivision",hiturl=routes.Application.CollectionSearch(colcn.id).url,Ispost=false,specific=true){
+					function fms(ifs)
+					{
+						var self=this;
+						self.searchtext=ko.observable(ifs.stext);
+						self.page=ifs.pgn;
+						self.subcat=ko.observable(ifs.st); 
+						self.pagesize=ifs.ps;
+					};
+					var initcontent	={stext:'',pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE,st:@DInitial.USER_RELATION_QUERY.FOLLOWERS};
+				}{ }
+				return thisuserview;	
+			}
+		
+			function PBDocInit()
+			{
+				function fms(ifs)
+				{
+					var self=this;
+					self.gendercont=ko.observable(ifs.gend);
+					self.pricerange=ko.observable(ifs.prc);
+					self.searchtext=ko.observable(ifs.stext);
+					self.page=ifs.pgn;
+					self.pagesize=ifs.ps;
+					self.collectionid=ifs.cid;		
+				};
+				
+				
+				@Templates.js.pbactionjs("collectionproductdivisions"){
+					
+					self.fr=new fms({cid:@colcn.id, gend:0, prc:0, stext:'',ps:@DInitial.GENERIC_PAGE_SIZE, pgn:0});
+					self.sfm = ko.observable(self.fr);
+					
+					@if(UserCollection.IsCollectionAdmin(colcn,Application.getContributor(session()))){
+						
+					@Html(play.Routes.javascriptRouter("collectiondiscarder",controllers.routes.javascript.Useract.DiscardFromMyCollections));
+						
+					self.rpfromcollection=function(pr){
+						var retnresp=$().setresponse({url:collectiondiscarder.controllers.Useract.DiscardFromMyCollections(pr.id(),@colcn.id).absoluteURL(),failans:false});
+						if(retnresp===false){
+							$().msgbox("<h1 class='lred'>Failed</h1>",2000);
+							}else{
+								self.prodList.remove(pr);
+								}
+					}
+					}
+					
+					self.loadProd = function(jsonstring) {
+						
+						ldiv.display();
+						var sentsuccess=true;
+						var posting = $.get( "@routes.Application.CollectionSearch(colcn.id)",jsonstring,"json");
+						posting.done(function( data ) {								
+							$prodselect=data['prodgrid'];
+							if(!data['hasmore'])
+								self.fr.page=-1;
+							
+							$.each($prodselect, 
+								function(prindex, prattr)
+								{
+									self.prodList.push(ko.mapping.fromJS(prattr));
+									ldiv.stillbusy();
+								}
+							);
+							ldiv.loadcomplete();
+						});
+						posting.fail(function( data ) {
+							ldiv.loadcomplete();	
+							sentsuccess=false;
+						});
+						
+						return sentsuccess;						       
+					};
+					 
+					self.loadMore = function()
+					{
+						if(self.fr.page!==-1 && self.loadProd($.param(self.fr)))
+			  				self.fr.page++;
+					}
+					 
+					self.pform=ko.computed(function() {	
+				  			self.fr.page=0;
+				  			self.prodList.removeAll();
+			      				if(self.loadProd($.param(self.fr)))
+				  				self.fr.page++;
+				  			
+							}).extend({ throttle: 200 });			
+				
+					
+					
+				}
+				return thisshopview;
+			}
+			
+			function CMTDocInit(ldiv)
+			{	
+				@Templates.js.commentaction(idofpassed=colcn.id,divid="commentdiv",hiturl=routes.Application.GetCollectionComments(colcn.id).url,Ispost=false,specific=true){
+					function fms(ifs)
+					{
+						var self=this;
+						self.cmnttxt=ko.observable(ifs.ct);
+						self.collection=ifs.prdct;
+					};
+					var initcontent	={ct:'',prdct:@colcn.id};
+					var urlforpostingcomment="@routes.Useract.PutcommentonCollection";
+				}{
+					self.deletecomment =function(cmnt){
+						var retnresp=$().setresponse({url:UserLink.controllers.Useract.RemoveCollectioncomment(cmnt.cid).absoluteURL(),failans:false});
+						if(retnresp===false)
+						{
+							$().msgbox("<label class='alert-danger full-width'>Failed</label>",2000);
+						}
+						else
+						{
+							self.commentlist.remove(cmnt);
+						}
+					}
+				 }
+			}
+			CMTDocInit(ldiv);
+		
+		}	
+	}
+}{
+	@Templates.pagefooter(){ }
+}

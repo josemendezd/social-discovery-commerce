@@ -1,0 +1,20 @@
+@(pc: String="theme-white",pcw: String="theme-white")(appendcontent: Html)
+
+@appendcontent
+@*
+-----------------RECOMMENDED---------------------------
+<div id="pagemaincontentdivision" class="container">
+	<div class="row">
+		<div  class="col-lg-10 col-lg-offset-1 col-xs-12 col-sm-12 col-md-12 col-12">
+			@appendcontent
+		</div>
+	</div>
+</div>
+
+-------------------EARLIER--------------------------------
+<div id="pagemaincontentdivision" class="@pc">
+	<div id="wrapper" class="@pcw">		   
+	  	@appendcontent	  	   
+	</div>
+</div>
+*@

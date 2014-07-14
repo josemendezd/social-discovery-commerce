@@ -1,0 +1,254 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+
+
+GET     /                           		controllers.Application.home
+GET     /home                       		controllers.Application.index
+GET     /restricted                 		controllers.Application.restricted
+GET     /assets/javascript/routes.js    	controllers.Application.jsRoutes
+GET     /shop                      			controllers.Application.shop
+GET     /shop/:category                    	controllers.Application.cshop(category: String)
+GET		/redirectto							controllers.Application.PageRedirection(urlpage: String)
+GET		/discover							controllers.Application.discover
+
+
+#Tools Page
+GET		/grab								controllers.Application.grabber
+GET		/tools/showgrabbed					controllers.Application.ShowGrabbed(imageurl: String,price:Double,currency: String,title: String,pageurl: String)
+GET		/grab/bookmark						controllers.Application.BookMarkTool
+
+#Account Related
+GET     /user/profile               		controllers.Application.profile
+GET		/user/profile/picture				controllers.Application.showprofileimage
+POST	/user/profile/picture				controllers.Application.setprofileimage
+POST	/user/profile/edit					controllers.Application.setmyprofile
+
+GET     /login                      		controllers.Application.login
+POST    /login                      		controllers.Application.doLogin
+GET     /logout                     		com.feth.play.module.pa.controllers.Authenticate.logout
+GET     /authenticate/:provider     		com.feth.play.module.pa.controllers.Authenticate.authenticate(provider: String)
+GET     /signup                     		controllers.Application.signup
+POST    /signup                     		controllers.Application.doSignup
+GET     /accounts/unverified        		controllers.Signup.unverified
+GET     /authenticate/:provider/denied     	controllers.Signup.oAuthDenied(provider: String)
+GET     /accounts/verify/:token     		controllers.Signup.verify(token: String)
+GET     /accounts/exists            		controllers.Signup.exists
+GET     /accounts/password/reset/:token     controllers.Signup.resetPassword(token: String)
+POST    /accounts/password/reset            controllers.Signup.doResetPassword
+GET    	/accounts/password/change    		controllers.Account.changePassword
+POST   	/accounts/password/change    		controllers.Account.doChangePassword
+GET     /accounts/verify            		controllers.Account.verifyEmail
+GET     /accounts/add               		controllers.Account.link
+GET     /accounts/link              		controllers.Account.askLink
+POST    /accounts/link              		controllers.Account.doLink
+GET     /accounts/merge             		controllers.Account.askMerge
+POST    /accounts/merge             		controllers.Account.doMerge
+GET     /login/password/forgot     			controllers.Signup.forgotPassword(email: String ?= "")
+POST    /login/password/forgot     			controllers.Signup.doForgotPassword
+
+GET		/postauthorization					controllers.Signup.PostSignUp
+
+GET		/signup/enteremail					controllers.Signup.getemailform
+POST	/signup/enteremail					controllers.Signup.GetUsersEmail
+GET		/postsignup/selectcategory			controllers.Signup.selectcategory
+POST	/postsignup/selectcategory			controllers.Signup.SetUsersPreferredCategory
+GET		/postsignup/selectinfluencers		controllers.Signup.selectinfluencers
+GET		/postsignup/sui						controllers.Signup.SetUsersInfluencers(mode:String)
+GET		/postsignup/sui/json				controllers.Signup.selectinfluencersjson(page:Int ?= 0 ,pagesize:Int ?= 40)
+GET		/postsignup/importcontacts			controllers.Signup.importcontacts
+
+#POST	/postsignup/importcontacts			controllers.Signup.importcontacts
+
+GET		/postsignup/selectcontacts			controllers.Signup.selectcontacts
+POST	/postsignup/selectcontacts			controllers.Signup.SetUsersContactList(influencers:String)
+
+
+#User Actions
+
+POST	/productquery						controllers.Application.ProductQuery
+GET		/prodstatlist/:prid/:lwt			controllers.Application.ProductStatDetails(prid: Long , lwt: Int)
+
+GET		/search/q							controllers.Application.QuerySuggestion(query:String,catgid:Long)
+GET		/search								controllers.Application.RunSearch(searchkey:String?="",index:Int?=0)
+POST	/search								controllers.Application.KeySearch
+GET		/search/follow/:id					controllers.Useract.CopySearch(id: Long)
+GET		/search/save						controllers.Useract.SaveMySearch(searchtext:String, pricerange:Int ?= 0, gendercont:Int ?= 0)
+GET		/search/isFollowing					controllers.Useract.FindthisSearch(searchtext:String, pricerange:Int ?= 0, gendercont:Int ?= 0)
+GET		/search/hascopied/:id				controllers.Useract.FindthisSearchbyId(id:Long)
+GET		/search/product/count				controllers.Application.SearchTotalProductCount(searchtext:String, pricerange:Int ?= 0, gendercont:Int ?= 0)
+GET		/search/setprivate/:id				controllers.Useract.SetSearchPrivate(id:Long)
+
+GET		/product/page/:id					controllers.Application.ProductPage(id: Long,isajax:Boolean?=false)						
+GET		/collection/page/:id				controllers.Application.CollectionPage(id: Long,isajax:Boolean?=false)
+GET		/store/page/:id						controllers.Application.StorePage(id: Long,isajax:Boolean?=false)
+GET		/contributor/page/:id				controllers.Application.ContributorPage(id: Long,isajax:Boolean?=false,isuser:Boolean?=false)
+GET		/contributor/page/:id/:selectedtab	controllers.Application.ContributorSelecttabPage(id: Long,selectedtab:Int,isajax:Boolean?=false,isuser:Boolean?=false)
+GET		/search/page/:id					controllers.Application.SearchPage(id: Long,isajax:Boolean?=false)
+
+POST	/product/create						controllers.Useract.CreateProduct
+#Category
+GET		/category/list/:id					controllers.Application.RetrieveCategoryList(id: Long)
+
+#For Specific pages i.e. product search on product page
+GET		/product/search						controllers.Application.ProductSearch(id: Long,subcat: Int ?= 0,searchtext:String ?= "",gendercont:Int ?= 0,page:Int ?= 0 ,pagesize:Int ?= 20)						
+GET		/collection/search					controllers.Application.CollectionSearch(id: Long,subcat: Int ?= 0,searchtext:String ?= "", pricerange:Int ?= 0, gendercont:Int ?= 0,page:Int ?= 0 ,pagesize:Int ?= 20)
+GET		/store/search						controllers.Application.StoreSearch(id: Long,subcat: Int ?= 0,searchtext:String ?= "", pricerange:Int ?= 0, gendercont:Int ?= 0,page:Int ?= 0 ,pagesize:Int ?= 20)
+GET		/contributor/search					controllers.Application.ContributorSearch(id: Long,subcat: Int ?= 0,searchtext:String ?= "", pricerange:Int ?= 0, gendercont:Int ?= 0,page:Int ?= 0 ,pagesize:Int ?= 20)
+
+GET		/product/getrelated					controllers.Application.ProductGetRelated(id: Long)
+GET		/product/collectionstatus			controllers.Useract.GetProductCollectionStatus(prid: Long)
+POST	/product/postcomment				controllers.Useract.PutcommentonProduct
+GET		/product/deletecomment				controllers.Useract.Removecomment(cid: Long)
+POST	/product/recommend/:prid			controllers.Useract.RecommendProduct(prid: Long)
+POST	/product/mailrecommend/:prid		controllers.Useract.MailRecommendProduct(prid: Long)
+GET		/product/preload					controllers.Application.PreloadProducts(preloadsize: Int ?= 8)
+GET		/product/addoptions					controllers.Useract.addoptions()
+GET		/product/addoptions/web				controllers.Useract.addoptionsfromweb(weburl:String?="")
+POST	/product/addoptions/upload			controllers.Useract.addoptionsbyupload()
+
+GET		/watchlist							controllers.Useract.MyWatchList
+POST	/watchlistjson						controllers.Useract.MyWatchListJson
+GET		/myfriendsfeed						controllers.Useract.myfriendsfeed
+POST	/myfriendsfeedjson					controllers.Useract.myfriendsfeedjson
+
+GET		/love/:prid							controllers.Useract.Love(prid: Long)
+GET		/unlike/:prid						controllers.Useract.Hate(prid: Long)
+GET		/want/:prid							controllers.Useract.Want(prid: Long)
+GET		/unwant/:prid						controllers.Useract.Nomore(prid: Long)
+GET		/tried/:prid						controllers.Useract.Own(prid: Long)
+GET		/released/:prid						controllers.Useract.Release(prid: Long)
+GET		/getcollections/:prid				controllers.Useract.GetCollections(prid: Long)
+GET		/follow								controllers.Useract.FollowAct(actioncontxt:Int,obid: Long)
+
+GET		/user/promote/:conid/:role			controllers.Application.ChangeUserRole(conid: Long,role:String)
+
+GET		/user/collection/json/:pageno				controllers.Useract.UserCollectionList(pageno: Int)
+POST	/user/collection/create						controllers.Useract.CreateCollection
+GET		/user/collection/delete						controllers.Useract.DeleteCollection(Collectionid: Long)
+POST	/user/collection/add						controllers.Useract.AddToMyCollections
+GET		/user/collection/remove						controllers.Useract.DiscardFromMyCollections(prid: Long , Collectionid: Long)
+POST	/user/collection/copy/:Collectionid			controllers.Useract.CopytoCollection(Collectionid: Long)
+GET		/user/collection/privacy/:Collectionid		controllers.Useract.TogglePrivacy(Collectionid: Long)
+POST	/user/collection/addadmin/:Collectionid		controllers.Useract.AddAdmintoCollection(Collectionid: Long)
+POST	/user/collection/comments/add				controllers.Useract.PutcommentonCollection
+GET		/user/collection/comments/remove/:cid		controllers.Useract.RemoveCollectioncomment(cid: Long)
+GET		/user/collection/comments/get/:id			controllers.Application.GetCollectionComments(id: Long)
+POST	/user/collection/suggest/:Collectionid		controllers.Useract.Suggestaproduct(Collectionid: Long)
+POST	/user/collection/coverimage/:id				controllers.Useract.SetCollectionCoverImage(id: Long)
+POST	/user/collection/copycoverimage/:id/:withId  controllers.Useract.CopyCollectionCoverImage(id: Long, withId: Long)
+GET     /user/collection/images                     controllers.Useract.GetCollectionsImages()
+
+GET		/store/setcustomer/:id						controllers.Useract.SetCustomer(id: Long)
+GET		/store/claim/:id							controllers.Useract.ClaimStore(id: Long)
+
+#BLOG METHODS
+
+GET		/blog/list									controllers.Application.GetBlogList(page:Int ?= 0 ,pagesize:Int ?= 20)
+GET		/blog/page/:id								controllers.Application.GetBlogPage(id: Long)
+GET		/blog/complain/:id							controllers.Application.GetBlogComplainForm(id: Long)
+GET		/blog/tag/:tag								controllers.Application.GetBlogListByTag(tag:String,page:Int ?= 0 ,pagesize:Int ?= 20)
+
+POST	/blog/comments/add							controllers.Useract.AddBlogComment
+GET		/blog/comments/remove/:id					controllers.Useract.RemoveBlogComment(id: Long)
+GET		/blog/comments/get/							controllers.Application.GetBlogComments(id: Long, limit:Int ?= 0)
+
+
+GET		/blog/editearlier/:id						controllers.Application.GetEditBlog(id: Long)
+GET		/blog/postnew								controllers.Application.GetAddBlog
+GET		/blog/remove/:id							controllers.Useract.RemoveBlog(id: Long)
+
+POST	/blog/postnew								controllers.Useract.AddBlog
+POST	/blog/editearlier							controllers.Useract.EditBlog
+
+GET		/blog/editearlier/images/all/				controllers.Useract.getImagesForBlog(id:String)
+GET 	/blog/like									controllers.Useract.likeBlog(id:Long)
+GET 	/blog/dislike								controllers.Useract.dislikeBlog(id:Long)
+
+#Content Methods
+GET		/content/page/create						controllers.Application.GetAddContent
+POST	/content/page/create						controllers.Useract.AddContentPage
+GET		/content/page/delete/:title					controllers.Useract.DeleteContentPage(title:String)
+POST	/content/page/save							controllers.Useract.SaveContentPage
+
+GET		/content/page/:title						controllers.Application.GetContentPage(title:String)
+
+#Suggestions,feedback
+POST	/feedback/mainpage							controllers.Useract.PostFeedback
+GET		/report/new/:contentid/:ratype/:frompage	controllers.Useract.GetComplainForm(contentid:Long,ratype:Int,frompage:String)	
+POST	/report/post								controllers.Useract.LodgeAComplain		
+
+
+#Admin
+GET		/admin/page									controllers.Application.GetAdminPage
+GET		/admin/get/wallpaper						controllers.Application.GetAllWallpapers
+POST	/admin/upload/wallpaper						controllers.Application.UploadWallpapers
+GET		/admin/delete/wallpaper						controllers.Application.RemoveWallpapers(id:Long)
+GET		/admin/ipblacklist/view						controllers.AdminControls.ipblacklistcontrol_view(p:Int ?= 0, s ?= "datecreated", o ?= "desc")
+POST	/admin/ipblacklist/create					controllers.AdminControls.ipblacklistcontrol_create()
+GET		/admin/ipblacklist/delete					controllers.AdminControls.ipblacklistcontrol_delete(i:Long,p:Int ?= 0)
+GET		/admin/usercontrol/actdeact					controllers.AdminControls.usercontrol_activatedeactivate(userid:Long)
+GET		/admin/productcontrol/actdeact				controllers.AdminControls.productcontrol_activatedeactivate(prid:Long)
+GET		/admin/sql/view								controllers.AdminControls.sqlcontrol_view()
+POST	/admin/sql/update							controllers.AdminControls.sqlcontrol_update()
+
+
+
+
+#Social
+GET		/social/fb/access							controllers.Social.GetFBAccessCode(returnurl:String)
+GET		/social/fb/friends							controllers.Social.getfbfriends
+GET		/social/fb/friends/json/:code				controllers.Social.getfbfriendsjson(code:String)
+							
+GET		/social/tw/friends							controllers.Social.gettwitterfriends
+GET		/social/tw/friends/json						controllers.Social.gettwitterfriendsjson
+#Yahoo Verification
+GET		/TYiXIohLTQ6ePhh.axSL0opXwfwJzKZ7988NZpRynw--.html	controllers.Social.verifyyahoo
+
+
+
+
+
+
+#Static Pages
+GET		/sp/aboutus									controllers.SPages.aboutus()
+GET		/sp/contactus								controllers.SPages.contactus()
+POST	/sp/contactus								controllers.Application.submitcontactus()
+GET		/sp/whatsboozology							controllers.SPages.wboozology()
+GET		/sp/terms									controllers.SPages.terms()
+GET		/sp/store									controllers.SPages.store()
+GET		/sp/privacyandcookiepolicy					controllers.SPages.pncp()
+GET		/sp/developer								controllers.SPages.developer()
+GET		/sp/community								controllers.SPages.community()
+GET		/sp/helpme									controllers.SPages.helpme()
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+#Dev Mode
+GET		/mystat								controllers.Useract.MyStats
+#GET		/test							controllers.Application.ProdTest
+#GET		/t								controllers.Application.Tryhtm
+
+
+#Cart Module
+POST 	/cart/add/item					controllers.Carts.addCart()
+GET		/cart/items						controllers.Carts.getCartList()
+GET		/cart/user/lists				controllers.Carts.cartListIndex()
+POST 	/cart/delete/item				controllers.Carts.deleteItem()
+POST 	/cart/update/item				controllers.Carts.updateItem()
+GET		/cart/item/lists				controllers.Carts.getCartItems()
+GET		/cart/user/checkout				controllers.Carts.checkOutPage()
+POST 	/cart/user/details				controllers.Carts.checkOutUserDetails()
+GET		/cart/guest/checkout			controllers.Carts.guestcheckOutPage()
+GET		/cart/new/user/checkout			controllers.Carts.createUserCheckoutPage()
+POST 	/cart/new/user/details			controllers.Carts.checkOutNewUserDetails()
+POST 	/cart/checkUserName				controllers.Carts.checkUserNameAvailability()
+POST 	/cart/checkout/login			controllers.Carts.userLogin()
+POST 	/cart/checkout/transaction		controllers.Carts.cardTransctionStatus()
+GET		/cart/count						controllers.Carts.itemCount()
+
+

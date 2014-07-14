@@ -1,0 +1,293 @@
+@(jsurl:String,cssurl:String)(implicit request: play.mvc.Http.Request) 
+
+
+@getasseturl(pu:String)={@routes.Assets.at(pu).absoluteURL(request)}
+
+@*
+Remaining Yet:
+Find Price
+
+*@	
+(function() {
+
+	// Localize jQuery variable
+	var $$
+	,jqueryversion='1.9.0',
+	jqueryurl='@getasseturl("js/jquery-1.9.0.min.js")',
+	boozhomeurl='@routes.Application.index().absoluteURL(request)',
+	boozuniqueid='bl9a947c5702f149029ef4b1f71b4923a5';
+	var boozuniquescript=boozuniqueid+'_script';
+	@Html(play.Routes.javascriptRouter("jsRoutes",controllers.routes.javascript.Application.ShowGrabbed));
+
+	//alert("Entered");//debug
+
+	if(typeof window.boozologygrabber !== "undefined" && window.boozologygrabber!=false)
+	{
+		window.boozologygrabber.startprocess();
+		return;
+	}
+
+	/******** Load jQuery if not present *********/
+	if (window.jQuery === undefined || window.jQuery.fn.jquery !== jqueryversion) {
+		var script_tag = document.createElement('script');
+		script_tag.setAttribute("type","text/javascript");
+		script_tag.setAttribute("src",jqueryurl);
+		script_tag.setAttribute("id",boozuniquescript);
+		if (script_tag.readyState) {
+		  script_tag.onreadystatechange = function () { // For old versions of IE
+			  if (this.readyState == 'complete' || this.readyState == 'loaded') {
+				  scriptLoadHandler();
+			  }
+		  };
+		} else { // Other browsers
+		  script_tag.onload = scriptLoadHandler;
+		}
+		
+		// Try to find the head, otherwise default to the documentElement
+		(document.getElementsByTagName("head")[0] || document.documentElement).appendChild(script_tag);
+	} else {
+		// The jQuery version on the window is the one we want to use
+		$$ = window.jQuery;
+		main();
+	}
+
+	/******** Called once jQuery has loaded ******/
+	function scriptLoadHandler() {
+		// Restore $ and window.jQuery to their previous values and store the
+		// new jQuery in our local jQuery variable
+		$$ = window.jQuery.noConflict(true);
+		// Call our main function
+		//alert('Script Loaded');
+		main(); 
+	}
+
+	/******** Our main function ********/
+	function main() { 
+		$$(document).ready(function($) {
+			var  boozologygrabber=function(){
+					var self=this;
+					self.$images=[];//=$('img')
+					self.$imagescnt=0;// :$images.length
+					self.$hasrun=false;
+					
+					self.startprocess = function ()
+					{
+						if(!self.hasrun||self.$imagescnt==0)
+						{
+							self.scanimages();
+							if(self.$imagescnt==0)
+							{
+								self.notify(1);
+								return false;
+							}
+						}
+						self.applycovers();
+						self.addcontrollisteners();
+						self.$hasrun=true;								
+					}
+					
+					self.scanimages = function (){
+						self.clearcovers();
+						var images=$('img');
+						self.$images=[];
+						self.$imagescnt=0;
+						images.each(function(imgn){
+								var imgo=$(this);
+								var imgprop=self.retrieveimageprop(imgo);
+								if(self.doesimagequalify(imgprop))
+									self.$images.push({id:boozuniqueid+'_img_'+imgn,img:imgo,ip:imgprop});
+							});
+						self.$imagescnt=self.$images.length;
+						//alert("Total Images : "+self.$imagescnt +"<br/> Scanned Images : "+images.length);//debug
+					}
+					
+					self.applycovers = function (){					
+						$.each(self.$images,function(imgn,$img){
+								var htmlforinsertion=$('<div id="'+$img.id+'" style="position:relative;"></div>');
+								htmlforinsertion.append($(	'<div style="top:0;left:0;position:absolute;height:'+$img.ip.height+'px;width:'+$img.ip.width+'px;background-color:red;z-index:9999;text-align:center;font-size:14px;line-height:25px;opacity:0.5;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";filter: alpha(opacity=50);">'+
+										'<div style="width:100%;background-color:black;top:48%;position:relative;"><b style="color:white;">Grab This</b></div>'+
+									'</div>')
+								.data('refimg',$img).click(function (e) {
+									e.stopImmediatePropagation();
+									e.preventDefault();
+									var $img=$(this).data('refimg');
+									//alert("Image property : "+JSON.stringify($img.ip));
+									self.oncoverclick($img);
+								}));
+								if($img.img.length > 0)
+								{
+									$img.img.before(htmlforinsertion);;
+								}
+								else
+									self.$images.splice(imgn,1);
+							});
+							
+							
+					}
+					
+					self.findpricetext = function ($img){
+					
+						var found=false,pricestring,currency='$',price='10';
+						var regexcncy='(EUR|EURO|\\€|GBP|\\£|JPY|\\¥|CAD|C\\$|AUD|A\\$|USD|\\$)',regexcost='\\d+([0-9]|\\,)*[.]?\\d*',regexconcat='\\s*';
+						var regularexpressionkey=regexcncy+regexconcat+regexcost;
+						var rek = new RegExp(regularexpressionkey,"i"),
+						rec = new RegExp(regexcncy,"i"),
+						rea = new RegExp(regexconcat,"i"),
+						rep = new RegExp(regexcost,"i"),
+						allparents=$img.img.parents();
+						for(var cnt=0,allpl=allparents.length;cnt<allpl;cnt++)
+						{
+							try{
+							var textval=$(allparents[cnt]).text();
+							 var m = rek.exec(textval);
+							 if (m != null) {
+								pricestring=m[0].replace(',','');
+								currency=rec.exec(pricestring)[0];
+								price=parseFloat(rep.exec(pricestring)[0]).toFixed(2);
+								found=true;
+								break;
+							 }
+							}catch(err){
+								alert(err);
+							}
+						}
+						if(!found){currency='$';price='10';}
+						return {price:price,currency:currency};
+					}
+					
+					self.resetvars = function (){
+						self.clearcovers();
+						self.$images=[];
+						self.$imagescnt=0;
+						self.$hasrun=false;
+						window.boozologygrabber=false;
+						var selector="script[id='"+boozuniquescript+"']";
+						$(selector).remove();
+						
+					}
+					
+					self.clearcovers = function (){
+						var selector="div[id^='"+boozuniqueid+"_img_"+"']";
+						$(selector).remove();
+					}
+						
+					self.addcontrollisteners = function (){
+							$('body').append($('<div id="'+boozuniqueid+'_img_button'+'" style="position:fixed;top:10px;right:20px;width:150px;height:80px;background-color:black;z-index:9999;text-align:center;font-size:16px;"></div>')
+								.append(
+									$('<div style="position:relative;"> </div>')
+									.append(
+										$('<a href="'+boozhomeurl+'" target="_blank" style="color:white;font-size:20px;font-family:cursive;line-height:50px;text-decoration:underline;clear:both;">BOOZOLOGY</a>')
+									).append($('<a href="javascript:void(0);" style="color:white;font-size:14px;line-height:20px;float:left;margin-left:10px;text-decoration:underline;clear:both;">Close</a>')
+												.click(function(e){self.clearcovers();})
+									).append($('<a href="javascript:void(0);" style="color:white;font-size:14px;line-height:20px;float:right;margin-right:10px;text-decoration:underline;">Clear All</a>')
+												.click(function(e){self.resetvars();})
+									)
+								)
+							);
+
+						
+						
+						}
+						
+					self.openwindow = function (params){
+						var url = jsRoutes.controllers.Application.ShowGrabbed(params.imageurl,params.price,params.currency,params.title,params.pageurl).absoluteURL();
+						var window_params = "width = 950,height= 650,scrollbars=1,toolbar='no',location='no',directories='no',status='no',menubar='no',resizable='yes'";
+						try {
+							window.open(url, '_blank', window_params);
+						} catch(err) {
+							window.showModalDialog(url, '_blank', window_params);
+						}
+					}
+						
+					self.oncoverclick = function ($img){
+						var prt=self.findpricetext($img)
+						,ptitle=
+							function(){
+								if($img.ip.title)
+									return $img.ip.title;
+								var linkeda=$img.img.closest('[title]');
+								if(linkeda.length>0)
+									return linkeda.attr("title"); 
+								return document.title
+								};
+						var pageparam={imageurl:$img.ip.src,
+						price:prt.price,
+						currency:prt.currency,
+						title:ptitle(),
+						pageurl:location.href
+						};
+						self.clearcovers();
+						self.openwindow(pageparam);
+					}
+					
+					self.doesimagequalify = function ($imgp){
+						if ($imgp.src.substr(0, 5) == 'data:') {
+						    return false;
+						}
+						if(	$imgp.offsetheight>100 && $imgp.offsetheight>100)
+							return true;
+						else
+							return false;
+							
+						@*
+							var img = new Image();
+							img.onload = function() {
+							  alert(this.width + 'x' + this.height);
+							}
+							img.src = $("#myimg").attr('src');
+						*@
+							
+					}
+					
+					self.retrieveimageprop = function ($imgo){
+						var jsimg=$imgo[0];
+						var wd=$imgo.width(),ht=$imgo.height();
+						if(jsimg.naturalWidth && jsimg.naturalHeight)
+						{
+							wd=jsimg.naturalWidth;
+							ht=jsimg.naturalHeight;
+						}
+						
+						return {
+									top: $imgo.offset().top,
+									left: $imgo.offset().left,
+									width: $imgo.outerWidth(true)<=$imgo.parent().outerWidth(false)?$imgo.parent().outerWidth(false):$imgo.outerWidth(true),
+									height: $imgo.outerHeight(true)<=$imgo.parent().outerHeight(false)?$imgo.parent().outerHeight(false):$imgo.outerHeight(true),
+									src:$imgo[0].src,
+									title:$imgo.attr("title"),
+									alt:$imgo.attr("alt"),
+									offsetheight:ht,
+									offsetwidth:wd
+								};
+					}
+					
+					self.notify = function (status){
+						/*
+							1:no image found
+							2:internal error
+							3:image not found
+						*/
+						switch (status){
+								case 1:
+									alert('no image found');
+									break;
+								case 2:
+									alert('internal error');
+									break;
+								case 3:
+									alert('image disappeared or unloaded');
+									break;
+								default:
+									alert('An error occured');
+									break;
+							}
+						}		
+				}
+			var boozologygrabberobject=new boozologygrabber();
+			boozologygrabberobject.startprocess();
+			window.boozologygrabber=boozologygrabberobject;
+			  
+		});
+	}
+
+})(); 

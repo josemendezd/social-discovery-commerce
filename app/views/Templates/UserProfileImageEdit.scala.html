@@ -1,0 +1,70 @@
+@(localUser: models.User = null)
+@import helper._
+@import helper.twitterBootstrap._
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+   <link media="screen" type="text/css" rel="stylesheet" href="@routes.Assets.at("style.css")" />
+   <link href="@routes.Assets.at("css/bootstrap.min.css")" media="screen" rel="stylesheet" />
+   <script src="@routes.Assets.at("js/custom.js")"></script>  
+<style type="text/css">
+.fileinput-div{
+position: relative;
+overflow: hidden;
+width: 160px;
+height: 20px;
+}
+.fileinput-button{
+height: 40px !important;
+width: 160px !important;
+opacity: 0;
+filter:alpha(opacity: 0);
+position: absolute;
+top: -10px;
+left: -10px;
+}
+.filechoosebutton{
+width: 150px;position: relative;top: 0px; left: 0px;
+}
+
+</style> 
+  </head>
+  <body class="theme-white text-center">
+@AlertMessages()
+	<div class="onnextline">
+		
+		
+	  	@form(action = routes.Application.setprofileimage, 'enctype -> "multipart/form-data",'class->"form-horizontal") {    
+		    
+			<div class="control-group">  
+				<label class="control-label" for="input01">User Image:</label>  
+				<div class="controls text-left"> 
+				 	<img class="thumblimgsmall" src="@localUser.getusersimage()" alt="@localUser.name">
+					<br/>
+					<br/>					
+					<div class="inlinedisplay fileinput-div">
+						<button class="filechoosebutton llightblue underline spacecreater-small"><i class="icon-plus icon-white"></i><span class="white">Choose Image</span></button>
+						<input type="file" id="upload_input" name="picture" class="fileinput-button"  onchange="readName(this);"  />
+					</div>		   
+				    <p class="inlinedisplay spacecreater-lateral">                        
+				        <input type="submit" value="Upload" class="lred underline spacecreater-small">
+				    </p> 
+					<br/>
+					<span class="btn-small">Size Limit: <b>2 MB</b></span><br/>
+					<div id="fileinformation"  class="borderinvisible span4" style="display:none;margin:0;'"></div>					  
+				</div>  
+			</div>
+		}
+		
+	</div>
+	<script>
+	document.getElementById('upload_input').onchange = function () {
+		var textp=document.getElementById('fileinformation');
+		textp.innerHTML='Selected file: ' + (function(x){if(x.length>1){return x}else{ return 'None !!';}})(this.value);
+		if(this.value.length > 0) {textp.style.display = 'block';}
+	};
+	</script>
+	 	
+  </body>
+</html>
+

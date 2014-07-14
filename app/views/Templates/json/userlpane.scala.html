@@ -1,0 +1,3 @@
+@(userslist: List[Contributor])(implicit session: play.mvc.Http.Session)
+{"usergrid":[@for((contr,cnt) <- userslist.zipWithIndex){@if(cnt!=0){,}
+@Templates.json.userbrick(contr)}],"hasmore":false}

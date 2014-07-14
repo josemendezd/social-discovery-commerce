@@ -1,0 +1,138 @@
+@(selector: Int = 0)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+globalfunctions();
+@subjectPresentOr(){
+	@if(DInitial.SIGNUP_STAGE.CLEARED_ALL_STAGES!=0 ){
+
+	@if(Application.getLocalUser(session())!=null){
+	
+	@if(Application.getLocalUser(session()).registerstatus!=DInitial.SIGNUP_STAGE.CLEARED_ALL_STAGES){
+		globalswitch({st:"@DInitial.JSGLOBAL.POST_AUTHORIZE_PENDING",rurl:"@routes.Signup.PostSignUp()"});
+		
+	}
+	}
+	}
+}{ globalswitch({st:"@DInitial.JSGLOBAL.ISNOT_LOGGEDIN",loadimg:"@routes.Assets.at("img/loading.gif")"}); }
+
+@*
+$.ajaxSetup({ cache: false });
+
+$("html, body").animate({ scrollTop: 0 }, 10);
+@subjectNotPresent() {
+
+$("form[id^='Formsign']").submit(function(event) {
+	event.preventDefault();
+	var Errorhead='<div class="alert alert-block alert-danger"><b>Errors:</b><ul>',Errortail="</ul></div>";
+	var erlc=window.location.href;
+	var redirect_uri =erlc.replace('#signin','').replace('#signup','');
+	var formname=this.id;						
+	var $form = $( this ),
+	formcontent = $("#"+formname).serialize() + '&redirecturi=' + encodeURIComponent(redirect_uri),
+	url = $form.attr( 'action' );
+	$('#dispsignerror').empty();
+	
+	var rspbd = $form.parent();
+	var eerbrd = $form.find( '#dispsignerror' );
+	var returnb=false;
+	//alert(formname+rspbd.id+eerbrd.id);
+	
+	if(formname=="Formsignup")
+	{
+		if($form.find( 'input[name="password"]' ).val().length < 5)
+			{
+				eerbrd.html(Errorhead+"<li>Password should be at least 5 characters.</li>"+Errortail);
+				returnb=true;
+			}
+		if($form.find( 'input[name="password"]' ).val()!== $form.find( 'input[name="repeatPassword"]' ).val())
+			{
+				eerbrd.html(Errorhead+"<li>Passwords do not match.</li>"+Errortail);
+				returnb=true;
+			}
+		if(!$form.find( 'input[name="agree"]' ).is(":checked"))
+			{
+				eerbrd.html(Errorhead+"<li>Please accept agreement.</li>"+Errortail);
+				returnb=true;
+			}
+	}
+	if(formname=="Formsignin")
+	{
+		if($form.find( 'input[name="password"]' ).val().length < 5)
+		{
+			eerbrd.html(Errorhead+"<li>Invalid Password.</li>"+Errortail);
+			returnb=true;
+		}
+	}
+	if(returnb===true)
+	{
+		$.colorbox.resize();
+		return;
+	}
+	ldiv.display();
+	eerbrd.html('<img src="@routes.Assets.at("img/loading.gif")"></img>');
+	$.colorbox.resize();
+	var posting = $.post(url,formcontent,"json");
+	posting.done(function( data ) {
+		ldiv.loadcomplete();
+		if (data.redirectto) {
+            // data.redirect contains the string URL to redirect to
+            window.location.replace(data.redirectto);
+        }
+		//var erlc=window.location.href;
+		//window.location.replace(erlc.replace('#signin','').replace('#signup',''));
+	});
+	posting.fail(function( data ) {
+		ldiv.loadcomplete();
+		var Errormsgs="";
+		var reply=$.parseJSON(data.responseText);
+			$.each(reply, 
+					function(eron, errmsg)
+					{Errormsgs+="<li>"+ eron +" - "+errmsg+"</li>";}
+			);
+		if(typeof Recaptcha!=="undefined" && Recaptcha)
+			Recaptcha.reload();
+		eerbrd.html(Errorhead+Errormsgs+Errortail);	
+		$.colorbox.resize();					
+	});
+});
+
+
+}
+
+	
+
+      
+$.each($("form"),function(i, f){f.reset();});
+$("#footerfeedbackform").find('.loaderspan').hide();
+$("#footerfeedbackform").submit(function(event) {
+	event.preventDefault();			
+	var formname=this.id,$form = $( this );
+	var $formcontent = $form.serialize(),$url = $form.attr( 'action' ),$mes = $form.find('.loaderspan');
+	$mes.show();if(!$mes.hasClass('bgloadericoleft')){$mes.addClass('bgloadericoleft');}
+	$mes.html('<label>loading.....</label>');						
+	var retnresp=$().setresponse({ispost:true,url:$url,argdata:$formcontent,failans:false,failreq:true,failnode:'responseText'});
+	if(retnresp.Issuccess==false){
+		var reply=$.parseJSON(retnresp.retresp),Errormsgs='';
+		$.each(reply, function(eron, errmsg){Errormsgs+=eron +" - "+errmsg+".";});
+		$mes.html($().cat('<label style="color:red;float:right;">Failed!!'+Errormsgs+'</label>',100));
+	}
+	else
+	{$mes.html('<label style="color:green">'+retnresp.retresp+'</label>');setTimeout(function(){$form.hide(2000)},5000);}
+	if($mes.hasClass('bgloadericoleft')){$mes.removeClass('bgloadericoleft');}
+});
+
+	
+
+
+$(".fromiframe").colorbox({iframe:true,scrolling:false});
+$(function(){$('.nav.navbar-nav.navbar-right a[href="' + location.href.replace(window.location.protocol+"//"+location.host,"") + '"]').parent().addClass('active');});
+//$(function(){$('.navigationtabs a[href="/' + location.href.replace(window.location.protocol+"//","").split("/")[1] + '"]').parent().addClass('active');});
+
+$("#btn-scrollup").click(function () {
+          $("html, body").animate({ scrollTop: 0 }, 600);
+          return false;
+      });
+*@
+
+

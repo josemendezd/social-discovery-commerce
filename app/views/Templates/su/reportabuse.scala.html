@@ -1,0 +1,31 @@
+@(complainform: Form[_])
+
+@import helper._
+@import Designs._
+
+@implicitField = @{ FieldConstructor(BLFieldConstructor.f) }
+
+
+@helper.form(action=routes.Useract.LodgeAComplain, args = 'role->"form",'target -> "reportabuseiframe") { 
+
+	<div class="hidden">
+	
+		@input(complainform("contentid")) { (id, name, value, args) =>
+		    <input type="hidden" name="@name" value="@value" >
+		}
+		@input(complainform("ratype")) { (id, name, value, args) =>
+		    <input type="hidden" name="@name" value="@value" >
+		}
+		@input(complainform("frompage")) { (id, name, value, args) =>
+		    <input type="hidden" name="@name" value="@java.net.URLDecoder.decode(value.mkString(" "), "UTF-8")" >
+		}
+	</div>
+	@textarea(field = complainform("complaintext"), args = 'rows -> 5, 'cols -> 120,'_label -> "Complain Message", 'placeholder -> "Write the complain here.", 'class-> "form-control",'_class-> "form-group",'_inline->"false")
+	
+	<ul class="list-inline">
+    	<li><button type="submit" class="btn brectangle btn-success">Submit</button></li>
+	    <li><button type="reset" class=" btn brectangle btn-warning">Reset</button></li>
+    </ul>
+			
+}
+<iframe name="reportabuseiframe" class="noborder" height="100px" width="100%"></iframe>

@@ -1,0 +1,32 @@
+@(productID: Long)
+
+$('#addToCart').click(function() {
+				var id = @productID;
+				var quantity = $('#quantity').val();
+				if(quantity == 0) {
+					alert("Quantity cannot be zero");
+				} else {
+					$.ajax({
+						type: "POST",
+						url: "/cart/add/item",
+						data: { id : id,
+							    quantity: quantity 
+							},
+						success: function(data){
+							observableProduct.removeAll();
+							if(data.length>0) {
+								$('#cartTemplate-container').show();
+								$('#cartTemplate').show();
+								$('#navigation-navbar-default').css('padding-top', '36px');
+								observableProduct.push(data[0]);
+								$('#cartCount').show();
+								$('.noti_bubble').empty();
+								$('.noti_bubble').append("<a>"+data.length+"</a>");
+							} else {
+								$('#navigation-navbar-default').css('padding-top', '0px');
+								$('#cartTemplate-container').hide();
+							}								
+						}
+					});
+				}	
+});

@@ -1,0 +1,90 @@
+@font-face {
+  font-family: 'Calibri';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Calibri'), local('Calibri'), url(fonts/Calibri/Calibri.woff) format('woff');
+}
+@font-face {
+  font-family: 'Calibri';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Calibri Semibold'), local('Calibri-Semibold'), url(fonts/Calibri/Calibri_Semibold.woff) format('woff');
+}
+
+.majorblogunit{ width:72.0238%;}
+.minorblogunit{ width:22.0238%;}
+.majorblogunit, .minorblogunit{
+    float: left;
+    margin: 0px 1.4881% 20px;
+    font-family: "Calibri",sans-serif;
+}
+.blnavbar .blnavbar-inner{
+background: none repeat scroll 0% 0% rgb(141, 63, 63) !important;
+}
+
+.blnavbar .blnavbar-inner .container .blnav > li > a {
+color: rgb(191, 113, 113)!important;
+}
+.blnavbar .blnavbar-inner .container .blnav > li > a:hover,
+.blnavbar .blnavbar-inner .container .blnav > li.active > a {
+color: white!important;
+}
+.noboxshadow{box-shadow:none;}
+.post {
+    margin-bottom: 30px;
+}
+.post:hover .disonhover {
+    display: block;
+}
+.post:hover .hidonhover{display:none;}
+
+.post .title {
+    line-height: 42px;
+}
+
+.post .title a{ color: #6D6D2F;font-size:40px; }
+
+.post .post-header {
+    height: 30px;
+    line-height: 30px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.post .post-header .published {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.post .post-header .share {
+    min-width:250px;
+    margin-top: 5px;
+}
+.post .post-content {
+    margin: 25px 0px;
+    line-height: 1.6;
+    font-size:15px;
+}
+
+
+
+.blogsidebar{margin-top:100px;}
+
+.accordion-heading{
+	text-align: center;
+}
+.accordion-heading a{
+color: rgb(221, 75, 57);
+font-size: 16px;
+font-family: Calibri;
+border-bottom: 1px solid #EEEEEE;
+}
+.accordion-group{border:none!important;}
+
+
+
+
+
+.blbanner {
+	background-color:rgb(234, 245, 207) !important;
+}

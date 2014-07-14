@@ -1,0 +1,19 @@
+
+  <div class="modal-content" >
+    <div class="modal-header">
+      <button type="button"  class="close" ng-click="close()">&times;</button>
+      <h6 class="modal-title">Choose Image</h6>
+    </div>
+    <div class="modal-body row">
+    	<div data-ng-repeat="col in collections" class="input-group col-md-1" style="margin-bottom: 8px;">
+      		<span class="input-group-addon">
+        		<input type="radio"  name="selected-image" data-ng-model="fdata.withId"  value="{{col.id}}">
+      		</span>
+      		<img src="{{col.url}}" />
+    	</div>
+   		
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" ng-click="ok()">Save</button>
+    </div>
+  </div>

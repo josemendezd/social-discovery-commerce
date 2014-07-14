@@ -1,0 +1,299 @@
+@()(appendcontent: Html)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+<div class="loaderimagediv"><b id="loadertext">Loading...</b></div>
+
+<div class="footer-wrap">
+
+<!-- Begin Container  -->
+	<div class="container">
+		<!-- End .row -->
+		<div class="row">
+			<!-- Begin .col-lg-6 -->
+			<div class="col-lg-8 col-md-8 col-xs-12 col-sm-12 col-12">
+				<div class="logo"><img src="@routes.Assets.at("bl/images/logo-white.png")"   alt="Boozology"></div>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				<!-- Begin .social-wrap -->
+				<div class="social-wrap">
+					<h4>Social</h4>
+					<!-- Begin .social -->
+					<ul class="social">
+						<li><a href="https://www.facebook.com/boozologyOfficial" target="_blank"><i class="icon-facebook"></i></a></li>
+						<li><a href="https://twitter.com/BOOZOLOGYdotCOM" target="_blank"><i class="icon-twitter"></i></a></li>
+						<li><a href="https://plus.google.com/+Boozology" target="_blank"><i class="icon-google-plus"></i></a></li>
+					</ul>
+					<!-- End .social -->
+				</div>
+				<!-- End .social-wrap -->
+				<div class="clearfix"></div>
+					<!-- Begin .help-menu -->
+					<ul class="help-menu">
+						<li><a href="@routes.SPages.wboozology()">What's Boozology</a></li>
+						<li><a href="@routes.SPages.store()">For Stores</a></li>
+						<li><a href="@routes.SPages.community()">Community Guidelines</a></li>
+					</ul>
+					<!-- End .help-menu -->
+					
+			</div>
+			<!-- End .col-lg-6 -->
+								
+			<!-- Begin .col-lg-3 -->
+			<div class="col-lg-4 col-md-4 col-xs-12 col-sm-12 col-12">	
+			
+				<!-- Begin .footer-menu -->
+				<div class="footer-menu-wrap">	
+					<h3>More Info:</h3>
+					<!-- Begin .footer-menu-wrap -->
+					<ul class="footer-menu">
+						<li><a href="@routes.Application.GetBlogList()">Blog</a></li>
+						<li><a href="@routes.SPages.aboutus()">About</a></li>
+						<li><a href="@routes.SPages.developer()">Developers</a></li>
+						<li><a href="@routes.SPages.contactus()">Support</a></li>
+						<li><a href="@routes.SPages.helpme()">Help/Faq</a></li>
+						<li><a href="@routes.SPages.terms()">Terms</a></li>
+						<li><a href="@routes.SPages.pncp()">Privacy and Cookie Policy</a></li>
+					</ul>
+					<!-- End .footer-menu-wrap -->
+				
+				</div>
+				<!-- End .footer-menu -->
+		
+		</div>
+			<!-- End .col-lg-3 -->
+		
+			<!-- Begin .col-lg-3 -->
+			
+				@*
+				<div class="col-lg-3 col-md-12 col-xs-12 col-sm-12 col-12">	
+		
+				<!-- Begin .feedback-wrap -->
+				<div class="feedback-wrap">	
+					<form role="form" id="footerfeedbackform" action="@routes.Useract.PostFeedback" method="post">
+					@subjectNotPresent() {
+					<h3>Feedback</h3>
+					 <div class="form-group">
+					    <label for="exampleInputName">First Name</label>
+					    <input type="text" class="form-control" id="exampleInputName" placeholder="First name" name="name">
+					  </div>
+					  <div class="form-group">
+					    <label for="exampleInputEmail1">Email</label>
+					    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email"  name="email">
+					  </div>
+					  }
+					  <div class="form-group">
+					    <label for="exampleInputText">Message</label>
+					    <textarea name="content" class="form-control" id="" cols="30" rows="10" placeholder="Message"></textarea>
+					  </div>
+					  <div id="recaptcha_challenge" class="form-group">
+					  
+					  </div>
+					  <button type="submit" class="btn btn-default">Submit</button>
+					  <button type="reset" class="btn btn-default">Clear</button>
+					  <span class="loaderspan">Loading...</span>
+					</form>	
+				
+				</div>
+				
+				<!-- End .footer-wrap -->
+			
+			</div>
+			*@
+			<!-- End .col-lg-3 -->
+	
+		</div>
+		<!-- End .row -->
+	
+	</div>	
+	<!-- End .container -->
+	<div class="col-lg-12">
+		<div class="row">
+	@*	<div class="col-lg-6 copyrightImg">
+			<img src="@routes.Assets.at("bl/images/logo-white.png")"   alt="Boozology">
+		</div>
+	*@
+		<div class="col-lg-8 copyrightText" valign="middle" >
+			<p>Copyright &copy; 2014 Boozology LLC. All rights reserved.	
+			</p>			
+		</div>
+		</div>
+	</div>
+	
+
+
+</div>
+<!-- End .footer-wrap -->
+<a id="btn-scrollup" style="display: inline;" class="btn btn-default" href="#">
+	<i class="icon-chevron-up"></i>
+</a>
+
+
+@subjectNotPresent() {
+@helper.javascriptRouter("forgotpassword")(controllers.routes.javascript.Signup.forgotPassword)
+<div class="modal fade" id="signinModal" tabindex="-1" role="dialog" aria-labelledby="membersignin" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove-sign"></i></button>
+                  <h4 class="modal-title" id="membersignin">Member Sign In</h4>
+               </div>
+               <div class="modal-body">
+                  <form role="form" id="Formsigninajax" action='@routes.Application.doLogin' method="POST">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter email">
+                     </div>
+                     <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                     </div>
+                     <div class="form-group">
+                        <a href="javascript:void(0);" onclick="window.location.href = forgotpassword.controllers.Signup.forgotPassword($('#Formsigninajax #exampleInputEmail1').val() || null).absoluteURL();">Forgot password?</a>
+                     </div>
+                     <div class="clearfix"></div>
+                     <ul class="sign-up-options">
+                        <li> <button type="submit" class="btn btn-default login">Login</button></li>
+                        <li>or</li>
+                        <li>
+                           @_providerPartial(skipCurrent=false)
+                        </li>
+                     </ul>
+                     <div class="clearfix"></div>
+                     <input type="hidden" value="true" name="isajax">
+                     <div id="dispsignerror"></div>
+                  </form>
+               </div>
+               <div class="modal-footer">
+                  <a href="@routes.Application.signup">Not a member? Sign up</a>
+               </div>
+            </div>
+            <!-- /.modal-content -->
+         </div>
+         <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+      
+      <!-- Modal -->
+	<div class="modal fade" id="signinupModel" tabindex="-1" role="dialog" aria-describedby="signinupModelbody" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">      
+	      <div class="modal-body"  id="signinupModelbody" >
+	      	<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove-sign"></i></button>
+	        <h2>Please <a data-toggle="modal" href="@routes.Application.login">SignIn</a> or <a href="@routes.Application.signup">SignUp</a> to proceed</h2>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	
+
+}
+
+<div class="modal fade" id="warningModel" tabindex="-1" role="dialog" aria-describedby="warningModelbody" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">      
+	      <div class="modal-body"  id="warningModelbody" >
+	      	<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove-sign"></i></button>
+	        <h2>You are not supposed to comment twice in a minute</h2>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@*   
+<div id="footer" class="onnextline theme-cross">
+	<div class="wrapperlikeabsolute">
+		<div class="searchposition clearfix">
+			<div class="pull-left"><h1>BOOZOLOGY</h1></div>
+			<div class="text-left pull-right">
+				<div class="socialdiv margin-small">
+					@if(play.Play.isProd()){
+					<ul class="thumbnails">
+						<li>
+							<div class="g-plusone" data-size="small" data-href="//plus.google.com/112619907843049084794"></div>
+							
+							<script type="text/javascript">
+						  (function() {
+						    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+						    po.src = 'https://apis.google.com/js/plusone.js';
+						    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+						  })();
+						</script>
+					</li>
+					<li>
+						<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2FboozologyOfficial&amp;width=450&amp;height=80&amp;colorscheme=dark&amp;layout=standard&amp;action=like&amp;show_faces=true&amp;send=true" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe>
+					</li>
+					<li><iframe allowtransparency="true" frameborder="0" scrolling="no" src="//platform.twitter.com/widgets/follow_button.html?screen_name=BOOZOLOGYdotCOM " style="width:150px; height:20px;"></iframe></li>
+				</ul>
+				}								
+			</div>				
+		</div>
+	</div>
+	<div class="clearfix uppercased calibri searchposition">
+		<div class="pull-left" style="width:60%">
+			<ul class="inline text-left">
+				<li>
+					<ul class="unstyled">
+						<li><a href="@routes.Application.GetContentPage("WhatsBoozology")">What's Boozology</a></li>
+						<li><a href="@routes.Application.GetContentPage("forstores")">For Stores</a></li>
+						<li><a href="@routes.Application.GetContentPage("community")">Community Guidelines</a></li>
+						<li><a href="@routes.Application.GetContentPage("PACP")">Privacy and Cookie Policy</a></li>														
+					</ul>
+				</li>
+				<li>
+					<ul class="unstyled">
+						<li><a href="@routes.Application.GetBlogList()">BLOG</a></li>
+						<li><a href="@routes.Application.GetContentPage("About")">About</a></li>
+						<li><a href="@routes.Application.GetContentPage("Developers")">Developers</a></li>
+					</ul>
+				</li>
+				<li>
+					<ul class="unstyled">
+						<li><a href="@routes.Application.GetContentPage("Support")">Support</a></li>
+						<li><a href="@routes.Application.GetContentPage("Help_faq")">Help/FAQ</a></li>
+						<li><a href="@routes.Application.GetContentPage("Terms")">Terms</a></li>
+					</ul>
+				</li>				
+			</ul>				
+		</div>
+		<div class="pull-right text-right" style="width:40%">					
+			<form id="footerfeedbackform" action="@routes.Useract.PostFeedback" method="post">
+				<div><b>Feedback</b></div>
+				@subjectNotPresent() {
+				<div>Name: <input class="inputtypes span3"  type="text" name="name"/></div>
+				<div class="clearfix">Email: <input class="inputtypes span3" type="text" name="email"/></div>
+				}
+				<div class="clearfix">Message: <textarea class="inputtypes span3"  name="content"></textarea></div>
+				<button type="submit" class="btn-success brectangle">Submit</button>
+				<button type="reset" class="btn-warning brectangle">Clear</button>
+				<div class="onnextline"><span class="bgloadericoleft inlinedisplay loaderspan pull-right spacecreater-lateral">Loading...</span></div>
+			</form>
+		</div>
+	</div>
+</div>
+      <p><strong class="white">Copyright &copy; 2014 Boozology LLC. All rights reserved.</strong></p>
+</div>
+
+<a id="btn-scrollup" style="display: inline;" class="btn-circle btn-large" href="#">
+	<i class="icon-chevron-up"></i>
+</a>
+
+@subjectNotPresent() {
+<!--Replace this part-->
+<div style="display:none;">
+	<div id="signinup" class="text-center"> 
+		<h2 style="font-family:Georgia;">Please <a href="#signin" class="popoutcont darkcontent">SignIn</a> or <a href="#signup" class="popoutcont darkcontent">SignUp</a> to proceed</h2>
+	</div>
+	@Templates.su.signin(true)
+	@Templates.su.signup(true)      
+</div>
+
+}
+
+*@
+<!-- All the contents of this site belongs to Boozology LLC, USA. Written by Kislay Kundan. - J Mendez-->
+<div id="divstore" class="hidden"></div>
