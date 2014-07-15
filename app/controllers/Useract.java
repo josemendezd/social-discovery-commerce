@@ -860,8 +860,6 @@ public class Useract  extends Controller {
 	public static Result SetCollectionCoverImage(long id)
 	{
 		UserCollection uc= UserCollection.find.byId(id);
-		DynamicForm bindedForm = play.data.Form.form().bindFromRequest();
-		Long prid = Long.parseLong(bindedForm.get("product"));
 		if(uc==null)
 			return badRequest();
 		String allotedname="collectionpic"+uc.id;
