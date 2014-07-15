@@ -270,7 +270,7 @@ public class GHelp extends Controller {
 		try {
 			generateThumbnailImageVersion(infile, outfile);
 			//String outfilePath = outfile.getPath().replace("\\", "/");
-			return routes.Assets.at(outfile.getPath().replace("public", "")).absoluteURL(request());
+			return routes.Assets.at(outfile.getPath().replace("public/", "")).absoluteURL(request());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

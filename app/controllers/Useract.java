@@ -883,7 +883,8 @@ public class Useract  extends Controller {
 		sourceFilePath = sourceFilePath.substring(sourceFilePath.indexOf("assets"));
 		sourceFilePath = sourceFilePath.replace("assets", "public");
     	String ImageAddress=GHelp.copyImage(sourceFilePath, destFilePath);
-    	ImageAddress = ImageAddress.replace("//", "/");
+    	//ImageAddress = ImageAddress.replace("//", "/");
+    	//ImageAddress = ImageAddress.replace("http:/", "http://");
 		if(ImageAddress==null) {
 			return status(601, "Unable to Save image.Please report to Support.");
 		}
