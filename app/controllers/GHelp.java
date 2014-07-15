@@ -269,8 +269,8 @@ public class GHelp extends Controller {
 		File outfile = new File(destPath + ext);
 		try {
 			generateThumbnailImageVersion(infile, outfile);
-			//String outfilePath = outfile.getPath().replace("\\", "/");
-			return routes.Assets.at(outfile.getPath().replace("public", "")).absoluteURL(request());
+			String outfilePath = outfile.getPath().replace("//", "/").replace("public", "");
+			return routes.Assets.at(outfilePath).absoluteURL(request());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
