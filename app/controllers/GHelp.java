@@ -338,9 +338,19 @@ public class GHelp extends Controller {
 	
 	private static void generateThumbnailImageVersion(File file, File outputfile)
 			throws IOException {
-		if(outputfile.exists() && outputfile.isFile() ) outputfile.delete();
+		if(outputfile.exists() && outputfile.isFile() ) {
+			Logger.info("===File already present");
+			outputfile.delete();
+			if(!outputfile.exists()) {
+				Logger.info("===File deleted");
+			}
+		}
 		
 		net.coobird.thumbnailator.Thumbnails.of(file).allowOverwrite(true).size(160, 160).keepAspectRatio(true).outputQuality(1.0f).toFile(outputfile);
+		if(outputfile.exists() && outputfile.isFile() ) {
+			Logger.info("===File created");
+		}
+		
 	}
 	
 	public static String getimageextension(String allotedname,String contenttype)
