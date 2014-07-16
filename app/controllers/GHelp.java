@@ -321,7 +321,7 @@ public class GHelp extends Controller {
 	            savedfilechannel.close();
 				uploadedfilechannel.close();
 				*/
-				
+				Logger.info("==========outputfile:"+outputfile.getCanonicalPath());
 				flash(Application.FLASH_MESSAGE_KEY, "Successfully Uploaded!! ");
 				
 				return routes.Assets.at(outputlocation.replace("public/", "")).absoluteURL(request());				
@@ -343,11 +343,12 @@ public class GHelp extends Controller {
 			String outputPath = outputfile.getPath();
 			Logger.info("=========File already present at "+outputPath);
 		} 
-		FileOutputStream fop = new FileOutputStream(outputfile);
+		//FileOutputStream fop = new FileOutputStream(outputfile);
 		net.coobird.thumbnailator.Thumbnails.of(file).allowOverwrite(true).size(160, 160).keepAspectRatio(true).
-		outputQuality(1.0f).toOutputStream(fop);
-		fop.flush();
-		fop.close();
+		outputQuality(1.0f).toFile(outputfile);
+		//toOutputStream(fop);
+		//fop.flush();
+		//fop.close();
 		
 		
 		
