@@ -269,13 +269,14 @@ public class GHelp extends Controller {
 		File outfile = new File(destPath + ext);
 		try {
 			generateThumbnailImageVersion(infile, outfile);
-			//String outfilePath = outfile.getPath().replace("\\", "/");
-			return routes.Assets.at(outfile.getPath().replace("public/", "")).absoluteURL(request());
+			return outfile.getName();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
+	
+	
 	
 	public static String uploadImage(final String allotedname,String imagecontext,String filepath,play.mvc.Http.MultipartFormData body,int sizeflag)
 	{
@@ -305,26 +306,24 @@ public class GHelp extends Controller {
 					picturename=allotedname+picturename;
 				}else{
 				int picturenamelength=picturename.length();
-				if(picturenamelength>240)
-					picturename.substring(picturenamelength-237);
+				if(picturenamelength > 240)
+					picturename.substring(picturenamelength - 237);
 				}
 				String outputlocation = URLDecoder.decode(filepath, "UTF-8") +picturename;
-				Logger.info("==========outputlocation:"+outputlocation);
 				File outputfile=new File(outputlocation);
 				
-				File dir = new File("public/gallery/uploads");
+				/*File dir = new File("public/gallery/uploads");
 				if(dir.exists() && dir.isDirectory()) {
 					for(File _f : dir.listFiles()) {
 						Logger.info("==========present file: "+_f.getPath());
 					}
-				}
+				}*/
 				net.coobird.thumbnailator.Thumbnails.of(infile).allowOverwrite(true).size(160, 160).keepAspectRatio(true).
 				outputQuality(1.0f).toFile(outputfile);
 				
-				Logger.info("==========outputfile:"+outputfile.getCanonicalPath());
 				flash(Application.FLASH_MESSAGE_KEY, "Successfully Uploaded!! ");
 				
-				return routes.Assets.at(outputlocation.replace("public/", "")).absoluteURL(request());				
+				return outputfile.getName();				
 				
 				} catch(Exception e) {
 					e.printStackTrace();
@@ -343,14 +342,8 @@ public class GHelp extends Controller {
 			String outputPath = outputfile.getPath();
 			Logger.info("=========File already present at "+outputPath);
 		} 
-		//FileOutputStream fop = new FileOutputStream(outputfile);
 		net.coobird.thumbnailator.Thumbnails.of(file).allowOverwrite(true).size(160, 160).keepAspectRatio(true).
 		outputQuality(1.0f).toFile(outputfile);
-		//toOutputStream(fop);
-		//fop.flush();
-		//fop.close();
-		
-		
 		
 		
 	}

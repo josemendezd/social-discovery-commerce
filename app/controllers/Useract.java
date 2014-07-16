@@ -72,6 +72,8 @@ public class Useract  extends Controller {
 	//..........NAVIGATION.................
 	//>>>>>>>>>>SUB PART- QUERY<<<<<<<<<<<<
 	
+	private static final String COLLECTION_GALLERY_UPLOADS = "public/gallery/uploads/";
+
 	@SubjectPresent
 	public static Result  MyWatchList()
 	{
@@ -864,10 +866,11 @@ public class Useract  extends Controller {
 		if(uc==null)
 			return badRequest();
 		String allotedname="collectionpic"+uc.id;
-    	String ImageAddress=GHelp.uploadImage(allotedname, "custom","public/gallery/uploads/", request().body().asMultipartFormData(),DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.Identifier);
-		if(ImageAddress==null)
+    	String ImageName=GHelp.uploadImage(allotedname, "custom",COLLECTION_GALLERY_UPLOADS, request().body().asMultipartFormData(),DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.Identifier);
+		if(ImageName==null)
 			return Application.CollectionPage(id, false);
-		uc.SetCoverImage(ImageAddress);
+		String url = routes.Useract.GetImage("collection", ImageName).absoluteURL(request());
+		uc.SetCoverImage(url);
 		return redirect(routes.Application.CollectionPage(id, false));
 		
 	}
@@ -879,25 +882,27 @@ public class Useract  extends Controller {
 		if(withUC == null || uc == null) {
 			return badRequest();
 		}
-		String destFilePath = "public/gallery/uploads/collectionpic" + uc.id;
+		String destFilePath = COLLECTION_GALLERY_UPLOADS+"collectionpic" + uc.id;
 		String sourceFilePath = withUC.coverimage;
-		sourceFilePath = sourceFilePath.substring(sourceFilePath.indexOf("assets"));
-		sourceFilePath = sourceFilePath.replace("assets", "public");
-    	String ImageAddress=GHelp.copyImage(sourceFilePath, destFilePath);
+		sourceFilePath = COLLECTION_GALLERY_UPLOADS + sourceFilePath.substring(sourceFilePath.lastIndexOf("/") + 1);
+		String ImageName=GHelp.copyImage(sourceFilePath, destFilePath);
     	//ImageAddress = ImageAddress.replace("//", "/");
     	//ImageAddress = ImageAddress.replace("http:/", "http://");
-		if(ImageAddress==null) {
+		if(ImageName==null) {
 			return status(601, "Unable to Save image.Please report to Support.");
 		}
-		uc.SetCoverImage(ImageAddress);
-		return ok(ImageAddress);
+		String url = routes.Useract.GetImage("collection", ImageName).absoluteURL(request());
+		uc.SetCoverImage(url);
+		return ok(url);
 		
 	}
 	
-	public static Result DownLoadCollectionCoverImage(String name) {
-		File file = new File("public/gallery/uploads/"+name);
-		return ok(file);
-		
+	public static Result GetImage(String type, String name) {
+		if("collection".equals(type)) {
+			File file = new File(COLLECTION_GALLERY_UPLOADS+name);
+			return ok(file);
+		}
+		return ok();
 	}
 	
 	//................STORE ACTIONS..............................

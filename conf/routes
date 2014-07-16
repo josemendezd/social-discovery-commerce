@@ -138,9 +138,9 @@ GET		/user/collection/comments/remove/:cid		controllers.Useract.RemoveCollection
 GET		/user/collection/comments/get/:id			controllers.Application.GetCollectionComments(id: Long)
 POST	/user/collection/suggest/:Collectionid		controllers.Useract.Suggestaproduct(Collectionid: Long)
 POST	/user/collection/coverimage/:id				controllers.Useract.SetCollectionCoverImage(id: Long)
-POST	/user/collection/copycoverimage/:id/:withId  controllers.Useract.CopyCollectionCoverImage(id: Long, withId: Long)
+POST	/user/collection/copycoverimage/:id/:withId controllers.Useract.CopyCollectionCoverImage(id: Long, withId: Long)
 GET     /user/collection/images                     controllers.Useract.GetCollectionsImages()
-
+GET 	/image/:type/:name				            controllers.Useract.GetImage(type:String,name:String)
 GET		/store/setcustomer/:id						controllers.Useract.SetCustomer(id: Long)
 GET		/store/claim/:id							controllers.Useract.ClaimStore(id: Long)
 
@@ -252,5 +252,4 @@ POST 	/cart/checkout/transaction		controllers.Carts.cardTransctionStatus()
 GET		/cart/count						controllers.Carts.itemCount()
 
 #Dev
-GET /downloadCollectionCover/:name      controllers.Useract.DownLoadCollectionCoverImage(name:String)
 
