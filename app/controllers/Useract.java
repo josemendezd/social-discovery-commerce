@@ -72,7 +72,7 @@ public class Useract  extends Controller {
 	//..........NAVIGATION.................
 	//>>>>>>>>>>SUB PART- QUERY<<<<<<<<<<<<
 	
-	private static final String COLLECTION_GALLERY_UPLOADS = "public/gallery/uploads/";
+	private static final String COLLECTION_GALLERY_UPLOADS = "gallery/uploads/";
 
 	@SubjectPresent
 	public static Result  MyWatchList()
