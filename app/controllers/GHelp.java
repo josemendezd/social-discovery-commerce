@@ -338,6 +338,8 @@ public class GHelp extends Controller {
 	
 	private static void generateThumbnailImageVersion(File file, File outputfile)
 			throws IOException {
+		if(outputfile.exists() && outputfile.isFile() ) outputfile.delete();
+		
 		net.coobird.thumbnailator.Thumbnails.of(file).allowOverwrite(true).size(160, 160).keepAspectRatio(true).outputQuality(1.0f).toFile(outputfile);
 	}
 	
