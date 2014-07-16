@@ -130,6 +130,10 @@ public class Application extends Controller {
 			}
 		}
 		
+		if(!Strings.isNullOrEmpty(q) || !Strings.isNullOrEmpty(c)) {
+			return ok(cshop.render(cid));
+		}
+		
 		if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ALL_USERS, null))
 			return Useract.MyWatchList();
 		else

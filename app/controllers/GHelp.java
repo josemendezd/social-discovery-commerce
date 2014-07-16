@@ -338,7 +338,7 @@ public class GHelp extends Controller {
 	
 	private static void generateThumbnailImageVersion(File file, File outputfile)
 			throws IOException {
-		net.coobird.thumbnailator.Thumbnails.of(file).size(160, 160).keepAspectRatio(true).outputQuality(1.0f).toFile(outputfile);
+		net.coobird.thumbnailator.Thumbnails.of(file).allowOverwrite(true).size(160, 160).keepAspectRatio(true).outputQuality(1.0f).toFile(outputfile);
 	}
 	
 	public static String getimageextension(String allotedname,String contenttype)
