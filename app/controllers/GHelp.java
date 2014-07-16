@@ -323,7 +323,8 @@ public class GHelp extends Controller {
 				*/
 				
 				flash(Application.FLASH_MESSAGE_KEY, "Successfully Uploaded!! ");
-				return routes.Assets.at(outputfile.getPath().replace("public/", "")).absoluteURL(request());				
+				
+				return routes.Assets.at(outputlocation.replace("public/", "")).absoluteURL(request());				
 				
 				} catch(Exception e) {
 					e.printStackTrace();
