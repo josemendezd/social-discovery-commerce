@@ -342,12 +342,12 @@ public class GHelp extends Controller {
 			String outputPath = outputfile.getPath();
 			Logger.info("===File already present");
 			outputfile.delete();
-			net.coobird.thumbnailator.Thumbnails.of(file).allowOverwrite(true).size(160, 160).keepAspectRatio(true).
+			/*net.coobird.thumbnailator.Thumbnails.of(file).allowOverwrite(true).size(160, 160).keepAspectRatio(true).
 			outputQuality(1.0f).toFile(outputPath);
 			outputfile = new File(outputPath);
 			if(outputfile.exists() && outputfile.isFile() ) {
 				Logger.info("===File created at " + outputfile.getPath());
-			}
+			}*/
 			
 		} else {
 			net.coobird.thumbnailator.Thumbnails.of(file).allowOverwrite(true).size(160, 160).keepAspectRatio(true).
