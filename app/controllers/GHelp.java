@@ -311,8 +311,17 @@ public class GHelp extends Controller {
 				String outputlocation = URLDecoder.decode(filepath, "UTF-8") +picturename;
 				Logger.info("==========outputlocation:"+outputlocation);
 				File outputfile=new File(outputlocation);
+				
+				File dir = new File("public/gallery/uploads");
+				if(dir.exists() && dir.isDirectory()) {
+					for(File _f : dir.listFiles()) {
+						Logger.info("==========present file: "+_f.getPath());
+					}
+				}
 				//com.google.common.io.Files.copy(file, outputfile);
-				generateThumbnailImageVersion(infile, outputfile);
+				//generateThumbnailImageVersion(infile, outputfile);
+				net.coobird.thumbnailator.Thumbnails.of(infile).allowOverwrite(true).size(160, 160).keepAspectRatio(true).
+				outputQuality(1.0f).toFile(outputfile);
 				/*
 				FileChannel uploadedfilechannel= new FileInputStream(file).getChannel();
 	            FileChannel savedfilechannel = new FileOutputStream(outputfile).getChannel();
