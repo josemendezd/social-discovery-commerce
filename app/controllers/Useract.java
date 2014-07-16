@@ -863,7 +863,7 @@ public class Useract  extends Controller {
 		if(uc==null)
 			return badRequest();
 		String allotedname="collectionpic"+uc.id;
-    	String ImageAddress=GHelp.uploadImage(allotedname, "custom","public/gallery/uploads/", request().body().asMultipartFormData(),DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.Identifier);
+    	String ImageAddress=GHelp.uploadImage(allotedname, "","public/gallery/uploads/", request().body().asMultipartFormData(),DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.Identifier);
 		if(ImageAddress==null)
 			return Application.CollectionPage(id, false);
 		uc.SetCoverImage(ImageAddress);

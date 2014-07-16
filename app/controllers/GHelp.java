@@ -347,8 +347,6 @@ public class GHelp extends Controller {
 			outputfile = new File(outputPath);
 			if(outputfile.exists() && outputfile.isFile() ) {
 				Logger.info("===File created at " + outputfile.getPath());
-				Logger.info("===File created at " + outputfile.getAbsolutePath());
-				Logger.info("===File created at " + outputfile.getCanonicalPath());
 			}
 			
 		} else {
