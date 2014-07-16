@@ -323,7 +323,7 @@ public class GHelp extends Controller {
 				*/
 				
 				flash(Application.FLASH_MESSAGE_KEY, "Successfully Uploaded!! ");
-				return routes.Assets.at(outputlocation.replace("public/", "")).absoluteURL(request());				
+				return routes.Assets.at(outputfile.getPath().replace("public/", "")).absoluteURL(request());				
 				
 				} catch(Exception e) {
 					e.printStackTrace();
@@ -348,7 +348,7 @@ public class GHelp extends Controller {
 		
 		net.coobird.thumbnailator.Thumbnails.of(file).allowOverwrite(true).size(160, 160).keepAspectRatio(true).outputQuality(1.0f).toFile(outputfile);
 		if(outputfile.exists() && outputfile.isFile() ) {
-			Logger.info("===File created");
+			Logger.info("===File created at " + outputfile.getPath());
 		}
 		
 	}
