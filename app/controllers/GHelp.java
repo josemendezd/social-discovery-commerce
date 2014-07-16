@@ -312,13 +312,12 @@ public class GHelp extends Controller {
 				String outputlocation = URLDecoder.decode(filepath, "UTF-8") +picturename;
 				File outputfile=new File(outputlocation);
 				
-				/*File dir = new File("public/gallery/uploads");
-				if(dir.exists() && dir.isDirectory()) {
-					for(File _f : dir.listFiles()) {
-						Logger.info("==========present file: "+_f.getPath());
-					}
-				}*/
-				net.coobird.thumbnailator.Thumbnails.of(infile).allowOverwrite(true).size(160, 160).keepAspectRatio(true).
+				File dir = new File("gallery/uploads");
+				if(!dir.exists()) {
+					dir.mkdirs();
+				} 
+				
+				net.coobird.thumbnailator.Thumbnails.of(infile).size(160, 160).keepAspectRatio(true).
 				outputQuality(1.0f).toFile(outputfile);
 				
 				flash(Application.FLASH_MESSAGE_KEY, "Successfully Uploaded!! ");
