@@ -2,6 +2,7 @@ package controllers;
 
 import static play.data.Form.form;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -890,6 +891,12 @@ public class Useract  extends Controller {
 		}
 		uc.SetCoverImage(ImageAddress);
 		return ok(ImageAddress);
+		
+	}
+	
+	public static Result DownLoadCollectionCoverImage(String name) {
+		File file = new File("public/gallery/uploads/"+name);
+		return ok(file);
 		
 	}
 	

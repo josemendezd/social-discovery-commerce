@@ -251,4 +251,6 @@ POST 	/cart/checkout/login			controllers.Carts.userLogin()
 POST 	/cart/checkout/transaction		controllers.Carts.cardTransctionStatus()
 GET		/cart/count						controllers.Carts.itemCount()
 
+#Dev
+GET /downloadCollectionCover/:name      controllers.Useract.DownLoadCollectionCoverImage(name:String)
 

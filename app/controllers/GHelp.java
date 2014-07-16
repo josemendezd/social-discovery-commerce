@@ -318,18 +318,9 @@ public class GHelp extends Controller {
 						Logger.info("==========present file: "+_f.getPath());
 					}
 				}
-				//com.google.common.io.Files.copy(file, outputfile);
-				//generateThumbnailImageVersion(infile, outputfile);
 				net.coobird.thumbnailator.Thumbnails.of(infile).allowOverwrite(true).size(160, 160).keepAspectRatio(true).
 				outputQuality(1.0f).toFile(outputfile);
-				/*
-				FileChannel uploadedfilechannel= new FileInputStream(file).getChannel();
-	            FileChannel savedfilechannel = new FileOutputStream(outputfile).getChannel();
-	            savedfilechannel.transferFrom(uploadedfilechannel, 0, uploadedfilechannel.size());
-	            savedfilechannel.force(true);
-	            savedfilechannel.close();
-				uploadedfilechannel.close();
-				*/
+				
 				Logger.info("==========outputfile:"+outputfile.getCanonicalPath());
 				flash(Application.FLASH_MESSAGE_KEY, "Successfully Uploaded!! ");
 				
