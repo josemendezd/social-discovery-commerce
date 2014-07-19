@@ -1,9 +1,164 @@
 @(hasloadernode: Boolean=true,loadernode:String="prloadmorestyle hidden",isajax: Boolean=false,extracontent:Html=Html(" "),defaultsize:Int =3)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
 <div>
-    <div class="row" data-bind="foreach: prodList, visible: prodList().length > 0">	
-    		      <!--  product include -->	
-        @Templates.su.pbko(extracontent,defaultsize)
-    </div>
+	<div class="row ">
+		<div id="iso-container" class="col-lg-12">
+    		<div class="isotope-wrap" data-bind="foreach: prodList, visible: prodList().length > 0">	
+				  <!--  product include -->	
+				@Templates.su.pbko(extracontent,defaultsize)    		
+    		</div>
+   		</div>
+   	</div>
     @if(hasloadernode){<div id="prloadmore" class="@loadernode" data-bind="click:loadMore,html:$root.moreloadtext, visible: prodList().length > 0"></div>}
 	@Templates.su.collpopko(){ }
 </div>
+
+<script type="text/html" id="popoverBindingTemplate">
+	<button class="close pull-right" type="button" onClick="closeLink()">x</button>
+    <div class="product-social">
+		<p>
+		 Recommend
+		  
+		</p>
+
+		<ul class="social">
+		  <li><a data-bind="attr:{onclick: 'openFb('+ id()+')' }">
+					<i class="icon-facebook"></i>
+				</a>
+			</li>
+		   <li><a data-bind="attr:{onclick: 'openTwitter('+ id()+')' }">
+					<i class="icon-twitter"></i>
+				</a>
+			</li>
+
+			<li><a data-bind="attr:{onclick: 'openGooglePlus('+ id()+')' }">
+					<i class="icon-google-plus"></i>
+				</a>
+			</li>
+			<li>
+				<a class="standalone_mailthisproduct_link" data-bind="popover: {template: 'emailThisProduct', trigger: 'click', placement: 'bottom'}" href="javascript:void(0);">
+					<i class="icon-envelope"></i>
+				</a>
+			</li>
+
+			<li>
+				<a class="standalone_recommendthisproduct_link" data-bind="popover: {template: 'recommendThisProduct', trigger: 'click', placement: 'bottom'}" href="javascript:void(0);">
+					<i class="icon-exchange"></i>
+				</a>
+			</li>
+	    </ul>
+		<div class="clearfix">
+		</div>
+	</div>
+</script>
+<script type="text/html" id="emailThisProduct">
+@subjectPresentOr(){
+<div  class="padding-small" >
+	<div id="standalone_mailthisproductxloader" class="bgloaderico" style="display:none;"><span class="full-width">&nbsp;</span></div>
+	<button class="close pull-right" type="button" onClick="closeLink()">x</button>
+	<span id="standalone_mailthisproductxstatus" class="text-center onnextline"></span>
+	<form class="standalone_mailthisproduct_form onnextline padding-small" role="form">
+		<div class="input-group">
+			<input type="hidden" class="product_id" data-bind="{value:id}">
+			<input type="text" placeholder="Enter Name" class="form-control" name="useremail">
+			<div class="clearfix padding-small"></div>
+			<button class="btn btn-default btn-info" type="submit">Enter E-mail</button>
+		</div>
+		<br>Hi, I like this product.<br> You might also like this.
+	</form>
+</div>
+}{
+	<script>
+		$().askforloginorsignup();
+	</script>
+}
+</script>
+
+
+
+
+
+<script type="text/html" id="recommendThisProduct">
+@subjectPresentOr(){
+<div  class="padding-small">
+	<div id="standalone_recommendthisproductxloader" class="bgloaderico" style="display: none;"><span class="full-width">&nbsp;</span></div>
+    <button class="close pull-right" type="button" onClick="closeLink()">x</button>
+	<span id="standalone_recommendthisproductxstatus" class="text-center onnextline"></span>
+    <form id="standalone_recommendthisproduct_form" class="onnextline padding-small ng-pristine ng-valid" role="form">
+		<div class="input-group">
+			<input type="hidden" class="product_id" data-bind="{value:id}">
+			<input type="text" placeholder="Enter Name" class="form-control" name="username">
+			<div class="clearfix padding-small"></div>
+			<button class="btn btn-default btn-info" type="submit">Submit User Name</button>
+		</div>
+	</form>
+</div>
+}{
+	<script>
+		$().askforloginorsignup();
+	</script>
+}
+</script>
+
+
+<script>
+	function openFb (id) {
+		window.open(
+				'https://www.facebook.com/sharer.php?u='+ encodeURIComponent(window.location.protocol + '//' + window.location.host + '/product/page/' + id + '?isAjax=false' +')'),'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+		return false;
+	}
+	
+	function openTwitter (id) {
+		window.open(
+				'https://twitter.com/intent/tweet?text=Loves%20%20'+ encodeURIComponent(window.location.protocol + '//' + window.location.host + '/product/page/' + id + '?isAjax=false' +')'),
+					'', 
+					'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+		return false;
+	};
+	
+	function openGooglePlus (id) {
+		window.open(
+				'https://plus.google.com/share?url='+encodeURIComponent(window.location.protocol + '//' + window.location.host+'/product/page/' + id + '?isAjax=false'),'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+		return false;
+	};
+	
+	$('body').on('submit','.standalone_mailthisproduct_form', function(event) {
+		event.preventDefault();
+		$msgbox=$('#standalone_mailthisproductxstatus');$loader=$('#standalone_mailthisproductxloader');
+		$msgbox.show();$loader.show();
+		var retnresp=$().setresponse({ispost:true,url:"/product/mailrecommend/"+ $(this).find('.product_id').val(),argdata:$( this ).serialize(),failans:false});
+		$loader.hide();
+		if(retnresp===false){ $msgbox.html('<label class="alert-danger"><b class="underline">Failed</b></label>');}
+		else{$msgbox.html('<label class="alert-success"> <b>Done!!</b> </label>');}
+		this.reset();
+		$msgbox.hide(2000,function(){$('#standalone_mailthisproduct_container').hide('slow');});
+	});
+	
+	$('body').on('submit','#standalone_recommendthisproduct_form', function(event) {
+		event.preventDefault();
+		$msgbox=$('#standalone_recommendthisproductxstatus');$loader=$('#standalone_recommendthisproductxloader');
+		$msgbox.show();$loader.show();
+		var retnresp=$().setresponse({ispost:true,url:"/product/recommend/"+ $(this).find('.product_id').val() ,argdata:$( this ).serialize(),failans:false});
+		$loader.hide();
+		if(retnresp===false){ $msgbox.html('<label class="alert-danger"><b class="underline">Failed</b></label>');}
+		else{$msgbox.html('<label class="alert-success"> <b>Done!!</b> </label>');}
+		this.reset();
+		$msgbox.hide(2000,function(){$('#standalone_recommendthisproduct_container').hide('slow');});
+	});
+	
+	function closeMailLink() {
+		$('.standalone_mailthisproduct_link').popover('destroy');
+	}
+	
+	function closeLink() {
+		$('.share_prod').popover('destroy');
+		$('.standalone_mailthisproduct_link').popover('destroy');
+		$('.standalone_recommendthisproduct_link').popover('destroy');
+	}
+</script>
+<style>
+	.popover {
+		position: fixed !important;
+	} 
+</style>

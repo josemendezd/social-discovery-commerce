@@ -517,17 +517,48 @@ width:70px;height:70px;vertical-align: baseline!important;
 				}
 				self.loadinitcatg();
 				
+				var $containerShopList;
 				self.loadProd = function(jsonstring) {			
 					ldiv.display();
 					var sentsuccess=true;
 					var posting = $.post( "@routes.Application.ProductQuery",jsonstring,"json");
 					
-					posting.done(function( data ) {								
+					posting.done(function( data ) {	
 						$prodselect=data['prodgrid'];
+						
+						var sizeOfItemsBeforeApplyingIsotope = $('.isotope-item').length;
 						self.prodList.removeAll(self.earlyproductlist);
-						if(!data['hasmore']){self.fr.page=-1;}				
-						$.each($prodselect,function(prindex, prattr){self.prodList.push(ko.mapping.fromJS(prattr));ldiv.stillbusy();});
+								
+						$.each($prodselect,function(prindex, prattr){
+							self.prodList.push(ko.mapping.fromJS(prattr));
+							ldiv.stillbusy();
+						});
+						
 						ldiv.loadcomplete();
+						
+						/* Fire event to show isotope view */
+						if(self.fr.page == 1 ){
+							
+							try {
+								$containerShopList.isotope('destroy');
+							} catch(e) {}
+							
+							$containerShopList = $('.isotope-wrap').isotope({
+								  itemSelector: '.isotope-item',
+								  masonry: {
+							   		columnWidth: 10,
+							        gutterWidth: 10
+							  	  }
+							});
+						} else {
+							$.each($('.isotope-item'), function(index, elem) {
+								if (index >= sizeOfItemsBeforeApplyingIsotope) {
+									$containerShopList.isotope( 'appended', elem );
+								}
+							});	
+						}
+						
+						if(!data['hasmore']){self.fr.page=-1;}		
 					});
 					posting.fail(function( data ) {
 						ldiv.loadcomplete();	

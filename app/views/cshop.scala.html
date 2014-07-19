@@ -216,7 +216,9 @@
 				}
 				self.loadinitcatg();
 				
+				var $container;
 				self.loadProd = function(jsonstring) {
+					
 					console.log(jsonstring);
 					ldiv.display();
 					var sentsuccess=true;
@@ -224,9 +226,32 @@
 					
 					posting.done(function( data ) {								
 						$prodselect=data['prodgrid'];
-						if(!data['hasmore']){self.fr.page=-1;}				
-						$.each($prodselect,function(prindex, prattr){self.prodList.push(ko.mapping.fromJS(prattr));ldiv.stillbusy();});
+						var sizeOfItemsBeforeApplyingIsotope = $('.isotope-item').length;
+						$.each($prodselect,function(prindex, prattr){
+							self.prodList.push(ko.mapping.fromJS(prattr));
+							ldiv.stillbusy();
+						});
 						ldiv.loadcomplete();
+						
+						/* Fire event to show isotope view */
+						if(self.fr.page == 1 ){
+							$container = $('.isotope-wrap').isotope({
+								  itemSelector: '.isotope-item',
+								  masonry: {
+							   		columnWidth: 10,
+							        gutterWidth: 10
+							  	  }
+							});
+						} else {
+							$.each($('.isotope-item'), function(index, elem) {
+								if (index >= sizeOfItemsBeforeApplyingIsotope) {
+									$container.isotope( 'appended', elem );
+								}
+							});	
+						}
+						
+						if(!data['hasmore']){self.fr.page=-1;}	
+						
 					});
 					posting.fail(function( data ) {
 						ldiv.loadcomplete();	
