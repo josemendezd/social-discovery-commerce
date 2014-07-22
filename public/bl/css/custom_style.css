@@ -219,8 +219,7 @@ i.icon-shopping-cart-custom {
 }
 
 .product-image {
-	background-size: 266px; 
+	background-size: cover; 
 	background-repeat : no-repeat; 
-	height: 211px;
-	object-fit: cover;
+	min-height: 211px;
 }

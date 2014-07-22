@@ -15,7 +15,7 @@
 </div>
 
 <script type="text/html" id="popoverBindingTemplate">
-	<button class="close pull-right" type="button" onClick="closeLink()">x</button>
+	<button class="close pull-right" type="button" onClick="closeShareProdLink()">x</button>
     <div class="product-social">
 		<p>
 		 Recommend
@@ -54,9 +54,9 @@
 </script>
 <script type="text/html" id="emailThisProduct">
 @subjectPresentOr(){
-<div  class="padding-small" >
+<div id="standalone_mailthisproduct_container" class="padding-small" >
 	<div id="standalone_mailthisproductxloader" class="bgloaderico" style="display:none;"><span class="full-width">&nbsp;</span></div>
-	<button class="close pull-right" type="button" onClick="closeLink()">x</button>
+	<button class="close pull-right" type="button" onClick="closeMailLink()">x</button>
 	<span id="standalone_mailthisproductxstatus" class="text-center onnextline"></span>
 	<form class="standalone_mailthisproduct_form onnextline padding-small" role="form">
 		<div class="input-group">
@@ -71,6 +71,9 @@
 }{
 	<script>
 		$().askforloginorsignup();
+		$("#signinupModel").on('hidden.bs.modal', function (e) {
+			$('.standalone_mailthisproduct_link').popover('destroy');
+		});
 	</script>
 }
 </script>
@@ -81,9 +84,9 @@
 
 <script type="text/html" id="recommendThisProduct">
 @subjectPresentOr(){
-<div  class="padding-small">
+<div id="standalone_recommendthisproduct_container" class="padding-small">
 	<div id="standalone_recommendthisproductxloader" class="bgloaderico" style="display: none;"><span class="full-width">&nbsp;</span></div>
-    <button class="close pull-right" type="button" onClick="closeLink()">x</button>
+    <button class="close pull-right" type="button" onClick="closeRecommendLink()">x</button>
 	<span id="standalone_recommendthisproductxstatus" class="text-center onnextline"></span>
     <form id="standalone_recommendthisproduct_form" class="onnextline padding-small ng-pristine ng-valid" role="form">
 		<div class="input-group">
@@ -97,6 +100,9 @@
 }{
 	<script>
 		$().askforloginorsignup();
+		$("#signinupModel").on('hidden.bs.modal', function (e) {
+			$('.standalone_recommendthisproduct_link').popover('destroy');
+		});
 	</script>
 }
 </script>
@@ -132,7 +138,8 @@
 		if(retnresp===false){ $msgbox.html('<label class="alert-danger"><b class="underline">Failed</b></label>');}
 		else{$msgbox.html('<label class="alert-success"> <b>Done!!</b> </label>');}
 		this.reset();
-		$msgbox.hide(2000,function(){$('#standalone_mailthisproduct_container').hide('slow');});
+		$msgbox.hide(2000,function(){$('#standalone_mailthisproduct_container').hide('slow');$('.standalone_mailthisproduct_link').popover('destroy');});
+		
 	});
 	
 	$('body').on('submit','#standalone_recommendthisproduct_form', function(event) {
@@ -144,16 +151,18 @@
 		if(retnresp===false){ $msgbox.html('<label class="alert-danger"><b class="underline">Failed</b></label>');}
 		else{$msgbox.html('<label class="alert-success"> <b>Done!!</b> </label>');}
 		this.reset();
-		$msgbox.hide(2000,function(){$('#standalone_recommendthisproduct_container').hide('slow');});
+		$msgbox.hide(2000,function(){$('#standalone_recommendthisproduct_container').hide('slow');$('.standalone_recommendthisproduct_link').popover('destroy');});
 	});
+	
+	function closeShareProdLink() {
+		$('.share_prod').popover('destroy');
+	}
 	
 	function closeMailLink() {
 		$('.standalone_mailthisproduct_link').popover('destroy');
 	}
 	
-	function closeLink() {
-		$('.share_prod').popover('destroy');
-		$('.standalone_mailthisproduct_link').popover('destroy');
+	function closeRecommendLink() {
 		$('.standalone_recommendthisproduct_link').popover('destroy');
 	}
 </script>
