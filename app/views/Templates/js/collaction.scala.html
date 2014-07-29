@@ -2,7 +2,7 @@
 @import be.objectify.deadbolt.java.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 
-	var initclctnode = {newclc:"icon-plus",nct:"hidden",prid:0,x:10000,y:10000,bg:"hidden"};
+	var initclctnode = {newclc:"icon-plus",nct:"hidden",prid:0,x:10000,y:10000,bg:"hidden",position:"absolute"};
 	self.clctnode = ko.mapping.fromJS(initclctnode);
 	self.userclist = ko.observableArray([]);
 	self.currentcn= {host:"",guest:""};
@@ -13,19 +13,24 @@
 			self.userclist.removeAll();
 			//.........................//
 			
-			$(self.currentcn.guest).insertAfter($(self.currentcn.host));
+			//$(self.currentcn.guest).insertAfter($(self.currentcn.host));
 			self.currentcn.host= "";
 			//...................................................//		
 	}
 	
-	self.initcolpop=function(linkobj,cord,zone)
+	self.initcolpop=function(linkobj,cord,zone,position)
 	{
 		if(self.userclist().length>0)
 		{
 			self.cleanup();
 			return false;
 		}
-		ko.mapping.fromJS({newclc:"icon-plus",nct:"hidden",prid:linkobj.id(),x:(cord.pageX),y:(cord.pageY),bg:"bgloaderico"},self.clctnode);
+		
+		if(position == 'fixed') {
+			ko.mapping.fromJS({newclc:"icon-plus",nct:"hidden",prid:linkobj.id(),x:(cord.clientX),y:(cord.clientY),bg:"bgloaderico",position:"fixed"},self.clctnode);
+		} else {
+			ko.mapping.fromJS({newclc:"icon-plus",nct:"hidden",prid:linkobj.id(),x:(20),y:(10),bg:"bgloaderico"},self.clctnode);
+		}
 		//...........................................................
 		self.currentcn.host=self.currentcn.guest.parentNode;
 		$(self.currentcn.guest).insertAfter($(cord.target.parentNode));		

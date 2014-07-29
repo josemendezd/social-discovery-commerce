@@ -119,7 +119,7 @@ GET		/unlike/:prid						controllers.Useract.Hate(prid: Long)
 GET		/want/:prid							controllers.Useract.Want(prid: Long)
 GET		/unwant/:prid						controllers.Useract.Nomore(prid: Long)
 GET		/tried/:prid						controllers.Useract.Own(prid: Long)
-GET		/released/:prid						controllers.Useract.Release(prid: Long)
+GET		/not%20tried/:prid						controllers.Useract.Release(prid: Long)
 GET		/getcollections/:prid				controllers.Useract.GetCollections(prid: Long)
 GET		/follow								controllers.Useract.FollowAct(actioncontxt:Int,obid: Long)
 

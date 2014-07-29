@@ -668,7 +668,7 @@ public class Application extends Controller {
 		localUser.savetocdn(allotedname, fp.getFile());
 		fp.getFile().delete();
 		localUser.setimage(allotedname);
-		return redirect(routes.Application.showprofileimage());
+		return redirect(routes.Application.profile());//redirect(routes.Application.showprofileimage());
 	}
 	
 	@Restrict(@Group(Application.USER_ROLE))

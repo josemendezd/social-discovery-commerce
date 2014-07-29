@@ -12,21 +12,29 @@
         <a href="javascript:void(0);" data-bind="attr:{href:siteurl}"><i class="icon-shopping-cart icon-shopping-cart-custom"></i></a>
       </div>
       <!-- Begin .info-wrap -->
-      <div class="info-wrap-custom">
-        <a href="javascript:void(0);" data-bind="click: $parent.lovestate"><i data-bind="css:lovetext()=='Love'?'icon-heart':'icon-thumbs-down'"></i><span data-bind="text: lovetext()=='Love'?'Like It!':lovetext()"></span></a>
+      <div data-bind="css: lovetext()=='Love' ? 'dropdown info-wrap-custom' : 'dropdown info-wrap-custom active'">
+        <a href="javascript:void(0);" data-bind="click: $parent.lovestate">
+        	<i class="icon-heart" data-bind="css:lovetext()=='Love'?'':'bluebackgnd'">
+        	</i><span data-bind="text: lovetext()=='Love'?'Like it':'Like it'"></span>
+        	<a href="javascript:void(0);" data-toggle="dropdown" role="button"><b class="caret"></b></a>
+        	<ul role="menu" class="dropdown-menu">
+              <li><a href="javascript:void(0);" data-bind="click: $parent.wantstate, clickBubble: false,text: wanttext,css:wanttext()=='Want'?'':'tred-custom'">Want</a></li>
+              <li><a href="javascript:void(0);" data-bind="click: $parent.triedstate, clickBubble: false,text: triedtext(),css:triedtext()=='Tried'?'':'tred-custom'">Tried</a></li>
+              <li><a href="javascript:void(0);" data-bind="click: $parent.collectstatev2, clickBubble: false">Collect</a></li>
+            </ul>
+        </a>
+        
       </div>
+      
       <a data-bind="attr:{href:prlink}" class="btn btn-default view-product-custom">View Product</a>
       <!-- End .info-wrap -->
-      <div class="product-image" data-bind="style: { backgroundImage: 'url(\'' + pic() + '\')'}"></div>
-      
+       <!-- <div class="product-image" data-bind="style: { backgroundImage: 'url(\'' + pic() + '\')'}"></div> -->
+       <img data-bind="attr:{src:pic()}" class="product-image img-responsive"/> 
       <div class="desc_prod_custom">
-        <a data-bind="attr:{href:prlink},text:name"></a>
+        <a data-bind="attr:{href:prlink},text:(name().length > 20 ? name().substring(0, 20) + '..' : name)"></a>
         <br>
-        <p>added by <a data-bind="attr:{href:usrlink,title:discoverer}"><span data-bind="text:discoverer"></span></a>  at <span class="price-background" data-bind="html:cncy()+$().cat(Math.round(cost()),8)"></span></p>
-        <ul class="comments-custom">
-          <li><i class="icon-comment"></i>3</li>
-          <li><i class="icon-heart"></i>14</li>
-        </ul>
+        <p>added by <a data-bind="attr:{href:usrlink,title:discoverer}"><span data-bind="text:(discoverer().length > 10 ? discoverer().substring(0, 10) + '..' : discoverer)"></span></a>  at <span class="price-background" data-bind="text:(store().length > 12 ? store().substring(0, 9)+'..' : store)"></span></p>
+     
       </div>
     </div>
     <div class="clearfix"></div>

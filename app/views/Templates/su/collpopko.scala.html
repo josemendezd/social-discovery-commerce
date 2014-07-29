@@ -6,7 +6,7 @@
 	@*
 	<div data-bind="click:function(){return false;},clickBubble: false,css:'collectioniframe '+clctnode.bg(),style:{top:Math.round((clctnode.y()-$($element.parentNode).offset().top))+'px',left:Math.round((clctnode.x()-$($element.parentNode).offset().left))+'px'}">
 	*@
-	<div class="collectioniframe" data-bind="attr:{nonesense:(function(a){return ' ';})(currentcn.guest=$element)},click:function(){return false;},clickBubble: false,css:clctnode.bg" style="float: left;padding: 5px;min-width: 230px;">	
+	<div class="collectioniframe" data-bind="attr:{nonesense:(function(a){return ' ';})(currentcn.guest=$element)},click:function(){return false;},clickBubble: false,css:clctnode.bg, style:{position:clctnode.position(), top:(clctnode.y() + 20)+'px',left:Math.round((clctnode.x() - 10))+'px'}" style="float: left;padding: 5px;min-width: 250px;height:300px;overflow-y: auto;">
 		<div style="margin-top: 5%;"><a href="javascript:void(0);" data-bind="click:colpopnewclc"><span class="padding-small">New Collection</span><i style="float: right;padding-top: 5px;" data-bind="css:clctnode.newclc"></i></a></div>
 		
 			<form data-bind="css:clctnode.nct" class="form-inline padding-small" onsubmit="return (function(z){ $(z).find('button').trigger('click');return false;})(this)">

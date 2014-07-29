@@ -54,24 +54,18 @@ function ShopView() {
 		}{$().askforloginorsignup();}				 
 	};
 	
+	self.collectstatev2 = function(prod,e){
+		@subjectPresentOr(){
+	 		self.initcolpop(prod,e,"#@divid","fixed");
+	 	}{$().askforloginorsignup();}
+	
+	
+	};
 	
 	self.collectstate = function(prod,e){
 	 @subjectPresentOr(){
-	 	self.initcolpop(prod,e,"#@divid");
-	 	/*
-	 	ko.mapping.fromJS({clcsrc:self.clctnode.clcsrc(),x:(e.pageX),y:(e.pageY),bg:"bgloaderico"},self.clctnode);
-	    var srvrp=$().setresponse({url:prod.cllink(),failans:false,successnode:"collectionlist"});
-	    if(srvrp===false)
-	    { self.clctnode.bg(" lred");return false;}
-	 	self.clctnode.bg("");
-	 	self.clctnode.clcsrc(srvrp);
-	 	//alert("Event Raised: "+'{clcsrc:'+self.clctnode.clcsrc()+',x:'+self.clctnode.x()+',y:'+self.clctnode.y()+',bg:'+self.clctnode.bg()+'}'); 
-		$("body").one("click", "#@divid", function(){		
-			
-			ko.mapping.fromJS(initclctnode,self.clctnode);
-			//alert("Dead: "+'{clcsrc:'+self.clctnode.clcsrc()+',x:'+self.clctnode.x()+',y:'+self.clctnode.y()+',bg:'+self.clctnode.bg()+'}');
-		});
-	 */
+	 	self.initcolpop(prod,e,"#@divid","absolute");
+	 	
 	 
 	 }{$().askforloginorsignup();}
 	
