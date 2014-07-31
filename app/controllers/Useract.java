@@ -1544,17 +1544,6 @@ public class Useract  extends Controller {
 		User user = Application.getLocalUser(session());
 		UserRate ur = UserRate.find.where().eq("user_id", user.id).eq("product_id", product_id).findUnique();
 		ur.delete();
-		
-		int count = UserRate.find.where().eq("product_id", product_id).findRowCount();
-		Product product = Product.find.byId(product_id);
-		
-		if(count != 0) {
-			product.rate = (product.rate - ur.rate)/count ;
-		} else {
-			product.rate = 0.0f;
-		}
-		product.update();
-		
 		return ok();
 	}
 	

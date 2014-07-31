@@ -66,18 +66,13 @@ public class UserRate extends Model {
 	public static void save(User user, Product p, float rate)
 	{
 		UserRate ur = find.where().eq("user_id", user.id).eq("product_id", p.id).findUnique();
-		int count = find.where().eq("product_id", p.id).findRowCount();
 		if (ur == null) {
 			ur = new UserRate();
 			ur.user_id = user.id;
 			ur.product_id = p.id;
 			ur.rate = rate;
-			p.rate = (rate + p.rate)/(count+1);
-			p.update();	
 			ur.save();
 		} else {
-			p.rate = ((rate < ur.rate) ? ((rate - ur.rate)/count + p.rate) : (p.rate - (ur.rate - rate)/count));
-			p.update();	
 			ur.rate = rate;
 			ur.update();
 		}

@@ -286,7 +286,6 @@ create table product (
   gender                    bigint,
   views                     bigint,
   description               varchar(255),
-  rate                      float,
   category_id               bigint,
   alive                     boolean,
   pstore_id                 bigint,

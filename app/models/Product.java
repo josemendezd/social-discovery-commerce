@@ -61,8 +61,6 @@ public class Product extends  Model {
     
     public String description;
     
-    public float rate;
-	
 	@ManyToOne
 	public Category category;
 	
