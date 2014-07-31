@@ -1,87 +1,73 @@
 package controllers;
 
-import static play.data.Form.form;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.channels.FileChannel;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.net.InetAddress;
-import java.util.Map;
-import java.util.Random;
-import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.io.SerializedString;
-
-import models.*;
+import models.Blog;
+import models.BlogComment;
+import models.Category;
+import models.CollectionComment;
+import models.Comment;
+import models.Contributor;
+import models.Eventlog;
+import models.FSearch;
+import models.Product;
+import models.S3File;
+import models.SecurityRole;
+import models.Store;
+import models.User;
+import models.UserCollection;
+import models.UserRate;
 import models.Admin.Contactus;
 import models.Admin.Infopage;
-import models.Notifications.SOFollows;
 import models.Notifications.UserSubscriptions;
-import play.Configuration;
-import play.Logger;
+import net.tanesha.recaptcha.ReCaptchaImpl;
+import net.tanesha.recaptcha.ReCaptchaResponse;
 import play.Play;
 import play.Routes;
-import play.api.mvc.MultipartFormData;
-import play.api.mvc.SimpleResult;
-import play.api.templates.Html;
 import play.data.DynamicForm;
 import play.data.Form;
-import play.data.Form.*;
-import play.mvc.*;
-import play.mvc.BodyParser.Json;
+import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData.FilePart;
-import play.mvc.Http.*;
+import play.mvc.Http.Session;
+import play.mvc.Result;
 import plugins.S3Plugin;
-import providers.MyLoginUsernamePasswordAuthUser;
 import providers.MyUsernamePasswordAuthProvider;
-import providers.MyUsernamePasswordAuthUser;
 import providers.MyUsernamePasswordAuthProvider.MyLogin;
 import providers.MyUsernamePasswordAuthProvider.MySignup;
-
-import views.html.*;
+import providers.MyUsernamePasswordAuthUser;
+import views.html.blogpage;
+import views.html.collectionpage;
+import views.html.contentpage;
+import views.html.cshop;
+import views.html.login;
+import views.html.product;
+import views.html.productjson;
+import views.html.profile;
+import views.html.restricted;
+import views.html.shop;
+import views.html.signup;
+import views.html.storepage;
+import views.html.userprofile;
 import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.avaje.ebean.Ebean;
-import com.avaje.ebean.Expr;
-import com.avaje.ebean.Page;
-import com.avaje.ebean.RawSql;
-import com.avaje.ebean.RawSqlBuilder;
-import com.feth.play.module.mail.Mailer;
-import com.feth.play.module.mail.Mailer.Mail;
-import com.feth.play.module.mail.Mailer.Mail.Body;
+import com.avaje.ebean.SqlQuery;
+import com.avaje.ebean.SqlRow;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.providers.AuthProvider;
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.feth.play.module.pa.user.AuthUser;
-import com.feth.play.module.pa.user.EmailIdentity;
 import com.google.common.base.Strings;
 
 import controllers.SPages.CONTACTUS;
 import controllers.Useract.BLOG_EDIT_FORM;
 import controllers.Useract.PAGE_CONTENT_FORM;
-
-import net.tanesha.recaptcha.ReCaptcha;
-import net.tanesha.recaptcha.ReCaptchaFactory;
-import net.tanesha.recaptcha.ReCaptchaImpl;
-import net.tanesha.recaptcha.ReCaptchaResponse;
 
 
 public class Application extends Controller {
@@ -1008,6 +994,32 @@ public class Application extends Controller {
 		
 	}
 	
+	public static Float getProductRating(Long id) {
+		User user = Application.getLocalUser(session());
+		if(user == null) return null;
+		
+		UserRate ur = UserRate.find.where().eq("user_id", user.id).eq("product_id", id).findUnique();
+		
+		return ur==null ? 0 : ur.rate;
+	}
+	
+	public static Integer getTotalProductRating( Long id) {
+		String sqlQuery = "select sum(rate) as rate_sum from userrate where product_id= :product_id";
+		SqlQuery query = Ebean.createSqlQuery(sqlQuery);
+		query.setParameter("product_id", id);
+		SqlRow row = query.findUnique();
+		
+		return (row.getInteger("rate_sum")== null) ? 0 : row.getInteger("rate_sum");
+	}
+	
+	public static double getAverageProductRating(Long id) {
+		String sqlQuery = "select avg(rate) as rate_avg from userrate where product_id= :product_id";
+		SqlQuery query = Ebean.createSqlQuery(sqlQuery);
+		query.setParameter("product_id", id);
+		SqlRow row = query.findUnique();
+		
+		return (row.getFloat("rate_avg") == null) ? 0 : Math.round(row.getFloat("rate_avg") * 10.0) / 10.0;
+	}
 /*
 	@SuppressWarnings("unused")
 	private static Result ProdQuery() {

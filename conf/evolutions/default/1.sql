@@ -286,6 +286,7 @@ create table product (
   gender                    bigint,
   views                     bigint,
   description               varchar(255),
+  rate                      float,
   category_id               bigint,
   alive                     boolean,
   pstore_id                 bigint,
@@ -449,6 +450,14 @@ create table user_permission (
   id                        bigint not null,
   value                     varchar(255),
   constraint pk_user_permission primary key (id))
+;
+
+create table userrate (
+  id                        bigint not null,
+  user_id                   bigint,
+  product_id                bigint,
+  rate                      float,
+  constraint pk_userrate primary key (id))
 ;
 
 create table usersubscriptions (
@@ -624,6 +633,8 @@ create sequence user_collection_seq;
 create sequence userinfo_seq;
 
 create sequence user_permission_seq;
+
+create sequence userrate_seq;
 
 create sequence usersubscriptions_seq;
 
@@ -896,6 +907,8 @@ drop table if exists userinfo cascade;
 
 drop table if exists user_permission cascade;
 
+drop table if exists userrate cascade;
+
 drop table if exists usersubscriptions cascade;
 
 drop sequence if exists addfailed_seq;
@@ -993,6 +1006,8 @@ drop sequence if exists user_collection_seq;
 drop sequence if exists userinfo_seq;
 
 drop sequence if exists user_permission_seq;
+
+drop sequence if exists userrate_seq;
 
 drop sequence if exists usersubscriptions_seq;
 

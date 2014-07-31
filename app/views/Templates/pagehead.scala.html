@@ -18,13 +18,18 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" type="text/css" href="@routes.Assets.at("bl/css/bigvideo.css")">
     <link rel="stylesheet" href="@routes.Assets.at("bl/css/bootstrap.css")">
-
+    
+    <!-- star-rating -->
+	<link href="@routes.Assets.at("css/star-rating.css")"  rel="stylesheet" />
+    
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="@routes.Assets.at("bl/css/style.css")">
     <link rel="stylesheet" href="@routes.Assets.at("bl/css/custom_style.css")">
     
     <link rel="stylesheet" href="@routes.Assets.at("bl/css/font-awesome.css")">
     <link rel="stylesheet" href="@routes.Assets.at("css/colorbox.css")" /> 
+    <link rel="stylesheet" href="@routes.Assets.at("bl/css/nsPopover.css")" />
+    
     @**<link media="screen" type="text/css" rel="stylesheet" href="@routes.Assets.at("style.css")" />**@
     
 	<!--[if IE 7]>
@@ -42,7 +47,11 @@
 	<script src="@routes.Assets.at("js/knockout.mapping.js")"></script>
 	<script src="@routes.Assets.at("bl/js/jquery-ui-1.10.3.custom.min.js")"></script>
     <script src="@routes.Assets.at("bl/js/bootstrap.min.js")"></script>
-
+	
+	<!-- star-rating -->
+	<script src="@routes.Assets.at("js/star-rating.js")" type="text/javascript"></script>
+	
+	<!-- Angular-lib -->
     <script src="@routes.Assets.at("bl/js/angular.min.js")"></script> 
     <script src="@routes.Assets.at("bl/js/ui-bootstrap.min.js")"></script>
 	<script src="@routes.Assets.at("bl/js/ui-bootstrap-tpls.min.js")"></script>
@@ -60,6 +69,7 @@
 	<script src="@routes.Assets.at("js/isotope.pkgd.min.js")"></script> 
 	<script src="@routes.Assets.at("bl/js/knockout-bootstrap.min.js")"></script> 
 	
+	<script src="@routes.Assets.at("bl/js/nsPopover.js")"></script>
 	@appendcontent 
 
 	<script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===e.location.protocol?"https:":"http:")+'//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f);b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==

@@ -1,0 +1,47 @@
+@(productID: Long)
+
+console.log($("#@(productID)_ratting").val());
+if($("#@(productID)_ratting").val() == 0 ) {
+	$("#remove-ratings").css('display', 'none');
+	$("#ratingLabel").html('Did you like this Product? Rate now !&nbsp&nbsp');
+} else {
+	$("#ratingLabel").html('My Rating:&nbsp&nbsp');
+}
+
+$("#@(productID)_ratting").on("rating.change", function(event, value, caption) {
+       $.ajax({
+						type: "POST",
+						url: "/rating/"+@(productID),
+						data: { value : value },
+						success: function(data){
+							$("#ratingLabel").html('My Rating:&nbsp&nbsp');
+							$rating = $("#remove-ratings");
+							$rating.css('display', 'block');							
+						}
+				});
+});
+
+$(".details").click( function() {
+	$this = $(this);
+	$.ajax({
+			type: "GET",
+			url: "/get-rating-details/"+ $this.attr("productId"),
+			success: function(result){
+				console.log(result);
+			}
+	});
+});
+
+$("#remove-ratings").on("click" , function(productId) {
+	$this = $(this);
+	$.ajax({
+			type: "DELETE",
+			url: "/remove-rating/"+ $(this).attr("productId"),
+			success: function(data){
+				var pid = $this.attr("productId")
+				$this.css('display', 'none');
+				$("#" + pid + "_ratting").rating('clear');	
+				$("#ratingLabel").html('Did you like this Product? Rate now!&nbsp&nbsp');					
+			}
+	});
+})

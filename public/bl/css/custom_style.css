@@ -256,3 +256,18 @@ i.icon-shopping-cart-custom {
 .featured-product-custom .info-wrap-custom .tred-custom {
 	color: rgb(221, 75, 57) !important;
 }
+
+.rating-label {
+	font-size: 13px;
+}
+
+.popover-div {
+	height: 63px;
+	width: 63.79%;
+	padding-top: 18px;
+}
+
+.rating-details-overview {
+	font-size: 14px;
+	padding: 4px;
+}

@@ -2,6 +2,8 @@
 
 angular.module('bl-master', [
   'ui.bootstrap.modal',
-  'ui.bootstrap.tpls'
+  'ui.bootstrap.tpls',
+  'nsPopover',
+  'ui.bootstrap.progressbar'
 ]);
 

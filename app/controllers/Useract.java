@@ -29,6 +29,7 @@ import models.S3File;
 import models.Store;
 import models.User;
 import models.UserCollection;
+import models.UserRate;
 import models.Admin.Feedback;
 import models.Admin.Infopage;
 import models.Admin.Reportabuse;
@@ -58,11 +59,16 @@ import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import plugins.S3Plugin;
 import scala.concurrent.ExecutionContext;
+import viewmodel.PRDetails;
+import viewmodel.ProductRateDetail;
 import views.html.productjson;
 import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 
+import com.avaje.ebean.Ebean;
+import com.avaje.ebean.SqlQuery;
+import com.avaje.ebean.SqlRow;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.repackaged.com.google.common.base.Strings;
@@ -1517,8 +1523,72 @@ public class Useract  extends Controller {
 		for(Product px: pxc)
 			statb.append(String.format("<li><a href=\"love?prid=%s\">%s</a></li>",px.id,px.productname));				
 		statb.append("</ul></div>");
-				return ok(		views.html.main.render("EntryTest","",Html.apply(statb.toString())));
+				return ok(views.html.main.render("EntryTest","",Html.apply(statb.toString())));
 	}
 	
 
+	public static Result rateProduct(Long product_id) {
+		
+		User user = Application.getLocalUser(session());
+		
+		DynamicForm form = form().bindFromRequest();
+		String value = form.get("value");
+		
+		Product product = Product.find.byId(product_id);
+		
+		UserRate.save(user, product, Float.parseFloat(value));
+		return ok(value);
+	}
+	
+	public static Result removeRatings(Long product_id) {
+		User user = Application.getLocalUser(session());
+		UserRate ur = UserRate.find.where().eq("user_id", user.id).eq("product_id", product_id).findUnique();
+		ur.delete();
+		
+		int count = UserRate.find.where().eq("product_id", product_id).findRowCount();
+		Product product = Product.find.byId(product_id);
+		
+		if(count != 0) {
+			product.rate = (product.rate - ur.rate)/count ;
+		} else {
+			product.rate = 0.0f;
+		}
+		product.update();
+		
+		return ok();
+	}
+	
+	public static Result getProductRatingDetails(Long product_id) {
+		String sqlQuery = "select rate,count(rate) as count from userrate where product_id= :product_id group by rate";
+		SqlQuery query = Ebean.createSqlQuery(sqlQuery);
+		query.setParameter("product_id", product_id);
+		List<SqlRow> rows = query.findList();
+		
+		List<ProductRateDetail> details = new ArrayList<>();
+		Integer maxValue = 0;
+		
+		for( Integer i=1; i <= 5; i++) {
+			boolean isFilled = false;
+			
+			for( SqlRow row : rows ) {
+				if(i == row.getInteger("rate")) {
+					ProductRateDetail pd = new ProductRateDetail(row.getInteger("rate"), row.getInteger("count"));
+					details.add(pd);
+					
+					if( row.getInteger("count") > maxValue) {
+						maxValue = row.getInteger("count");
+					}
+					isFilled = true;
+					break;
+				}
+			}
+			if(isFilled == false) {
+				ProductRateDetail pd = new ProductRateDetail(i, 0);
+				details.add(pd);
+			}
+		}
+		
+		PRDetails prDetails = new PRDetails(details, maxValue);
+		return ok(Json.toJson(prDetails));
+	}
 }

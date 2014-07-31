@@ -38,10 +38,14 @@ blmaster.controller('CollectionImageSelectionController',function($scope, $http,
 			
 		});
 	}
-	
-	
-	
-	
+});
+
+blmaster.controller('PopoverController',function($scope, $http){
+	$scope.getDetails = function(pid) {
+		$http.get('/get-rating-details/'+pid).success( function(data, status) {
+			$scope.prdetails = data;
+		});
+	}
 });
 
 blmaster.controller('ApplicationController',function($scope, $http){

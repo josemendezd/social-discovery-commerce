@@ -211,7 +211,7 @@ margin-right:5%;
 							}
 						</div>
 						}
-					<div class="pull-left" style="position: relative;top:0;left:0;">
+					<div class="pull-left" style="position: relative;top:0;left:0;width: 100%;">
 					<ul class="list-inline" data-bind="with: presentprod">
 						<li><a href="javascript:void(0);" data-bind="click: $parent.lovestate,text: lovetext,css:lovetext()=='Love'?'btn btn-default':'btn btn-warning brectangle' "></a></li>
 						<li><a href="javascript:void(0);" data-bind="click: $parent.wantstate, clickBubble: false,text: wanttext,css:wanttext()=='Want'?'btn btn-default':'btn btn-warning brectangle' "></a></li>
@@ -219,7 +219,20 @@ margin-right:5%;
 		                <li><a class="btn btn-default" href="javascript:void(0);" data-bind="click: $parent.collectstate, clickBubble: false">Collect</a></li>
 		                @*<li><a class="label label-inverse spacecreater-vertical-small" href="@routes.Application.PageRedirection(productx.siteurl)">Visit the Page</a></li>*@
 		            </ul>
+		            
 		            </div>
+		            @subjectPresent(){
+		            <div style="width: 100%;float: left;" data-bind="with: presentprod">
+		               <label id="ratingLabel" style="float:left;margin-top: 5px;padding-left: 10px;">Did you like this Product? Rate now!&nbsp&nbsp</label>	
+					   <input id="@(productx.id)_ratting" class="rating"  value="@Application.getProductRating(productx.id)"  data-show-clear="false" data-show-caption="false" type="number" data-min="0" data-max="5" data-size="xs" data-step="1"  data-rtl="false"></input>
+					   
+					   <div class="btn-sm">
+							<a id="remove-ratings" class="gray underline" href="javascript:void(0)" productId="@(productx.id)">
+								Remove Rating
+							</a>					   
+					   </div>
+		            </div>
+		            }
 		            @Templates.su.collpopko(){ }            
 				</div>
               
@@ -265,6 +278,41 @@ margin-right:5%;
 				  <a href="#overview" data-toggle="tab">
 					Overview
 				  </a>
+				</li>
+				<li ng-controller="PopoverController" class="popover-div">
+				  @if(Application.getTotalProductRating(productx.id) == 0) {
+				  		<span class="rating-details-overview">No ratings yet..</span>
+				  }
+				  
+				  @if(Application.getTotalProductRating(productx.id) != 0) {
+				  	  <input class="rating"  value="@Application.getAverageProductRating(productx.id).toString().split('.')(0)"  
+					  	data-show-clear="false" data-disabled="true" data-show-caption="false" type="number" data-min="0" 
+					  	data-max="5" data-size="xs" data-readonly="true" data-step="1" data-rtl="false"></input>
+					  <span class="pull-left rating-details-overview">@Application.getAverageProductRating(productx.id)</span>
+					  <script type="text/ng-template" id="popover">
+						<div class="row">
+							<a class="col-sm-offset-9" href="javascript:void(0)" ng-click="hidePopover()">Close</a>
+						</div>
+						<div style="width:400px; padding:2%;">
+							<p style="font-size:17px;">AVERAGE RATING: <span>@Application.getAverageProductRating(productx.id)/5</span></p>
+							<div class="row" ng-repeat="dt in prdetails.details">
+								<div class="col-sm-2"><label class="rating-label">{{dt.rateNo}} star</label></div>
+								<progressbar class="progress-striped" value="dt.rateCount" max="prdetails.maxRating" type="warning" style="width: 40%; float:left; height:11px;margin-top: 9px;margin-bottom: 1px;"></progressbar>
+								<div class="col-sm-2"><label class="rating-label">({{dt.rateCount}})</label></div>
+							</div>
+						</div>
+					  </script>
+					  <span ng-click="getDetails(@productx.id)" ns-popover
+						  ns-popover-template="popover"
+						  ns-popover-trigger="click"
+						  ns-popover-placement="bottom"
+						  ns-popover-hide-on-click="false" 
+						  ns-popover-timeout="20" 
+						  class="rating-details-overview glyphicon glyphicon-align-left"></span>
+				  
+				  	 <span class="rating-details-overview">@Application.getTotalProductRating(productx.id) ratings</span>
+				  }
+				  
 				</li>
 				@*
 				<li>
@@ -665,7 +713,9 @@ margin-right:5%;
 		@Templates.su.jready{
 		
 		@Templates.js.add_cart_action(productx.id)
-			
+		
+		@Templates.js.ratting_action(productx.id)	
+		
 			function resizecbx()
 			{
 				try{

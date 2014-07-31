@@ -251,4 +251,8 @@ POST 	/cart/checkout/login			controllers.Carts.userLogin()
 POST 	/cart/checkout/transaction		controllers.Carts.cardTransctionStatus()
 GET		/cart/count						controllers.Carts.itemCount()
 
+# Rating 
 
+POST	/rating/:product_id				controllers.Useract.rateProduct(product_id : Long)	
+DELETE  /remove-rating/:product_id		controllers.Useract.removeRatings(product_id : Long)	
+GET		/get-rating-details/:product_id  controllers.Useract.getProductRatingDetails(product_id : Long)
