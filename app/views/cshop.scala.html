@@ -235,6 +235,9 @@
 						
 						/* Fire event to show isotope view */
 						if(self.fr.page == 1 ){
+							try {
+								$container.isotope('destroy');
+							} catch(e) {}
 							$container = $('.isotope-wrap').isotope({
 								  itemSelector: '.isotope-item',
 								  masonry: {
