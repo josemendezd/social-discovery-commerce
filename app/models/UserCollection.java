@@ -5,6 +5,7 @@ import play.data.format.Formats;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
 import play.db.ebean.Model.Finder;
+import plugins.S3Plugin;
 
 import javax.persistence.*;
 
@@ -27,6 +28,7 @@ import controllers.DInitial;
 import controllers.GHelp;
 import controllers.routes;
 
+import java.io.File;
 import java.util.*;
 
 @Entity
@@ -257,6 +259,34 @@ public class UserCollection extends  Model {
 	{
 		this.coverimage=imageaddress;
 		this.save();
+	}
+	
+	public void savetocdn(String allotedname,File tempstorage)
+	{
+		File ActualSize=S3File.getimageresized(tempstorage, allotedname,DInitial.IMAGESTORESIZE.AS_IT_IS.filestate, DInitial.IMAGESTORESIZE.AS_IT_IS.Identifier, DInitial.IMAGESTORESIZE.AS_IT_IS.width, DInitial.IMAGESTORESIZE.AS_IT_IS.height),
+				SmallSize=S3File.getimageresized(tempstorage, allotedname, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.filestate, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.Identifier, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.width, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.height);
+		S3File.createfile(S3Plugin.s3Bucket, UserCollection.class.getSimpleName(), allotedname, DInitial.IMAGESTORESIZE.AS_IT_IS.filestate, id, ActualSize);
+		S3File.createfile(S3Plugin.s3Bucket, UserCollection.class.getSimpleName(), allotedname, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.filestate, id,SmallSize );
+		ActualSize.delete();
+		SmallSize.delete();
+		
+		
+		//Ebean.createSqlUpdate("UPDATE User_Collection SET coverimage =:LOC  WHERE ID = :PID").setParameter("LOC", this.getcoverimagename(true)).setParameter("PID", this.id).execute();
+	}
+	
+	public String getcoverimagename(boolean ext)
+	{
+		return "collectionpic"+id+(ext?".png":"");
+	}
+	
+	public String getcoverimage()
+	{
+		return S3File.getUrl(UserCollection.class.getSimpleName(), getcoverimagename(true), DInitial.IMAGESTORESIZE.AS_IT_IS.filestate);
+	}
+	
+	public String getcoverimageThumb()
+	{
+		return S3File.getUrl(UserCollection.class.getSimpleName(), getcoverimagename(true), DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.filestate);
 	}
 	
 }

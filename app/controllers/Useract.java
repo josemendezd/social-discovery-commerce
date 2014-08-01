@@ -871,12 +871,26 @@ public class Useract  extends Controller {
 		UserCollection uc= UserCollection.find.byId(id);
 		if(uc==null)
 			return badRequest();
-		String allotedname="collectionpic"+uc.id;
-    	String ImageName=GHelp.uploadImage(allotedname, "custom",COLLECTION_GALLERY_UPLOADS, request().body().asMultipartFormData(),DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.Identifier);
-		if(ImageName==null)
-			return Application.CollectionPage(id, false);
-		String url = routes.Useract.GetImage("collection", ImageName).absoluteURL(request());
-		uc.SetCoverImage(url);
+		
+		FilePart fp=request().body().asMultipartFormData().getFile("picture");
+		if(fp.getFile().length()>DInitial.IMAGE_UPLOAD_FILE_SIZE_LIMIT)
+		{
+			flash(Application.FLASH_ERROR_KEY, "File exceeds size limit.");
+			return redirect(routes.Application.showprofileimage());
+		}
+		
+		if(!DInitial.CONTENT_TYPES.isspecifiedcontenttype( fp.getContentType(),DInitial.CONTENT_TYPES.IMAGE_GPJ))
+		{
+			flash(Application.FLASH_ERROR_KEY,"Unknown File Type!! Please use JPG,PNG");
+			return redirect(routes.Application.showprofileimage()); 
+		}
+		
+		String allotedname=uc.getcoverimagename(true);
+		
+		uc.savetocdn(allotedname, fp.getFile());
+		fp.getFile().delete();
+		uc.SetCoverImage(uc.getcoverimageThumb());
+		
 		return redirect(routes.Application.CollectionPage(id, false));
 		
 	}
@@ -885,21 +899,17 @@ public class Useract  extends Controller {
 	public static Result CopyCollectionCoverImage(long id, long withId) {
 		UserCollection uc = UserCollection.find.byId(id);
 		UserCollection withUC = UserCollection.find.byId(withId);
+		
 		if(withUC == null || uc == null) {
 			return badRequest();
 		}
-		String destFilePath = COLLECTION_GALLERY_UPLOADS+"collectionpic" + uc.id;
-		String sourceFilePath = withUC.coverimage;
-		sourceFilePath = COLLECTION_GALLERY_UPLOADS + sourceFilePath.substring(sourceFilePath.lastIndexOf("/") + 1);
-		String ImageName=GHelp.copyImage(sourceFilePath, destFilePath);
-    	//ImageAddress = ImageAddress.replace("//", "/");
-    	//ImageAddress = ImageAddress.replace("http:/", "http://");
-		if(ImageName==null) {
-			return status(601, "Unable to Save image.Please report to Support.");
-		}
-		String url = routes.Useract.GetImage("collection", ImageName).absoluteURL(request());
-		uc.SetCoverImage(url);
-		return ok(url);
+		File fp =GHelp.downloadandsaveimage(withUC.getcoverimage(), uc.getcoverimagename(false)) ;
+		
+		uc.savetocdn(uc.getcoverimagename(true), fp);
+		fp.delete();
+		
+		uc.SetCoverImage(uc.getcoverimageThumb());
+		return ok(uc.getcoverimage());
 		
 	}
 	
