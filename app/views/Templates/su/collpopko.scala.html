@@ -6,8 +6,8 @@
 	@*
 	<div data-bind="click:function(){return false;},clickBubble: false,css:'collectioniframe '+clctnode.bg(),style:{top:Math.round((clctnode.y()-$($element.parentNode).offset().top))+'px',left:Math.round((clctnode.x()-$($element.parentNode).offset().left))+'px'}">
 	*@
-	<div class="collectioniframe" data-bind="attr:{nonesense:(function(a){return ' ';})(currentcn.guest=$element)},click:function(){return false;},clickBubble: false,css:clctnode.bg, style:{position:clctnode.position(), top:(clctnode.y() + 20)+'px',left:Math.round((clctnode.x() - 10))+'px'}" style="float: left;padding: 5px;min-width: 250px;height:300px;overflow-y: auto;">
-		<div style="margin-top: 5%;"><a href="javascript:void(0);" data-bind="click:colpopnewclc"><span class="padding-small">New Collection</span><i style="float: right;padding-top: 5px;" data-bind="css:clctnode.newclc"></i></a></div>
+	<div class="collectioniframe" data-bind="attr:{nonesense:(function(a){return ' ';})(currentcn.guest=$element)},click:function(){return false;},clickBubble: false,css:clctnode.bg, style:{position:clctnode.position(), top:(clctnode.y() + 20)+'px',left:Math.round((clctnode.x() - 10))+'px'}" style="float: left;padding: 5px;min-width: 261px;height:300px;overflow-y: auto;">
+		<div style="margin-top: 5%;"><a href="javascript:void(0);" data-bind="click:colpopnewclc"><span class="padding-small">New Collection</span><img src="/assets/bl/images/gift-green-add.png" alt="add"  style="float: right;padding-top: 5px;"></a></div>
 		
 			<form data-bind="css:clctnode.nct" class="form-inline padding-small" onsubmit="return (function(z){ $(z).find('button').trigger('click');return false;})(this)">
 					<div class="input-group">
@@ -19,7 +19,15 @@
 			</form>
 			
 		<ul data-bind="foreach: userclist, visible: userclist().length > 0" class="list-unstyled text-left underline">			
-			<li><div style="float:left;width: 100%;margin-bottom: 5%;"><span style="margin-left: 3%;width: 74%;float: left;" class="margin-small black" data-bind="text:f2"></span><a href="javascript:void(0);"  style="float: right;" data-bind="click:$root.toggleslctn"><i style="padding-top: 5px;float: left;" data-bind="css:f3()?'icon-minus-sign':'icon-plus-sign tred'" class="icon-ok"></i><p style="float: right;" data-bind="text:f3()?'Remove':'Add'"></p></a></div></li>
+			<li>
+				<div style="float:left;width: 100%;margin-bottom: 5%;">
+					<span style="margin-left: 3%;width: 65%;float: left;" class="margin-small black" data-bind="text:f2"></span>
+					<a href="javascript:void(0);"  style="float: right;" data-bind="click:$root.toggleslctn">
+						<img data-bind="attr: { src:f3()? '/assets/bl/images/gift-gray.png' : '/assets/bl/images/gift-blue.png'}" class="icon-ok" style="float: left;padding-top: 5px;width: 13px;">
+						<p style="float: right;padding-left: 4px;padding-top: 2px;" data-bind="style: { color:f3()? '#6a6b6e' : '#428bca' }, text:f3()?'Remove':'Add'"></p>
+					</a>
+				</div>
+			</li>
 		</ul>
 		<div class="text-center onnextline" data-bind="visible:clctnode.bg()=='lred'">FAILED!!!</div>
 	</div>
