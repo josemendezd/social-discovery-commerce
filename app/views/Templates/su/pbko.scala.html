@@ -15,7 +15,8 @@
       <div data-bind="css: lovetext()=='Love' ? 'dropdown info-wrap-custom' : 'dropdown info-wrap-custom active'">
         <a href="javascript:void(0);" data-bind="click: $parent.lovestate">
         	<i class="icon-heart" data-bind="css:lovetext()=='Love'?'':'bluebackgnd'">
-        	</i><span data-bind="text: lovetext()=='Love'?'Like it':'Like it'"></span>
+        	</i>
+        	<span class="status" data-bind="text: lovetext()=='Love'?'Like it':'Unlike'"></span>
         	<a href="javascript:void(0);" data-toggle="dropdown" role="button"><b class="caret"></b></a>
         	<ul role="menu" class="dropdown-menu">
               <li><a href="javascript:void(0);" data-bind="click: $parent.wantstate, clickBubble: false,text: wanttext,css:wanttext()=='Want'?'':'tred-custom'">Want</a></li>

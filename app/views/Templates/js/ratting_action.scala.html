@@ -3,7 +3,7 @@
 console.log($("#@(productID)_ratting").val());
 if($("#@(productID)_ratting").val() == 0 ) {
 	$("#remove-ratings").css('display', 'none');
-	$("#ratingLabel").html('Did you like this Product? Rate now !&nbsp&nbsp');
+	$("#ratingLabel").html('Did you like this Product? Rate it now !&nbsp&nbsp');
 } else {
 	$("#ratingLabel").html('My Rating:&nbsp&nbsp');
 }
@@ -41,7 +41,7 @@ $("#remove-ratings").on("click" , function(productId) {
 				var pid = $this.attr("productId")
 				$this.css('display', 'none');
 				$("#" + pid + "_ratting").rating('clear');	
-				$("#ratingLabel").html('Did you like this Product? Rate now!&nbsp&nbsp');					
+				$("#ratingLabel").html('Did you like this Product? Rate it now!&nbsp&nbsp');					
 			}
 	});
 })

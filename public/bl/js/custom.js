@@ -61,7 +61,12 @@
     };
     $.fn.apld = function ($trg) {
         if ($trg.has('img').length == 0) {
-            $trg.prepend('<img style="margin-right:5px;" src="/assets/img/sl.gif"/>');
+        	if($trg.hasClass('status')){
+        		$trg.prepend('<img style="margin-right:5px;" src="/assets/img/sl.gif"/>');
+        	} else{
+        		var element = $trg.siblings('.status');
+        		element.prepend('<img style="margin-right:5px;" src="/assets/img/sl.gif"/>');
+        	}
         }
     };
     $.fn.msgbox = function (c, t) {

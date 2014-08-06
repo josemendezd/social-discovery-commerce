@@ -1004,12 +1004,12 @@ public class Application extends Controller {
 	}
 	
 	public static Integer getTotalProductRating( Long id) {
-		String sqlQuery = "select sum(rate) as rate_sum from userrate where product_id= :product_id";
+		String sqlQuery = "select count(*) as count from userrate where product_id= :product_id";
 		SqlQuery query = Ebean.createSqlQuery(sqlQuery);
 		query.setParameter("product_id", id);
 		SqlRow row = query.findUnique();
 		
-		return (row.getInteger("rate_sum")== null) ? 0 : row.getInteger("rate_sum");
+		return (row.getInteger("count")== null) ? 0 : row.getInteger("count");
 	}
 	
 	public static double getAverageProductRating(Long id) {
