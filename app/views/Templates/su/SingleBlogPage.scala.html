@@ -1,18 +1,21 @@
 @(blg:Blog,isgrouped:Boolean=false,blgcnt:Int=0,editor:Boolean=false,likedByMe:Boolean=false)
 @import be.objectify.deadbolt.java.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
-
-<head>
-	<meta property="og:title" content="@blg.title"/>
-	<meta property="og:description" content="@Html(blg.content)"/>
-	<meta property="article:author" content="@blg.author.user.name"/>
-	<meta property="og:url" content="/blog/page/@blg.id"/>
-	<meta property="og:updated_time" content="@blg.postedAt"/>
-	<meta property="og:type" content="Article"/>
-	@for(img <- blg.getImages()) {
-    	<meta property="og:image" content="@img.getURL()"/>
-	} 
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta property="og:title" content="@blg.title"/>
+		<meta property="og:type" content="article"/>
+		<meta property="og:description" content="@Html(blg.content)"/>
+		<meta property="og:url" content="@routes.Application.GetBlogPage(@blg.id).absoluteURL()"/>
+		<meta property="og:updated_time" content="@blg.postedAt"/>
+		
+		@for(img <- blg.getImages()) {
+			@if(img.isVideo==false){
+				<meta property="og:image" content="@img.getURL()"/>			
+			}
+		} 
+	</head>
 
 @pst(isadmin:Boolean)={
 	@if(isadmin){
@@ -554,3 +557,4 @@
 	}
 
 }		
+</html>
