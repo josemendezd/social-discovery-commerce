@@ -8,6 +8,7 @@ import java.util.List;
 
 import models.Blog;
 import models.BlogComment;
+import models.BlogLikes;
 import models.Category;
 import models.CollectionComment;
 import models.Comment;
