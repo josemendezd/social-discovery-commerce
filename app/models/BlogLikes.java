@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -32,6 +34,40 @@ public class BlogLikes extends Model {
 	 */
 	public Number like = 0;
 	
+	public static void updateLike(Blog bl, Contributor usr){
+		BlogLikes unqB = BlogLikes.find.where().and(Expr.eq("blog",bl), Expr.eq("author", usr)).findUnique();
+		if(unqB==null){
+			unqB = new BlogLikes();
+			unqB.blog = bl;
+			unqB.author = usr;
+			unqB.like = 1;
+			unqB.save();
+		}else{
+			//unqB.like = -1;
+			//unqB.update();
+			unqB.delete();
+		}
+	}
+	
+	public static Boolean blogLikedByMe(Blog bl, Contributor usr){
+		BlogLikes unqB = BlogLikes.find.where().and(Expr.eq("blog",bl), Expr.eq("author", usr)).findUnique();
+		if(unqB==null)
+			return false;
+		else
+			return true;
+	}
+	
+	public static void removeLikesForBlog(Blog blg){
+		List<BlogLikes> lis = BlogLikes.find.where().eq("blog", blg).findList();
+		for(BlogLikes lik:lis){
+			lik.delete();
+		}
+	}
+	
+	
+	/**
+	 * Like or dislike blog
+	 */
 	public static void rateBlog(Blog bl, Contributor usr, int lk){
 		BlogLikes unqB = BlogLikes.find.where().and(Expr.eq("blog",bl), Expr.eq("author", usr)).findUnique();
 		if(unqB==null){

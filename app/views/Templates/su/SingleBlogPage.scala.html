@@ -1,4 +1,4 @@
-@(blg:Blog,isgrouped:Boolean=false,blgcnt:Int=0)
+@(blg:Blog,isgrouped:Boolean=false,blgcnt:Int=0,editor:Boolean=false,likedByMe:Boolean=false)
 @import be.objectify.deadbolt.java.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 
@@ -23,15 +23,16 @@
 
 
     <!-- Begin .container -->
-    <div class="container blog" data-sticky_parent>
+    <div class="container blog" >
       <!-- Begin .row -->
-      <div class="row">
+      <div class="row" data-sticky_parent>
 		
         <!-- Begin blog-post -->
         <div class="blog-post"  id="Blog@{blg.id}" >
           <!-- Begin .col-lg-12 -->
-          <div class="col-lg-4 col-12 col-md-4 col-xs-12 col-sm-12" data-sticky_column>
+          <div id="txt@{blg.id}" class="col-lg-5 col-12 col-md-4 col-xs-12 col-sm-12" data-sticky_column>
             <!-- Begin .box -->
+           
             <div class="box">
                             
 		               <p class="meta pull-left">   
@@ -40,6 +41,7 @@
 		                  		 <img src="@blg.author.user.getusersimagesmall()" class="user-thumb img-responsive" alt="@blg.author.user.name" title="@blg.author.user.name" style="width: 70px;height: 70px;"> 
 		                  	</a>
 		                </p>
+		                
 		            
               <ul class="meta pull-right">
                 <li>
@@ -56,13 +58,18 @@
                 <li class="date" style="font-size: 12px;">@blg.postedAt</li>
                 <li class="comm-meta" style="font-size: 12px;"><a href="#blog_comment_@{blg.id}">@BlogComment.CommentCount(blg)</a> comments</li>
                 
+                
               </ul>
                <div class="clearfix">
               		</div>
               		<!-- like/dislike buttons -->
-              	<div class="btn-group btn-group-xs pull-left">
-                		<button type="button" class="btn btn-primary" onclick="likearticle()">+</button>
-                		<button type="button" class="btn btn-danger" onclick="dislikearticle()">-</button>
+              	<div class="pull-left">
+              			
+              				<button id="likeBtn" type="button" style="@if(likedByMe==true){display:none;}width:70px;" class="btn btn-danger btn-xs" onclick="likearticle()">Like</button>
+              				<button id="dislikeBtn" type="button" style="@if(likedByMe==false){display:none;}width:70px;" class="btn btn-xs" onclick="dislikearticle()">Dislike</button>
+              			
+                		@*<button type="button" class="btn btn-primary" onclick="likearticle()">+</button>
+                		<button type="button" class="btn btn-danger" onclick="dislikearticle()">-</button>*@
                 	</div>
               <!-- Begin .social -->
               <ul class="social" style="margin-bottom: 15px;">
@@ -82,11 +89,24 @@
             </div>
             <!-- end .box -->
             
+             @if(isadmin || editor){ 
+                 
+                 <div class="box">
+                	
+		                <a class="gray btn-small" href="@routes.Application.GetEditBlog(blg.id)"><i class="icon-edit"></i>Edit blog</a>
+		                <a class="blogdeletebutton gray btn-small underline" href="javascript:void(0);" data-link="@routes.Useract.RemoveBlog(blg.id)"><i class="icon-remove"></i>Delete</a>
+		                
+		                <div class="clearfix">
+              		</div>
+               </div>
+                
+                }
             
              <!-- Begin .title-wrap -->
             <div class="title-wrap">
               <h3>
                 <a title="@blg.title" href="@routes.Application.GetBlogPage(blg.id)">@blg.title</a>
+                <meta property="og:title" content="@blg.title"/>
               </h3>
             </div>
             <!-- End .title-wrap -->
@@ -99,9 +119,10 @@
             <!-- End post-image -->
             
             <!-- Begin post-excerpt -->
-            <div class="post-excerpt">
+            <div class="post-excerpt" style="height: 500px;">
               @Html(blg.content)
             </div>
+            <meta property="og:description" content="@blg.content"/>
             <!-- End post-excerpt -->
             
             
@@ -114,11 +135,12 @@
               <div class="clearfix"></div>
               <!-- begin .post-comment-form -->
               <div class="post-comment-form">
-                <form role="form" data-bind="submit:postcomment,with:sfm">
+                <form role="form" action="@routes.Useract.AddBlogComment" method="post" >
+                	<input type="hidden" value="@blg.id" name="blog" />
                   <div class="form-group">
                     <label for="blogcomment">Post a comment</label>
                     <div class="clearfix"></div>
-                    <textarea name="" id="" cols="20" rows="3" style="width:80%;"  data-bind="value: cmnttxt"></textarea>
+                    <textarea name="cmnttxt" id="" cols="20" rows="3" style="width:80%;"  data-bind="value: cmnttxt"></textarea>
                   </div>                  
                   <button type="submit" class="btn btn-default orange">Send</button>
                 </form>
@@ -132,7 +154,7 @@
           
            @if(blg.getImages()!=null){
           <!-- Begin .col-lg-8 images...-->
-          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-12" style="margin-bottom: 50px;" data-sticky_column>
+          <div id="imgs@{blg.id}" class="col-lg-6 col-md-8 col-sm-12 col-xs-12 col-12" style="margin-bottom: 150px; height: 700px;" data-sticky_column>
            @for(img <- blg.getImages()) {
            		@if(img.isVideo==false){
            			<img src="@img.getURL()" class="img-responsive" style="padding-bottom: 10px;"/>
@@ -321,13 +343,26 @@
 	
 	$(document).ready(function(){
 		setTimeout(function(){
+		checkHeight();
 		$("[data-sticky_column]").stick_in_parent({
 		      parent: "[data-sticky_parent]",
 		      offset_top:-50
 		    });
 		},1000);
 		getComments();
+		
+		//$("html").niceScroll({styler:"fb",cursorcolor:"#000"});
+		$(".post-excerpt").niceScroll({styler:"fb",cursorcolor:"#000"});
+		$("[id^=imgs]").niceScroll({styler:"fb",cursorcolor:"#000"});
 	});
+	
+	function checkHeight(){
+		if($("#txt@{blg.id}").height()>$("#imgs@{blg.id}").height()){
+			$("#txt@{blg.id}").removeAttr("data-sticky_column");
+		}else{
+			$("#imgs@{blg.id}").removeAttr("data-sticky_column");
+		}
+	}
 	
 	function getComments(){
 		$.getJSON("/blog/comments/get/?limit=0&id=@blg.id", function(json)
@@ -337,9 +372,8 @@
 				 	var hiddenC = "";
 					$.each(json.cmntgrid, function(i,cmm)
 	        		{
-	        			
 	        				var str = '<div class="comment-post">' +
-	        						'<img scr="' + cmm.ui +  '" class="user-thumb img-responsive" alt="' + cmm.un + '"/>' +
+	        						'<img src="' + cmm.ui +  '" class="user-thumb img-responsive" alt="' + cmm.un + '"/>' +
 	        						'<div class="comment">' +
 	        						 '<h4><a href="' + UserLink.controllers.Application.ContributorPage(cmm.uid).absoluteURL() + '">' + cmm.un + '</a></h4>'+
 	        						'</div>'+
@@ -350,7 +384,7 @@
 									@subjectPresent(){
 									'<li>'+
 										'<span data-bind="visible:(cmm.uid==@Application.getContributor(session()).id)||@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMIN_MODERATOR,null)){ true }else{ false }">'+
-											'<a class="delete-button" href="javascript:void(0);" data-bind="click:$root.deletecomment" title="delete this comment"><i class="icon-remove"></i></a>'+
+											'<a class="delete-button" href="javascript:void(0);" data-bind="click:$root.deletecomment" title="delete this comment" commentId='+ cmm.cid +'><i class="icon-remove"></i></a>'+
 										'</span>'+
 									'</li>'+
 									}
@@ -384,23 +418,45 @@
 		$(document.body).trigger("sticky_kit:recalc");
 	}
 	
-	function dislikearticle()
+	@*function dislikearticle()
 	{
 		$.getJSON("/blog/dislike/?id=@blg.id", function(json)
 				 {
 				 	
 				 });
-	}
+	}*@
 	
 	function likearticle()
 	{
+		$("#likeBtn").hide();
+		$("#dislikeBtn").show();
+		$.getJSON("/blog/like/?id=@blg.id", function(json)
+				 {
+				 	
+				 });
+	}
+	function dislikearticle()
+	{
+		$("#likeBtn").show();
+		$("#dislikeBtn").hide();
 		$.getJSON("/blog/like/?id=@blg.id", function(json)
 				 {
 				 	
 				 });
 	}
 	
-	
+	$('.blog').on('click', '.delete-button', function() {
+		var commentId = $(this).attr('commentId');
+		var retnresp=$().setresponse({url:UserLink.controllers.Useract.RemoveBlogComment(commentId).absoluteURL(),failans:false});
+		if(retnresp===false)
+		{
+			$().msgbox("<h1 class='lred'>Failed</h1>",2000);
+		}
+		else
+		{
+			$(this).closest( ".comment-post" ).remove();
+		}
+	});
 	</script>
 	
 	
@@ -411,6 +467,7 @@
 			$().msgbox('<div class="onnextline text-center"><span>Are you sure to Delete this Blog Post? </span><br/><a class="btn btn-danger" href="'+$(this).attr( "data-link" )+'">Yes</a></div>',60000);
 			});
 		}
+		
 		@*
 		@Templates.js.commentaction(idofpassed=blg.id,divid="Blog"+blg.id,hiturl=routes.Application.GetBlogComments(blg.id).url,Ispost=false,specific=true){
 			function fms(ifs)

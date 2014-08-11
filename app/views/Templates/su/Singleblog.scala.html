@@ -19,18 +19,21 @@
 	</style>
 }
 
+<script>
+	$("[id^=imgs]").niceScroll({styler:"fb",cursorcolor:"#000"});
+</script>
 @singleunit(isadmin:Boolean)={
 
 
     <!-- Begin .container -->
-    <div class="container blog" data-sticky_parent>
+    <div class="container blog" >
       <!-- Begin .row -->
-      <div class="row" >
+      <div class="row" data-sticky_parent>
 		
         <!-- Begin blog-post -->
         <div class="blog-post"  id="Blog@{blg.id}" >
           <!-- Begin .col-lg-12 -->
-          <div class="col-lg-4 col-12 col-md-4 col-xs-12 col-sm-12" data-sticky_column>
+          <div id="txt@{blg.id}" class="col-lg-5 col-12 col-md-4 col-xs-12 col-sm-12" data-sticky_column>
             <!-- Begin .box -->
             <div class="box">
                             
@@ -45,8 +48,7 @@
                 <li>
                 	<a href="@routes.Application.ContributorPage(blg.author.id)">                  
 		               <p>   
-		                  		
-		                  		<div class="pull-right"> <h4>@blg.author.user.name</h4></div>
+		                  <div class="pull-right"> <h4>@blg.author.user.name</h4></div>
 		                </p>
 		            </a>
 		            <div class="clearfix">
@@ -81,6 +83,7 @@
             <div class="title-wrap">
               <h3>
                 <a title="@blg.title" href="@routes.Application.GetBlogPage(blg.id)">@blg.title</a>
+                <meta property="og:title" content="@blg.title"/>
               </h3>
             </div>
             <!-- End .title-wrap -->
@@ -93,9 +96,11 @@
             <!-- End post-image -->
             
             <!-- Begin post-excerpt -->
-            <div class="post-excerpt readmore">
+            <div class="post-excerpt" style="height: 500px;overflow: hidden;">
               @Html(blg.content)
             </div>
+            <a href="javascript:void(0);" class="readmore-js-toggle">Read More</a>
+            <meta property="og:description" content="@blg.content"/>
             <!-- End post-excerpt -->
             
             @*
@@ -124,7 +129,7 @@
           
           @if(blg.getImages()!=null){
           <!-- Begin .col-lg-8 images...-->
-          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-12" style="margin-bottom: 50px;" data-sticky_column>
+          <div id="imgs@{blg.id}" class="col-lg-6 col-md-8 col-sm-12 col-xs-12 col-12" style="margin-bottom: 50px;padding-bottom: 50px;height: 805px;" data-sticky_column>
            @for(img <- blg.getImages()) {
            		@if(img.isVideo==false){
            			<img src="@img.getURL()" class="img-responsive" style="padding-bottom: 10px;"/>
@@ -307,7 +312,23 @@
 }
 
 @pagescript(isadmin:Boolean)={
-	<script>var allblogidlist=[];</script>
+	<script>
+	var allblogidlist=[];
+	
+	$(document).ready(function(){
+		
+		checkHeight();
+		
+	});
+	
+	function checkHeight(){
+		if($("#txt@{blg.id}").height()>$("#imgs@{blg.id}").height()){
+			$("#txt@{blg.id}").removeAttr("data-sticky_column");
+		}else{
+			$("#imgs@{blg.id}").removeAttr("data-sticky_column");
+		}
+	}
+	</script>
 	
 	
 	@Templates.su.jready{

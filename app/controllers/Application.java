@@ -484,9 +484,27 @@ public class Application extends Controller {
 	
 	public static Result GetBlogPage(Long id)
 	{
+		//is blog liked by current user
+		Boolean likedByMe = false;
+		//is local user creator of blog
+		Boolean editor = false;
+		
 		Blog b=Blog.find.byId(id);
-		if(b!=null)
-			return ok(views.html.Templates.su.SingleBlogPage.render(b,false,0));
+		
+		
+		if(b!=null) {
+			final Contributor localContributor = Application.getContributor(session());
+			
+			if(localContributor!=null){
+				if(b.author.user.id.equals(localContributor.user.id)){
+					editor = true;
+				}
+				likedByMe = BlogLikes.blogLikedByMe(b, localContributor);
+				/*if(likedByMe)
+					//Logger.debug("Blog is liked by me");
+*/			}
+			return ok(views.html.Templates.su.SingleBlogPage.render(b,false,0,editor,likedByMe));
+		}
 		else
 			return notFound();
 	}

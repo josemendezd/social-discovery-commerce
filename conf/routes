@@ -164,8 +164,8 @@ POST	/blog/postnew								controllers.Useract.AddBlog
 POST	/blog/editearlier							controllers.Useract.EditBlog
 
 GET		/blog/editearlier/images/all/				controllers.Useract.getImagesForBlog(id:String)
-GET 	/blog/like									controllers.Useract.likeBlog(id:Long)
-GET 	/blog/dislike								controllers.Useract.dislikeBlog(id:Long)
+GET 	/blog/like/									controllers.Useract.updateLikeBlog(id:Long)
+#GET 	/blog/dislike								controllers.Useract.dislikeBlog(id:Long)
 
 #Content Methods
 GET		/content/page/create						controllers.Application.GetAddContent

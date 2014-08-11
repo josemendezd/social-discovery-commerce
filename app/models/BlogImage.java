@@ -35,6 +35,15 @@ public class BlogImage extends Model {
 		
 	}
 	
+	public static void removeImagesForBlog(Blog blog){
+		List<BlogImage> lis = find.where().eq("blogid", blog.id).findList();
+		for(BlogImage img:lis){
+			S3File fil = img.file;
+			img.delete();
+			fil.delete();
+		}
+	}
+	
 	public static List<BlogImage> getImagesForBlog(Blog blog){
 		return find.where().eq("blogid", blog.id).findList();
 		

@@ -115,6 +115,9 @@ public class Blog extends Model {
     		return false;
     	Ebean.createSqlUpdate("DELETE from blog_blog_labels where blog_blog_labels.blog_id = :bid ").setParameter("bid", blg.id).execute();
     	Ebean.createSqlUpdate("DELETE from blog_labels where blog_labels.id NOT IN( SELECT DISTINCT blog_blog_labels.blog_labels_id from blog_blog_labels)").execute();
+    	Ebean.createSqlUpdate("DELETE from blog_comment where blog_comment.post_id = :bid ").setParameter("bid", blg.id).execute();
+    	BlogImage.removeImagesForBlog(blg);
+    	BlogLikes.removeLikesForBlog(blg);
     	blg.delete();
     	return true;
     }
@@ -142,4 +145,6 @@ public class Blog extends Model {
     public List<BlogImage> getImages(){
     	return BlogImage.getImagesForBlog(this);
     }
+    
+    
 }

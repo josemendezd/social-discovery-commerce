@@ -1053,17 +1053,18 @@ public class Useract  extends Controller {
 		String content=bindedForm.get("cmnttxt");
 		if(content==null)
 			return badRequest();
-		response().setContentType("application/json");	
+		//response().setContentType("application/json");	
 		Contributor author=Application.getContributor(session());
 		Blog blg=Blog.find.byId(prid);
 		if(blg!=null)
 		{
 			BlogComment cmt=BlogComment.AddComment(blg, author, content.replace("\n", " "));
-			
 			if(cmt!=null)
 			{
 				//models.Notifications.SOCommentsPr.ReportEvent(author, post, cmt);
-				return ok("{\"answer\": "+ views.html.Templates.json.commentbrick.render(cmt.author,cmt.content,cmt.postedAt,cmt.id, session()).toString() +" }");
+				//return ok("{\"answer\": "+ views.html.Templates.json.commentbrick.render(cmt.author,cmt.content,cmt.postedAt,cmt.id, session()).toString() +" }");
+//				return ok(views.html.Templates.su.SingleBlogPage.render(blg,false,0));
+				return redirect("/blog/page/"+blg.id.toString());
 			}
 		}
 		return badRequest();
@@ -1161,7 +1162,7 @@ public class Useract  extends Controller {
 		        
 		    }
 		}
-		return redirect(routes.Application.GetBlogPage(blognew.id));
+		return ok(blognew.id.toString());//return redirect(routes.Application.GetBlogPage(blognew.id));
 		
 	}
 	
@@ -1220,7 +1221,7 @@ public class Useract  extends Controller {
 		        
 		    }
 		}
-		return redirect(routes.Application.GetBlogPage(bf.id));
+		return ok(bf.id.toString());//redirect(routes.Application.GetBlogPage(bf.id));
 	}
 	
 	@SubjectPresent
@@ -1232,7 +1233,9 @@ public class Useract  extends Controller {
 		String blogname=bg.title;
 		if(Blog.RemoveBlog(bg))
 		{
-			flash(Application.FLASH_MESSAGE_KEY,"Blog "+blogname.substring(0, 20)+"... Removed.");
+			if(blogname.length()>20)
+				blogname = blogname.substring(0,20);
+			flash(Application.FLASH_MESSAGE_KEY,"Blog "+blogname+"... Removed.");
 			return redirect(routes.Application.GetBlogList(0, DInitial.GENERIC_BLOG_PAGE_SIZE));
 		}
 		flash(Application.FLASH_ERROR_KEY,"Error removing blog "+blogname+".");
@@ -1257,7 +1260,7 @@ public class Useract  extends Controller {
 		}
 		return ok(result);
 	}
-	
+	/*
 	@SubjectPresent
 	public static Result likeBlog(Long blogid){
 		final Contributor localContributor = Application.getContributor(session());
@@ -1270,7 +1273,16 @@ public class Useract  extends Controller {
 		final Contributor localContributor = Application.getContributor(session());
 		BlogLikes.rateBlog(Blog.find.byId(blogid), localContributor, -1);
 		return ok();
+	}*/
+	public static Result updateLikeBlog(Long blogid){
+		final Contributor localContributor = Application.getContributor(session());
+		//BlogLikes.rateBlog(Blog.find.byId(blogid), localContributor, 1);
+		if(localContributor!=null)
+			BlogLikes.updateLike(Blog.find.byId(blogid), localContributor);
+		return ok();
 	}
+	
+	
 	//BLOG ENDS
 	
 	

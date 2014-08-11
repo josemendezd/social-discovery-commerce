@@ -1767,7 +1767,7 @@ input.form-control {
 }
 .modal-footer a {
 	float:left;
-	color:#f05721;
+	/* color:#f05721; */
 	font-size: 14px;
 	text-decoration: none;
 }
