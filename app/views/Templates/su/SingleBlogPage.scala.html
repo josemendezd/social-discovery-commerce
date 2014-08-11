@@ -2,6 +2,11 @@
 @import be.objectify.deadbolt.java.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 
+<head>
+	<meta property="og:title" content="@blg.title"/>
+	<meta property="og:description" content="@blg.content"/>
+</head>
+
 @pst(isadmin:Boolean)={
 	@if(isadmin){
 	<style>
@@ -106,7 +111,6 @@
             <div class="title-wrap">
               <h3>
                 <a title="@blg.title" href="@routes.Application.GetBlogPage(blg.id)">@blg.title</a>
-                <meta property="og:title" content="@blg.title"/>
               </h3>
             </div>
             <!-- End .title-wrap -->
@@ -122,7 +126,7 @@
             <div class="post-excerpt" style="height: 500px;">
               @Html(blg.content)
             </div>
-            <meta property="og:description" content="@blg.content"/>
+            
             <!-- End post-excerpt -->
             
             
