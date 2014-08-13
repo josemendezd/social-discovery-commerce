@@ -41,6 +41,8 @@ public class Blog extends Model {
     @Constraints.MaxLength(50000)
     public String content;
     
+    @Transient
+    public String htmlLessContent;
     
     @Required
     public String title;

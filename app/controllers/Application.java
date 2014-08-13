@@ -27,6 +27,10 @@ import models.Admin.Infopage;
 import models.Notifications.UserSubscriptions;
 import net.tanesha.recaptcha.ReCaptchaImpl;
 import net.tanesha.recaptcha.ReCaptchaResponse;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import play.Play;
 import play.Routes;
 import play.data.DynamicForm;
@@ -501,6 +505,9 @@ public class Application extends Controller {
 					editor = true;
 				}
 				likedByMe = BlogLikes.blogLikedByMe(b, localContributor);
+				
+				Document doc=Jsoup.parse(b.content);
+				b.htmlLessContent = doc.text().substring(0, doc.text().length() < 200 ? doc.text().length() : 200);
 				/*if(likedByMe)
 					//Logger.debug("Blog is liked by me");
 */			}
