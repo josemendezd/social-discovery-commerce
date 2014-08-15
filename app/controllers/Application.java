@@ -559,14 +559,15 @@ public class Application extends Controller {
 		
 		Useract.BLOG_EDIT_FORM bef=new BLOG_EDIT_FORM();
 		
-		String sqlquery="SELECT    blog.id AS blogid,    blog.title AS blogtittle,    blog.content AS blogtext,    string_agg(blog_labels.tag, ',') AS tags FROM    blog,    blog_blog_labels,    blog_labels WHERE    blog.id = blog_blog_labels.blog_id AND   blog_blog_labels.blog_labels_id = blog_labels.id AND   blog.id = :bid GROUP BY blog.id";
+		String sqlquery="SELECT    blog.id AS blogid,    blog.title AS blogtittle,    blog.content AS blogtext,  blog.perma_link as permalink,  string_agg(blog_labels.tag, ',') AS tags FROM    blog,    blog_blog_labels,    blog_labels WHERE    blog.id = blog_blog_labels.blog_id AND   blog_blog_labels.blog_labels_id = blog_labels.id AND   blog.id = :bid GROUP BY blog.id";
 		com.avaje.ebean.SqlRow sqlr= Ebean.createSqlQuery(sqlquery).setParameter("bid", b.id).findUnique();
 		
 		bef.blogid = sqlr.getLong("blogid");
 		bef.blogtittle = sqlr.getString("blogtittle");
 		bef.blogtext = sqlr.getString("blogtext");
 		bef.tags = sqlr.getString("tags");
-				
+		bef.permaLink = sqlr.getString("permalink");	
+		
 		return ok(views.html.Admin.Blog.AddEdit2.render(Useract.EDIT_BLOG_FORM.fill(bef),true));
 	}
 	

@@ -48,6 +48,23 @@ blmaster.controller('PopoverController',function($scope, $http){
 	}
 });
 
+var permalink = $("#permalink_second").val();
+
+String.prototype.replaceAll = function(s,r){ return this.split(s).join(r) }
+
+blmaster.controller('BlogController',function($scope, $http){
+	$scope.checkPermalink = function($event) {
+		if($scope.permalink != undefined) {
+			if($scope.permalink.length == 0) {
+				$scope.permalink_new = permalink;
+			}
+			else {
+				$scope.permalink_new = angular.lowercase($scope.permalink.replaceAll(" ", "-"));
+			}
+		}
+	}
+});
+
 blmaster.controller('ApplicationController',function($scope, $http){
 	
 	

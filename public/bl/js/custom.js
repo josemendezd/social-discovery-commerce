@@ -111,7 +111,9 @@ var loaderdiv = function (e, t) {
         n.loadertext.text("Loading...")
     }
 
-    function i() {
+    function i(_t) {
+    	
+    	if(_t == 'undefined') _t = 1e4;
         n.busy = false;
         setTimeout(function () {
             if (!n.busy && n.state !== false) {
@@ -124,15 +126,15 @@ var loaderdiv = function (e, t) {
                     n.watchstate()
                 } else {}
             }
-        }, 1e4)
+        }, _t)
     }
 
-    function s() {
+    function s(_t) {
         n.loadertext.text("Loading...");
         n.divbox.show();
         n.state = true;
         n.busy = false;
-        n.watchstate()
+        n.watchstate(_t)
     }
 
     function o() {

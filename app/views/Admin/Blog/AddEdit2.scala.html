@@ -47,10 +47,18 @@ i.icon-share {
 				<div class="row">	
 				<div class="col-sm-8">
 				
-		<form action="@hiturl" method="POST" enctype="multipart/form-data" id="blogForm">
+		<form action="@hiturl" method="POST" enctype="multipart/form-data" id="blogForm" ng-controller="BlogController">
 			@inputText(field = newblogform("blogtittle"), args = 'size -> 255, 'placeholder -> "Blog Title",'_label ->"Blog Title",'class->"form-control")			
 			@textarea(field = newblogform("blogtext"), args = 'rows -> 75, 'cols -> 300 ,'class->"textarea",'_label ->"Blog Content")			
 			@inputText(field = newblogform("tags"), args = 'size -> 255, 'placeholder -> "Tags",'_label ->"Blog Tags",'class->"form-control")			
+			
+			@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY, Application.getLocalUser(session()))) {
+					<input type="text" ng-model="permalink" ng-keyup="checkPermalink($event)" id="permalink_first" class="form-control"/>
+					<div id="permalink-div" class="col-sm-12 pull-left" style="padding: 0px;">
+						<label class="col-sm-7" style="padding: 0px;">Permalink: http://www.buzzology.com/blog/</label>
+						<input type="text" ng-model="permalink_new" id="permalink_second" name="permaLink" value="@newblogform("permaLink").value" class="col-sm-5 form-control" style="height:26px; margin-top: 10px; width:32%; padding: 0px;"/>
+					</div>
+			}
 			
 			<input style="display:none;" type="file" multiple="multiple" name="fileUpload[]" id="fileupload" class="btn btn-default btn-elg">
 			<input onchange="selectedVideo()" style="display:none;" type="file" multiple="multiple" name="fileUpload2" id="fileupload2" class="btn btn-default btn-elg">

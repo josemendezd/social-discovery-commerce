@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 import models.Blog;
 import models.BlogComment;
 import models.BlogImage;
+import models.BlogLabels;
 import models.BlogLikes;
 import models.Category;
 import models.CollectionComment;
@@ -1095,7 +1096,10 @@ public class Useract  extends Controller {
 		public String blogtext;
 		
 		@Required
-		public String tags;		
+		public String tags;	
+		
+		@Required
+		public String permaLink;	
 	}
 	public static class BLOG_EDIT_FORM extends BLOG_FORM{
 		@Required
@@ -1134,8 +1138,16 @@ public class Useract  extends Controller {
 		String blgTitle = body.asFormUrlEncoded().get("blogtittle")[0];
 		String blgText = body.asFormUrlEncoded().get("blogtext")[0];
 		String tags =  body.asFormUrlEncoded().get("tags")[0];
+		String permalink = body.asFormUrlEncoded().get("permaLink")[0];
+		
+		Blog blog = Blog.findByPermalink(permalink);
+		if( blog != null ) {
+			return status(400);
+		}
 		
 		Blog blognew= Blog.AddBlog(blgTitle, localContributor, blgText);
+		blognew.permaLink = permalink;
+		blognew.update();
 		//Blog blognew= Blog.AddBlog(blgTitle, Contributor.find.byId(3L), blgText);
 		blognew.ApplyLabel(tags);
 		
@@ -1601,5 +1613,30 @@ public class Useract  extends Controller {
 		
 		PRDetails prDetails = new PRDetails(details, maxValue);
 		return ok(Json.toJson(prDetails));
+	}
+	
+	public static Result getBlogByPermalink(String permalink) {
+		Blog blog = Blog.findByPermalink(permalink);
+		if(blog == null) {
+			return badRequest();
+		}
+		
+		boolean editor = false;
+		boolean likedByMe = false;
+		
+		final Contributor localContributor = Application.getContributor(session());
+		
+		if(localContributor!=null){
+			if(blog.author.user.id.equals(localContributor.user.id)){
+				editor = true;
+			}
+			likedByMe = BlogLikes.blogLikedByMe(blog, localContributor);
+			
+			Document doc=Jsoup.parse(blog.content);
+			blog.htmlLessContent = doc.text().substring(0, doc.text().length() < 200 ? doc.text().length() : 200);
+			/*if(likedByMe)
+				//Logger.debug("Blog is liked by me");
+*/			}
+		return ok(views.html.Templates.su.SingleBlogPage.render(blog,false,0,editor,likedByMe));
 	}
 }

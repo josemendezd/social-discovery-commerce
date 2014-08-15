@@ -46,6 +46,10 @@ public class Blog extends Model {
     
     @Required
     public String title;
+
+    @Required
+    @Column(unique=true)
+    public String permaLink;
     
     @ManyToMany
     public List<BlogLabels> labels;
@@ -147,6 +151,10 @@ public class Blog extends Model {
     public List<BlogImage> getImages(){
     	return BlogImage.getImagesForBlog(this);
     }
+
+	public static Blog findByPermalink(String permalink) {
+		return find.where().eq("permaLink", permalink).findUnique();
+	}
     
     
 }

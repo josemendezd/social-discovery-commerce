@@ -167,6 +167,7 @@ GET		/blog/editearlier/images/all/				controllers.Useract.getImagesForBlog(id:St
 GET 	/blog/like/									controllers.Useract.updateLikeBlog(id:Long)
 #GET 	/blog/dislike								controllers.Useract.dislikeBlog(id:Long)
 
+GET		/blog/:permalink							controllers.Useract.getBlogByPermalink(permalink:String)
 #Content Methods
 GET		/content/page/create						controllers.Application.GetAddContent
 POST	/content/page/create						controllers.Useract.AddContentPage
