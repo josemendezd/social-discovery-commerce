@@ -1639,4 +1639,12 @@ public class Useract  extends Controller {
 */			}
 		return ok(views.html.Templates.su.SingleBlogPage.render(blog,false,0,editor,likedByMe));
 	}
+	
+	public static Result checkPermalinkAvailability(String permalink) {
+		Blog blog = Blog.findByPermalink(permalink);
+		if(blog != null) {
+			return badRequest();
+		}
+		return ok();
+	}
 }

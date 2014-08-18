@@ -1141,4 +1141,29 @@ public class Application extends Controller {
 	}
 	*/
 
+	public static Result handleOldPermalinks() {
+		String permalink = request().path().substring(1);
+		Blog blog = Blog.findByPermalink(permalink);
+		if(blog == null) {
+			return badRequest();
+		}
+		
+		boolean editor = false;
+		boolean likedByMe = false;
+		
+		final Contributor localContributor = Application.getContributor(session());
+		
+		if(localContributor!=null){
+			if(blog.author.user.id.equals(localContributor.user.id)){
+				editor = true;
+			}
+			likedByMe = BlogLikes.blogLikedByMe(blog, localContributor);
+			
+			Document doc=Jsoup.parse(blog.content);
+			blog.htmlLessContent = doc.text().substring(0, doc.text().length() < 200 ? doc.text().length() : 200);
+			/*if(likedByMe)
+				//Logger.debug("Blog is liked by me");
+*/			}
+		return ok(views.html.Templates.su.SingleBlogPage.render(blog,false,0,editor,likedByMe));
+	}
 }

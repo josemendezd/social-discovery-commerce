@@ -41,8 +41,6 @@ i.icon-share {
 		  </div>
 	</div>	
 		
-	
-		
 		<div class="jumbotron" style="margin-top:40px;">
 				<div class="row">	
 				<div class="col-sm-8">
@@ -53,10 +51,11 @@ i.icon-share {
 			@inputText(field = newblogform("tags"), args = 'size -> 255, 'placeholder -> "Tags",'_label ->"Blog Tags",'class->"form-control")			
 			
 			@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY, Application.getLocalUser(session()))) {
-					<input type="text" ng-model="permalink" ng-keyup="checkPermalink($event)" id="permalink_first" class="form-control"/>
+					<input type="text" ng-model="permalink" ng-keypress="checkBeforeKeypress($event)" ng-keyup="checkPermalink($event)" id="permalink_first" class="form-control"/>
 					<div id="permalink-div" class="col-sm-12 pull-left" style="padding: 0px;">
 						<label class="col-sm-7" style="padding: 0px;">Permalink: http://www.buzzology.com/blog/</label>
-						<input type="text" ng-model="permalink_new" id="permalink_second" name="permaLink" value="@newblogform("permaLink").value" class="col-sm-5 form-control" style="height:26px; margin-top: 10px; width:32%; padding: 0px;"/>
+						<input type="text" ng-model="permalink_new" id="permalink_second" readonly="readonly" name="permaLink" value="@newblogform("permaLink").value" class="col-sm-3 form-control" style="height:26px;background-color: #FFFFFF; margin-top: 10px; width:32%; padding: 0px;"/>
+						<button type="button" data-ng-click="checkAvailibility(permalink_new)" class="check-avail col-sm-2 btn btn-xs btn-success" style="margin-top: 10px;">check availability</button>
 					</div>
 			}
 			

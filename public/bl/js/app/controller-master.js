@@ -59,10 +59,33 @@ blmaster.controller('BlogController',function($scope, $http){
 				$scope.permalink_new = permalink;
 			}
 			else {
-				$scope.permalink_new = angular.lowercase($scope.permalink.replaceAll(" ", "-"));
+				$scope.permalink_new = angular.lowercase($scope.permalink.replace(/\s+/g, "-"));
 			}
 		}
-	}
+	};
+	
+	$scope.checkBeforeKeypress = function(event) {
+		var regex = new RegExp("^[a-zA-Z0-9\ \]+$");
+	    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+	    if (!regex.test(key)) {
+	       event.preventDefault();
+	       return false;
+	    }
+	};
+	
+	$scope.checkAvailibility = function( _permalink ) {
+		console.log(_permalink);
+		if( _permalink == undefined) {
+			_permalink = permalink;
+		}
+		$http.get('/check-permalink-availability/' + _permalink).success( function(data, status) {
+			$('.permalink-error').remove();
+			$('#permalink-div').after('<p class="permalink-error text-success" style="font-size: 14px; padding:0px;">Yes, This permalink is available!</p>');
+		}).error( function(data, status) {
+			$('.permalink-error').remove();
+			$('#permalink-div').after('<p class="permalink-error text-danger" style="font-size: 14px; padding:0px;">Sorry, This permalink is already taken. Please choose another one!</p>');
+		});
+	};
 });
 
 blmaster.controller('ApplicationController',function($scope, $http){

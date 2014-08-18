@@ -168,6 +168,8 @@ GET 	/blog/like/									controllers.Useract.updateLikeBlog(id:Long)
 #GET 	/blog/dislike								controllers.Useract.dislikeBlog(id:Long)
 
 GET		/blog/:permalink							controllers.Useract.getBlogByPermalink(permalink:String)
+GET		/check-permalink-availability/:permalink	controllers.Useract.checkPermalinkAvailability(permalink:String)
+
 #Content Methods
 GET		/content/page/create						controllers.Application.GetAddContent
 POST	/content/page/create						controllers.Useract.AddContentPage
@@ -257,3 +259,30 @@ GET		/cart/count						controllers.Carts.itemCount()
 POST	/rating/:product_id				controllers.Useract.rateProduct(product_id : Long)	
 DELETE  /remove-rating/:product_id		controllers.Useract.removeRatings(product_id : Long)	
 GET		/get-rating-details/:product_id  controllers.Useract.getProductRatingDetails(product_id : Long)
+
+# old permalinks
+
+GET		/wide-open-for-cheap-beer        controllers.Application.handleOldPermalinks()
+GET		/the-red-carpet				     controllers.Application.handleOldPermalinks()
+GET		/apples-to-apples-my-love-affair-with-hard-apple-cider        controllers.Application.handleOldPermalinks()
+GET		/michelada-for-beer              controllers.Application.handleOldPermalinks()
+GET		/drinking-in-the-new-year-new-years-eve-2013        controllers.Application.handleOldPermalinks()
+GET		/the-boozology-of-beer                      controllers.Application.handleOldPermalinks()
+GET		/party-hard-with-boilermaker                controllers.Application.handleOldPermalinks()
+GET		/more-to-singapore-sling-than-just-pretty-girls        controllers.Application.handleOldPermalinks()
+GET		/of-beers-and-beggars-how-to-navigate-the-big-apple-on-a-budget        controllers.Application.handleOldPermalinks()
+GET		/beer-101-different-types-of-beer           controllers.Application.handleOldPermalinks()
+GET		/beer-101-serving-beer        				controllers.Application.handleOldPermalinks()
+GET		/four-roses-of-bourbon						controllers.Application.handleOldPermalinks()
+GET		/storing-beer								controllers.Application.handleOldPermalinks()
+GET		/types-of-wine-glasses						controllers.Application.handleOldPermalinks()
+GET		/between-the-sheets-cocktail				controllers.Application.handleOldPermalinks()
+GET		/storing-wine								controllers.Application.handleOldPermalinks()
+GET		/get-in-the-zone-nightlife-preparation-guide controllers.Application.handleOldPermalinks()
+GET		/ouzo-cocktail-drink							controllers.Application.handleOldPermalinks()
+GET		/mighty-black-russian                         controllers.Application.handleOldPermalinks()
+GET		/wine-101-serving-wine                        controllers.Application.handleOldPermalinks()
+GET		/wines-of-the-world							  controllers.Application.handleOldPermalinks()
+GET		/beer-review-pliny-the-elder				  controllers.Application.handleOldPermalinks()
+GET		/wine-additives-whats-in-your-wine            controllers.Application.handleOldPermalinks()
+GET		/beer-review-bravo-brava 					  controllers.Application.handleOldPermalinks()
