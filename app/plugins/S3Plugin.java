@@ -14,8 +14,8 @@ import play.Plugin;
 public class S3Plugin extends Plugin {
 
     public static final String AWS_S3_BUCKET = "aws.s3.bucket";
-    public static final String AWS_ACCESS_KEY = "aws.access.key";
-    public static final String AWS_SECRET_KEY = "aws.secret.key";
+    public static final String AWS_ACCESS_KEY = "AWSAccessKeyId";
+    public static final String AWS_SECRET_KEY = "AWSSecretKey";
     public static final String BASE_URL_FORMAT="base.url.format";
     private final Application application;
 
@@ -31,8 +31,12 @@ public class S3Plugin extends Plugin {
 
     @Override
     public void onStart() {
-        String accessKey = application.configuration().getString(AWS_ACCESS_KEY);
-        String secretKey = application.configuration().getString(AWS_SECRET_KEY);
+        String accessKey = System.getenv(AWS_ACCESS_KEY);//application.configuration().getString(AWS_ACCESS_KEY);
+        String secretKey = System.getenv(AWS_SECRET_KEY);//application.configuration().getString(AWS_SECRET_KEY);
+        
+        System.out.println("accessKey:" + accessKey);
+        System.out.println("secretKey:" + secretKey);
+        
         s3Bucket = application.configuration().getString(AWS_S3_BUCKET);
         baseurl = application.configuration().getString(BASE_URL_FORMAT);
         boolean dev=Play.isDev();
