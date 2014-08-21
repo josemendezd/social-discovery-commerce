@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.http.impl.client.HttpClients;
+
 import models.Blog;
 import models.Cart;
+import models.Contributor;
 import models.Item;
 import models.Product;
 import models.User;
@@ -23,6 +26,10 @@ import providers.MyUsernamePasswordAuthProvider;
 import providers.MyUsernamePasswordAuthProvider.MyLogin;
 import providers.MyUsernamePasswordAuthProvider.MySignup;
 import views.html.login;
+
+import akismet.Akismet;
+import akismet.AkismetComment;
+import akismet.AkismetException;
 
 import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
 import com.google.common.collect.Lists;
@@ -586,12 +593,47 @@ public class Carts extends Controller {
 			System.out.println(userlocation);
 		} catch (Exception e){
 			e.printStackTrace();
-			return false;
+			return true; // for testing only make it false otherwise
 		}	
 		return true;
 	}
 	
 	
+	private final static String validApiKey;
+	private final static String validApiConsumer;
+	
+	static {
+		validApiKey = "9414cd858392";//System.getProperty("akismetApiKey");
+		validApiConsumer = "http://serene-shore-4868-942.herokuapp.com/product/page/81";//System.getProperty("akismetConsumer");
+		
+		if(validApiKey == null || validApiConsumer == null)
+			throw new RuntimeException("Both api key and consumer must be specified!");
+	}
+	
+	public static boolean akismetValidationForComment(Long prid, String commentText) throws AkismetException {
+		final Akismet akismet = new Akismet(HttpClients.createDefault());		
+		
+		akismet.setApiKey(validApiKey);		
+		akismet.setApiConsumer(validApiConsumer);	
+		
+		Contributor author=Application.getContributor(session());
+		
+		AkismetComment comment = new AkismetComment();
+		comment.setUserIp(request().remoteAddress());
+		comment.setUserAgent(request().getHeader("User-Agent"));
+		comment.setReferrer(request().getHeader("Referer"));
+		comment.setPermalink("http://"+ request().host() + "/product/page/" + prid);
+		comment.setCommentType("comment");
+		comment.setCommentAuthor(author.user.firstName);
+		comment.setCommentAuthorEmail(author.user.email);
+		comment.setCommentAuthorUrl("http://" + request().host()+ "/contributor/page/" + author.user.id);
+		comment.setCommentContent(commentText);
+		
+		if(akismet.submitSpam(comment)) {
+			return true;
+		}
+		return false;
+	}
 	// This function checks whether the blog has to be displayed or not 
 	/*public static boolean blogPostView(BuzzVM buzz) {
 		boolean flag = false;

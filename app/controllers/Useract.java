@@ -63,6 +63,7 @@ import scala.concurrent.ExecutionContext;
 import viewmodel.PRDetails;
 import viewmodel.ProductRateDetail;
 import views.html.productjson;
+import akismet.AkismetException;
 import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
@@ -952,12 +953,18 @@ public class Useract  extends Controller {
 	
 	//.................COMMENT............................
 	@SubjectPresent
-	public static Result  PutcommentonProduct()
+	public static Result PutcommentonProduct() throws AkismetException
 	{
 		DynamicForm bindedForm = play.data.Form.form().bindFromRequest();
 		Long prid = Long.parseLong(bindedForm.get("product"));
 		String content=bindedForm.get("cmnttxt");
-		if(content==null)
+		
+		if(Carts.akismetValidationForComment(prid, content)) {
+			return ok("Condition is true");
+		}
+		return ok("Condition is false");
+		
+		/*if(content==null)
 			return badRequest();
 		response().setContentType("application/json");	
 		Contributor author=Application.getContributor(session());
@@ -991,7 +998,7 @@ public class Useract  extends Controller {
 				}
 			}
 		}
-		return badRequest();
+		return badRequest();*/
 	}
 	
 	@SubjectPresent
