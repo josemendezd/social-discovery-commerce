@@ -629,7 +629,7 @@ public class Carts extends Controller {
 		comment.setCommentAuthorUrl("http://" + request().host()+ "/contributor/page/" + author.user.id);
 		comment.setCommentContent(commentText);
 		
-		if(akismet.submitSpam(comment)) {
+		if(akismet.commentCheck(comment)) {
 			return true;
 		}
 		return false;
