@@ -3,7 +3,7 @@
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 @singleunit={
 
-<div class="comment-post">
+<div class="comment-post" data-bind="if:!sf">
 	<div class="user-thumb">
 	  <img data-bind="attr:{src:ui,alt:un}" class="img-responsive">
 	</div>

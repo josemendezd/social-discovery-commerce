@@ -42,6 +42,8 @@ public class Comment extends Model {
     @Required
     public Product post;
     
+    public boolean spam_flag;
+    
     public Comment(Product post, Contributor author, String content) {
         this.post = post;
         this.author = author;
@@ -61,6 +63,24 @@ public class Comment extends Model {
     	return new Comment(post, author, content);
     }
     
+    /*It is another constructor for storing spam_flag status */ 
+
+    public Comment(Product post, Contributor author, String content,
+			boolean spam_flag) {
+    	 this.post = post;
+         this.author = author;
+         this.content = content;
+         this.postedAt = new Date();
+         this.spam_flag = spam_flag;
+         this.save();
+	}
+    
+    public static Comment AddComment(Product post, Contributor author, String content, boolean spam_flag)
+    {
+    	return new Comment(post, author, content, spam_flag);
+    }
+    /*End */
+    
     public static boolean RemoveComment(Comment cmnt,Contributor contrib)
     {
     	
@@ -76,7 +96,7 @@ public class Comment extends Model {
     }
     
     public static String ProductCommentPageJSON(Product p) {        
-    	String query="SELECT string_agg(row_to_json(data):: text,',') AS LIST  FROM ( SELECT    users.name un,     getimageurl("+String.format("'%s',users.profileimage,'%s','%s'", User.class.getSimpleName(),DInitial.IMAGESTORESIZE.THUMBNAIL_VERYSMALL.filestate,S3File.getbaseurl())+")   ui,    comment.id cid,    comment.author_id uid,    comment.posted_at  AT TIME ZONE current_setting('TIMEZONE') cd,    comment.content ct FROM    comment,    contributor,    users WHERE users.active = true AND  contributor.id = comment.author_id AND   users.id = contributor.user_id AND   comment.post_id = "+p.id+" ORDER BY   comment.posted_at ASC   )  data(un,ui,cid,uid,cd,ct)";
+    	String query="SELECT string_agg(row_to_json(data):: text,',') AS LIST  FROM ( SELECT    users.name un,     getimageurl("+String.format("'%s',users.profileimage,'%s','%s'", User.class.getSimpleName(),DInitial.IMAGESTORESIZE.THUMBNAIL_VERYSMALL.filestate,S3File.getbaseurl())+")   ui,    comment.id cid,    comment.author_id uid,    comment.posted_at  AT TIME ZONE current_setting('TIMEZONE') cd,    comment.content ct,  comment.spam_flag sf FROM    comment,    contributor,    users WHERE users.active = true AND  contributor.id = comment.author_id AND   users.id = contributor.user_id AND   comment.post_id = "+p.id+" ORDER BY   comment.posted_at ASC   )  data(un,ui,cid,uid,cd,ct,sf)";
 		return Ebean.createSqlQuery(query).findUnique().getString("LIST");
     }
  

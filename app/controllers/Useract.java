@@ -959,14 +959,12 @@ public class Useract  extends Controller {
 		Long prid = Long.parseLong(bindedForm.get("product"));
 		String content=bindedForm.get("cmnttxt");
 		
-		if(Carts.akismetValidationForComment(prid, content)) {
-			return ok("Condition is true");
-		}
-		return ok("Condition is false");
-		
-		/*if(content==null)
+		if(content==null)
 			return badRequest();
-		response().setContentType("application/json");	
+		
+		boolean spam_flag = Carts.akismetValidationForComment(prid, content);
+		
+		response().setContentType("application/json");
 		Contributor author=Application.getContributor(session());
 		if(author.user.emailValidated == true) {
 			Comment comment = Comment.find.where().eq("author.id", author.id).order().desc("postedAt").setMaxRows(1).findUnique();
@@ -975,12 +973,12 @@ public class Useract  extends Controller {
 					Product post=Product.find.byId(prid);
 					if(post!=null)
 					{
-						Comment cmt=Comment.AddComment(post, author, content.replace("\n", " "));
+						Comment cmt=Comment.AddComment(post, author, content.replace("\n", " "), spam_flag);
 						
 						if(cmt!=null)
 						{
 							models.Notifications.SOCommentsPr.ReportEvent(author, post, cmt);
-							return ok("{\"answer\": "+ views.html.Templates.json.commentbrick.render(cmt.author,cmt.content,cmt.postedAt,cmt.id, session()).toString() +" }");
+							return ok("{\"answer\": "+ views.html.Templates.json.commentbrick.render(cmt.author,cmt.content,cmt.postedAt,cmt.id,cmt.spam_flag, session()).toString() +" }");
 						}
 					}
 				}
@@ -988,17 +986,17 @@ public class Useract  extends Controller {
 				Product post=Product.find.byId(prid);
 				if(post!=null)
 				{
-					Comment cmt=Comment.AddComment(post, author, content.replace("\n", " "));
+					Comment cmt=Comment.AddComment(post, author, content.replace("\n", " "), spam_flag);
 					
 					if(cmt!=null)
 					{
 						models.Notifications.SOCommentsPr.ReportEvent(author, post, cmt);
-						return ok("{\"answer\": "+ views.html.Templates.json.commentbrick.render(cmt.author,cmt.content,cmt.postedAt,cmt.id, session()).toString() +" }");
+						return ok("{\"answer\": "+ views.html.Templates.json.commentbrick.render(cmt.author,cmt.content,cmt.postedAt,cmt.id, cmt.spam_flag, session()).toString() +" }");
 					}
 				}
 			}
 		}
-		return badRequest();*/
+		return badRequest();
 	}
 	
 	@SubjectPresent
@@ -1033,7 +1031,7 @@ public class Useract  extends Controller {
 			if(cmt!=null)
 			{
 				models.Notifications.SOCommentsCo.ReportEvent(author, uc, cmt);
-				return ok("{\"answer\": "+ views.html.Templates.json.commentbrick.render(cmt.author,cmt.content,cmt.postedAt,cmt.id, session()).toString() +" }");
+				return ok("{\"answer\": "+ views.html.Templates.json.commentbrick.render(cmt.author,cmt.content,cmt.postedAt,cmt.id, true, session()).toString() +" }");
 			}
 		}
 		return badRequest();

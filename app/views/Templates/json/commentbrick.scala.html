@@ -1,4 +1,4 @@
-@(author: Contributor,content:String,postedAt:Date,cid:Long)(implicit session: play.mvc.Http.Session) 
+@(author: Contributor,content:String,postedAt:Date,cid:Long, spam_flag: Boolean)(implicit session: play.mvc.Http.Session) 
 @import be.objectify.deadbolt.java.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 {
@@ -7,5 +7,6 @@
 	"uid":@author.id,
 	"cid":@cid,
 	"ct":"@GHelp.EHtml(content)",
-	"cd":"@Application.timezoneformat(postedAt)"	
+	"cd":"@Application.timezoneformat(postedAt)",
+	"sf":"@spam_flag"
 }

@@ -603,18 +603,15 @@ public class Carts extends Controller {
 	private final static String validApiConsumer;
 	
 	static {
-		validApiKey = "9414cd858392";//System.getProperty("akismetApiKey");
-		validApiConsumer = "http://serene-shore-4868-942.herokuapp.com/product/page/81";//System.getProperty("akismetConsumer");
+		validApiKey = Play.application().configuration().getString("AkismetApiKey");//System.getProperty("akismetApiKey");
+		validApiConsumer = "http://" + request().host();//System.getProperty("akismetConsumer");
 		
 		if(validApiKey == null || validApiConsumer == null)
 			throw new RuntimeException("Both api key and consumer must be specified!");
 	}
 	
 	public static boolean akismetValidationForComment(Long prid, String commentText) throws AkismetException {
-		final Akismet akismet = new Akismet(HttpClients.createDefault());		
-		
-		akismet.setApiKey(validApiKey);		
-		akismet.setApiConsumer(validApiConsumer);	
+		final Akismet akismet = new Akismet(validApiKey, "http://" + request().host());	
 		
 		Contributor author=Application.getContributor(session());
 		
@@ -622,14 +619,14 @@ public class Carts extends Controller {
 		comment.setUserIp(request().remoteAddress());
 		comment.setUserAgent(request().getHeader("User-Agent"));
 		comment.setReferrer(request().getHeader("Referer"));
-		comment.setPermalink("http://"+ request().host() + "/product/page/" + prid);
-		comment.setCommentType("comment");
-		comment.setCommentAuthor(author.user.firstName);
-		comment.setCommentAuthorEmail(author.user.email);
-		comment.setCommentAuthorUrl("http://" + request().host()+ "/contributor/page/" + author.user.id);
-		comment.setCommentContent(commentText);
+		comment.setPermalink("http://" + request().host()+ "/product/page/" + prid);
+		comment.setType("comment");
+		comment.setAuthor(author.user.firstName);
+		//comment.setAuthorEmail(author.user.email);
+		//comment.setAuthorUrl("http://" + request().host()+ "/contributor/page/" + author.user.id);
+		comment.setContent(commentText);
 		
-		if(akismet.commentCheck(comment)) {
+		if(akismet.checkComment(comment)) {
 			return true;
 		}
 		return false;
