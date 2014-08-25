@@ -74,7 +74,6 @@ blmaster.controller('BlogController',function($scope, $http){
 	};
 	
 	$scope.checkAvailibility = function( _permalink ) {
-		console.log(_permalink);
 		if( _permalink == undefined) {
 			_permalink = permalink;
 		}
@@ -88,7 +87,49 @@ blmaster.controller('BlogController',function($scope, $http){
 	};
 });
 
-blmaster.controller('ApplicationController',function($scope, $http){
+blmaster.controller('SpamTableController',function($scope, $http, $filter, $timeout, $q, ngTableParams){
+
+	$scope.tableParams = new ngTableParams({
+        page: 1,            // show first page
+        count: 10,          // count per page
+        sorting: {
+            name: 'asc'     // initial sorting
+        }
+    }, {
+        total: 0, // length of data
+        getData: function($defer, params) {
+        	$http.get('/get-spams?page=' + params.page() +"&rows=" + params.count()).success( function(data, status) {
+        		
+        		$timeout(function() {
+                     // update table params
+                     params.total(data.total);
+                     // set new data
+                     
+                     $defer.resolve(params.sorting() ?
+                             $filter('orderBy')(data.comments, params.orderBy()) :
+                                 data.comments);
+                     //$scope.commentList = data.comments;
+                 }, 500);
+    		}).error( function(data, status) {
+    			
+    		});
+        }
+    });
 	
+	$scope.showDetails = function( comment, $index ){
+		$scope.index = $index;
+		$scope.commentVM = comment;
+	};
 	
+	$scope.noSpam = function( comment_id, $index ){
+		$http.put('/not-a-spam', {'comment_id' : comment_id}).success( function(data,status) {
+			$scope.tableParams.data.splice($index,1);
+		});
+	};
+	
+	$scope.submitSpam = function( comment , $index ){
+		$http.put('/submit-spam', {'comment_id' : comment.id, 'post_id' : comment.post_id}).success( function(data,status) {
+			$scope.tableParams.data.splice($index,1);
+		});
+	};
 });

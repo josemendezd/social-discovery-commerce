@@ -611,7 +611,7 @@ public class Carts extends Controller {
 	}
 	
 	public static boolean akismetValidationForComment(Long prid, String commentText) throws AkismetException {
-		final Akismet akismet = new Akismet(validApiKey, "http://" + request().host());	
+		final Akismet akismet = new Akismet(validApiKey, validApiConsumer);	
 		
 		Contributor author=Application.getContributor(session());
 		

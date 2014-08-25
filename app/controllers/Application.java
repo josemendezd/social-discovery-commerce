@@ -3,6 +3,7 @@ package controllers;
 import java.io.File;
 import java.net.InetAddress;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import models.UserCollection;
 import models.UserRate;
 import models.Admin.Contactus;
 import models.Admin.Infopage;
+import models.Notifications.SOCommentsPr;
 import models.Notifications.UserSubscriptions;
 import net.tanesha.recaptcha.ReCaptchaImpl;
 import net.tanesha.recaptcha.ReCaptchaResponse;
@@ -35,6 +37,7 @@ import play.Play;
 import play.Routes;
 import play.data.DynamicForm;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Http.Session;
@@ -44,6 +47,8 @@ import providers.MyUsernamePasswordAuthProvider;
 import providers.MyUsernamePasswordAuthProvider.MyLogin;
 import providers.MyUsernamePasswordAuthProvider.MySignup;
 import providers.MyUsernamePasswordAuthUser;
+import viewmodel.CommentVM;
+import viewmodel.NgTableVM;
 import views.html.blogpage;
 import views.html.collectionpage;
 import views.html.contentpage;
@@ -57,6 +62,9 @@ import views.html.shop;
 import views.html.signup;
 import views.html.storepage;
 import views.html.userprofile;
+import akismet.Akismet;
+import akismet.AkismetComment;
+import akismet.AkismetException;
 import be.objectify.deadbolt.java.actions.Group;
 import be.objectify.deadbolt.java.actions.Restrict;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
@@ -1165,5 +1173,82 @@ public class Application extends Controller {
 				//Logger.debug("Blog is liked by me");
 */			}
 		return ok(views.html.Templates.su.SingleBlogPage.render(blog,false,0,editor,likedByMe));
+	}
+	
+	public static Result adminPageForSpam() {
+		return ok(views.html.Admin.adminPageForSpam.render());
+	}
+	
+	public static Result getAllSpams() {
+		int page = Integer.parseInt(request().getQueryString("page"));
+		int rowsPerPage = Integer.parseInt(request().getQueryString("rows"));
+		int totalSize = Comment.find.where().eq("spam_flag", true).findRowCount();
+		int start=0;
+		
+		start = (page-1) * rowsPerPage;
+		
+		List<Comment> comments = Comment.findAllSpams(start, rowsPerPage);
+		
+		List<CommentVM> commentVMs = new ArrayList<>();
+		for(Comment c : comments) {
+			CommentVM comment = new CommentVM(c);
+			comment.prod_url = "/product/page/" + comment.post_id;
+			commentVMs.add(comment);
+		}
+		
+		NgTableVM vm = new NgTableVM(totalSize, commentVMs);
+		return ok(Json.toJson(vm));
+	}
+	
+	public static Result notASpam() {
+		DynamicForm form = play.data.Form.form().bindFromRequest();
+		Long commentId = Long.parseLong(form.get("comment_id"));
+		Comment comment = Comment.find.byId(commentId);
+		comment.spam_flag = false;
+		comment.update();
+		return ok(Json.toJson(comment.id));
+	}
+	
+	private final static String validApiKey;
+	private final static String validApiConsumer;
+	
+	static {
+		validApiKey = Play.application().configuration().getString("AkismetApiKey");//System.getProperty("akismetApiKey");
+		validApiConsumer = "http://" + request().host();//System.getProperty("akismetConsumer");
+		
+		if(validApiKey == null || validApiConsumer == null)
+			throw new RuntimeException("Both api key and consumer must be specified!");
+	}
+	
+	public static Result submitSpam() {
+		final Akismet akismet = new Akismet(validApiKey, validApiConsumer);	
+		DynamicForm form = play.data.Form.form().bindFromRequest();
+		Long commentId = Long.parseLong(form.get("comment_id"));
+		Long prid = Long.parseLong(form.get("post_id"));
+		Comment c = Comment.find.byId(commentId);
+		
+		Contributor author=Application.getContributor(session());
+		
+		AkismetComment comment = new AkismetComment();
+		comment.setUserIp(request().remoteAddress());
+		comment.setUserAgent(request().getHeader("User-Agent"));
+		comment.setReferrer(request().getHeader("Referer"));
+		comment.setPermalink("http://" + request().host()+ "/product/page/" + prid);
+		comment.setType("comment");
+		comment.setAuthor(author.user.firstName);
+		comment.setContent(c.content);
+		
+		try {
+			akismet.submitSpam(comment);
+		} catch (AkismetException e) {
+			e.printStackTrace();
+		}
+		
+		SOCommentsPr soCommentsPr = SOCommentsPr.find.where().eq("comment", c).findUnique();
+		SOCommentsPr.DeleteEvent(soCommentsPr);
+		//delete comment as it is spam
+		c.delete();
+		
+		return ok();
 	}
 }

@@ -99,5 +99,9 @@ public class Comment extends Model {
     	String query="SELECT string_agg(row_to_json(data):: text,',') AS LIST  FROM ( SELECT    users.name un,     getimageurl("+String.format("'%s',users.profileimage,'%s','%s'", User.class.getSimpleName(),DInitial.IMAGESTORESIZE.THUMBNAIL_VERYSMALL.filestate,S3File.getbaseurl())+")   ui,    comment.id cid,    comment.author_id uid,    comment.posted_at  AT TIME ZONE current_setting('TIMEZONE') cd,    comment.content ct,  comment.spam_flag sf FROM    comment,    contributor,    users WHERE users.active = true AND  contributor.id = comment.author_id AND   users.id = contributor.user_id AND   comment.post_id = "+p.id+" ORDER BY   comment.posted_at ASC   )  data(un,ui,cid,uid,cd,ct,sf)";
 		return Ebean.createSqlQuery(query).findUnique().getString("LIST");
     }
+
+	public static List<Comment> findAllSpams(int start, int rowsPerPage) {
+		return find.where().eq("spam_flag", true).setFirstRow(start).setMaxRows(rowsPerPage).findList();
+	}
  
 }

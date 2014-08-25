@@ -1,0 +1,72 @@
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import Templates._
+
+@pst={
+<link href="@routes.Assets.at("css/blog.css")"  rel='stylesheet' type='text/css' />
+<style type="text/css">
+	.ng-table th {
+		text-align: left !important;
+	}
+</style>
+}
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Blog @Boozology"){@pst}
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){	
+		<h3 class="text-success">Admin Spam Page</h3>
+		<div ng-controller="SpamTableController">
+			<table ng-table="tableParams" class="table">
+				<tbody>
+					<tr ng-repeat="comment in $data">
+	           			<td data-title="'Product'" sortable="'prod_name'"><a href="{{comment.prod_url}}">{{comment.prod_name}}</a></td>
+	            		<td ng-bind="comment.content.length<=20 ? comment.content : comment.content| limitTo:20" data-title="'Content'" sortable="'content'">...</td>
+	            		<td data-title="'postedAt'" sortable="'postedAt'">{{comment.postedAt | date:'dd-MM-yyyy'}}</td>
+	            		<td data-title="'Show Details'">
+	            			<button data-ng-click="showDetails(comment, $index)" class="btn btn-default btn-xs" data-toggle="modal" data-target=".bs-example-modal-sm">Show</button>
+	            		</td>
+	            		<td data-title="'Not Spam'">
+	            			<button data-ng-click="noSpam(comment.id, $index)" class="btn btn-success btn-xs">No Spam</button>
+	            		</td>
+	            		<td data-title="'Submit Spam'">
+	            			<button data-ng-click="submitSpam(comment, $index)" class="btn btn-danger btn-xs">Submit Spam</button>
+	            		</td>
+	        		</tr>
+				</tbody>
+			</table>
+			
+			<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-sm">
+			    <div class="modal-content">
+			      	 <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				        <h4 class="modal-title" id="modalLabel">Spam Details</h4>
+				      </div>
+				      
+				      <div class="modal-body" data-ng-model="commentVM">
+				         <p class="text-muted">{{commentVM.content}}</p>	
+				      </div>
+				      
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+				        <button data-ng-click="noSpam(commentVM.id, index)" class="btn btn-success btn-sm" data-dismiss="modal">No Spam</button>
+				        <button data-ng-click="submitSpam(commentVM.id, index)" class="btn btn-danger btn-sm" data-dismiss="modal">Submit Spam</button>
+				      </div>
+			    </div>
+			  </div>
+			</div>
+			
+		</div>
+	
+	}
+	@Templates.su.jready{
+		$('.loaderimagediv').hide();
+	}
+}{
+	@Templates.pagefooter(){ }
+}	

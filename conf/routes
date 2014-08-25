@@ -286,3 +286,9 @@ GET		/wines-of-the-world							  controllers.Application.handleOldPermalinks()
 GET		/beer-review-pliny-the-elder				  controllers.Application.handleOldPermalinks()
 GET		/wine-additives-whats-in-your-wine            controllers.Application.handleOldPermalinks()
 GET		/beer-review-bravo-brava 					  controllers.Application.handleOldPermalinks()
+
+# Admin Page
+GET		/admin/spam									controllers.Application.adminPageForSpam()
+GET		/get-spams									controllers.Application.getAllSpams()
+PUT		/not-a-spam									controllers.Application.notASpam()
+PUT		/submit-spam								controllers.Application.submitSpam()
