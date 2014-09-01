@@ -631,6 +631,49 @@ public class Carts extends Controller {
 		}
 		return false;
 	}
+	
+	public static boolean akismetValidationForBlogComment(Long prid, String commentText) throws AkismetException {
+		final Akismet akismet = new Akismet(validApiKey, validApiConsumer);	
+		
+		Contributor author=Application.getContributor(session());
+		
+		AkismetComment comment = new AkismetComment();
+		comment.setUserIp(request().remoteAddress());
+		comment.setUserAgent(request().getHeader("User-Agent"));
+		comment.setReferrer(request().getHeader("Referer"));
+		comment.setPermalink("http://" + request().host()+ "/blog/page/" + prid);
+		comment.setType("comment");
+		comment.setAuthor(author.user.firstName);
+		//comment.setAuthorEmail(author.user.email);
+		//comment.setAuthorUrl("http://" + request().host()+ "/contributor/page/" + author.user.id);
+		comment.setContent(commentText);
+		
+		if(akismet.checkComment(comment)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean akismetValidationForProductDesc(String descText) throws AkismetException {
+		final Akismet akismet = new Akismet(validApiKey, validApiConsumer);	
+		
+		Contributor author=Application.getContributor(session());
+		
+		AkismetComment comment = new AkismetComment();
+		comment.setUserIp(request().remoteAddress());
+		comment.setUserAgent(request().getHeader("User-Agent"));
+		comment.setReferrer(request().getHeader("Referer"));
+		comment.setType("blog-post");
+		comment.setAuthor(author.user.firstName);
+		//comment.setAuthorEmail(author.user.email);
+		//comment.setAuthorUrl("http://" + request().host()+ "/contributor/page/" + author.user.id);
+		comment.setContent(descText);
+		
+		if(akismet.checkComment(comment)) {
+			return true;
+		}
+		return false;
+	}
 	// This function checks whether the blog has to be displayed or not 
 	/*public static boolean blogPostView(BuzzVM buzz) {
 		boolean flag = false;

@@ -1,16 +1,23 @@
 package models;
 
-import play.Logger;
-import play.data.format.Formats;
-import play.data.validation.*;
-import play.db.ebean.Model;
-import play.db.ebean.Model.Finder;
-import plugins.S3Plugin;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.List;
 
-import javax.persistence.*;
-import javax.validation.Constraint;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import models.Admin.Addfailed;
+import play.data.validation.Constraints;
+import play.db.ebean.Model;
+import plugins.S3Plugin;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
@@ -20,15 +27,8 @@ import com.avaje.ebean.RawSql;
 import com.avaje.ebean.RawSqlBuilder;
 import com.avaje.ebean.annotation.CreatedTimestamp;
 
-import controllers.Application;
 import controllers.DInitial;
 import controllers.GHelp;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.*;
 
 @Entity
 public class Product extends  Model {
@@ -61,6 +61,8 @@ public class Product extends  Model {
     
     public String description;
     
+    public Boolean spam_flag;
+    
 	@ManyToOne
 	public Category category;
 	
@@ -88,9 +90,12 @@ public class Product extends  Model {
 	@ManyToOne
 	public Store pstore;
 
+	@ManyToMany
+    public List<ProductLabel> labels;
+	
 	public static Model.Finder<Long,Product> find = new Finder<Long, Product>(Long.class, Product.class);
 	
-	public Product(String ProductName,String currency,double pricetag,User usr,String SitUrl,String ImgUrl,Category categ,boolean status,String description)
+	public Product(String ProductName,String currency,double pricetag,User usr,String SitUrl,String ImgUrl,Category categ,boolean status,String description, boolean spam_flag)
 	{
 		this.productname=ProductName;
 		this.Currency=currency;
@@ -101,9 +106,10 @@ public class Product extends  Model {
 		this.ImageLocation=ImgUrl;
 		this.category=categ;
 		this.alive=status;
-		this.gender=usr.gender;
+		this.gender=0L;
 		this.views=0L;
 		this.description=description;
+		this.spam_flag = spam_flag;
 		this.save();
 	}
 	
@@ -134,9 +140,9 @@ public class Product extends  Model {
 	}
 	
 	//Static Modifiers
-	public static Product CreateProduct(String ProductName,String currency,double pricetag,User usr,String SitUrl,String ImgUrl,Category categ,boolean status,long pgender,String description)
+	public static Product CreateProduct(String ProductName,String currency,double pricetag,User usr,String SitUrl,String ImgUrl,Category categ,boolean status,long pgender,String description,boolean spam_flag)
 	{
-		Product p=new Product(ProductName, currency, pricetag, usr, SitUrl, ImgUrl, categ, status,description);
+		Product p=new Product(ProductName, currency, pricetag, usr, SitUrl, ImgUrl, categ, status,description,spam_flag);
 
 		try {
 			String allotedname=p.getproductimagename(true);
@@ -270,5 +276,31 @@ public class Product extends  Model {
         fp=fp.or(Expr.eq("Founder.id", prod.Founder.id),Expr.eq("pstore.id", prod.pstore.id));
 		return	fp.orderBy("timeofadd desc").findPagingList(pageSize).getPage(page);
     }
+	
+	public void ApplyLabel(String labelarray)
+    {
+    	Ebean.createSqlUpdate("DELETE from product_product_label where product_product_label.product_id = :bid ").setParameter("bid", this.id).execute();
+    	Ebean.createSqlUpdate("DELETE from product_label where product_label.id NOT IN( SELECT DISTINCT product_product_label.product_label_id from product_product_label)").execute();
+    	String tags[]=labelarray.split(",");
+    	for(String tag:tags)
+    	{
+    		if(tag!=null)
+    			AddLabel(ProductLabel.AddTag(tag)) ;
+    	}
+    	this.save();
+    }
+	
+	public boolean AddLabel(ProductLabel productLabel)
+    {
+    	if(this.labels.size()>=DInitial.PRODUCT_LABELS_LIMIT||this.labels.contains(productLabel))
+    		return false;
+    	this.labels.add(productLabel);
+    	this.save();
+    	return true;
+    }
+
+	public static List<Product> findAllSpams(int start, int rowsPerPage) {
+		return find.where().eq("spam_flag", true).setFirstRow(start).setMaxRows(rowsPerPage).findList();
+	}
 	
 }

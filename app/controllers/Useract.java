@@ -26,6 +26,7 @@ import models.Eventlog;
 import models.FSearch;
 import models.Follow;
 import models.Product;
+import models.ProductLabel;
 import models.S3File;
 import models.Store;
 import models.User;
@@ -45,6 +46,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import play.Logger;
+import play.api.mvc.Flash;
 import play.api.templates.Html;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -52,6 +54,7 @@ import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
+import play.data.validation.Validation;
 import play.i18n.Messages;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -371,9 +374,9 @@ public class Useract  extends Controller {
 		
 		public String description;
 		
-		public String location;
-		
 		public String servicearea;
+		
+		public String labels;
 		
 		public Category getcategory()
 		{
@@ -408,10 +411,15 @@ public class Useract  extends Controller {
 		} 
 		
 		Useract.NEW_PRODUCT np=filledForm.bindFromRequest().get();
+		Boolean spam_flag = false;
+		try {
+			spam_flag = Carts.akismetValidationForProductDesc(np.description);
+		} catch (AkismetException e) {
+			e.printStackTrace();
+		}
+		Product p=Product.CreateProduct(np.productname, np.currency, np.pricetag, usr, np.capturesite, np.imagelocation, np.getcategory(),true,np.gender,np.description,spam_flag);
+		p.ApplyLabel(np.labels);
 		
-		
-		
-		Product p=Product.CreateProduct(np.productname, np.currency, np.pricetag, usr, np.capturesite, np.imagelocation, np.getcategory(),true,np.gender,np.description);
 		if(p!=null)
 		{
 				/*
@@ -436,13 +444,17 @@ public class Useract  extends Controller {
 		}
 		
 		
-		return redirect(routes.Application.ProductPage(p.id,false));	
+		return Application.ProductPage(p.id,false);	
 		
 	}
 	
 	@SubjectPresent
 	public static Result  addoptions()
 	{
+		final Contributor localUser = Application.getContributor(session());
+		if(!Boolean.valueOf(localUser.user.emailValidated)){
+			flash().put(Application.EMAIL_VERIFICATION_FAIL, "You must verify your email before you can comment");
+		}
 		return ok(views.html.Tools.addproduct.render());
 	
 	}
@@ -1052,19 +1064,21 @@ public class Useract  extends Controller {
 	}
 	
 	@SubjectPresent
-	public static Result  AddBlogComment()
+	public static Result  AddBlogComment() throws AkismetException
 	{
 		DynamicForm bindedForm = play.data.Form.form().bindFromRequest();
 		Long prid = Long.parseLong(bindedForm.get("blog"));
 		String content=bindedForm.get("cmnttxt");
 		if(content==null)
 			return badRequest();
+		
+		boolean spam_flag = Carts.akismetValidationForBlogComment(prid, content);
 		//response().setContentType("application/json");	
 		Contributor author=Application.getContributor(session());
 		Blog blg=Blog.find.byId(prid);
 		if(blg!=null)
 		{
-			BlogComment cmt=BlogComment.AddComment(blg, author, content.replace("\n", " "));
+			BlogComment cmt=BlogComment.AddComment(blg, author, content.replace("\n", " "), spam_flag);
 			if(cmt!=null)
 			{
 				//models.Notifications.SOCommentsPr.ReportEvent(author, post, cmt);

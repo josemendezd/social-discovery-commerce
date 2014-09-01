@@ -386,6 +386,7 @@
 				 	var hiddenC = "";
 					$.each(json.cmntgrid, function(i,cmm)
 	        		{
+						if( !cmm.sf ) {
 	        				var str = '<div class="comment-post">' +
 	        						'<img src="' + cmm.ui +  '" class="user-thumb img-responsive" alt="' + cmm.un + '"/>' +
 	        						'<div class="comment">' +
@@ -410,7 +411,7 @@
 	        				hiddenC += str;
 	        			}
 	        			count++;
-	        			
+					}
 	        			
 	        		});
 	        		$("#cmmHold").append(comments);

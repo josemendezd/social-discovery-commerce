@@ -156,6 +156,8 @@ public class DInitial {
     
     public static final int BLOG_LABELS_LIMIT=10;
     
+    public static final int PRODUCT_LABELS_LIMIT=10;
+    
     public static class CURRENT_ACL{
     	public static final int 
     	ADMINISTRATOR_ONLY=1,

@@ -296,7 +296,7 @@ public class Global extends GlobalSettings {
 				Logger.info(fx.getAbsolutePath());
 				for(Contributor c:contl)
 				{
-					Product cpr=new Product(("Product "+c.user.id+" "+c.user.name+" ")+prodiden, "$", 12+rand.nextInt(150000), c.user, "http://"+prodiden+"avenue.amazon.com/productx",fx.getName(),catl.get(rand.nextInt(4)), true,"Random Initialized");
+					Product cpr=new Product(("Product "+c.user.id+" "+c.user.name+" ")+prodiden, "$", 12+rand.nextInt(150000), c.user, "http://"+prodiden+"avenue.amazon.com/productx",fx.getName(),catl.get(rand.nextInt(4)), true,"Random Initialized",false);
 					if(cpr!=null)
 					{
 						//disabled....

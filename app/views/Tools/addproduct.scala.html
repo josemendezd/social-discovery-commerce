@@ -37,7 +37,7 @@
 	<body>	
 		<div class="addbuttondiv">
 				  
-		  	<button type="button" class="btn btn-lg btn-danger brectangle addbuttonsnature" data-toggle="collapse" data-target="#addfromweb">
+		  	<button type="button" class="btn btn-lg btn-danger brectangle addbuttonsnature btnupload" data-toggle="collapse" data-target="#addfromweb">
 				Add from the Web
 			</button>
 			<div id="addfromweb" class="collapse"> 
@@ -47,7 +47,7 @@
 					<button type="submit" class="btn btn-default">Submit URL or Image URL</button>
 				</form>		
 			</div>
-			<button type="button" class="btn btn-lg btn-success brectangle addbuttonsnature" data-toggle="collapse" data-target="#uploadprod">
+			<button type="button" class="btn btn-lg btn-success brectangle addbuttonsnature btnupload" data-toggle="collapse" data-target="#uploadprod">
 				Upload
 			</button>
 			<div id="uploadprod" class="collapse"> 
@@ -67,7 +67,7 @@
 			}
 			
 			</div>
-			<button type="button" class="btn btn-lg btn-info brectangle addbuttonsnature" data-toggle="collapse" data-target="#draggb">
+			<button  type="button" class="btn btn-lg btn-info brectangle addbuttonsnature btnupload" data-toggle="collapse" data-target="#draggb">
 				Drag Grabber Button
 			</button>
 			<div id="draggb" class="collapse"> 
@@ -84,6 +84,10 @@
 						textp.innerHTML='Selected file: ' + (function(x){if(x.length>1){return x}else{ return 'None !!';}})(this.value);
 						if(this.value.length > 0) {textp.style.display = 'block';}
 					};
+					
+					if(@(flash.contains(Application.EMAIL_VERIFICATION_FAIL))) {
+						$(".btnupload").attr('disabled','disabled');
+					}
 			</script>
 		  
 		  @Templates.su.jready{

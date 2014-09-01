@@ -25,6 +25,10 @@
     	$('#warningModel').modal({show:true});
     };
     
+    $.fn.giveEmailValidationWarning = function () {
+    	$('#emailWarningValidation').modal({show:true});
+    };
+    
     $.fn.setresponse = function (e) {
     	//params-> ispost(false|optional),failreq(false|optional),issync(true|optional)
     	//,failans(false|optional),argdata(""|optional),successnode("answer"|optional),failnode("answer"|optional)

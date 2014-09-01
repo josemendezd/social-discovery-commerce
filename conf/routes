@@ -292,3 +292,10 @@ GET		/admin/spam									controllers.Application.adminPageForSpam()
 GET		/get-spams									controllers.Application.getAllSpams()
 PUT		/not-a-spam									controllers.Application.notASpam()
 PUT		/submit-spam								controllers.Application.submitSpam()
+
+GET		/admin/blog/spam							controllers.Application.adminPageForBlogSpam()
+GET		/get-blog-spams								controllers.Application.getAllBlogSpams()
+PUT		/blog/not-a-spam							controllers.Application.notASpamComment()
+PUT		/blog/submit-spam							controllers.Application.submitBlogSpam()
+
+GET		/check/email								controllers.Application.isEmailValidated()

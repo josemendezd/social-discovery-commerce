@@ -1,7 +1,12 @@
 package controllers;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -90,6 +95,7 @@ public class Application extends Controller {
 	public static final String USER_ROLE = "user";
 	public static final String ADMIN_ROLE = "admin";
 	public static final String MODERATOR_ROLE = "moderator";
+	public static final String EMAIL_VERIFICATION_FAIL = "email";
 	
 	public static final String WebAddress=play.Play.application().configuration().getString("site.address");
 	public static final String Captchaprivate=play.Play.application().configuration().getString("site.captcha.private");
@@ -475,10 +481,15 @@ public class Application extends Controller {
 		Category c=Category.find.byId(id);
 		if(c!=null)
 		{
-			String jsrep=Category.ChildJSON(c.id);
-			if(jsrep==null)
-				jsrep=" ";
-			return ok("{\"child\":["+jsrep+"]}");
+			if(c.cname.equals("All")) {
+				String jsrep=Category.ChildJSON(c.id);
+				if(jsrep==null)
+					jsrep=" ";
+				return ok("{\"child\":["+jsrep+"]}");
+			}
+			else{
+				return ok("{\"child\":[]}");
+			}
 		}
 		else
 			return notFound();
@@ -1174,7 +1185,7 @@ public class Application extends Controller {
 */			}
 		return ok(views.html.Templates.su.SingleBlogPage.render(blog,false,0,editor,likedByMe));
 	}
-	
+	@Restrict(@Group(Application.ADMIN_ROLE))
 	public static Result adminPageForSpam() {
 		return ok(views.html.Admin.adminPageForSpam.render());
 	}
@@ -1200,6 +1211,7 @@ public class Application extends Controller {
 		return ok(Json.toJson(vm));
 	}
 	
+	@Restrict(@Group(Application.ADMIN_ROLE))
 	public static Result notASpam() {
 		DynamicForm form = play.data.Form.form().bindFromRequest();
 		Long commentId = Long.parseLong(form.get("comment_id"));
@@ -1219,7 +1231,7 @@ public class Application extends Controller {
 		if(validApiKey == null || validApiConsumer == null)
 			throw new RuntimeException("Both api key and consumer must be specified!");
 	}
-	
+	@Restrict(@Group(Application.ADMIN_ROLE))
 	public static Result submitSpam() {
 		final Akismet akismet = new Akismet(validApiKey, validApiConsumer);	
 		DynamicForm form = play.data.Form.form().bindFromRequest();
@@ -1227,7 +1239,7 @@ public class Application extends Controller {
 		Long prid = Long.parseLong(form.get("post_id"));
 		Comment c = Comment.find.byId(commentId);
 		
-		Contributor author=Application.getContributor(session());
+		Contributor author=c.author;
 		
 		AkismetComment comment = new AkismetComment();
 		comment.setUserIp(request().remoteAddress());
@@ -1250,5 +1262,142 @@ public class Application extends Controller {
 		c.delete();
 		
 		return ok();
+	}
+
+	@Restrict(@Group(Application.ADMIN_ROLE))	
+	public static Result adminPageForBlogSpam() {
+		return ok(views.html.Admin.adminPageForBlogSpam.render());
+	}
+	
+	@Restrict(@Group(Application.ADMIN_ROLE))
+	public static Result getAllBlogSpams() {
+		int page = Integer.parseInt(request().getQueryString("page"));
+		int rowsPerPage = Integer.parseInt(request().getQueryString("rows"));
+		int totalSize = BlogComment.find.where().eq("spam_flag", true).findRowCount();
+		int start=0;
+		
+		start = (page-1) * rowsPerPage;
+		
+		List<BlogComment> comments = BlogComment.findAllSpams(start, rowsPerPage);
+		
+		List<CommentVM> commentVMs = new ArrayList<>();
+		for(BlogComment c : comments) {
+			CommentVM comment = new CommentVM(c);
+			comment.prod_url = "/blog/page/" + comment.post_id;
+			commentVMs.add(comment);
+		}
+		
+		NgTableVM vm = new NgTableVM(totalSize, commentVMs);
+		return ok(Json.toJson(vm));
+	}
+	
+	@Restrict(@Group(Application.ADMIN_ROLE))
+	public static Result notASpamComment() {
+		DynamicForm form = play.data.Form.form().bindFromRequest();
+		Long commentId = Long.parseLong(form.get("comment_id"));
+		BlogComment comment = BlogComment.find.byId(commentId);
+		comment.spam_flag = false;
+		comment.update();
+		return ok(Json.toJson(comment.id));
+	}
+	
+	@Restrict(@Group(Application.ADMIN_ROLE))
+	public static Result submitBlogSpam() {
+		final Akismet akismet = new Akismet(validApiKey, validApiConsumer);	
+		DynamicForm form = play.data.Form.form().bindFromRequest();
+		Long commentId = Long.parseLong(form.get("comment_id"));
+		Long prid = Long.parseLong(form.get("post_id"));
+		BlogComment bc = BlogComment.find.byId(commentId);
+		
+		Contributor author= bc.author;
+		
+		AkismetComment comment = new AkismetComment();
+		comment.setUserIp(request().remoteAddress());
+		comment.setUserAgent(request().getHeader("User-Agent"));
+		comment.setReferrer(request().getHeader("Referer"));
+		comment.setPermalink("http://" + request().host()+ "/blog/page/" + prid);
+		comment.setType("comment");
+		comment.setAuthor(author.user.firstName);
+		comment.setContent(bc.content);
+		
+		try {
+			akismet.submitSpam(comment);
+		} catch (AkismetException e) {
+			e.printStackTrace();
+		}
+		//delete comment as it is spam
+		bc.delete();
+		
+		return ok();
+	}
+	
+	@Restrict(@Group(Application.ADMIN_ROLE))
+	public static Result adminPageForProductSpam() {
+		return ok(views.html.Admin.adminPageForProductSpam.render());
+	}
+	
+	@Restrict(@Group(Application.ADMIN_ROLE))
+	public static Result getAllProductSpams() {
+		int page = Integer.parseInt(request().getQueryString("page"));
+		int rowsPerPage = Integer.parseInt(request().getQueryString("rows"));
+		int totalSize = Product.find.where().eq("spam_flag", true).findRowCount();
+		int start=0;
+		
+		start = (page-1) * rowsPerPage;
+		
+		List<Product> Products = Product.findAllSpams(start, rowsPerPage);
+		
+		List<CommentVM> productVMs = new ArrayList<>();
+		for(Product p : Products) {
+			CommentVM vm = new CommentVM(p);
+			vm.prod_url = "/product/page/" + p.id;
+			productVMs.add(vm);
+		}
+		
+		NgTableVM vm = new NgTableVM(totalSize, productVMs);
+		return ok(Json.toJson(vm));
+	}
+	
+	@Restrict(@Group(Application.ADMIN_ROLE))
+	public static Result notSpam() {
+		DynamicForm form = play.data.Form.form().bindFromRequest();
+		Long commentId = Long.parseLong(form.get("comment_id"));
+		Product product = Product.find.byId(commentId);
+		product.spam_flag = false;
+		product.update();
+		return ok(Json.toJson(product.id));
+	}
+	
+	@Restrict(@Group(Application.ADMIN_ROLE))
+	public static Result submitProductSpam() {
+		final Akismet akismet = new Akismet(validApiKey, validApiConsumer);	
+		DynamicForm form = play.data.Form.form().bindFromRequest();
+		Long commentId = Long.parseLong(form.get("comment_id"));
+		Product bc = Product.find.byId(commentId);
+		
+		AkismetComment comment = new AkismetComment();
+		comment.setUserIp(request().remoteAddress());
+		comment.setUserAgent(request().getHeader("User-Agent"));
+		comment.setReferrer(request().getHeader("Referer"));
+		comment.setType("comment");
+		comment.setAuthor(bc.Founder.firstName);
+		comment.setContent(bc.description);
+		
+		try {
+			akismet.submitSpam(comment);
+		} catch (AkismetException e) {
+			e.printStackTrace();
+		}
+		//delete comment as it is spam
+		//bc.delete();
+		
+		return ok();
+	}
+	
+	
+	
+	public static Boolean verifyEmail(){
+		final Contributor localUser = Application.getContributor(session());
+		return Boolean.valueOf(localUser.user.emailValidated);
 	}
 }
