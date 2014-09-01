@@ -250,14 +250,18 @@
 		}
 		self.loadinitcatg();
 		
-		
+		var active = false;
 		self.verifyform=function(){
 			var retnresp=$().setresponse({ispost:false ,failans:false});
 			console.log(retnresp);
 			
+			
 			var tags = $("#labels").val();
 			if( tags.split(',').length > 10) {
-				$('#labels').after('<label style="font-size:12px;color:red">Sorry, You can not add more than 10 tags.</label>')
+				if(active == false){
+					$('#labels').after('<label style="font-size:12px;color:red">Sorry, You can not add more than 10 tags.</label>')
+					active = true;
+				}
 				return;
 			}
 			

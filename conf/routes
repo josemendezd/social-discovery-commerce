@@ -298,4 +298,8 @@ GET		/get-blog-spams								controllers.Application.getAllBlogSpams()
 PUT		/blog/not-a-spam							controllers.Application.notASpamComment()
 PUT		/blog/submit-spam							controllers.Application.submitBlogSpam()
 
-GET		/check/email								controllers.Application.isEmailValidated()
+GET		/admin/product/spam							controllers.Application.adminPageForProductSpam()
+GET		/get-product-spams							controllers.Application.getAllProductSpams()
+PUT		/product/not-a-spam							controllers.Application.notSpam()
+PUT		/product/submit-spam						controllers.Application.submitProductSpam()
+

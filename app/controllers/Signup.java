@@ -403,10 +403,14 @@ public class Signup extends Controller {
 			{				
 				flash(Application.FLASH_ERROR_KEY, "Sorry a user already registered with this email,if you still claim that its yours, then please use forgot password on login page.");
 				signingin.updatestatus(DInitial.SIGNUP_STAGE.EMAIL_TO_BE_ENTERED );
+				signingin.emailValidated = true;
+				signingin.update();
 				return badRequest(views.html.account.signup.askusersemail.render());//Redirect to Enter a valid Email-ID with a link to forgot password				
 			}	
 			signingin.setusersemail(email);
 			signingin.updatestatus(DInitial.SIGNUP_STAGE.JUST_REGISTERED );
+			signingin.emailValidated = true;
+			signingin.update();
 		}
 	    session().remove("clearid");
 	    flash(Application.FLASH_ERROR_KEY,"Email is now configured, Please try to login again");
