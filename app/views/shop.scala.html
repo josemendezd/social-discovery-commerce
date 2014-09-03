@@ -13,6 +13,15 @@ position:absolute;margin-top:400px;right:10px;z-index:5;font-size: 18px;
 width:70px;height:70px;vertical-align: baseline!important;
 }
 
+.isotope-item {
+  float: left;
+ 
+ 
+}
+.isotope-wrap {
+	width: 100%;
+}
+
 </style>
 <script src="@routes.Assets.at("bl/js/typeahead.min.js")"></script>
 }
@@ -539,17 +548,25 @@ width:70px;height:70px;vertical-align: baseline!important;
 						/* Fire event to show isotope view */
 						if(self.fr.page == 1 ){
 							
+							setTimeout(function () {
+								
+								$(window).load(function() {
+									console.log("loaded");
+									$containerShopList = $('.isotope-wrap').isotope({
+										  itemSelector: '.isotope-item',
+										  masonry: {
+											  columnWidth: 50
+											}
+									});
+							    });
+										
+							},2000);
+							
 							try {
 								$containerShopList.isotope('destroy');
 							} catch(e) {}
 							
-							$containerShopList = $('.isotope-wrap').isotope({
-								  itemSelector: '.isotope-item',
-								  masonry: {
-							   		columnWidth: 10,
-							        gutterWidth: 10
-							  	  }
-							});
+							
 						} else {
 							$.each($('.isotope-item'), function(index, elem) {
 								if (index >= sizeOfItemsBeforeApplyingIsotope) {
