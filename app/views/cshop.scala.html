@@ -245,10 +245,16 @@
 							        gutterWidth: 10
 							  	  }
 							});
+								$(".isotope-item").find(".product-image").load(function(){
+					        	$container.isotope();
+					        });
 						} else {
 							$.each($('.isotope-item'), function(index, elem) {
 								if (index >= sizeOfItemsBeforeApplyingIsotope) {
 									$container.isotope( 'appended', elem );
+									$(elem).find(".product-image").load(function(){
+							        	$container.isotope();
+							        });
 								}
 							});	
 						}

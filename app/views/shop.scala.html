@@ -548,9 +548,6 @@ width:70px;height:70px;vertical-align: baseline!important;
 						/* Fire event to show isotope view */
 						if(self.fr.page == 1 ){
 							
-							setTimeout(function () {
-								
-								$(window).load(function() {
 									console.log("loaded");
 									$containerShopList = $('.isotope-wrap').isotope({
 										  itemSelector: '.isotope-item',
@@ -558,9 +555,12 @@ width:70px;height:70px;vertical-align: baseline!important;
 											  columnWidth: 50
 											}
 									});
-							    });
+							 
 										
-							},2000);
+							
+							$(".isotope-item").find(".product-image").load(function(){
+					        	$containerShopList.isotope();
+					        });
 							
 							try {
 								$containerShopList.isotope('destroy');
@@ -571,6 +571,9 @@ width:70px;height:70px;vertical-align: baseline!important;
 							$.each($('.isotope-item'), function(index, elem) {
 								if (index >= sizeOfItemsBeforeApplyingIsotope) {
 									$containerShopList.isotope( 'appended', elem );
+									$(elem).find(".product-image").load(function(){
+							        	$containerShopList.isotope();
+							        }); 
 								}
 							});	
 						}
