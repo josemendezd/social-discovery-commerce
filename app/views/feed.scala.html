@@ -276,18 +276,19 @@
 								  itemSelector: '.isotope-item',
 								  masonry: {
 							   		columnWidth: 10,
+									gutterWidth: 10
 							  	  }
 							});
 							
 							$(".isotope-item").find(".product-image").load(function(){
-					        	$containerShopList.isotope();
+								$containerList.isotope();
 					        });
 						} else {
 							$.each($('.isotope-item'), function(index, elem) {
 								if (index >= sizeOfItemsBeforeApplyingIsotope) {
 									$containerList.isotope( 'appended', elem );
 									$(elem).find(".product-image").load(function(){
-							        	$containerShopList.isotope();
+							        	$containerList.isotope();
 							        });
 								}
 							});	
