@@ -37,7 +37,7 @@ i.icon-share {
 	
 	<div class="row">
 		  <div class="span6">
-		    <h2>@if(isedit){ Now Editing: <span class="underline gray">@newblogform("blogtittle").value</span> }else{ ---Create a new Blog }</h2>
+		    <h2 style="padding-left: 40px;">@if(isedit){ Now Editing: <span class="underline gray">@newblogform("blogtittle").value</span> }else{    Create a new Post }</h2>
 		  </div>
 	</div>	
 		
@@ -53,7 +53,7 @@ i.icon-share {
 			@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY, Application.getLocalUser(session()))) {
 					<input type="text" ng-model="permalink" ng-keypress="checkBeforeKeypress($event)" ng-keyup="checkPermalink($event)" id="permalink_first" class="form-control"/>
 					<div id="permalink-div" class="col-sm-12 pull-left" style="padding: 0px;">
-						<label class="col-sm-7" style="padding: 0px;">Permalink: http://www.buzzology.com/blog/</label>
+						<label class="col-sm-7" style="padding: 0px;">Permalink: http://www.boozology.com/blog/</label>
 						<input type="text" ng-model="permalink_new" id="permalink_second" readonly="readonly" name="permaLink" value="@newblogform("permaLink").value" class="col-sm-3 form-control" style="height:26px;background-color: #FFFFFF; margin-top: 10px; width:32%; padding: 0px;"/>
 						<button type="button" data-ng-click="checkAvailibility(permalink_new)" class="check-avail col-sm-2 btn btn-xs btn-success" style="margin-top: 10px;">check availability</button>
 					</div>

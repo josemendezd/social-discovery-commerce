@@ -593,7 +593,7 @@ public class Carts extends Controller {
 			System.out.println(userlocation);
 		} catch (Exception e){
 			e.printStackTrace();
-			return true; // for testing only make it false otherwise
+			return true; 
 		}	
 		return true;
 	}

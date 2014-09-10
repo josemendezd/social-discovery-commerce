@@ -193,7 +193,7 @@ GET		/admin/ipblacklist/view						controllers.AdminControls.ipblacklistcontrol_v
 POST	/admin/ipblacklist/create					controllers.AdminControls.ipblacklistcontrol_create()
 GET		/admin/ipblacklist/delete					controllers.AdminControls.ipblacklistcontrol_delete(i:Long,p:Int ?= 0)
 GET		/admin/usercontrol/actdeact					controllers.AdminControls.usercontrol_activatedeactivate(userid:Long)
-GET		/admin/productcontrol/actdeact				controllers.AdminControls.productcontrol_activatedeactivate(prid:Long)
+GET		/admin/productcontrol/actdeact/:prid				controllers.AdminControls.productcontrol_activatedeactivate(prid:Long)
 GET		/admin/sql/view								controllers.AdminControls.sqlcontrol_view()
 POST	/admin/sql/update							controllers.AdminControls.sqlcontrol_update()
 
