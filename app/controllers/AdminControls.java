@@ -148,7 +148,7 @@ public class AdminControls extends Controller {
 		}
 	}
 	
-	@Restrict(@Group({Application.ADMIN_ROLE , Application.MODERATOR_ROLE}))
+	@Restrict(@Group({Application.ADMIN_ROLE}))
 	public static Result productcontrol_activatedeactivate(Long prid){return usercontrol.activatedeactivate(prid);}
 	
 	public static class productcontrol{
