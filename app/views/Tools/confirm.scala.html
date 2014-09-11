@@ -34,10 +34,12 @@
     <script src="@routes.Assets.at("javascripts/global.js")"></script>
     *@
     <script src="@routes.Assets.at("js/global_no_coffee.js")"></script>
+    <script src="@routes.Assets.at("bl/js/jquery.tokeninput.js")"></script>
     <link href="@routes.Assets.at("bl/css/fonts/fonts.css")" rel="stylesheet" type="text/css">
     
     <link href="@routes.Assets.at("css/bootstrap.css")" media="screen" rel="stylesheet" />
     <link href="@routes.Assets.at("css/bootstrap-responsive.css")" media="screen" rel="stylesheet" />
+    <link href="@routes.Assets.at("bl/css/token-input.css")" rel="stylesheet" type="text/css">
     <style>
     body{padding-top: 0px;}
     .text-nav {
@@ -143,10 +145,10 @@
 				  </div>
 				</div>
 				
-				<div class="control-group">
+				<div >
 				  <label class="control-label"  for="labels">Labels :</label>
-				  <div class="controls">
-					<input type="text" name="labels" id="labels"/>
+				  <div >
+					<input name="labels" id="labels"/>
 				  </div>
 				</div>
 				
@@ -200,6 +202,10 @@
   
   
   @Templates.su.jready{
+  
+  $('#labels').tokenInput("/tags/all", {
+                preventDuplicates: true
+            });
   
   @Html(play.Routes.javascriptRouter("categoryloader",controllers.routes.javascript.Application.RetrieveCategoryList));
   

@@ -303,3 +303,7 @@ GET		/get-product-spams							controllers.Application.getAllProductSpams()
 PUT		/product/not-a-spam							controllers.Application.notSpam()
 PUT		/product/submit-spam						controllers.Application.submitProductSpam()
 
+GET		/admin/tags									controllers.Application.adminPageForManageTags()
+PUT		/tags/add									controllers.Application.addTags()
+GET		/tags/all									controllers.Application.getAllTags()
+

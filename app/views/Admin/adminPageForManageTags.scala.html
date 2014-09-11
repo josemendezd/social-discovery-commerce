@@ -1,0 +1,40 @@
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import Templates._
+
+@pst={
+<link href="@routes.Assets.at("css/blog.css")"  rel='stylesheet' type='text/css' />
+<style type="text/css">
+	.ng-table th {
+		text-align: left !important;
+	}
+</style>
+}
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Blog @Boozology"){@pst}
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){	
+		<h3 class="text-success">Manage Tags</h3>
+		<div ng-controller="ManageTagsController">
+			<div class="control-group">
+				  <label class="control-label"  for="labels">Labels :</label>
+				  <div class="controls">
+					<input type="text" name="labels" id="labels" data-ng-model="labels"/>
+				  </div>
+			</div>
+			<button class="btn btn-primary" data-ng-click="addLabel(labels)">Add Tags</button>
+		
+		</div>
+	
+	}
+	@Templates.su.jready{
+		$('.loaderimagediv').hide();
+	}
+}{
+	@Templates.pagefooter(){ }
+}	

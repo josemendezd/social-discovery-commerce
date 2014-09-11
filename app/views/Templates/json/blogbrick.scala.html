@@ -9,5 +9,5 @@
 "baid":"@blg.author.id",
 "bccnt":"@BlogComment.CommentCount(blg)",	
 "tags":[ @for((tags,cnt) <- blg.labels.zipWithIndex){ @if(cnt!=0){,}
-{"tn":"@tags.tag"} } ]
+{"tn":"@tags.name"} } ]
 }

@@ -10,7 +10,9 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import models.Blog;
 import models.BlogComment;
@@ -25,6 +27,7 @@ import models.Product;
 import models.S3File;
 import models.SecurityRole;
 import models.Store;
+import models.Tags;
 import models.User;
 import models.UserCollection;
 import models.UserRate;
@@ -540,10 +543,11 @@ public class Application extends Controller {
 	@SubjectPresent
 	public static Result  GetAddBlog(){
 		User blogwriter=getLocalUser(session());
+		
 		boolean flag = false;
 		if(!blogwriter.emailValidated) {
 			//return ok(views.html.account.unverified.render());
-			return ok(views.html.Admin.Blog.AddEdit2.render(Useract.NEW_BLOG_FORM,false));
+			return ok(views.html.Admin.Blog.AddEdit2.render(Useract.NEW_BLOG_FORM,false,"[]"));
 			
 		} else {
 			for(int i = 0; i < blogwriter.roles.size(); i++) {
@@ -552,7 +556,7 @@ public class Application extends Controller {
 				}
 			}
 			if(flag == true) {
-				return ok(views.html.Admin.Blog.AddEdit2.render(Useract.NEW_BLOG_FORM,false));
+				return ok(views.html.Admin.Blog.AddEdit2.render(Useract.NEW_BLOG_FORM,false,"[]"));
 			} else {
 				try {
 					String IPAddress = play.mvc.Controller.request().remoteAddress();
@@ -561,9 +565,9 @@ public class Application extends Controller {
 				} catch (Exception e){
 					e.printStackTrace();
 					//return ok(views.html.account.unverified.render());
-					return ok(views.html.Admin.Blog.AddEdit2.render(Useract.NEW_BLOG_FORM,false));
+					return ok(views.html.Admin.Blog.AddEdit2.render(Useract.NEW_BLOG_FORM,false,"[]"));
 				}	
-				return ok(views.html.Admin.Blog.AddEdit2.render(Useract.NEW_BLOG_FORM,false));
+				return ok(views.html.Admin.Blog.AddEdit2.render(Useract.NEW_BLOG_FORM,false,"[]"));
 			}
 		}
 		
@@ -585,9 +589,17 @@ public class Application extends Controller {
 		bef.blogtittle = sqlr.getString("blogtittle");
 		bef.blogtext = sqlr.getString("blogtext");
 		bef.tags = sqlr.getString("tags");
-		bef.permaLink = sqlr.getString("permalink");	
+		bef.permaLink = sqlr.getString("permalink");
 		
-		return ok(views.html.Admin.Blog.AddEdit2.render(Useract.EDIT_BLOG_FORM.fill(bef),true));
+		List<Map> listTags = new ArrayList<>();
+		for(Tags tag : b.labels){
+			Map map = new HashMap<>();
+			map.put("id", tag.id);
+			map.put("name", tag.name);
+			listTags.add(map);
+		}
+		String asTagsInJson = Json.stringify(Json.toJson(listTags));
+		return ok(views.html.Admin.Blog.AddEdit2.render(Useract.EDIT_BLOG_FORM.fill(bef),true,asTagsInJson));
 	}
 	
 	public static Result  GetBlogComplainForm(Long id){
@@ -1400,4 +1412,26 @@ public class Application extends Controller {
 		final Contributor localUser = Application.getContributor(session());
 		return Boolean.valueOf(localUser.user.emailValidated);
 	}
+	
+	@Restrict(@Group(Application.ADMIN_ROLE))
+	public static Result adminPageForManageTags() {
+		return ok(views.html.Admin.adminPageForManageTags.render());
+	}
+	
+	@Restrict(@Group(Application.ADMIN_ROLE))
+	public static Result addTags() {
+		DynamicForm form = play.data.Form.form().bindFromRequest();
+		String tags = form.get("tags");
+		Tags.AddTag(tags);
+		return ok();
+	}
+	
+	public static Result getAllTags() {
+		List<Tags> tags = (List<Tags>) Tags.getAllTags();
+		return ok(Json.toJson(tags));
+	}
+	
+	
+	
+	
 }

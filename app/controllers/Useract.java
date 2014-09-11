@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
 import models.Blog;
 import models.BlogComment;
 import models.BlogImage;
-import models.BlogLabels;
 import models.BlogLikes;
 import models.Category;
 import models.CollectionComment;
@@ -26,7 +25,6 @@ import models.Eventlog;
 import models.FSearch;
 import models.Follow;
 import models.Product;
-import models.ProductLabel;
 import models.S3File;
 import models.Store;
 import models.User;
@@ -418,7 +416,7 @@ public class Useract  extends Controller {
 			e.printStackTrace();
 		}
 		Product p=Product.CreateProduct(np.productname, np.currency, np.pricetag, usr, np.capturesite, np.imagelocation, np.getcategory(),true,np.gender,np.description,spam_flag);
-		p.ApplyLabel(np.labels);
+		p.ApplyTag(np.labels);
 		
 		if(p!=null)
 		{
@@ -1168,7 +1166,7 @@ public class Useract  extends Controller {
 		blognew.permaLink = permalink;
 		blognew.update();
 		//Blog blognew= Blog.AddBlog(blgTitle, Contributor.find.byId(3L), blgText);
-		blognew.ApplyLabel(tags);
+		blognew.ApplyTag(tags);
 		
 		if(body.getFiles()!=null){
 			for(MultipartFormData.FilePart part : body.getFiles()){
@@ -1226,7 +1224,7 @@ public class Useract  extends Controller {
 		
 		Blog.EditBlog(bf,blgTitle, localContributor, blgText);
 		//Blog.EditBlog(bf,blgTitle, Contributor.find.byId(3L), blgText);
-		bf.ApplyLabel(tags);
+		bf.ApplyTag(tags);
 
 		
 		if(body.getFiles()!=null){

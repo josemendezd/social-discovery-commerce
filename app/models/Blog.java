@@ -52,7 +52,7 @@ public class Blog extends Model {
     public String permaLink;
     
     @ManyToMany
-    public List<BlogLabels> labels;
+    public List<Tags> labels;
     
     public Blog(String title, Contributor author, String content) {
         this.title = title;
@@ -62,7 +62,7 @@ public class Blog extends Model {
         this.save();
     }  
     
-    public void ApplyLabel(String labelarray)
+    /*public void ApplyLabel(String labelarray)
     {
     	Ebean.createSqlUpdate("DELETE from blog_blog_labels where blog_blog_labels.blog_id = :bid ").setParameter("bid", this.id).execute();
     	Ebean.createSqlUpdate("DELETE from blog_labels where blog_labels.id NOT IN( SELECT DISTINCT blog_blog_labels.blog_labels_id from blog_blog_labels)").execute();
@@ -73,10 +73,20 @@ public class Blog extends Model {
     			AddLabel(BlogLabels.AddTag(tag)) ;
     	}
     	this.save();
+    }*/
+    
+    public void ApplyTag(String labels)
+    {
+    	String tags[]=labels.split(",");
+    	for(String tag:tags)
+    	{
+    		if(tag!=null)
+    			this.labels.add(Tags.find.byId(Long.parseLong(tag)));
+    	}
+    	this.save();
     }
     
-    
-    public boolean AddLabel(BlogLabels bl)
+   /* public boolean AddLabel(BlogLabels bl)
     {
     	if(this.labels.size()>=DInitial.BLOG_LABELS_LIMIT||this.labels.contains(bl))
     		return false;
@@ -91,7 +101,7 @@ public class Blog extends Model {
     		return false;
     	this.save();
     	return true;
-    }
+    }*/
     
     public static Model.Finder<Long,Blog> find = new Finder<Long, Blog>(Long.class, Blog.class);
     

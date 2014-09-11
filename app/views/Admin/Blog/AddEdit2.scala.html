@@ -1,4 +1,4 @@
-@(newblogform: Form[_],isedit:Boolean=true)
+@(newblogform: Form[_],isedit:Boolean=true)(asTagsInJson:String)
 
 @import helper._
 
@@ -19,6 +19,8 @@ i.icon-share {
 <script src="@routes.Assets.at("bootstrapeditor/lib/js/wysihtml5-0.3.0.js")"></script>
 <script src="@routes.Assets.at("bootstrapeditor/src/bootstrap-wysihtml5.js")"></script>
 <script src="@routes.Assets.at("bootstrapeditor/rtedit.js")"></script>
+<script src="@routes.Assets.at("bl/js/jquery.tokeninput.js")"></script>
+<link href="@routes.Assets.at("bl/css/token-input.css")" rel="stylesheet" type="text/css">
 
 }
 
@@ -91,7 +93,13 @@ i.icon-share {
 		}
 		
 	
-		@Templates.su.jready{		
+		@Templates.su.jready{
+		
+		$('#tags').tokenInput("/tags/all", {
+                preventDuplicates: true,
+                prePopulate : @Html(asTagsInJson)
+         });	
+            	
 			$('.textarea').wysihtml5();
 			$('.loaderimagediv').hide();
 			

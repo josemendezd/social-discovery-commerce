@@ -91,7 +91,7 @@ public class Product extends  Model {
 	public Store pstore;
 
 	@ManyToMany
-    public List<ProductLabel> labels;
+    public List<Tags> labels;
 	
 	public static Model.Finder<Long,Product> find = new Finder<Long, Product>(Long.class, Product.class);
 	
@@ -277,7 +277,7 @@ public class Product extends  Model {
 		return	fp.orderBy("timeofadd desc").findPagingList(pageSize).getPage(page);
     }
 	
-	public void ApplyLabel(String labelarray)
+	/*public void ApplyLabel(String labelarray)
     {
     	Ebean.createSqlUpdate("DELETE from product_product_label where product_product_label.product_id = :bid ").setParameter("bid", this.id).execute();
     	Ebean.createSqlUpdate("DELETE from product_label where product_label.id NOT IN( SELECT DISTINCT product_product_label.product_label_id from product_product_label)").execute();
@@ -298,7 +298,18 @@ public class Product extends  Model {
     	this.save();
     	return true;
     }
-
+*/
+	public void ApplyTag(String labels)
+    {
+    	String tags[]=labels.split(",");
+    	for(String tag:tags)
+    	{
+    		if(tag!=null)
+    			this.labels.add(Tags.find.byId(Long.parseLong(tag)));
+    	}
+    	this.save();
+    }
+	
 	public static List<Product> findAllSpams(int start, int rowsPerPage) {
 		return find.where().eq("spam_flag", true).setFirstRow(start).setMaxRows(rowsPerPage).findList();
 	}

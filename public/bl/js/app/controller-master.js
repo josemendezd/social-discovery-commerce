@@ -227,3 +227,13 @@ blmaster.controller('ProductSpamTableController',function($scope, $http, $filter
 		});
 	};
 });
+// For Admin
+blmaster.controller('ManageTagsController',function($scope, $http){
+	$scope.addLabel = function(tags){
+		alert(tags);
+		$http.put('/tags/add', {'tags':tags}).success( function() {
+			alert("Success");
+		})
+	}
+});
+
