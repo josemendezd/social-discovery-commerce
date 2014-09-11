@@ -149,7 +149,7 @@ public class AdminControls extends Controller {
 	}
 	
 	@Restrict(@Group({Application.ADMIN_ROLE}))
-	public static Result productcontrol_activatedeactivate(Long prid){return usercontrol.activatedeactivate(prid);}
+	public static Result productcontrol_activatedeactivate(Long prid){return productcontrol.activatedeactivate(prid);}
 	
 	public static class productcontrol{
 		public static Result view(int page, String sortBy, String order, String filter)
