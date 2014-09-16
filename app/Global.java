@@ -250,13 +250,13 @@ public class Global extends GlobalSettings {
 			
 			Logger.info("Inserting initial images...");
 			String url = "http://" + play.Play.application().configuration().getString(AWS_S3_BUCKET) + play.Play.application().configuration().getString(BASE_URL_FORMAT);
-			ImageBeer.createInitial(url+"/home_cat/beer.png");
-			ImageGadgets.createInitial(url+"/home_cat/gadgets.png");
-			ImageGlassWare.createInitial(url+"/home_cat/glassware.png");
-			ImageLiquor.createInitial(url+"/home_cat/liquor.png");
-			ImageMixology.createInitial(url+"/home_cat/mixology.png");
-			ImageToys.createInitial(url+"/home_cat/toys.png");
-			ImageWine.createInitial(url+"/home_cat/wine.png");
+			ImageBeer.createInitial(url+"home_cat/beer.png");
+			ImageGadgets.createInitial(url+"home_cat/gadgets.png");
+			ImageGlassWare.createInitial(url+"home_cat/glassware.png");
+			ImageLiquor.createInitial(url+"home_cat/liquor.png");
+			ImageMixology.createInitial(url+"home_cat/mixology.png");
+			ImageToys.createInitial(url+"home_cat/toys.png");
+			ImageWine.createInitial(url+"home_cat/wine.png");
 			
 			Logger.info("Initial images recorded...");
 	

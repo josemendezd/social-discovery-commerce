@@ -88,8 +88,9 @@
         </ul>
       </div>
       <!-- End .category-list -->
-
-      <img src="@routes.Assets.at("bl/images/wine.png")" class="img-responsive" alt="">
+       @defining(controllers.HomePageImages.imagePathWine()) { imageSource=>
+       		<img src=@imageSource  class="img-responsive" alt="">
+       }
     </div>
     <!-- End .category-product -->
 
@@ -110,7 +111,9 @@
         </ul>
       </div>
       <!-- End .category-list -->
-      <img src="@routes.Assets.at("bl/images/beer.png")"class="img-responsive" alt="">
+      @defining(controllers.HomePageImages.imagePathBeer()) { imageSource=>
+                        <img src=@imageSource class="img-responsive" alt="">
+                        }
     </div>
 
   </div>
@@ -134,7 +137,9 @@
       </div>
       <!-- End .category-list -->
 
-      <img src="@routes.Assets.at("bl/images/liquor.png")" class="img-responsive" alt="">
+      @defining(controllers.HomePageImages.imagePathLiquor()) { imageSource=>
+        <img src=@imageSource  class="img-responsive" alt="">
+        }
     </div>
     <!-- End .category-product -->
 
@@ -156,7 +161,9 @@
         </ul>
       </div>
       <!-- End .category-list -->
-      <img src="@routes.Assets.at("bl/images/mixology.png")" class="img-responsive" alt="">
+      @defining(controllers.HomePageImages.imagePathMixology()) { imageSource=>
+                        <img src=@imageSource class="img-responsive" alt="">
+                        }
     </div>
     <!-- End .category-product -->
   </div>
@@ -179,7 +186,9 @@
         </ul>
       </div>
       <!-- End .category-list -->
-      <img src="@routes.Assets.at("bl/images/gadgets.png")" class="img-responsive" alt="">
+      @defining(controllers.HomePageImages.imagePathGadgets()) { imageSource=>
+                        <img src=@imageSource class="img-responsive" alt="">
+                        }
     </div>
     <!-- End .category-product -->
   </div>
@@ -203,7 +212,9 @@
       </div>
       <!-- End .category-list -->
 
-      <img src="@routes.Assets.at("bl/images/toys.png")" class="img-responsive" alt="">
+      @defining(controllers.HomePageImages.imagePathToys()) { imageSource=>
+                        <img src=@imageSource  class="img-responsive" alt="">
+                        }
     </div>
     <!-- End .category-product -->
 
@@ -225,7 +236,9 @@
         </ul>
       </div>
       <!-- End .category-list -->
-      <img src="@routes.Assets.at("bl/images/glassware.png")" class="img-responsive" alt="">
+      @defining(controllers.HomePageImages.imagePathGlassWare()) { imageSource=>
+                        <img src=@imageSource class="img-responsive" alt="">
+                        }
     </div>
     <!-- End .category-product -->
   </div>
