@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
+import com.avaje.ebean.Ebean;
+
 @Entity
 public class Tags extends Model  {
 	@Id
@@ -39,9 +41,11 @@ public class Tags extends Model  {
     	}
     }
     
-    public static boolean RemoveTag(String tagstring)
+    public static boolean RemoveTag(Long tagID)
     {
-    	Tags label=find.where().eq("tag", tagstring).findUnique();
+    	Ebean.createSqlUpdate("DELETE from product_tags where product_tags.tags_id = :id ").setParameter("id", tagID).execute();
+    	Ebean.createSqlUpdate("DELETE from blog_tags where blog_tags.tags_id = :id ").setParameter("id", tagID).execute();
+    	Tags label=Tags.find.byId(tagID);
     	if(label==null )
     		return false;
     	label.delete();

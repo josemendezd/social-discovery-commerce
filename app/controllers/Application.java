@@ -1430,7 +1430,13 @@ public class Application extends Controller {
 		List<Tags> tags = (List<Tags>) Tags.getAllTags();
 		return ok(Json.toJson(tags));
 	}
-	
+	@Restrict(@Group(Application.ADMIN_ROLE))
+	public static Result deleteTag() {
+		DynamicForm form = play.data.Form.form().bindFromRequest();
+		String stringID = form.get("id");
+		Tags.RemoveTag(Long.parseLong(stringID));
+		return ok();
+	}
 	
 	
 	

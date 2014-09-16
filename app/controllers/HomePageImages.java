@@ -20,7 +20,7 @@ public class HomePageImages extends Controller {
 		int number  = obj.nextInt(5) + 1;
 		ImageWine imageWine = ImageWine.find.byId(1L);
 		if(imageWine!=null)
-			return "/assets/" + imageWine.url;
+			return imageWine.url;
 		return null;
 	}
 	
@@ -30,7 +30,7 @@ public class HomePageImages extends Controller {
 		int number  = obj.nextInt(5) + 1;
 		ImageBeer imageBeer = ImageBeer.find.byId(1L);
 		if(imageBeer!=null)
-		return "/assets/" + imageBeer.url;
+		return imageBeer.url;
 		return null;
 	}
 	
@@ -40,7 +40,7 @@ public class HomePageImages extends Controller {
 		int number  = obj.nextInt(5) + 1;
 		ImageLiquor imageLiquor = ImageLiquor.find.byId(1L);
 		if(imageLiquor!=null)
-		return "/assets/" + imageLiquor.url;
+		return imageLiquor.url;
 		return null;
 	}
 	
@@ -50,7 +50,7 @@ public class HomePageImages extends Controller {
 		int number  = obj.nextInt(5) + 1;
 		ImageMixology imageMixology = ImageMixology.find.byId(1L);
 		if(imageMixology!=null)
-		return "/assets/" + imageMixology.url;
+		return imageMixology.url;
 		return null;
 	}
 	
@@ -60,7 +60,7 @@ public class HomePageImages extends Controller {
 		int number  = obj.nextInt(5) + 1;
 		ImageGadgets imageGadgets = ImageGadgets.find.byId(1L);
 		if(imageGadgets!=null)
-		return "/assets/" + imageGadgets.url;
+		return imageGadgets.url;
 		return null;
 	}
 	
@@ -70,7 +70,7 @@ public class HomePageImages extends Controller {
 		int number  = obj.nextInt(5) + 1;
 		ImageToys imageToys = ImageToys.find.byId(1L);
 		if(imageToys!=null)
-		return "/assets/" + imageToys.url;
+		return imageToys.url;
 		return null;
 	}
 	
@@ -80,7 +80,7 @@ public class HomePageImages extends Controller {
 		int number  = obj.nextInt(5) + 1;
 		ImageGlassWare imageGlassWare = ImageGlassWare.find.byId(1L);
 		if(imageGlassWare!=null)
-		return "/assets/" + imageGlassWare.url;
+		return imageGlassWare.url;
 		return null;
 	}
 

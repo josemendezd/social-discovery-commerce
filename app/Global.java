@@ -75,6 +75,8 @@ public class Global extends GlobalSettings {
 	
 	public static final String  APP_ENV_LOCAL = "local";
 	public static final String  APP_ENV_VAR = "CURRENT_APPNAME";
+	public static final String AWS_S3_BUCKET = "aws.s3.bucket";
+	public static final String BASE_URL_FORMAT = "base.url.format";
 
 	public void onStart(Application app) {
 		Logger.info("Application has started");	
@@ -247,14 +249,14 @@ public class Global extends GlobalSettings {
 			Logger.info("User data recorder...");
 			
 			Logger.info("Inserting initial images...");
-			
-			ImageBeer.createInitial("bl/images/beer.png");
-			ImageGadgets.createInitial("bl/images/gadgets.png");
-			ImageGlassWare.createInitial("bl/images/glassware.png");
-			ImageLiquor.createInitial("bl/images/liquor.png");
-			ImageMixology.createInitial("bl/images/mixology.png");
-			ImageToys.createInitial("bl/images/toys.png");
-			ImageWine.createInitial("bl/images/wine.png");
+			String url = "http://" + play.Play.application().configuration().getString(AWS_S3_BUCKET) + play.Play.application().configuration().getString(BASE_URL_FORMAT);
+			ImageBeer.createInitial(url+"/home_cat/beer.png");
+			ImageGadgets.createInitial(url+"/home_cat/gadgets.png");
+			ImageGlassWare.createInitial(url+"/home_cat/glassware.png");
+			ImageLiquor.createInitial(url+"/home_cat/liquor.png");
+			ImageMixology.createInitial(url+"/home_cat/mixology.png");
+			ImageToys.createInitial(url+"/home_cat/toys.png");
+			ImageWine.createInitial(url+"/home_cat/wine.png");
 			
 			Logger.info("Initial images recorded...");
 	

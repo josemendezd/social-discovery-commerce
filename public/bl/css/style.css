@@ -1887,6 +1887,7 @@ input.form-control {
 .brectangle{border-radius:0px !important;border:none !important;text-shadow:none !important;}
 .onnextline{clear: both;}
 .collectioniframe{
+	display: none;
 	z-index:150;
 	position:absolute;
 	display:block;	

@@ -561,6 +561,10 @@ width:70px;height:70px;vertical-align: baseline!important;
 							
 							$(".isotope-item").find(".product-image").load(function(){
 					        	$containerShopList.isotope();
+					        	
+					        	$($(this).parents(".isotope-item")).mouseleave(function(){
+					        		$(this).find('.dropdown').removeClass('open');
+					      		});
 					        });
 							
 							try {

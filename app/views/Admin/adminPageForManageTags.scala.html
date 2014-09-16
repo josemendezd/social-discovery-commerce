@@ -20,11 +20,18 @@
 }{
 	@Templates.pagemaincontent(){	
 		<h3 class="text-success">Manage Tags</h3>
-		<div ng-controller="ManageTagsController">
-			<div class="control-group">
+		<div data-ng-controller="ManageTagsController" style="padding-left: 10px;">
+			<div style="float:left">
+               <div data-ng-repeat="token in allLabel" style="float:left;padding:5px;padding-left:15px;">
+                 <span style="width:120px;float:left">{{token.name}}</span>
+                 <input style="float:left" name="" type="button" value="Delete" class="btngray" data-ng-click="deleteToken(token.id)" />
+                  
+              </div>
+			</div>
+			<div class="control-group" style="width:100%;">
 				  <label class="control-label"  for="labels">Labels :</label>
 				  <div class="controls">
-					<input type="text" name="labels" id="labels" data-ng-model="labels"/>
+					<textarea style="width:500px;" name="labels" id="labels" data-ng-model="labels"></textarea>
 				  </div>
 			</div>
 			<button class="btn btn-primary" data-ng-click="addLabel(labels)">Add Tags</button>

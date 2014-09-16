@@ -306,4 +306,5 @@ PUT		/product/submit-spam						controllers.Application.submitProductSpam()
 GET		/admin/tags									controllers.Application.adminPageForManageTags()
 PUT		/tags/add									controllers.Application.addTags()
 GET		/tags/all									controllers.Application.getAllTags()
+PUT		/tags/delete								controllers.Application.deleteTag()
 

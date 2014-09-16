@@ -282,6 +282,9 @@
 							
 							$(".isotope-item").find(".product-image").load(function(){
 								$containerList.isotope();
+								$($(this).parents(".isotope-item")).mouseleave(function(){
+					        		$(this).find('.dropdown').removeClass('open');
+					      		});
 					        });
 						} else {
 							$.each($('.isotope-item'), function(index, elem) {

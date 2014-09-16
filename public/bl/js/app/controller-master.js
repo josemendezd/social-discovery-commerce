@@ -228,11 +228,33 @@ blmaster.controller('ProductSpamTableController',function($scope, $http, $filter
 	};
 });
 // For Admin
-blmaster.controller('ManageTagsController',function($scope, $http){
+
+blmaster.service('labelService',function($resource){
+	   this.getAllLabels = $resource(
+	           '/tags/all',
+	           {alt:'json',callback:'JSON_CALLBACK'},
+	           {
+	               get: {method:'get' ,isArray:true}
+	           }
+	   );
+	});
+
+blmaster.controller('ManageTagsController',function($scope, $http, labelService){
 	$scope.addLabel = function(tags){
-		alert(tags);
 		$http.put('/tags/add', {'tags':tags}).success( function() {
-			alert("Success");
+		})
+	}
+	
+	$scope.allLabel = labelService.getAllLabels.get();
+	
+	$scope.deleteToken = function(id){
+		alert(id);
+		$http.put('/tags/delete', {'id':id}).success( function() {
+			 angular.forEach($scope.allLabel, function(tag, key){
+                 if(tag.id == id) {
+                         $scope.allLabel.splice($scope.allLabel.indexOf(tag),1);
+                 }
+			 });
 		})
 	}
 });
