@@ -1,7 +1,5 @@
 package controllers;
 
-import java.util.Random;
-
 import models.ImageBeer;
 import models.ImageGadgets;
 import models.ImageGlassWare;
@@ -16,9 +14,7 @@ public class HomePageImages extends Controller {
 
 	// This function returns the random path for the wine section
 	public static String imagePathWine() {
-		Random obj = new Random();
-		int number  = obj.nextInt(5) + 1;
-		ImageWine imageWine = ImageWine.find.byId(1L);
+		ImageWine imageWine = ImageWine.getRandomImage();
 		if(imageWine!=null)
 			return imageWine.url;
 		return null;
@@ -26,9 +22,7 @@ public class HomePageImages extends Controller {
 	
 	// This function returns the random path for the beer section
 	public static String imagePathBeer() {
-		Random obj = new Random();
-		int number  = obj.nextInt(5) + 1;
-		ImageBeer imageBeer = ImageBeer.find.byId(1L);
+		ImageBeer imageBeer = ImageBeer.getRandomImage();
 		if(imageBeer!=null)
 		return imageBeer.url;
 		return null;
@@ -36,9 +30,7 @@ public class HomePageImages extends Controller {
 	
 	// This function returns the random path for the liquor section
 	public static String imagePathLiquor() {
-		Random obj = new Random();
-		int number  = obj.nextInt(5) + 1;
-		ImageLiquor imageLiquor = ImageLiquor.find.byId(1L);
+		ImageLiquor imageLiquor = ImageLiquor.getRandomImage();
 		if(imageLiquor!=null)
 		return imageLiquor.url;
 		return null;
@@ -46,9 +38,7 @@ public class HomePageImages extends Controller {
 	
 	// This function returns the random path for the mixology section
 	public static String imagePathMixology() {
-		Random obj = new Random();
-		int number  = obj.nextInt(5) + 1;
-		ImageMixology imageMixology = ImageMixology.find.byId(1L);
+		ImageMixology imageMixology = ImageMixology.getRandomImage();
 		if(imageMixology!=null)
 		return imageMixology.url;
 		return null;
@@ -56,9 +46,7 @@ public class HomePageImages extends Controller {
 	
 	// This function returns the random path for the gadgets section
 	public static String imagePathGadgets() {
-		Random obj = new Random();
-		int number  = obj.nextInt(5) + 1;
-		ImageGadgets imageGadgets = ImageGadgets.find.byId(1L);
+		ImageGadgets imageGadgets = ImageGadgets.getRandomImage();
 		if(imageGadgets!=null)
 		return imageGadgets.url;
 		return null;
@@ -66,9 +54,7 @@ public class HomePageImages extends Controller {
 	
 	// This function returns the random path for the toys section
 	public static String imagePathToys() {
-		Random obj = new Random();
-		int number  = obj.nextInt(5) + 1;
-		ImageToys imageToys = ImageToys.find.byId(1L);
+		ImageToys imageToys = ImageToys.getRandomImage();
 		if(imageToys!=null)
 		return imageToys.url;
 		return null;
@@ -76,9 +62,7 @@ public class HomePageImages extends Controller {
 	
 	// This function returns the random path for the glass ware section
 	public static String imagePathGlassWare() {
-		Random obj = new Random();
-		int number  = obj.nextInt(5) + 1;
-		ImageGlassWare imageGlassWare = ImageGlassWare.find.byId(1L);
+		ImageGlassWare imageGlassWare = ImageGlassWare.getRandomImage();
 		if(imageGlassWare!=null)
 		return imageGlassWare.url;
 		return null;

@@ -71,7 +71,7 @@
 			</div>
 		</div>
 		<div class="pull-left" style="width:60%;display: inline-block;">
-			<form class="form-horizontal searchposition" action="@routes.Useract.CreateProduct" method="post" data-bind="submit:verifyform">
+			<form name="ajaxform" id="ajaxform" class="form-horizontal searchposition" method="POST" data-bind="submit:verifyform">
 				
 				<input type="hidden" name="imagelocation" value="@pil">
 				<input id="categoryidentity" type="hidden" name="categoryid" value="0">
@@ -289,8 +289,27 @@
 				return false;
 			}
 			}catch(err){}
+			$("#ajaxform").submit();
 			return true;
 		}
+		$("#ajaxform").submit(function(e){
+			var postData = $(this).serializeArray();
+			var formURL = $(this).attr("action");
+			$.ajax(
+			{
+				url : "/product/create",
+				type: "POST",
+				data : postData,
+				success:function(data, textStatus, jqXHR) {
+					parent.document.location.href = "/product/page/"+data;
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.log("ERROR");
+				}
+			});
+		    e.preventDefault();	//STOP default action
+		    e.unbind(); 
+		});
 		
 		self.pform=ko.computed(function() {	
 	  			$('#categoryidentity').val(self.categoryid());

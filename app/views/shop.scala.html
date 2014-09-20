@@ -478,9 +478,15 @@ width:70px;height:70px;vertical-align: baseline!important;
 				 	$.each(srvrp,function(clcindex, clcattr){self.catglist.push(ko.mapping.fromJS(clcattr));});
 				 	return true;
 				}
-				
+				var prvCat = 0;
 				self.catgclickshort=function(ctg){
 					var $indx=1,$leng=self.pcatglist().length;
+					if(prvCat === ctg.id())
+						return;
+					prvCat = ctg.id();
+					
+					
+					
 					if($indx>0 && $leng>0)
 						self.pcatglist.splice($indx, $leng-$indx);
 					if(!ctg.pid())

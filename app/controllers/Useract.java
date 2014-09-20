@@ -44,7 +44,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import play.Logger;
-import play.api.mvc.Flash;
 import play.api.templates.Html;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -52,7 +51,6 @@ import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
-import play.data.validation.Validation;
 import play.i18n.Messages;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -442,7 +440,7 @@ public class Useract  extends Controller {
 		}
 		
 		
-		return Application.ProductPage(p.id,false);	
+		return ok(""+p.id);	
 		
 	}
 	
