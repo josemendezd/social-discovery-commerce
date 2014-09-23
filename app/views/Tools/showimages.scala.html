@@ -73,7 +73,9 @@
 		    	resizecbx();
 		    	$('#capturemessage').hide();
 		    	
+		    	window.onload = function(){
 		    	var imgarr = $('img[id^=capturedimag]'),icarr=[];
+				console.log(imgarr.length);
 		    	for(var i=0,l=imgarr.length;i<l;i++)
 		    	{
 					var imgo=$(imgarr[i]);
@@ -108,7 +110,7 @@
 				$('.carousel').on('slid.bs.carousel', function () {
 				  resizecbx();
 				})
-									
+				}		
 		  
 		  }  		
 	</body>
