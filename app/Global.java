@@ -197,6 +197,9 @@ public class Global extends GlobalSettings {
 			}
 		}
 		
+		if(!Category.categoryExistbyName("Gadget")) {
+            Category.CreateRootCategory("Gadget");
+		}
 		
 		if(!Contributor.find.all().isEmpty())
 		{

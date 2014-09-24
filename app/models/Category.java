@@ -163,5 +163,12 @@ public class Category extends  Model {
 	{
 		return c.toplevel;
 	}
+
+	public static boolean categoryExistbyName(String cName) {
+		Category root=find.where().ieq("cname",cName).findUnique();
+		if(root != null)
+			return true;
+		return false;
+	}
 	
 }
