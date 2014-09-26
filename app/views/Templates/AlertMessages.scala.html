@@ -17,9 +17,10 @@
 }
 @if(flash.contains(Application.EMAIL_VERIFICATION_FAIL)) {
 <div class="onnextline">
-  <div id="alertheader" class="alert alert-success nomargin">
+  <div id="alertheader" class="alert alert-danger nomargin">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     @flash().get(Application.EMAIL_VERIFICATION_FAIL)
+    <a href="@routes.Account.verifyEmail()">Verify my email</a>
   </div>
 </div>
 }
