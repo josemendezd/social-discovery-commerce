@@ -38,6 +38,7 @@ function addImagesBeforeSubmit() {
 	formData = new FormData($("#blogForm")[0]);
 
 	ldiv.loadertext.text("Saving...");
+	ldiv.display(300000);
 	
 	$.each(uploadedFiles, function(i, file) {
 		formData.append('fileUpload[]', file, file.name);
