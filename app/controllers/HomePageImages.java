@@ -8,6 +8,7 @@ import models.ImageMixology;
 import models.ImageToys;
 import models.ImageWine;
 import play.mvc.Controller;
+import plugins.S3Plugin;
 
 public class HomePageImages extends Controller {
 	
@@ -66,6 +67,11 @@ public class HomePageImages extends Controller {
 		if(imageGlassWare!=null)
 		return imageGlassWare.url;
 		return null;
+	}
+	
+	// This function returns the favicon icon
+	public static String imagePathFavicon() {
+		return "http://" + play.Play.application().configuration().getString(S3Plugin.AWS_S3_BUCKET) + play.Play.application().configuration().getString(S3Plugin.BASE_URL_FORMAT) + "assets/boozology_favicon.png";
 	}
 
 }
