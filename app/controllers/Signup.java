@@ -319,6 +319,9 @@ public class Signup extends Controller {
 		
 		switch(signingin.registerstatus)
 		{
+		case DInitial.SIGNUP_STAGE.JUST_REGISTERED:
+			signingin.updatestatus(DInitial.SIGNUP_STAGE.CHOOSE_CATEGORY);
+			return redirect(routes.Signup.walkthrough());
 		case DInitial.SIGNUP_STAGE.CHOOSE_CATEGORY:
 			return redirect(routes.Signup.selectcategory());
 		case DInitial.SIGNUP_STAGE.CHOOSE_INFLUENCERS:
@@ -329,7 +332,7 @@ public class Signup extends Controller {
 			return redirect(routes.Signup.selectcontacts());
 		default:
 			signingin.updatestatus(DInitial.SIGNUP_STAGE.CHOOSE_CATEGORY);
-			return selectcategory();
+			return walkthrough();
 		}
 	}
 	
@@ -348,6 +351,14 @@ public class Signup extends Controller {
 	{
 		return ok(views.html.account.signup.askcategory.render(Category.TopLevelCategories(),Application.getLocalUser(session())));
 	}
+	
+	@SubjectPresent	
+	public static Result walkthrough ()
+	{
+		return ok(views.html.account.signup.walkthrough.render(Application.getLocalUser(session())));
+	}
+	
+	
 
 	@SubjectPresent	
 	public static Result selectinfluencers()
@@ -372,6 +383,7 @@ public class Signup extends Controller {
 	{
 		User signingin=Application.getLocalUser(session());
 		signingin.updatestatus(DInitial.SIGNUP_STAGE.CLEARED_ALL_STAGES);
+		flash(Application.FLASH_MESSAGE_KEY, "Love what you see? Click the \"Like\" heart. Others will like you back!");
 		return redirect(routes.Useract.MyWatchList());
 	}
 	

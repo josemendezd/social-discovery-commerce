@@ -12,6 +12,7 @@ import plugins.S3Plugin;
 
 public class HomePageImages extends Controller {
 	
+	public static String assestsPath = "http://" + play.Play.application().configuration().getString(S3Plugin.AWS_S3_BUCKET) + play.Play.application().configuration().getString(S3Plugin.BASE_URL_FORMAT) + "assets/";
 
 	// This function returns the random path for the wine section
 	public static String imagePathWine() {
@@ -73,5 +74,28 @@ public class HomePageImages extends Controller {
 	public static String imagePathFavicon() {
 		return "http://" + play.Play.application().configuration().getString(S3Plugin.AWS_S3_BUCKET) + play.Play.application().configuration().getString(S3Plugin.BASE_URL_FORMAT) + "assets/boozology_favicon.png";
 	}
+	
+	public static String imagePathWelcome() {
+		return HomePageImages.assestsPath + "welcome_walk.png ";
+	}
+	
+	public static String imagePathBlog() {
+		return HomePageImages.assestsPath + "blog_walk.png ";
+	}
+	 
+	public static String imagePathFollow() {
+		return HomePageImages.assestsPath + "follow_walk.png ";
+	}
+	
+	public static String imagePathProduct() {
+		return HomePageImages.assestsPath + "products_walk.png ";
+	}
+	
+	public static String imagePathCollection() {
+		return HomePageImages.assestsPath + "collection_walk.png ";
+	}
+	
+	
+	
 
 }

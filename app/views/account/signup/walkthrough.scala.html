@@ -1,0 +1,79 @@
+@(localuser:User)
+
+@ps={}
+
+
+@Templates.MasterTemplate(){
+@Templates.pagehead("Administration @Boozology"){@ps}
+}{
+<div class="calibri">
+@Templates.AlertMessages()	
+</div>	
+}{
+@Templates.pagemaincontent(){	
+
+	   <!-- Begin .row -->
+	   <div id="example-basic">
+		    <h3></h3>
+		    <section>
+		    	<div id="legend">
+		        	<legend class="">Welcome to the world of Boozology !</legend> 		        </div>
+		        <p>We're a community of people who love cool stuff and we're excited to have you on board.<br/>
+		         Let's get you started with a quick tour...</p>
+		         <img src="@controllers.HomePageImages.imagePathWelcome()" class="img-responsive" alt="">
+		    </section>
+		    <h3></h3>
+		    <section>
+		        <div id="legend">
+		        	<legend class="">Save your favorite products to your profile.</legend> 		        </div>
+		        <p>Or use our magic button to save products from any place online.</p>
+		         <img src="@controllers.HomePageImages.imagePathProduct()"  class="img-responsive" alt="">
+		    </section>
+		    <h3></h3>
+		    <section>
+		    	<div id="legend">
+		        	<legend class="">Follow people you like and see what they share.</legend> 	
+		    	</div>
+		        <img src="@controllers.HomePageImages.imagePathFollow()" class="img-responsive" alt="">
+		    </section>
+		    <h3></h3>
+		    <section>
+		        <div id="legend">
+		        	<legend class="">Collect your favorite products</legend> 
+		        </div>
+		        <p>Collections are a great way to organize stuff you love around a theme or event.</p>
+		         <img src="@controllers.HomePageImages.imagePathCollection()" class="img-responsive" alt="">
+		    </section>
+		    <h3></h3>
+		    <section>
+		        <div id="legend">
+		        	<legend class="">Share a Post in our Buzz section</legend> 
+		        </div>
+		        <p>Posts are ideas and stories added by the community.</p>
+		         <img src="@controllers.HomePageImages.imagePathBlog()" class="img-responsive" alt="">
+		    </section>
+	</div>
+
+<script>
+$("#example-basic").steps({
+    headerTag: "h3",
+    bodyTag: "section",
+    transitionEffect: "slideLeft",
+    autoFocus: true,
+    onFinished: function (event, currentIndex)
+    {
+        window.location.href = "@routes.Signup.PostSignUp";  
+    }
+});
+
+$(document).ready(function(){
+	//Examples of how to assign the Colorbox event to elements
+	ldiv=new loaderdiv('.loaderimagediv','#loadertext');
+	ldiv.initdiv();				
+	
+});
+</script>
+}
+}{
+@Templates.pagefooter(){ }
+}	

@@ -51,6 +51,7 @@ POST    /login/password/forgot     			controllers.Signup.doForgotPassword
 
 GET		/postauthorization					controllers.Signup.PostSignUp
 
+GET		/postsignup/walkthrough				controllers.Signup.walkthrough
 GET		/signup/enteremail					controllers.Signup.getemailform
 POST	/signup/enteremail					controllers.Signup.GetUsersEmail
 GET		/postsignup/selectcategory			controllers.Signup.selectcategory
