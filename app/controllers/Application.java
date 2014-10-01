@@ -193,6 +193,10 @@ public class Application extends Controller {
 	{
 		return ok(views.html.Tools.bookmark.render());
 	}
+	public static Result BookMarkToolFromWalkthrough()
+	{
+		return ok(views.html.Tools.bookmarkfromwalkthrough.render());
+	}
 	
 	//>>>>>>>>>>>>>>>>PUBLIC QUERY<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	//For Searching Products on shop page

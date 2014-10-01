@@ -1,0 +1,40 @@
+@()
+@pst={
+<style>
+h3{
+	color:black;
+	font-weight: bold;
+}
+</style>
+
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("BookMark Button @Boozology"){@pst}
+}{
+	@Templates.pageheader(){		
+	}{ }
+	
+}{
+@Templates.pagemaincontent(){
+	
+<div class="container">
+	<div class="onnextline text-center">
+					<h3>Drag this Button to favorite bar </h3>	<a class="btn btn-lg btn-danger brectangle" href="@Tools.Grabber()">Grabber</a>			
+	</div>		
+</div>
+<script>
+$(document).ready(function(){
+	//Examples of how to assign the Colorbox event to elements
+	ldiv=new loaderdiv('.loaderimagediv','#loadertext');
+	ldiv.initdiv();				
+	
+});
+
+</script>
+				
+}
+}{
+	@Templates.pagefooter(){ }
+}	

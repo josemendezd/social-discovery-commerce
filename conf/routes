@@ -19,6 +19,7 @@ GET		/discover							controllers.Application.discover
 GET		/grab								controllers.Application.grabber
 GET		/tools/showgrabbed					controllers.Application.ShowGrabbed(imageurl: String,price:Double,currency: String,title: String,pageurl: String)
 GET		/grab/bookmark						controllers.Application.BookMarkTool
+GET     /grab/BookMarkToolFromWalkthrough   controllers.Application.BookMarkToolFromWalkthrough 
 
 #Account Related
 GET     /user/profile               		controllers.Application.profile

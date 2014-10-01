@@ -26,7 +26,7 @@
 		    <section>
 		        <div id="legend">
 		        	<legend class="">Save your favorite products to your profile.</legend> 		        </div>
-		        <p>Or use our magic button to save products from any place online.</p>
+		        <p>Or use our <a href="" onClick="divFunction()">magic button</a> to save products from any place online.</p>
 		         <img src="@controllers.HomePageImages.imagePathProduct()"  class="img-responsive" alt="">
 		    </section>
 		    <h3></h3>
@@ -72,8 +72,22 @@ $(document).ready(function(){
 	ldiv.initdiv();				
 	
 });
+
+
+function divFunction(){
+	window.open("@routes.Application.BookMarkToolFromWalkthrough().absoluteURL(request())");
+	window.focus();
+}
+
+
 </script>
 }
 }{
 @Templates.pagefooter(){ }
 }	
+
+<style>
+body{
+	padding-top: 50px !important;
+}
+</style>
