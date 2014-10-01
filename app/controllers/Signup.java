@@ -307,20 +307,15 @@ public class Signup extends Controller {
 			return redirect(redirect_back);
 		}
 		
-		if(signingin.registerstatus==DInitial.SIGNUP_STAGE.JUST_REGISTERED && !signingin.emailValidated)
+		switch(signingin.registerstatus)
 		{
+		case DInitial.SIGNUP_STAGE.JUST_REGISTERED:
 			signingin.updatestatus(DInitial.SIGNUP_STAGE.CHOOSE_CATEGORY);
 			if(Play.isProd())
 			{
 				MyUsernamePasswordAuthProvider.getProvider().sendVerifyEmailMailingAfterSignup(signingin, ctx());
 				flash(Application.FLASH_MESSAGE_KEY, "An email has been sent for verification.Please consider to verify to get full access.");
 			}
-		}
-		
-		switch(signingin.registerstatus)
-		{
-		case DInitial.SIGNUP_STAGE.JUST_REGISTERED:
-			signingin.updatestatus(DInitial.SIGNUP_STAGE.CHOOSE_CATEGORY);
 			return redirect(routes.Signup.walkthrough());
 		case DInitial.SIGNUP_STAGE.CHOOSE_CATEGORY:
 			return redirect(routes.Signup.selectcategory());
