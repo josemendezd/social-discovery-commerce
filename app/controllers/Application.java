@@ -1441,7 +1441,9 @@ public class Application extends Controller {
 	}
 	
 	public static Result getAllTags() {
-		List<Tags> tags = (List<Tags>) Tags.getAllTags();
+		DynamicForm form = play.data.Form.form().bindFromRequest();
+		String q = form.get("q");
+		List<Tags> tags = (List<Tags>) Tags.getAllTags(q);
 		return ok(Json.toJson(tags));
 	}
 	@Restrict(@Group(Application.ADMIN_ROLE))

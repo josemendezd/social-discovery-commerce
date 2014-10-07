@@ -52,7 +52,10 @@ public class Tags extends Model  {
     	return true;
     }
 
-	public static List<Tags> getAllTags() {
+	public static List<Tags> getAllTags(String query) {
+		if(query != null){
+			return Tags.find.where().ilike("name", query+"%").findList();
+		}
 		return Tags.find.all();
 	}
 }
