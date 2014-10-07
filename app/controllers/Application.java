@@ -284,10 +284,14 @@ public class Application extends Controller {
 	public static Result  ProductPage(Long id ,Boolean isajax)
 	{
 		Product prid=Product.find.byId(id);
-		if(prid!=null)
+		if(prid!=null) {
+			if(!Application.verifyEmail()){
+				flash().put(Application.EMAIL_VERIFICATION_FAIL, "You must verify your email before you can comment");
+			}
 			return ok(product.render(prid,isajax));
-		else
+		} else {
 			return notFound();
+		}
 	}
 	
 	public static Result  CollectionPage(Long id ,Boolean isajax)
@@ -537,6 +541,9 @@ public class Application extends Controller {
 				/*if(likedByMe)
 					//Logger.debug("Blog is liked by me");
 */			}
+			if(!Application.verifyEmail()) {
+				flash().put(Application.EMAIL_VERIFICATION_FAIL, "You must verify your email before you can comment");
+			}
 			return ok(views.html.Templates.su.SingleBlogPage.render(b,false,0,editor,likedByMe));
 		}
 		else
@@ -1414,6 +1421,9 @@ public class Application extends Controller {
 	
 	public static Boolean verifyEmail(){
 		final Contributor localUser = Application.getContributor(session());
+		if(localUser == null) {
+			return false;
+		}
 		return Boolean.valueOf(localUser.user.emailValidated);
 	}
 	

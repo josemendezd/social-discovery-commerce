@@ -20,7 +20,7 @@
   <div id="alertheader" class="alert alert-danger nomargin">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     @flash().get(Application.EMAIL_VERIFICATION_FAIL)
-    <a href="@routes.Account.verifyEmail()">Verify my email</a>
+    <a href="@routes.Account.verifyEmail()" target="_top">Verify my email</a>
   </div>
 </div>
 }

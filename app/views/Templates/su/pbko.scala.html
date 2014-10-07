@@ -26,8 +26,8 @@
         </a>
         
       </div>
+      	@if(Application.getLocalUser(session()) != null){ <a data-bind="attr:{href:prlink}" class="btn btn-default view-product-custom">View Product</a>}else{ <a class="btn btn-default view-product-custom" data-toggle="modal" href="#signinupModel">View Product</a>}
       
-      <a data-bind="attr:{href:prlink}" class="btn btn-default view-product-custom">View Product</a>
       <!-- End .info-wrap -->
        <!-- <div class="product-image" data-bind="style: { backgroundImage: 'url(\'' + pic() + '\')'}"></div> -->
        <img data-bind="attr:{src:pic()}" class="product-image img-responsive"/> 
