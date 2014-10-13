@@ -31,6 +31,7 @@ import controllers.routes;
 
 import play.data.validation.*;
 import play.i18n.Messages;
+import providers.MyMadMimiMailer;
 import scala.concurrent.ExecutionContext;
  
 @Entity
@@ -64,12 +65,30 @@ public class SOCommentsCo extends Model {
     }
 
     public static void DispatchMessage(SOCommentsCo sc){
+       	/**
     	GHelp.mailsender.sendMail(Messages.get("boozology.notifications.socommentsco",sc.commenter.user.name,sc.collection.colname),
     			new com.feth.play.module.mail.Mailer.Mail.Body(
     					views.html.Templates.MailTemplates.collectioncomment.render(sc.collection.contributor.user.name,sc.commenter.user.name,sc.collection.colname,Application.WebAddress+routes.Application.CollectionPage(sc.collection.id, false).url(),sc.comment.content).toString(),
     					views.txt.Templates.MailTemplates.collectioncomment.render(sc.collection.contributor.user.name,sc.commenter.user.name,sc.collection.colname,Application.WebAddress+routes.Application.CollectionPage(sc.collection.id, false),sc.comment.content).toString()
     					),
     			GHelp.getEmailName(sc.collection.contributor.user.email, sc.collection.contributor.user.name));
+    	
+    	**/
+    	
+    	
+    	Map<String, String> map = new HashMap<String, String>();
+    	map.put("commenter", sc.commenter.user.getNameNotEmpty());
+    	map.put("collection", sc.collection.colname);
+    	map.put("url", Application.WebAddress+routes.Application.CollectionPage(sc.collection.id, false).url());
+    	map.put("comment", sc.comment.content);
+    	
+    	try {
+			MyMadMimiMailer.sendMyNotification(map, sc.collection.contributor.user, "CommentsCo");//Not working
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     public static Model.Finder<Long,SOCommentsCo> find = new Finder<Long, SOCommentsCo>(Long.class, SOCommentsCo.class);   

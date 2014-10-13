@@ -30,6 +30,7 @@ import controllers.routes;
 
 import play.data.validation.*;
 import play.i18n.Messages;
+import providers.MyMadMimiMailer;
 import scala.concurrent.ExecutionContext;
  
 @Entity
@@ -62,6 +63,8 @@ public class SORecommends extends Model {
     }
 
     public static void DispatchMessage(SORecommends sr){
+     	
+    	/**
     	GHelp.mailsender.sendMail(Messages.get("boozology.notifications.sorecommends",sr.recommender.user.name,sr.product.productname),
     			new com.feth.play.module.mail.Mailer.Mail.Body(views.html.Templates.MailTemplates.recommendproduct
     					.render(sr.leader.user.name,sr.recommender.user.name,Application.WebAddress+routes.Application.ProductPage(sr.product.id, false).url())
@@ -69,7 +72,39 @@ public class SORecommends extends Model {
     					.render(sr.leader.user.name,sr.recommender.user.name,Application.WebAddress+routes.Application.ProductPage(sr.product.id, false).url())
     					.toString()),
     			GHelp.getEmailName(sr.leader.user.email, sr.leader.user.name));
-    }
+    			**/
+    	String myTempRecommenderName;
+		if(sr.recommender.user.firstName==null ){
+			myTempRecommenderName=sr.recommender.user.name;
+		}
+		else{
+			myTempRecommenderName=sr.recommender.user.firstName+ " "+sr.recommender.user.lastName;
+		}    	
+
+    	String myTempUserName;
+		if(sr.leader.user.firstName==null ){
+			myTempUserName=sr.leader.user.name;
+		}
+		else{
+			myTempUserName=sr.leader.user.firstName+ " "+sr.leader.user.lastName;
+		} 
+		
+    	//------------------------------------------------------------------------------------
+   
+      	Map<String, String> map = new HashMap<String, String>();
+    	map.put("recommender", myTempRecommenderName);
+    	map.put("productname",sr.product.productname);
+    	map.put("url",Application.WebAddress+routes.Application.ProductPage(sr.product.id, false).url());
+    	//map.put("comment", sp.comment.content);
+    	map.put("username", myTempUserName);
+    	boolean res =false;
+    	try {
+		 res=	MyMadMimiMailer.sendMyNotification(map, sr.leader.user,"SORecommends");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}    
+	}
     
     public static Model.Finder<Long,SORecommends> find = new Finder<Long, SORecommends>(Long.class, SORecommends.class);   
     

@@ -11,9 +11,15 @@
 		<!-- End .row -->
 		<div class="row">
 			<!-- Begin .col-lg-6 -->
-			<div class="col-lg-8 col-md-8 col-xs-12 col-sm-12 col-12">
-				<div class="logo"><img src="@routes.Assets.at("bl/images/logo-white.png")"   alt="Boozology"></div>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			<div class="col-lg-8 col-md-8 col-xs-12 col-sm-12 col-12"><div class="logo" ><img src="@routes.Assets.at("bl/images/logo-white.png")"   alt="Boozology"></div>
+			<div>
+				Thank You for visiting our website.
+				We are really excited about our new look. We hope that you find the new design easy to navigate, informative and fun. 
+
+				Our website is still in beta version, so please bear with us as we make final changes and perfect those little things that will make this a great resource for our community. 
+				If you notice any problems or have any suggestions, please contact us at contact@@boozology.com
+				Thanks again for visiting our site. If you find it useful, please consider helping us maintain its usefulness by becoming an active member.
+				</div>
 				<!-- Begin .social-wrap -->
 				<div class="social-wrap">
 					<h4>Social</h4>
@@ -29,8 +35,8 @@
 				<div class="clearfix"></div>
 					<!-- Begin .help-menu -->
 					<ul class="help-menu">
-						<li><a href="@routes.SPages.wboozology()">What's Boozology</a></li>
-						<li><a href="@routes.SPages.store()">For Stores</a></li>
+						<li><a href="@routes.SPages.aboutus()">What's Boozology</a></li><!-- wboozology() -->
+						<li><a href="@routes.SPages.contactus()">For Stores</a></li><!-- sotre() -->
 						<li><a href="@routes.SPages.community()">Community Guidelines</a></li>
 					</ul>
 					<!-- End .help-menu -->
@@ -48,7 +54,7 @@
 					<ul class="footer-menu">
 						<li><a href="@routes.Application.GetBlogList()">Blog</a></li>
 						<li><a href="@routes.SPages.aboutus()">About</a></li>
-						<li><a href="@routes.SPages.developer()">Developers</a></li>
+						<li><a href="@routes.SPages.contactus()">Developers</a></li><!-- developer() -->
 						<li><a href="@routes.SPages.contactus()">Support</a></li>
 						<li><a href="@routes.SPages.helpme()">Help/Faq</a></li>
 						<li><a href="@routes.SPages.terms()">Terms</a></li>
@@ -249,8 +255,8 @@
 			<ul class="inline text-left">
 				<li>
 					<ul class="unstyled">
-						<li><a href="@routes.Application.GetContentPage("WhatsBoozology")">What's Boozology</a></li>
-						<li><a href="@routes.Application.GetContentPage("forstores")">For Stores</a></li>
+						<li><a href="@routes.Application.GetContentPage("About")">What's Boozology</a></li><!-- whatsboozology -->
+						<li><a href="@routes.Application.GetContentPage("Help_faq")">For Stores</a></li><!-- stores -->
 						<li><a href="@routes.Application.GetContentPage("community")">Community Guidelines</a></li>
 						<li><a href="@routes.Application.GetContentPage("PACP")">Privacy and Cookie Policy</a></li>														
 					</ul>
@@ -259,7 +265,7 @@
 					<ul class="unstyled">
 						<li><a href="@routes.Application.GetBlogList()">BLOG</a></li>
 						<li><a href="@routes.Application.GetContentPage("About")">About</a></li>
-						<li><a href="@routes.Application.GetContentPage("Developers")">Developers</a></li>
+						<li><a href="@routes.Application.GetContentPage("Help_faq")">Developers</a></li><!-- developers -->
 					</ul>
 				</li>
 				<li>
@@ -306,5 +312,5 @@
 }
 
 *@
-<!-- All the contents of this site belongs to Boozology LLC, USA. Written by Kislay Kundan. - J Mendez-->
+<!-- All the contents of this site belongs to Boozology LLC, USA. Written by  - J Mendez-->
 <div id="divstore" class="hidden"></div>

@@ -37,6 +37,8 @@ create table blog (
   posted_at                 timestamp,
   content                   text,
   title                     varchar(255),
+  perma_link                varchar(255),
+  constraint uq_blog_perma_link unique (perma_link),
   constraint pk_blog primary key (id))
 ;
 
@@ -46,6 +48,7 @@ create table blog_comment (
   posted_at                 timestamp,
   content                   varchar(255),
   post_id                   bigint,
+  spam_flag                 boolean,
   constraint pk_blog_comment primary key (id))
 ;
 
@@ -57,13 +60,6 @@ create table blog_image (
   file_type                 varchar(255),
   ok                        varchar(255),
   constraint pk_blog_image primary key (id))
-;
-
-create table blog_labels (
-  id                        bigint not null,
-  tag                       varchar(255),
-  constraint uq_blog_labels_tag unique (tag),
-  constraint pk_blog_labels primary key (id))
 ;
 
 create table blog_likes (
@@ -104,6 +100,7 @@ create table comment (
   posted_at                 timestamp,
   content                   varchar(255),
   post_id                   bigint,
+  spam_flag                 boolean,
   constraint pk_comment primary key (id))
 ;
 
@@ -286,6 +283,7 @@ create table product (
   gender                    bigint,
   views                     bigint,
   description               varchar(255),
+  spam_flag                 boolean,
   category_id               bigint,
   alive                     boolean,
   pstore_id                 bigint,
@@ -372,6 +370,13 @@ create table store (
   servicearea               varchar(255),
   firstappearance           timestamp not null,
   constraint pk_store primary key (id))
+;
+
+create table tags (
+  id                        bigint not null,
+  name                      varchar(255),
+  constraint uq_tags_name unique (name),
+  constraint pk_tags primary key (id))
 ;
 
 create table token_action (
@@ -472,10 +477,10 @@ create table usersubscriptions (
 ;
 
 
-create table blog_blog_labels (
+create table blog_tags (
   blog_id                        bigint not null,
-  blog_labels_id                 bigint not null,
-  constraint pk_blog_blog_labels primary key (blog_id, blog_labels_id))
+  tags_id                        bigint not null,
+  constraint pk_blog_tags primary key (blog_id, tags_id))
 ;
 
 create table ownedproduct (
@@ -500,6 +505,12 @@ create table collectionadmins (
   contributor_id                 bigint not null,
   user_collection_id             bigint not null,
   constraint pk_collectionadmins primary key (contributor_id, user_collection_id))
+;
+
+create table product_tags (
+  product_id                     bigint not null,
+  tags_id                        bigint not null,
+  constraint pk_product_tags primary key (product_id, tags_id))
 ;
 
 create table store_user_collection (
@@ -548,8 +559,6 @@ create sequence blog_seq;
 create sequence blog_comment_seq;
 
 create sequence blog_image_seq;
-
-create sequence blog_labels_seq;
 
 create sequence blog_likes_seq;
 
@@ -620,6 +629,8 @@ create sequence sosuggestsco_seq;
 create sequence security_role_seq;
 
 create sequence store_seq;
+
+create sequence tags_seq;
 
 create sequence token_action_seq;
 
@@ -740,9 +751,9 @@ create index ix_usersubscriptions_subscrib_50 on usersubscriptions (subscriber_i
 
 
 
-alter table blog_blog_labels add constraint fk_blog_blog_labels_blog_01 foreign key (blog_id) references blog (id);
+alter table blog_tags add constraint fk_blog_tags_blog_01 foreign key (blog_id) references blog (id);
 
-alter table blog_blog_labels add constraint fk_blog_blog_labels_blog_labe_02 foreign key (blog_labels_id) references blog_labels (id);
+alter table blog_tags add constraint fk_blog_tags_tags_02 foreign key (tags_id) references tags (id);
 
 alter table ownedproduct add constraint fk_ownedproduct_contributor_01 foreign key (contributor_id) references contributor (id);
 
@@ -759,6 +770,10 @@ alter table wantedproduct add constraint fk_wantedproduct_product_02 foreign key
 alter table collectionadmins add constraint fk_collectionadmins_contribut_01 foreign key (contributor_id) references contributor (id);
 
 alter table collectionadmins add constraint fk_collectionadmins_user_coll_02 foreign key (user_collection_id) references user_collection (id);
+
+alter table product_tags add constraint fk_product_tags_product_01 foreign key (product_id) references product (id);
+
+alter table product_tags add constraint fk_product_tags_tags_02 foreign key (tags_id) references tags (id);
 
 alter table store_user_collection add constraint fk_store_user_collection_stor_01 foreign key (store_id) references store (id);
 
@@ -794,13 +809,11 @@ drop table if exists blacklist cascade;
 
 drop table if exists blog cascade;
 
-drop table if exists blog_blog_labels cascade;
+drop table if exists blog_tags cascade;
 
 drop table if exists blog_comment cascade;
 
 drop table if exists blog_image cascade;
-
-drop table if exists blog_labels cascade;
 
 drop table if exists blog_likes cascade;
 
@@ -866,6 +879,8 @@ drop table if exists product cascade;
 
 drop table if exists user_collection_product cascade;
 
+drop table if exists product_tags cascade;
+
 drop table if exists reportabuse cascade;
 
 drop table if exists s3file cascade;
@@ -887,6 +902,8 @@ drop table if exists store cascade;
 drop table if exists store_user_collection cascade;
 
 drop table if exists store_contributor cascade;
+
+drop table if exists tags cascade;
 
 drop table if exists token_action cascade;
 
@@ -921,8 +938,6 @@ drop sequence if exists blog_seq;
 drop sequence if exists blog_comment_seq;
 
 drop sequence if exists blog_image_seq;
-
-drop sequence if exists blog_labels_seq;
 
 drop sequence if exists blog_likes_seq;
 
@@ -993,6 +1008,8 @@ drop sequence if exists sosuggestsco_seq;
 drop sequence if exists security_role_seq;
 
 drop sequence if exists store_seq;
+
+drop sequence if exists tags_seq;
 
 drop sequence if exists token_action_seq;
 

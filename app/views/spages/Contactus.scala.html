@@ -26,7 +26,10 @@
 		<div class="col-lg-12 col-12 col-md-12 col-xs-12 col-sm-12">
 			<div class="page-title">
 				<h1>Contact us</h1>
-				<p class="intro">There is a short list of our most <a href="">frequently asked questions</a>.However,in case you need more information about Boozology or if you need support, please contact us through this form.You can also mail us at support@@boozology.com</p>
+				<p class="intro">Let us know how we can improve your experience with Boozology.</p>
+				<p class="intro">Ask us anything - but check out our <a href="">FAQs</a> first please! </p>
+				 <p class="intro">or get in touch with us at support@@boozology.com </p>
+
 			</div>			
 		</div>
 		<!-- End .col-lg-12 -->
@@ -38,7 +41,7 @@
 		    <div class="contact-form-wrap">
 				@form(action = routes.Application.submitcontactus(), args = 'role->"form") {
 					
-					@helper.input(cntform("querytype"), 'class-> "form-control",'_class-> "form-group",'_label -> "Querytype",'_inline->"true") { (id, name, value, args) =>
+					@helper.input(cntform("querytype"), 'class-> "form-control",'_class-> "form-group",'_label -> "Issue",'_inline->"true") { (id, name, value, args) =>
 					    <select name="@name" id="@id" @toHtmlArgs(args)>
 					    	@for((key,value)<-DInitial.QueryType){
 					  		<option value="@key">@value</option>
@@ -77,14 +80,14 @@
     <div class="col-lg-3 col-md-3 col-sm-9 col-xs-12 col-12">
         <!-- Begin .box -->
         <div class="box">
-          <h4>Departments</h4>
+          <h4>Boozology</h4>
 
           <!-- Begin .quick-nav -->
           <ul class="quick-nav">
-            <li><i class="icon-caret-right"></i><a href="#">Legal Department</a> </li>
-            <li><i class="icon-caret-right"></i><a href="#">Customer Services</a></li>
-            <li><i class="icon-caret-right"></i><a href="#">Bugs</a></li>
-            <li><i class="icon-caret-right"></i><a href="#">Media</a></li>
+            <li><i class="icon-caret-right"></i><a href="./aboutus">About Us</a> </li>
+            <li><i class="icon-caret-right"></i><a href="./helpme">FAQs</a></li>
+            <li><i class="icon-caret-right"></i><a href="./community">Community Guidelines</a></li>
+            <li><i class="icon-caret-right"></i><a href="./terms">Terms & Conditions</a></li>
           </ul>
           <!-- .quick-nav -->
 
@@ -94,9 +97,10 @@
         <!-- Begin .box -->
         <div class="box">
           <h4>Address</h4>
-        <p>Boozology</p>
-        <p>Str. Mihai Voda Iasi, Nr.2 Bl.B2 Romania Iasi</p>
-<p>Call Us: <span class="phone">(0040)  747 - 452321</span></p>
+        <p>Boozology LLC</p>
+        <p>340 S LEMON AVE #2557</p>
+          <p>WALNUT, CA 91789</p>
+<p>Call Us: <span class="phone">(+1) 321 250 6915</span></p>
         </div>
         <!-- End .box -->
 

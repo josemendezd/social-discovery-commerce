@@ -292,7 +292,7 @@ public class User extends Model implements Subject {
 		return find.where().eq("active", true).eq("name", uname);
 	}
 
-	private static ExpressionList<User> getEmailUserFind(final String email) {
+	public static ExpressionList<User> getEmailUserFind(final String email) {
 		return find.where().eq("active", true).eq("email", email);
 	}
 
@@ -372,7 +372,18 @@ public class User extends Model implements Subject {
 	{
 		return "profilepic"+id+(ext?".png":"");
 	}
-	
+	public String getNameNotEmpty()
+	{	
+	  String userNameNotEmpty ;
+      if (this.firstName == null){
+    	  userNameNotEmpty=this.name;
+      }
+      else{
+    	  userNameNotEmpty= this.firstName + " "+ this.lastName;
+      }
+      
+      return userNameNotEmpty;
+	}	
 	public String getusersimage()
 	{
 		return S3File.getUrl(User.class.getSimpleName(), profileimage, DInitial.IMAGESTORESIZE.AS_IT_IS.filestate);

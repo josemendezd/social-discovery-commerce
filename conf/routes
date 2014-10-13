@@ -28,6 +28,7 @@ POST	/user/profile/picture				controllers.Application.setprofileimage
 POST	/user/profile/edit					controllers.Application.setmyprofile
 
 GET     /login                      		controllers.Application.login
+GET     /logintwitter                       controllers.Application.logintwitter
 POST    /login                      		controllers.Application.doLogin
 GET     /logout                     		com.feth.play.module.pa.controllers.Authenticate.logout
 GET     /authenticate/:provider     		com.feth.play.module.pa.controllers.Authenticate.authenticate(provider: String)

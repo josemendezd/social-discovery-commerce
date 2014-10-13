@@ -346,12 +346,13 @@ public class DInitial {
     static
     {
     	QueryType = new HashMap<Integer, String>();
-    	QueryType.put(QUERYTYPES.OTHERQUERY, "Other Queries");
-    	QueryType.put(QUERYTYPES.PAYMENTRELATED, "Payment Related Queries");
-    	QueryType.put(QUERYTYPES.ORDERRELATED,"Order Related Query");    	
-    	QueryType.put(QUERYTYPES.RECEIVEDITEM,"Problem With Item Received");
-    	QueryType.put(QUERYTYPES.FEATURESNASSISTANCE,"Product Features/ Buying Assistance");
-    	QueryType.put(QUERYTYPES.SELLERELATED,"Seller Related Query");
+    	QueryType.put(QUERYTYPES.OTHERQUERY, "General Questions");
+    	QueryType.put(QUERYTYPES.PAYMENTRELATED, "Report a Bug");
+    	QueryType.put(QUERYTYPES.ORDERRELATED,"Friends Related");    	
+    	QueryType.put(QUERYTYPES.RECEIVEDITEM,"Product Related");
+    	QueryType.put(QUERYTYPES.FEATURESNASSISTANCE,"Blog Related");
+    	QueryType.put(QUERYTYPES.SELLERELATED,"Problem With Site");
+    	
     }
     
     //public static final String Recaptchahtml= ReCaptchaFactory.newReCaptcha(controllers.Application.Captchapublic, controllers.Application.Captchaprivate, false).createRecaptchaHtml(null, null).replaceAll("\\p{C}", " ").replaceAll("/script", "--VBS");

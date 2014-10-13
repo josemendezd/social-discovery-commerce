@@ -29,7 +29,7 @@ import views.html.account.ask_link;
 import views.html.account.signup.*;
 
 import be.objectify.deadbolt.java.actions.SubjectPresent;
-
+import com.avaje.ebean.ExpressionList;
 import com.feth.play.module.pa.PlayAuthenticate;
 
 import static play.data.Form.form;
@@ -309,6 +309,7 @@ public class Signup extends Controller {
 		
 		switch(signingin.registerstatus)
 		{
+		//if(signingin.registerstatus==DInitial.SIGNUP_STAGE.JUST_REGISTERED && !signingin.emailValidated)
 		case DInitial.SIGNUP_STAGE.JUST_REGISTERED:
 			signingin.updatestatus(DInitial.SIGNUP_STAGE.CHOOSE_CATEGORY);
 			if(Play.isProd())
@@ -337,7 +338,7 @@ public class Signup extends Controller {
 	{
 		Logger.info(String.format("++++ getemailform ++++"));
 		
-		flash(Application.FLASH_ERROR_KEY,"Your Signup provider doesn't provide email-id, please enter one and relogin.");
+		flash(Application.FLASH_ERROR_KEY,"Please provide your email to be able to verify your account. Thanks!.");
 		return ok(views.html.account.signup.askusersemail.render());
 	}
 
@@ -352,8 +353,6 @@ public class Signup extends Controller {
 	{
 		return ok(views.html.account.signup.walkthrough.render(Application.getLocalUser(session())));
 	}
-	
-	
 
 	@SubjectPresent	
 	public static Result selectinfluencers()
@@ -420,8 +419,8 @@ public class Signup extends Controller {
 			signingin.update();
 		}
 	    session().remove("clearid");
-	    flash(Application.FLASH_ERROR_KEY,"Email is now configured, Please try to login again");
-		return  redirect(routes.Application.login());
+	    flash(Application.FLASH_ERROR_KEY,"Your account is all set up and ready to go! Login with Twitter!");
+		return  redirect(routes.Application.logintwitter());
 	}
 	
 	@SubjectPresent	//TODO: Port method on Akka.

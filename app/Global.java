@@ -77,9 +77,15 @@ public class Global extends GlobalSettings {
 	public static final String  APP_ENV_VAR = "CURRENT_APPNAME";
 	public static final String AWS_S3_BUCKET = "aws.s3.bucket";
 	public static final String BASE_URL_FORMAT = "base.url.format";
-
+    public static final String AWS_ACCESS_KEY_2 = "aws.access.key";
+    public static final String AWS_SECRET_KEY_2 = "aws.secret.key";
+    
+    
+    
 	public void onStart(Application app) {
 		Logger.info("Application has started");	
+		//Logger.info("Application AWS_ACCESS_KEY_2:"+play.Play.application().configuration().getString(AWS_ACCESS_KEY_2) );	
+		//Logger.info("Application AWS_S3_BUCKET:"+play.Play.application().configuration().getString(AWS_S3_BUCKET) );	
 		PlayAuthenticate.setResolver(new Resolver() {
 
 			@Override
@@ -188,7 +194,7 @@ public class Global extends GlobalSettings {
 				//File f=new File(play.Play.application().path()+ File.separator +"public"+File.separator+"dbfiles"+File.separator+"Country.mmdb");
 				Logger.info("Initializing geoip with "+f.length());
 				DInitial.geoipreader = new DatabaseReader(f);
-				//Logger.info(DInitial.geoipreader.country(java.net.InetAddress.getByName("173.252.110.27")).getCountry().getName());
+				Logger.info(DInitial.geoipreader.country(java.net.InetAddress.getByName("173.252.110.27")).getCountry().getName());
 			}catch(Exception E)
 			{
 				//Logger.error(DInitial.geoipreader.toString());
@@ -212,9 +218,9 @@ public class Global extends GlobalSettings {
 		Random rand=new Random();
 		int user_count=2,user_collection=4,product_count=50;
 		Map<String,String> ul = new HashMap<String, String>();
-		ul.put("admin", "a1234");
-		ul.put("moderator", "m1234");
-		ul.put("user", "u1234");
+		ul.put("joe", "a1234");
+		//ul.put("moderator", "m1234");
+		//ul.put("user", "u1234");
 		
 		try
 		{
@@ -253,13 +259,13 @@ public class Global extends GlobalSettings {
 			
 			Logger.info("Inserting initial images...");
 			String url = "http://" + play.Play.application().configuration().getString(AWS_S3_BUCKET) + play.Play.application().configuration().getString(BASE_URL_FORMAT);
-			ImageBeer.createInitial(url+"home_cat/beer.png");
-			ImageGadgets.createInitial(url+"home_cat/gadgets.png");
-			ImageGlassWare.createInitial(url+"home_cat/glassware.png");
-			ImageLiquor.createInitial(url+"home_cat/liquor.png");
-			ImageMixology.createInitial(url+"home_cat/mixology.png");
-			ImageToys.createInitial(url+"home_cat/toys.png");
-			ImageWine.createInitial(url+"home_cat/wine.png");
+			ImageBeer.createInitial(url+"home_cat/beer.jpg");
+			ImageGadgets.createInitial(url+"home_cat/gadgets.jpg");
+			ImageGlassWare.createInitial(url+"home_cat/glassware.jpg");
+			ImageLiquor.createInitial(url+"home_cat/liquor.jpg");
+			ImageMixology.createInitial(url+"home_cat/mixology.jpg");
+			ImageToys.createInitial(url+"home_cat/toys.jpg");
+			ImageWine.createInitial(url+"home_cat/wine2.jpg");
 			
 			Logger.info("Initial images recorded...");
 	
@@ -405,7 +411,7 @@ public class Global extends GlobalSettings {
 		Logger.info("Data initialization done...Having hangover...");	
 		if(play.Play.isProd())
 		{
-			//System.out.print(FinalResponse.toString());
+			System.out.print("Running in production Environment. ");
 		}
 	}
 }

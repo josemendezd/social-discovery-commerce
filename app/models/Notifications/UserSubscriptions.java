@@ -39,10 +39,10 @@ public class UserSubscriptions extends Model {
     public Contributor subscriber;
     
 
-    public boolean sofollows = false;
+    public boolean sofollows = true;
     public boolean socommentpr = true;
     public boolean socommentco = true;
-    public boolean sorecommends = false;
+    public boolean sorecommends = true;
     public boolean sosuggestsco = true;
     public boolean advertisements = true;
     

@@ -32,12 +32,13 @@ import controllers.routes;
 
 import play.data.validation.*;
 import play.i18n.Messages;
+import providers.MyMadMimiMailer;
 import scala.concurrent.ExecutionContext;
  
 @Entity
 @Table(name="socommentspr")
 public class SOCommentsPr extends Model {
- 
+ 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
 	public Long id;
@@ -65,6 +66,8 @@ public class SOCommentsPr extends Model {
     }
 
     public static void DispatchMessage(SOCommentsPr sp){
+    	
+    	/**
     	GHelp.mailsender.sendMail(Messages.get("boozology.notifications.socommentspr",sp.commenter.user.name,sp.product.productname),
     			new com.feth.play.module.mail.Mailer.Mail.Body(views.html.Templates.MailTemplates.productcomment
     					.render(sp.product.Founder.name,sp.commenter.user.name,sp.product.productname,Application.WebAddress+routes.Application.ProductPage(sp.product.id, false).url(),sp.comment.content)
@@ -72,7 +75,21 @@ public class SOCommentsPr extends Model {
     					.render(sp.product.Founder.name,sp.commenter.user.name,sp.product.productname,Application.WebAddress+routes.Application.ProductPage(sp.product.id, false).url(),sp.comment.content)
     					.toString()),
     			GHelp.getEmailName(sp.product.Founder.email, sp.product.Founder.name));
-    }
+    	**/
+    	
+    	Map<String, String> map = new HashMap<String, String>();
+    	map.put("commenter", sp.commenter.user.getNameNotEmpty());
+    	map.put("productname",sp.product.productname);
+    	map.put("url",Application.WebAddress+routes.Application.ProductPage(sp.product.id, false).url());
+    	map.put("comment", sp.comment.content);
+    	map.put("username", sp.product.Founder.getNameNotEmpty());
+    	try {
+			MyMadMimiMailer.sendMyNotification(map, sp.product.Founder,"CommentsPr");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+  }
     
     public static Model.Finder<Long,SOCommentsPr> find = new Finder<Long, SOCommentsPr>(Long.class, SOCommentsPr.class);   
     

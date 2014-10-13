@@ -27,6 +27,17 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+
 
 import static play.data.Form.form;
 
@@ -136,8 +147,8 @@ public class MyUsernamePasswordAuthProvider
 		final User u = User.findByUsernamePasswordIdentity(user);
 		
 		if (u != null) {
-			/*
-			 *FOR EMAIL VALIDATION UNCOMMENT THIS BLOCK
+			
+			 //FOR EMAIL VALIDATION UNCOMMENT THIS BLOCK
 			if (u.emailValidated) {
 				// This user exists, has its email validated and is active
 				return SignupResult.USER_EXISTS;
@@ -146,8 +157,8 @@ public class MyUsernamePasswordAuthProvider
 				// email
 				return SignupResult.USER_EXISTS_UNVERIFIED;
 			}
-			*/
-			return SignupResult.USER_EXISTS;
+			
+			//return SignupResult.USER_EXISTS;
 		}
 		
 		// The user either does not exist or is inactive - create a new one
@@ -155,6 +166,36 @@ public class MyUsernamePasswordAuthProvider
 		final User newUser = User.create(user);
 		// Usually the email should be verified before allowing login, however
 		// if you return
+		
+		final String token = generateVerificationRecord(newUser);
+		//=ctx().request();
+	//	Http.Request request = Http.Request.current();
+		
+		final boolean isSecure = getConfiguration().getBoolean(
+				SETTING_KEY_VERIFICATION_LINK_SECURE);
+		final String url = routes.Signup.verify(token).absoluteURL(
+				play.mvc.Http.Context.current().request(), isSecure);		
+		boolean mailRes=false;
+			try {
+				String myTempUserName;
+				if(newUser.firstName==null ){
+					myTempUserName=newUser.name;
+				}
+				else{
+					myTempUserName=newUser.firstName+ " "+newUser.lastName;
+				}
+			 mailRes=MyMadMimiMailer.verifyEmail(myTempUserName, newUser.email,  url);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(!mailRes){
+				Logger.info("Error: verify email was not sent. method signupUser at MyUserNamePasswordAuthProvider ");
+			}
+				
+			// TODO Auto-generated catch block
+		
+		
 		return SignupResult.USER_CREATED;//NO VALIDATION
 		// then the user gets logged in directly
 		//return SignupResult.USER_CREATED_UNVERIFIED;//ENABLE FOR VALIDATION
@@ -324,9 +365,34 @@ public class MyUsernamePasswordAuthProvider
 
 	public void sendPasswordResetMailing(final User user, final Context ctx) {
 		final String token = generatePasswordResetRecord(user);
-		final String subject = getPasswordResetMailingSubject(user, ctx);
-		final Body body = getPasswordResetMailingBody(token, user, ctx);
-		mailer.sendMail(subject, body, getEmailName(user));
+		//final String subject = getPasswordResetMailingSubject(user, ctx);
+		//final Body body = getPasswordResetMailingBody(token, user, ctx);
+		//mailer.sendMail(subject, body, getEmailName(user));
+		
+		final boolean isSecure = getConfiguration().getBoolean(
+				SETTING_KEY_VERIFICATION_LINK_SECURE);
+		final String url = routes.Signup.resetPassword(token).absoluteURL(
+				ctx.request(), isSecure);
+		
+		
+		//Logger.info(" getEmailName " + getEmailName(user));
+		
+		String myTempUserName ;
+		if(user.firstName==null){
+			myTempUserName=user.name;
+		}
+		else{
+			myTempUserName=user.firstName+ " "+user.lastName;
+		}
+		
+		try {
+			boolean mailRes=MyMadMimiMailer.resetPassword(myTempUserName, user.email,  url);
+			Logger.info("after sending email result: "+mailRes);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 	}
 
 	public boolean isLoginAfterPasswordReset() {
@@ -409,8 +475,28 @@ public class MyUsernamePasswordAuthProvider
 		final String subject = getVerifyEmailMailingSubjectAfterSignup(user,
 				ctx);
 		final String token = generateVerificationRecord(user);
-		final Body body = getVerifyEmailMailingBodyAfterSignup(token, user, ctx);
-		mailer.sendMail(subject, body, getEmailName(user));
+
+		
+		final boolean isSecure = getConfiguration().getBoolean(
+				SETTING_KEY_VERIFICATION_LINK_SECURE);
+		final String url = routes.Signup.verify(token).absoluteURL(
+				play.mvc.Http.Context.current().request(), isSecure);		
+		
+			try {
+				
+						String myTempUserName;
+						if(user.firstName.isEmpty()){
+							myTempUserName=user.name;
+						}
+						else{
+							myTempUserName=user.firstName+ " "+user.lastName;
+						}
+					boolean mailRes=MyMadMimiMailer.verifyEmail(myTempUserName, user.email,  url);
+					//Logger.info("after sending email result: "+mailRes);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
 	}
 
 	private String getEmailName(final User user) {

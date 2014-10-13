@@ -31,6 +31,7 @@ import controllers.routes;
 import play.data.validation.*;
 import play.i18n.Messages;
 import play.libs.Akka;
+import providers.MyMadMimiMailer;
 import scala.concurrent.ExecutionContext;
  
 @Entity
@@ -59,6 +60,8 @@ public class SOFollows extends Model {
     }
     
     public static void DispatchMessage(SOFollows sf){
+    	
+    	/**
     	GHelp.mailsender.sendMail(Messages.get("boozology.notifications.sofollows",sf.follower.user.name),
     			new com.feth.play.module.mail.Mailer.Mail.Body(views.html.Templates.MailTemplates.follow
     					.render(sf.leader.user.name,sf.follower.user.name,Application.WebAddress+routes.Application.ContributorPage(sf.leader.id, false, false).url())
@@ -66,7 +69,20 @@ public class SOFollows extends Model {
     					.render(sf.leader.user.name,sf.follower.user.name,Application.WebAddress+routes.Application.ContributorPage(sf.leader.id, false, false).url())
     					.toString()),
     			GHelp.getEmailName(sf.leader.user.email, sf.leader.user.name));
-    }
+    	**/
+      	Map<String, String> map = new HashMap<String, String>();
+    	map.put("followername", sf.follower.user.getNameNotEmpty());
+    	map.put("followerusername",sf.follower.user.name);
+    	map.put("url",Application.WebAddress+routes.Application.ContributorPage(sf.leader.id, false, false).url());
+    	//map.put("comment", sf.comment.content);
+    	map.put("username", sf.leader.user.getNameNotEmpty());
+    	try {
+			MyMadMimiMailer.sendMyNotification(map, sf.leader.user,"SOFollows");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	    }
     
     public static Model.Finder<Long,SOFollows> find = new Finder<Long, SOFollows>(Long.class, SOFollows.class);   
     

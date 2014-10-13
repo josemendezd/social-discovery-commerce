@@ -44,6 +44,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import play.Logger;
+import play.api.mvc.Flash;
 import play.api.templates.Html;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -51,6 +52,7 @@ import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
+import play.data.validation.Validation;
 import play.i18n.Messages;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -58,6 +60,7 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import plugins.S3Plugin;
+import providers.MyMadMimiMailer;
 import scala.concurrent.ExecutionContext;
 import viewmodel.PRDetails;
 import viewmodel.ProductRateDetail;
@@ -675,6 +678,9 @@ public class Useract  extends Controller {
 			final ExecutionContext ec = akka.dispatch.ExecutionContexts.global();
 	    	akka.dispatch.Futures.future(new Callable<Boolean>() {
 	    	public Boolean call() {
+	    	
+	    	boolean res = false;
+	    	/**
 			GHelp.mailsender.sendMail(Messages.get("boozology.notifications.sorecommends",c.user.name,p.productname),
 	    			new com.feth.play.module.mail.Mailer.Mail.Body(views.html.Templates.MailTemplates.mailingproduct
 	    					.render(c.user.name,Application.WebAddress+routes.Application.ProductPage(p.id, false).url())
@@ -683,6 +689,27 @@ public class Useract  extends Controller {
 	    					.toString()),
 	    			GHelp.getEmailName(useremail, useremail));
 			return true;
+			**/
+	    		String myTempUserName;
+	    		if(c.user.firstName==null ){
+					myTempUserName=c.user.name;
+				}
+				else{
+					myTempUserName=c.user.firstName+ " "+c.user.lastName;
+				}
+	    		Map<String, String> map = new HashMap<String, String>();
+	        	map.put("recommender", myTempUserName);
+	        	map.put("productname", p.productname);
+	        	map.put("url", Application.WebAddress+routes.Application.ProductPage(p.id, false).url() );
+	        	//map.put("comment", sf.comment.content);
+	        	map.put("receiveremail", useremail);
+	        	try {
+	    			res= MyMadMimiMailer.sendMyMailRecommendProduct( map, useremail, myTempUserName );
+	    		} catch (Exception e) {
+	    			// TODO Auto-generated catch block
+	    			e.printStackTrace();
+	    		} 		
+	    		return res;			
 	    	}
 	    	}, ec);
 			collectionnode.put("answer", "Recommended!!");

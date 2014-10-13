@@ -41,6 +41,7 @@ import net.tanesha.recaptcha.ReCaptchaResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import play.Logger;
 import play.Play;
 import play.Routes;
 import play.data.DynamicForm;
@@ -51,6 +52,7 @@ import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Http.Session;
 import play.mvc.Result;
 import plugins.S3Plugin;
+import providers.MyMadMimiMailer;
 import providers.MyUsernamePasswordAuthProvider;
 import providers.MyUsernamePasswordAuthProvider.MyLogin;
 import providers.MyUsernamePasswordAuthProvider.MySignup;
@@ -62,6 +64,7 @@ import views.html.collectionpage;
 import views.html.contentpage;
 import views.html.cshop;
 import views.html.login;
+import views.html.logintwitter;
 import views.html.product;
 import views.html.productjson;
 import views.html.profile;
@@ -811,6 +814,13 @@ public class Application extends Controller {
 		return ok(login.render(MyUsernamePasswordAuthProvider.LOGIN_FORM));
 	}
 
+	public static Result logintwitter() {
+		if(getLocalUser(session()) != null)
+			return redirect(routes.Application.index());
+		return ok(logintwitter.render(MyUsernamePasswordAuthProvider.LOGIN_FORM));
+	}	
+	
+	
 	public static Result doLogin() {
 		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
 		DynamicForm formcontents=play.data.Form.form().bindFromRequest();
@@ -998,8 +1008,14 @@ public class Application extends Controller {
 			return badRequest(views.html.spages.Contactus.render(filledForm));
 		}else{
 			CONTACTUS cu = filledForm.get();
-			Contactus cus = Contactus.CreateQuery(cu.querytype, cu.email, cu.firstname, cu.lastname, cu.subject, cu.content);
-			flash(FLASH_MESSAGE_KEY,"Your query has been successfully submited.");
+		//	Contactus cus = Contactus.CreateQuery(cu.querytype, cu.email, cu.firstname, cu.lastname, cu.subject, cu.content);
+			try {
+				MyMadMimiMailer.sendSupportMail ( cu.firstname + cu.lastname , cu.email,  "Subj:"+cu.subject + " Text:"+ cu.content ) ;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			flash(FLASH_MESSAGE_KEY,"Message Sent! We will reply ASAP!");
 			return redirect(routes.Application.index());
 		}
 	}
@@ -1248,11 +1264,13 @@ public class Application extends Controller {
 	private final static String validApiConsumer;
 	
 	static {
-		validApiKey = Play.application().configuration().getString("AkismetApiKey");//System.getProperty("akismetApiKey");
+		
+		
+		validApiKey = play.Play.application().configuration().getString("akismet.api.key");//System.getProperty("akismetApiKey");
 		validApiConsumer = "http://" + request().host();//System.getProperty("akismetConsumer");
 		
-		if(validApiKey == null || validApiConsumer == null)
-			throw new RuntimeException("Both api key and consumer must be specified!");
+		if(validApiKey == null )
+			throw new RuntimeException("Both api key and consumer must be specified! 1");
 	}
 	@Restrict(@Group(Application.ADMIN_ROLE))
 	public static Result submitSpam() {

@@ -603,7 +603,7 @@ public class Carts extends Controller {
 	private final static String validApiConsumer;
 	
 	static {
-		validApiKey = Play.application().configuration().getString("AkismetApiKey");//System.getProperty("akismetApiKey");
+		validApiKey = Play.application().configuration().getString("akismet.api.key");//System.getProperty("akismetApiKey");
 		validApiConsumer = "http://" + request().host();//System.getProperty("akismetConsumer");
 		
 		if(validApiKey == null || validApiConsumer == null)

@@ -1,0 +1,39 @@
+@(skipCurrent: Boolean = true, socialmessage: String="")
+
+@import com.feth.play.module.pa.views.html._
+
+<ul class="list-inline">
+	@forProviders(skipCurrent) { p =>
+				<li>@if(p.getKey() == "twitter"){			
+					<a class="btn btn-lg brectangle socialbutton-@{p.getKey()}" href="@p.getUrl()"><i class="icon-@{p.getKey()}"></i></a>
+					}
+				</li>
+			}
+</ul>
+@*
+<script type="text/javascript">
+function askOpenID(url) {
+	var openid = prompt("Please enter your OpenID:", "yourname.myopenid.com");
+	if(openid) {
+		window.location.href = url + "?p=" + encodeURIComponent(openid);
+	}
+}
+</script>
+<div class="control-group text-center">
+   <label class="control-label" for="Social"><i>@socialmessage</i></label>
+   <div class="clearstyled">
+		<ul class="list-inline">
+			@forProviders(skipCurrent) { p =>
+				<li>
+				@if(p.getKey() == "openid") {
+					<a href="javascript:void(0);" onclick="askOpenID('@p.getUrl()');">
+				} else {
+					<a href="@p.getUrl()">
+				}
+				@_providerIcon(p.getKey())</a>
+				</li>
+			}
+		</ul>
+	</div>
+</div>
+*@

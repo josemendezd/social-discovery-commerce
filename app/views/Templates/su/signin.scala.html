@@ -3,15 +3,28 @@
 @helper.javascriptRouter("jsRoutes")(controllers.routes.javascript.Signup.forgotPassword)
 
 <div id="signin" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">      
-    <form  class="form-horizontal" action='@routes.Application.doLogin' method="POST" @if(isajax){id="Formsigninajax"}else{id="Formsignin"}>
-      <fieldset>
-          <div>
-          	<legend>Login</legend>
-          </div>		                
-          
+   </br>
+    <div class="text-center">
+    	<span>
+    	
+    	Login with Facebook or Twitter and join the fun! </span>
+    	 
+		<div class="clearfix padding-small"></div></br>
+    	@_providerPartial(skipCurrent=false)
+    </div>
+    </br>
+    <div id=labelemail >
+    	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+        <span>or login with your email address and password.</span>
+        </a>
+        </div>  
+        </br>
+        <div id="collapseOne" class="panel-collapse collapse collapse"> 
+    	<form  class="form-horizontal" action='@routes.Application.doLogin' method="POST" @if(isajax){id="Formsigninajax"}else{id="Formsignin"}>
+      	<fieldset>
            @controls(6)
            
-           <input type="hidden" value="@isajax" name="isajax">
+          <input type="hidden" value="@isajax" name="isajax">
            
            <div id="dispsignerror"></div>
            
@@ -24,12 +37,8 @@
 			  </div>
 			</div>
            	
-      </fieldset>
-    </form>
-    <div class="text-center">
-    	<span>Use a social Network  to Login</span>
-		<div class="clearfix padding-small"></div>
-    	@_providerPartial(skipCurrent=false)
-    </div>
+      	</fieldset>
+    	</form>
+</div>
    
 </div>

@@ -3,9 +3,9 @@
 console.log($("#@(productID)_ratting").val());
 if($("#@(productID)_ratting").val() == 0 ) {
 	$("#remove-ratings").css('display', 'none');
-	$("#ratingLabel").html('Did you like this Product? Rate it now !&nbsp&nbsp');
+	$("#ratingLabel").html('Rate this product');
 } else {
-	$("#ratingLabel").html('My Rating:&nbsp&nbsp');
+	$("#ratingLabel").html('Rate this product&nbsp');
 }
 
 $("#@(productID)_ratting").on("rating.change", function(event, value, caption) {
@@ -14,7 +14,7 @@ $("#@(productID)_ratting").on("rating.change", function(event, value, caption) {
 						url: "/rating/"+@(productID),
 						data: { value : value },
 						success: function(data){
-							$("#ratingLabel").html('My Rating:&nbsp&nbsp');
+							$("#ratingLabel").html('My Rating:&nbsp');
 							$rating = $("#remove-ratings");
 							$rating.css('display', 'block');							
 						}
@@ -41,7 +41,7 @@ $("#remove-ratings").on("click" , function(productId) {
 				var pid = $this.attr("productId")
 				$this.css('display', 'none');
 				$("#" + pid + "_ratting").rating('clear');	
-				$("#ratingLabel").html('Did you like this Product? Rate it now!&nbsp&nbsp');					
+				$("#ratingLabel").html('Rate this product&nbsp');					
 			}
 	});
 })
