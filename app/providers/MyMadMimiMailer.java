@@ -28,8 +28,8 @@ import play.Logger;
  */
 public class MyMadMimiMailer {
 
-    public static final String MM_API_USER = "madmimi.api.username";
-    public static final String MM_API_KEY = "madmimi.api.key";
+    public static final String MM_API_USER = play.Play.application().configuration().getString("madmimi.api.username");
+    public static final String MM_API_KEY = play.Play.application().configuration().getString("madmimi.api.key");
 
 	
     /**

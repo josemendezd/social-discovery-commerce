@@ -2,10 +2,18 @@
 
 <div id="signup" class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
      <div class="text-center">
-    	<span> Signup with Facebook or Twitter </span>
+    	<span> Sign up with Facebook or Twitter and join the world of Boozology!</span>
 		<div class="clearfix padding-small"></div>
     	@_providerPartial(skipCurrent=false)
-    </div>
+    </div> 
+        </br>
+    <div id=labelemail >
+    	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+        <span>or sign up with your email address and password.</span>
+        </a>
+        </div>  
+        </br>   
+    <div id="collapseOne" class="panel-collapse collapse collapse"> 
    <form class="form-horizontal"  method="POST" action="@routes.Application.doSignup"  @if(isajax){id="Formsignup"}>
         <fieldset>
             <div id="legend">
@@ -25,7 +33,7 @@
 			    <div class="col-sm-offset-2 col-sm-10">
 			      <div class="checkbox">
 			        <label>
-			          <input type="checkbox" name="agree"  checked> I agree to the <a href="#">terms of services</a>
+			          <input type="checkbox" name="agree"  checked> I agree to the <a href="./sp/terms">terms of services</a>
 			        </label>
 			      </div>
 			    </div>
@@ -39,5 +47,5 @@
 			
       </fieldset>
     </form>
-  
+  </div>
 </div>

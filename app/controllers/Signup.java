@@ -315,7 +315,7 @@ public class Signup extends Controller {
 			if(Play.isProd())
 			{
 				MyUsernamePasswordAuthProvider.getProvider().sendVerifyEmailMailingAfterSignup(signingin, ctx());
-				flash(Application.FLASH_MESSAGE_KEY, "An email has been sent for verification.Please consider to verify to get full access.");
+				flash(Application.FLASH_MESSAGE_KEY, "Please check your e-mail and click on the secured link to verify your account and complete the registration process.");
 			}
 			return redirect(routes.Signup.walkthrough());
 		case DInitial.SIGNUP_STAGE.CHOOSE_CATEGORY:
