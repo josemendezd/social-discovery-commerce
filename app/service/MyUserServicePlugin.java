@@ -2,9 +2,12 @@ package service;
 
 import models.User;
 import play.Application;
+import play.Logger;
 
 import com.feth.play.module.pa.user.AuthUser;
 import com.feth.play.module.pa.user.AuthUserIdentity;
+import com.feth.play.module.pa.user.EmailIdentity;
+import com.feth.play.module.pa.user.NameIdentity;
 import com.feth.play.module.pa.service.UserServicePlugin;
 
 public class MyUserServicePlugin extends UserServicePlugin {
@@ -17,11 +20,40 @@ public class MyUserServicePlugin extends UserServicePlugin {
 	public Object save(final AuthUser authUser) {
 		final boolean isLinked = User.existsByAuthUserIdentity(authUser);
 		if (!isLinked) {
-			return User.create(authUser).id;
+			if (authUser instanceof EmailIdentity) {
+				final EmailIdentity identity = (EmailIdentity) authUser;
+				String email = identity.getEmail();
+				if(User.findByEmail(email)!=null){
+					//the user is already registered. Should login w/ old account.
+					Logger.info("email already exists");
+					
+					User.addLinkedAccount( User.findByEmail(email), authUser);
+					
+					
+					return  User.findByEmail(email);
+				}
+				
+				
+			}
+			if (authUser instanceof NameIdentity) {
+				final NameIdentity identity = (NameIdentity) authUser;
+				String name = identity.getName();
+				if(User.findByUserName(name)!=null){
+					//the name is used by another user should use a different name
+				//	Logger.info("name already exists");
+					 return User.createDifferentUserName(authUser).id;
+				}
+				
+			}			
+		
+			
+		 return User.create(authUser).id;
+		
 		} else {
 			// we have this user already, so return null
 			return null;
 		}
+		
 	}
 
 	@Override

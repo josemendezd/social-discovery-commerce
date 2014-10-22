@@ -948,9 +948,78 @@ public class Application extends Controller {
 			if(isajax)
 				if(flash().containsKey(FLASH_ERROR_KEY))
 					return badRequest("{\"Error\":\""+flash().get(Application.FLASH_ERROR_KEY)+"\"}" );			
+			
+			Logger.info(" result:"+r.toString());
+			
 			return r;
 		}
 	}
+	
+	//------------------------------------------------------------------------
+	//social sign up
+public static String socialSignUp(String paUrl) {
+	
+		Logger.info("here social signup:"+paUrl);
+		/*
+		DynamicForm bindedForm = play.data.Form.form().bindFromRequest();
+		
+		if(Play.isProd())
+		{
+			String remoteAddr = request().remoteAddress();
+		    ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
+		    reCaptcha.setPrivateKey(Captchaprivate);
+		    String challenge = bindedForm.get("recaptcha_challenge_field");
+		    String uresponse = bindedForm.get("recaptcha_response_field");
+		    ReCaptchaResponse reCaptchaResponse = reCaptcha.checkAnswer(remoteAddr, challenge, uresponse);
+		    if(!reCaptchaResponse.isValid())
+			{
+				response().setContentType("application/json");
+				return badRequest("{\"Captcha\":[\"Captcha Entered was invalid.Please Retry.\"]}");
+			}
+		}
+		
+		String Redirect_to=play.data.Form.form().bindFromRequest().get("redirecturi");
+		if(Redirect_to!=null)
+			session().put(DInitial.REDIRECT_BACK_URL, Redirect_to);
+	    
+	    Boolean isajax= Boolean.parseBoolean( play.data.Form.form().bindFromRequest().get("isajax"));
+	    if(isajax)
+		{
+			response().setContentType("application/json");
+			session().put("isajax", "yes");
+		}
+	    com.feth.play.module.pa.controllers.Authenticate.noCache(response());
+		final Form<MySignup> filledForm = MyUsernamePasswordAuthProvider.SIGNUP_FORM
+				.bindFromRequest();	
+		
+		if (filledForm.hasErrors()) {
+			if(isajax)
+				return badRequest(filledForm.errorsAsJson());
+			
+			flash(FLASH_ERROR_KEY, filledForm.errorsAsJson().toString());
+			return badRequest(signup.render(filledForm));
+			
+		} else {
+			flash().clear();
+			Result r= UsernamePasswordAuthProvider.handleSignup(ctx());
+			if(isajax)
+				if(flash().containsKey(FLASH_ERROR_KEY))
+					return badRequest("{\"Error\":\""+flash().get(Application.FLASH_ERROR_KEY)+"\"}" );			
+			
+			Logger.info(" result:"+r.toString());
+			
+			return r;
+		}
+		*/
+		
+		
+		return "http://localhost:9000/";
+	}
+	
+	
+	
+	
+	//-------------------------------------------------------------------------
 	
 	
 	@Restrict(@Group(Application.ADMIN_ROLE))

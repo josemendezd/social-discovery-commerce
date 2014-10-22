@@ -13,7 +13,7 @@ import play.Plugin;
 
 public class S3Plugin extends Plugin {
 
-    public static final String AWS_S3_BUCKET = "aws.s3.bucket";
+    public static final String AWS_S3_BUCKET = play.Play.application().configuration().getString("aws.s3.bucket");
     // private static final String AWS_ACCESS_KEY = System.getenv("AWSAccessKeyId");
     // private static final String AWS_SECRET_KEY = System.getenv("AWSSecretKey");
     public static final String AWS_ACCESS_KEY = play.Play.application().configuration().getString("aws.access.key");
@@ -40,7 +40,7 @@ public class S3Plugin extends Plugin {
         
         //application.configuration().getString(AWS_SECRET_KEY);
         
-        s3Bucket = application.configuration().getString(AWS_S3_BUCKET);
+        s3Bucket = AWS_S3_BUCKET;
         baseurl = application.configuration().getString(BASE_URL_FORMAT);
         boolean dev=Play.isDev();
         
@@ -62,7 +62,7 @@ public class S3Plugin extends Plugin {
     public boolean enabled() {
         return (AWS_ACCESS_KEY != null &&
                 AWS_SECRET_KEY != null &&
-                application.configuration().keys().contains(AWS_S3_BUCKET));
+                AWS_S3_BUCKET!=null);
     }
     
 }

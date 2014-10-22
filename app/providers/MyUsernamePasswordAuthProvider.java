@@ -116,13 +116,15 @@ public class MyUsernamePasswordAuthProvider
 		public String name;
 		
 		
-		public String validate() {
+		public String validate() {//check function jsglobals.scala
 			if (password == null || !password.equals(repeatPassword)) {
 				return Messages
 						.get("boozology.password.signup.error.passwords_not_same");
 			}
 			if(User.findByUserName(name)!=null)
 				return "UserName already Taken. Please choose another";
+			if(User.findByEmail(email)!=null)
+				return "User email already Taken. Please choose another";
 			return null;
 		}
 	}
@@ -148,17 +150,22 @@ public class MyUsernamePasswordAuthProvider
 		
 		if (u != null) {
 			
-			 //FOR EMAIL VALIDATION UNCOMMENT THIS BLOCK
+			Logger.info("here user exists ");
+			
+			/*
+			//FOR EMAIL VALIDATION UNCOMMENT THIS BLOCK
 			if (u.emailValidated) {
 				// This user exists, has its email validated and is active
+				Logger.info("here user exists,  validated ");
 				return SignupResult.USER_EXISTS;
 			} else {
 				// this user exists, is active but has not yet validated its
 				// email
+				Logger.info("here user exists, is active but has not yet validated ");
 				return SignupResult.USER_EXISTS_UNVERIFIED;
 			}
-			
-			//return SignupResult.USER_EXISTS;
+			*/
+			return SignupResult.USER_EXISTS;
 		}
 		
 		// The user either does not exist or is inactive - create a new one

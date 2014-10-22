@@ -137,8 +137,7 @@ public class User extends Model implements Subject {
 		return permissions;
 	}
 
-	public static boolean existsByAuthUserIdentity(
-			final AuthUserIdentity identity) {
+	public static boolean existsByAuthUserIdentity( final AuthUserIdentity identity) {
 		final ExpressionList<User> exp;
 		if (identity instanceof UsernamePasswordAuthUser) {
 			exp = getUsernamePasswordAuthUserFind((UsernamePasswordAuthUser) identity);
@@ -173,8 +172,7 @@ public class User extends Model implements Subject {
 
 	private static ExpressionList<User> getUsernamePasswordAuthUserFind(
 			final UsernamePasswordAuthUser identity) {
-		return getEmailUserFind(identity.getEmail()).eq(
-				"linkedAccounts.providerKey", identity.getProvider());
+		return getEmailUserFind(identity.getEmail()).eq("linkedAccounts.providerKey", identity.getProvider());
 	}
 
 	public void merge(final User otherUser) {
@@ -187,8 +185,9 @@ public class User extends Model implements Subject {
 		otherUser.active = false;
 		Ebean.save(Arrays.asList(new User[] { otherUser, this }));
 	}
-
+	//----------------------------------------------------------
 	public static User create(final AuthUser authUser) {
+	//	Logger.info("user info create 1");
 		final User user = new User();
 		user.roles = Collections.singletonList(SecurityRole
 				.findByRoleName(controllers.Application.USER_ROLE));
@@ -248,12 +247,98 @@ public class User extends Model implements Subject {
 		// user.saveManyToManyAssociations("permissions");
 		return user;
 	}
+	//----------------------------------------------------------
+	public static User createDifferentUserName(final AuthUser authUser) {
+		//Logger.info("user info create 2");
+		final User user = new User();
+		user.roles = Collections.singletonList(SecurityRole
+				.findByRoleName(controllers.Application.USER_ROLE));
+		// user.permissions = new ArrayList<UserPermission>();
+		// user.permissions.add(UserPermission.findByValue("printers.edit"));
+		user.active = true;
+		user.lastLogin = new Date();
+		user.linkedAccounts = Collections.singletonList(LinkedAccount
+				.create(authUser));
+
+		if (authUser instanceof EmailIdentity) {
+			final EmailIdentity identity = (EmailIdentity) authUser;
+			// Remember, even when getting them from FB & Co., emails should be
+			// verified within the application as a security breach there might
+			// break your security as well!
+			user.email = identity.getEmail();
+			user.emailValidated = false;
+		}
+
+		if (authUser instanceof NameIdentity) {
+			final NameIdentity identity = (NameIdentity) authUser;
+			final String name = identity.getName();
+			//Logger.info(" name :"+name);
+			if (name != null) {
+				
+				 ExpressionList<User> users= getUsersLikeName(name);
+				 //Logger.info(" different than  null:"+users.toString());
+				    Integer numberOfUsers = users.findRowCount();
+				   boolean nameOk = false;
+					while(!nameOk){	   
+				    if(findByUserName(name+numberOfUsers)==null ){
+				    	user.name = name+numberOfUsers;
+				    	nameOk=true;
+				    }
+				    else{
+				    	numberOfUsers++;
+				    }
+					}
+			}
+			else{
+				Logger.info(" name is null ");
+			
+			}
+		}
+		
+		if (authUser instanceof FirstLastNameIdentity) {
+		  final FirstLastNameIdentity identity = (FirstLastNameIdentity) authUser;
+		  final String firstName = identity.getFirstName();
+		  final String lastName = identity.getLastName();
+		  if (firstName != null) {
+		    user.firstName = firstName;
+		  }
+		  if (lastName != null) {
+		    user.lastName = lastName;
+		  }
+		}
+		/*
+		if(Logger.isDebugEnabled())
+			Logger.debug(GHelp.StringDump.dump(authUser));
+			*/
+		user.contrib=new Contributor(user);
+		user.profileimage=DInitial.DefaultUserImage[DInitial.GENDER.UNKNOWN];
+		user.gender=DInitial.GENDER.UNKNOWN;
+		user.registerstatus=DInitial.SIGNUP_STAGE.JUST_REGISTERED;
+		try{
+			String IPAddress=play.mvc.Controller.request().remoteAddress();
+			String initiallocation=DInitial.geoipreader.country(InetAddress.getByName(IPAddress)).getCountry().getName();
+			user.registerip=IPAddress;
+			user.registerlocation=initiallocation;
+			user.location=initiallocation;
+		}catch(Exception e){user.registerlocation="Unknown";}
+		user.save();
+		UserSubscriptions.InitSubscription(user.contrib);
+		user.saveManyToManyAssociations("roles");
+		// user.saveManyToManyAssociations("permissions");
+		return user;
+	}
 
 	public static void merge(final AuthUser oldUser, final AuthUser newUser) {
 		User.findByAuthUserIdentity(oldUser).merge(
 				User.findByAuthUserIdentity(newUser));
 	}
 
+	public static void merge(final User oldUser, final AuthUser newUser) {
+		oldUser.merge(
+				User.findByAuthUserIdentity(newUser));
+	}
+	
+	
 	public Set<String> getProviders() {
 		final Set<String> providerKeys = new HashSet<String>(
 				linkedAccounts.size());
@@ -261,6 +346,12 @@ public class User extends Model implements Subject {
 			providerKeys.add(acc.providerKey);
 		}
 		return providerKeys;
+	}
+	public static void addLinkedAccount(final User oldUser,
+			final AuthUser newUser) {
+	Logger.info("Merging usrs");
+		oldUser.linkedAccounts.add(LinkedAccount.create(newUser));
+		oldUser.save();
 	}
 
 	public static void addLinkedAccount(final AuthUser oldUser,
@@ -291,7 +382,11 @@ public class User extends Model implements Subject {
 	private static ExpressionList<User> getUserFind(final String uname) {
 		return find.where().eq("active", true).eq("name", uname);
 	}
-
+	
+	private static ExpressionList<User> getUsersLikeName(final String uname) {
+		return find.where().eq("active", true).like("name", uname+'%');
+				
+	}
 	public static ExpressionList<User> getEmailUserFind(final String email) {
 		return find.where().eq("active", true).eq("email", email);
 	}

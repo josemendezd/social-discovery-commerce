@@ -27,7 +27,8 @@ function askOpenID(url) {
 				@if(p.getKey() == "openid") {
 					<a href="javascript:void(0);" onclick="askOpenID('@p.getUrl()');">
 				} else {
-					<a href="@p.getUrl()">
+					<!--   <a href="@p.getUrl()"> -->
+					<a href="@routes.Application.socialSignUp" >
 				}
 				@_providerIcon(p.getKey())</a>
 				</li>
