@@ -11,9 +11,10 @@ import play.mvc.Controller;
 import plugins.S3Plugin;
 
 public class HomePageImages extends Controller {
-	
-	public static String assestsPath = "http://" + play.Play.application().configuration().getString(S3Plugin.AWS_S3_BUCKET) + play.Play.application().configuration().getString(S3Plugin.BASE_URL_FORMAT) + "assets/";
-
+	public static final String AWS_S3_BUCKET = "aws.s3.bucket";
+	public static final String BASE_URL_FORMAT = "base.url.format";
+	public static String assestsPath = "http://" + play.Play.application().configuration().getString(AWS_S3_BUCKET) + play.Play.application().configuration().getString(BASE_URL_FORMAT) + "assets/";
+									 //  "http://" + play.Play.application().configuration().getString(AWS_S3_BUCKET) + play.Play.application().configuration().getString(BASE_URL_FORMAT);
 	// This function returns the random path for the wine section
 	public static String imagePathWine() {
 		ImageWine imageWine = ImageWine.getRandomImage();
