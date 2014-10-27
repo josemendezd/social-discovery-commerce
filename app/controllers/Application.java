@@ -1541,6 +1541,15 @@ public static String socialSignUp(String paUrl) {
 		return ok();
 	}
 	
-	
+    /**
+     * Moves permanently the get into version without trailing slash
+     * @param path String
+     * @return Result
+     */
+    public static Result redirectUntrailed(String path) {
+        //    route required somwhere at the end:
+        //    GET    /*path/    controllers.Application.redirectUntrailed(path: String)
+        return movedPermanently("/" + path);
+    }	
 	
 }

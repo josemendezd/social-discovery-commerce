@@ -48,7 +48,7 @@ import com.feth.play.module.pa.user.AuthUser;
 import com.maxmind.geoip2.DatabaseReader;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-
+import views.html.spages.Aboutus;
 import controllers.DInitial;
 import controllers.routes;
 import play.Application;
@@ -71,6 +71,17 @@ import providers.MyUsernamePasswordAuthUser;
 import providers.MyUsernamePasswordAuthProvider.MySignup;
 import scala.concurrent.ExecutionContext;
 
+import play.*;
+import play.mvc.*;
+import play.mvc.Http.*;
+import play.libs.F.*;
+import static play.mvc.Results.*;
+
+
+import play.Logger;
+//import static play.mvc.Results.notFound;
+
+
 public class Global extends GlobalSettings {
 	
 	public static final String  APP_ENV_LOCAL = "local";
@@ -80,8 +91,8 @@ public class Global extends GlobalSettings {
     public static final String AWS_ACCESS_KEY_2 = "aws.access.key";
     public static final String AWS_SECRET_KEY_2 = "aws.secret.key";
     
-    
-    
+    // 404 - page not found error
+    @Override
 	public void onStart(Application app) {
 		Logger.info("Application has started");	
 		//Logger.info("Application AWS_ACCESS_KEY_2:"+play.Play.application().configuration().getString(AWS_ACCESS_KEY_2) );	
@@ -414,4 +425,32 @@ public class Global extends GlobalSettings {
 			System.out.print("Running in production Environment. ");
 		}
 	}
+	
+	  @Override
+	  public void onStop(Application app) {
+	    Logger.info("Application shutdown...");
+	  }  
+	  // 404 - page not found error
+	
+		  //  @Override
+		/**    public Result onHandlerNotFound(String uri) {
+		        Logger.error("Not found ressource : "+uri);
+		        return notFound(views.html.notFoundPage.render(uri));
+		    }
+		**/
+	    public Promise<SimpleResult> onHandlerNotFound(RequestHeader request) {
+	        return Promise.<SimpleResult>pure(notFound(
+	            views.html.notFoundPage.render(request.uri())
+	        ));
+	    }
+	    
+	    public Promise<SimpleResult> onBadRequest(RequestHeader request, String error) {
+	        return Promise.<SimpleResult>pure(badRequest("Don't try to hack the URI!"));
+	    }
+	    public Promise<SimpleResult> onError(RequestHeader request, Throwable t) {
+	        return Promise.<SimpleResult>pure(internalServerError(
+	            views.html.errorPage.render(t)
+	        ));
+	    }	
+	
 }

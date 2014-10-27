@@ -1,0 +1,274 @@
+@()
+
+@ps={}
+
+
+@Templates.MasterTemplate(){
+@Templates.pagehead("Administration @Boozology"){@ps}
+}{
+@Templates.pageheader(){		
+	}{ }	
+}{
+@Templates.pagemaincontent(){	
+
+
+<!-- Begin .container -->
+<div class="container">
+	<!-- Begin .row -->
+	<div class="row">
+		<!-- Begin .col-lg-12 -->
+		<div class="col-lg-12 col-12 col-md-12 col-xs-12 col-sm-12">
+	<div class="main-banner about-page">
+<!-- Begin .container -->
+
+
+
+  <!-- Begin .user-act -->
+  <div class="user-act">
+    
+    <h3>Welcome to the world of Boozology!</h3>
+    <div class="clearfix"></div>
+    <ul class="log-menu">
+      <li><a href="../login" class="btn btn-default login">Log in</a></li>
+      <li>or</li>
+      <li><a href="../signup" class="btn btn-default sign-up">Sign Up</a></li>
+    </ul>
+  </div>
+  <!-- End user-act -->
+  <div class="clearfix"></div>
+
+</div>
+<!-- End .main-banner.about-page -->
+			
+		</div>
+		<!-- End .col-lg-12 -->
+
+		<!-- Begin .col-lg-8 -->
+		<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 col-12">
+	<p class="intro">We're a community of people who love cool stuff and we're excited to have you on board. Here you can learn, discover, and talk about Boozy drinks and Booze related things!</p>	
+
+</div>
+
+  <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+			<div class="row text-center">
+      		 <img src=https://s3-us-west-2.amazonaws.com/com.gold.byrepo08/assets/aboutusbooz-02.png  alt="Find stuff you love">  
+      		</div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+      		<div class="row text-center">
+      			<img src=https://s3-us-west-2.amazonaws.com/com.gold.byrepo08/assets/aboutusbooz-03.png  alt="Use our magic button">
+   			</div>
+   	</div>
+  </div>
+   
+   <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+			<div class="row text-center">
+      		<img src=https://s3-us-west-2.amazonaws.com/com.gold.byrepo08/assets/aboutusbooz-04.png  alt="Share with friends">  
+      		</div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+      		<div class="row text-center">
+      			<img src=https://s3-us-west-2.amazonaws.com/com.gold.byrepo08/assets/aboutusbooz-05.png   alt="Create amazing collections">
+   			</div>
+   	</div>
+  </div>
+  
+	
+		
+		<!-- End .col-lg-8 -->
+    <div class="clearfix"></div>
+
+<div class="col-lg-12 col-xs-12 col-sm-12 col-md-12 col-12">
+<div class="main-categories about-page">
+<h2>Browse & Discover</h2>
+
+
+<div class="row">
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+  <!-- Begin .category-product -->
+    <div class="category-product">
+      <div class="title">
+        <h3>Wine</h3>
+      </div>
+      <!-- Begin .category-list -->
+      <div class="category-list">
+        <ul>
+          <li><a href="/discover?q=California">California</a></li>
+          <li><a href="/discover?q=French">French</a></li>
+          <li><a href="/discover?q=Italian">Italian</a></li>
+          <li><a href="/discover?q=Pinot Noir">Pinot Noir</a></li>
+          <li class="more"><a href="/discover?c=Wine">More...</a></li>
+        </ul>
+      </div>
+      <!-- End .category-list -->
+       @defining(controllers.HomePageImages.imagePathWine()) { imageSource=>
+       		<img src=@imageSource  class="img-responsive" alt="">
+       }
+    </div>
+    <!-- End .category-product -->
+
+  </div>
+<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+    <div class="category-product">
+      <div class="title">
+        <h3>Beer</h3>
+      </div>
+      <!-- Begin .category-list -->
+      <div class="category-list">
+        <ul>
+          <li><a href="/discover?q=IPA">IPA</a></li>
+	      <li><a href="/discover?q=Pale Ale">Pale Ale</a></li>
+	      <li><a href="/discover?q=Amber">Amber</a></li>
+	      <li><a href="/discover?q=Lager">Lager</a></li>
+	      <li class="more"><a href="/discover?c=Beer">More...</a></li>
+        </ul>
+      </div>
+      <!-- End .category-list -->
+      @defining(controllers.HomePageImages.imagePathBeer()) { imageSource=>
+                        <img src=@imageSource class="img-responsive" alt="">
+                        }
+    </div>
+
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-12">
+  <!-- Begin .category-product -->
+    <div class="category-product">
+      <div class="title">
+        <h3> Liquor & Spirits</h3>
+      </div>
+      <!-- Begin .category-list -->
+      <div class="category-list">
+        <ul>
+          <li><a href="/discover?q=Rum">Rum</a></li>
+          <li><a href="/discover?q=Vodka">Vodka</a></li>
+          <li><a href="/discover?q=Tequila">Tequila</a></li>
+          <li><a href="/discover?q=Whiskey">Whiskey</a></li>
+          <li class="more"><a href="/discover?c=Spirits">More...</a></li>
+        </ul>
+      </div>
+      <!-- End .category-list -->
+
+      @defining(controllers.HomePageImages.imagePathLiquor()) { imageSource=>
+        <img src=@imageSource  class="img-responsive" alt="">
+        }
+    </div>
+    <!-- End .category-product -->
+
+  </div>
+<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12">
+<!-- Begin .category-product -->
+    <div class="category-product small">
+      <div class="title">
+        <h3>Mixology</h3>
+      </div>
+      <!-- Begin .category-list -->
+      <div class="category-list">
+        <ul>
+          <li><a href="/discover?q=Latest Trends">Latest Trends</a></li>
+          <li><a href="/discover?q=Classics">Classics</a></li>
+          <li><a href="/discover?q=Bar Tools">Bar Tools</a></li>
+          <li><a href="/discover?q=Recipes">Recipes</a></li>
+          <li class="more"><a href="/discover?c=Mixology">More...</a></li>
+        </ul>
+      </div>
+      <!-- End .category-list -->
+      @defining(controllers.HomePageImages.imagePathMixology()) { imageSource=>
+                        <img src=@imageSource class="img-responsive" alt="">
+                        }
+    </div>
+    <!-- End .category-product -->
+  </div>
+</div>
+<div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
+<!-- Begin .category-product -->
+    <div class="category-product">
+      <div class="title">
+        <h3>Gadgets</h3>
+      </div>
+      <!-- Begin .category-list -->
+      <div class="category-list">
+        <ul>
+          <li><a href="/discover?q=Small Appliances">Small Appliances</a></li>
+          <li><a href="/discover?q=Cutlery">Cutlery</a></li>
+          <li><a href="/discover?q=Storage">Storage</a></li>
+          <li><a href="/discover?q=On the go">On the go</a></li>
+          <li class="more"><a href="/discover?c=Gadgets">More...</a></li>
+        </ul>
+      </div>
+      <!-- End .category-list -->
+      @defining(controllers.HomePageImages.imagePathGadgets()) { imageSource=>
+                        <img src=@imageSource class="img-responsive" alt="">
+                        }
+    </div>
+    <!-- End .category-product -->
+  </div>
+     </div>
+     <div class="row">
+  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12">
+  <!-- Begin .category-product -->
+    <div class="category-product small">
+      <div class="title">
+        <h3> Toys & Trinkets</h3>
+      </div>
+      <!-- Begin .category-list -->
+      <div class="category-list">
+        <ul>
+          <li><a href="/discover?q=Bar sets">Bar sets</a></li>
+          <li><a href="/discover?q=Corkscrews">Corkscrews</a></li>
+          <li><a href="/discover?q=Ice Molds">Ice Molds</a></li>
+          <li><a href="/discover?q=Shakers">Shakers</a></li>
+          <li class="more"><a href="/discover?c=Toys %26 Trinkets">More...</a></li>
+        </ul>
+      </div>
+      <!-- End .category-list -->
+
+      @defining(controllers.HomePageImages.imagePathToys()) { imageSource=>
+                        <img src=@imageSource  class="img-responsive" alt="">
+                        }
+    </div>
+    <!-- End .category-product -->
+
+  </div>
+<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-12">
+<!-- Begin .category-product -->
+    <div class="category-product">
+      <div class="title">
+        <h3> Glassware</h3>
+      </div>
+      <!-- Begin .category-list -->
+      <div class="category-list">
+        <ul>
+          <li><a href="/discover?q=Tumblers">Tumblers</a></li>
+          <li><a href="/discover?q=Wine Glasses">Wine Glasses</a></li>
+          <li><a href="/discover?q=Drinkware">Drinkware</a></li>
+          <li><a href="/discover?q=Shot Glasses">Shot Glasses</a></li>
+          <li class="more"><a href="/discover?c=Glassware">More...</a></li>
+        </ul>
+      </div>
+      <!-- End .category-list -->
+      @defining(controllers.HomePageImages.imagePathGlassWare()) { imageSource=>
+                        <img src=@imageSource class="img-responsive" alt="">
+                        }
+    </div>
+    <!-- End .category-product -->
+  </div>
+</div>
+</div>
+		</div>
+	</div>
+	<!-- End .row -->
+</div>
+<!-- End .container -->		
+@Templates.su.jready{
+			
+}
+	
+}
+}{
+@Templates.pagefooter(){ }
+}	

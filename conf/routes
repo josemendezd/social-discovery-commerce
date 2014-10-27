@@ -2,6 +2,11 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+
+# catch all route with slash at the end, pointing to action containing movedPermanently() 
+# redirect without the trailing slash
+GET     /*path/             controllers.Application.redirectUntrailed(path: String)
+
 # Home page
 
 
@@ -211,7 +216,7 @@ GET		/social/fb/friends/json/:code				controllers.Social.getfbfriendsjson(code:S
 GET		/social/tw/friends							controllers.Social.gettwitterfriends
 GET		/social/tw/friends/json						controllers.Social.gettwitterfriendsjson
 #Yahoo Verification
-GET		/TYiXIohLTQ6ePhh.axSL0opXwfwJzKZ7988NZpRynw--.html	controllers.Social.verifyyahoo
+#GET		/TYiXIohLTQ6ePhh.axSL0opXwfwJzKZ7988NZpRynw--.html	controllers.Social.verifyyahoo
 
 
 
@@ -233,7 +238,7 @@ GET		/sp/helpme									controllers.SPages.helpme()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
-
+#GET     /*file  						controllers.Assets.at(path="/public", file)
 #Dev Mode
 GET		/mystat								controllers.Useract.MyStats
 #GET		/test							controllers.Application.ProdTest
