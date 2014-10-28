@@ -2,13 +2,13 @@
 
 .product-wrap-custom {
 	border-bottom: 1px solid #979797;
-	/* margin-bottom: 10px; */
+	 margin-bottom: 10px; 
 }
 
 .product-details-custom {
 	position: relative;
 	width: 231px;
-	/* margin-bottom: 10px; */
+	 margin-bottom: 10px; 
 	border-bottom: none;
 	overflow: hidden;
 }
