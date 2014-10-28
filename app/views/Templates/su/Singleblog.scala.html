@@ -99,7 +99,8 @@
             <div class="post-excerpt" style="height: 500px;overflow: hidden;">
               @Html(blg.content)
             </div>
-            <a href="javascript:void(0);" class="readmore-js-toggle">Read More</a>
+           <!--  <a href="javascript:void(0);" class="readmore-js-toggle">Read More</a> -->
+            <a href="@routes.Application.GetBlogPage(blg.id)" >Read More</a> 
             <meta property="og:description" content="@blg.content"/>
             <!-- End post-excerpt -->
             

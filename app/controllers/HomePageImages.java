@@ -73,7 +73,7 @@ public class HomePageImages extends Controller {
 	
 	// This function returns the favicon icon
 	public static String imagePathFavicon() {
-		return "http://" + play.Play.application().configuration().getString(S3Plugin.AWS_S3_BUCKET) + play.Play.application().configuration().getString(S3Plugin.BASE_URL_FORMAT) + "assets/boozology_favicon.png";
+		return "http://" + play.Play.application().configuration().getString(AWS_S3_BUCKET) + play.Play.application().configuration().getString(BASE_URL_FORMAT) + "assets/boozology_favicon.png";
 	}
 	
 	public static String imagePathWelcome() {
