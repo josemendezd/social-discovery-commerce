@@ -25,6 +25,7 @@
     <meta content="" name="keywords" />
     <meta content="" name="description" />
     
+    <script src="@routes.Assets.at("bl/js/jquery.min.js")"></script>
     <script src="@routes.Assets.at("js/custom.js")"></script>
     <script src="@routes.Assets.at("js/knockout-2.3.0.js")"></script>
     <script src="@routes.Assets.at("js/knockout.mapping.js")"></script>    
@@ -62,7 +63,9 @@
   </head>
 
   <body>
-  
+  <div class="loaderimagediv" style="width: 22% !important;border: 11px solid black;!important">
+  	<b id="loadertext"></b>
+  </div>
   
   <div class="row">
 	<div>
@@ -179,7 +182,20 @@
 					
 					
 				</div>
-
+					
+					
+					  
+					
+					
+				  
+				
+				
+				
+				  
+				  
+				  
+				
+				
 				<div class="help-block text-center">
 					<button type="submit" class="btn btn-large btn-info">Add this Product</button>
 				</div>
@@ -313,15 +329,18 @@
 		$("#ajaxform").submit(function(e){
 			var postData = $(this).serializeArray();
 			var formURL = $(this).attr("action");
+			$('.loaderimagediv').show();
 			$.ajax(
 			{
 				url : "/product/create",
 				type: "POST",
 				data : postData,
 				success:function(data, textStatus, jqXHR) {
+					$('.loaderimagediv').hide();
 					parent.document.location.href = "/product/page/"+data;
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
+					$('.loaderimagediv').hide();
 					self.errormessage("Error while Creating Product, Try Again");
 				}
 			});
