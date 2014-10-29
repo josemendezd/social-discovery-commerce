@@ -86,11 +86,14 @@
 						wd=jsimg.naturalWidth;
 						ht=jsimg.naturalHeight;
 					}
-					if(	!(wd>100 && ht>100))
+					
+					if(!(wd>231 && ht>200) || (wd > 3*ht || ht > 3*wd))
 					{
-						try{
-							imgo.parent().remove();
-						}catch(err){}
+						
+							try{
+								imgo.parent().remove();
+							}catch(err){}
+						
 					}
 					else{
 						icarr.push(imgo);
