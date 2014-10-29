@@ -20,6 +20,7 @@
 .featured-product-custom {
 	position: relative;
 	display: inline-block;
+	margin-right: 3%;
 }
 
 .featured-product-custom .shareprod-custom {

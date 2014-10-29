@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -29,16 +30,18 @@ public class Tags extends Model  {
     
     public static Model.Finder<Long,Tags> find = new Finder<Long, Tags>(Long.class, Tags.class);
     
-    public static void AddTag(String tagstring)
+    public static List<Tags> AddTag(String tagstring)
     {
     	String tags[]=tagstring.split(",");
+    	List<Tags> tagsList = new ArrayList<Tags>();
     	for(String tag : tags){
 	    	String cleanuptag = tag.trim();
-	    	Tags label = find.where().eq("name", cleanuptag).findUnique();
+	    	Tags label = find.where().ieq("name", cleanuptag).findUnique();
 	    	if(label != null )
 	    		continue;
-	    	new Tags(cleanuptag);
+	    	tagsList.add(new Tags(cleanuptag));
     	}
+    	return tagsList;
     }
     
     public static boolean RemoveTag(Long tagID)

@@ -1519,12 +1519,12 @@ public static String socialSignUp(String paUrl) {
 		return ok(views.html.Admin.adminPageForManageTags.render());
 	}
 	
-	@Restrict(@Group(Application.ADMIN_ROLE))
+	//@Restrict(@Group(Application.ADMIN_ROLE))
 	public static Result addTags() {
 		DynamicForm form = play.data.Form.form().bindFromRequest();
 		String tags = form.get("tags");
-		Tags.AddTag(tags);
-		return ok();
+		return ok(Json.toJson(Tags.AddTag(tags)));
+		
 	}
 	
 	public static Result getAllTags() {

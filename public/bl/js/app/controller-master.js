@@ -248,7 +248,6 @@ blmaster.controller('ManageTagsController',function($scope, $http, labelService)
 	$scope.allLabel = labelService.getAllLabels.get();
 	
 	$scope.deleteToken = function(id){
-		alert(id);
 		$http.put('/tags/delete', {'id':id}).success( function() {
 			 angular.forEach($scope.allLabel, function(tag, key){
                  if(tag.id == id) {
