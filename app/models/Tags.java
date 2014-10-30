@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import play.Logger;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
@@ -25,7 +26,8 @@ public class Tags extends Model  {
     
     public Tags(String tagstring) {
         this.name = tagstring;
-        this.save();
+      //  Logger.info("add new tag");
+       this.save();
     }
     
     public static Model.Finder<Long,Tags> find = new Finder<Long, Tags>(Long.class, Tags.class);
