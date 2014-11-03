@@ -158,6 +158,8 @@ public class DInitial {
     
     public static final int PRODUCT_LABELS_LIMIT=10;
     
+    public static List<Long> productIds;
+    
     public static class CURRENT_ACL{
     	public static final int 
     	ADMINISTRATOR_ONLY=1,

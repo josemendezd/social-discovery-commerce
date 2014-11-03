@@ -113,6 +113,10 @@ public class Eventlog extends Model {
 		down.execute();
 	}
 	
+	public static Page<Product> RelevanceFeed(int page, int pageSize) {
+		return Ebean.find(Product.class).where().in("id", DInitial.productIds).findPagingList(pageSize).getPage(page);		
+    }
+	
 	public static Page<Product> RelevanceFeed(int page, int pageSize,String filter) {
 		/*
 		RawSql rawSql =	RawSqlBuilder.parse("SELECT  PRODUCTINV_ID FROM EVENTLOG WHERE EVENTTYPE =2 GROUP BY PRODUCTINV_ID ORDER BY" +
