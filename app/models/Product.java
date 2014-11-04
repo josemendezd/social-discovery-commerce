@@ -31,7 +31,7 @@ import controllers.DInitial;
 import controllers.GHelp;
 
 @Entity
-public class Product extends  Model {
+public class Product extends  Model implements Comparable<Product> {
 	@Id
 	@GeneratedValue
 	public Long id;
@@ -312,6 +312,11 @@ public class Product extends  Model {
 	
 	public static List<Product> findAllSpams(int start, int rowsPerPage) {
 		return find.where().eq("spam_flag", true).setFirstRow(start).setMaxRows(rowsPerPage).findList();
+	}
+
+	@Override
+	public int compareTo(Product o) {
+		return o.timeofadd.compareTo(timeofadd);
 	}
 	
 }

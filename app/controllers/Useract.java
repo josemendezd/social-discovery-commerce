@@ -528,9 +528,9 @@ public class Useract  extends Controller {
 			int ht = image.getHeight();
 			int wd = image.getWidth();
 			
-			if(!(wd > 231 && ht > 200) || (wd > 3*ht || ht > 3*wd)) {
+			if(!(wd > 231 && ht > 230) || (wd > 2*ht || ht > 2*wd)) {
 				flash(Application.FLASH_ERROR_KEY,"Image you seleted does not conform to our specifications.\n"
-						+ "Please make sure image width and height is mininum 230px and image height/width or width/height ratio  not more than 3/1 ");
+						+ "Please make sure image width and height is mininum 230px and image height/width or width/height ratio  not more than 2/1 ");
 				return Useract.addoptions(); 
 			}
 		} catch (IOException e) {

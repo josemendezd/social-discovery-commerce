@@ -251,13 +251,17 @@
 			@Templates.js.pbactionjs(){		
 				self.fr=new fms({gend:0, prc:0, stext:'',catg:0, pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE});
 				self.sfm = ko.observable(self.fr);
-				
+				self.stillloading = false;
 				// Behaviours
 				self.loadProd = function(jsonstring) {
 					
-					ldiv.display();
+					if(self.stillloading) {
+						return;
+					}
 					var sentsuccess=true;
 					var posting = $.post( "@routes.Useract.MyWatchListJson",jsonstring,"json");
+					ldiv.display();
+					self.stillloading = true;
 					posting.done(function( data ) {								
 						$prodselect=data['prodgrid'];
 						
@@ -294,13 +298,14 @@
 								}
 							});	
 						}
-						
+						self.stillloading = false;
 						if(!data['hasmore']) {self.fr.page=-1;}
 						
 					});
 					posting.fail(function( data ) {
 						ldiv.loadcomplete();	
 						sentsuccess=false;
+						self.stillloading = false;
 					});
 					
 					return sentsuccess;						       
