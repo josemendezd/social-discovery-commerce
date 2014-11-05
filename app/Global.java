@@ -87,8 +87,7 @@ public class Global extends GlobalSettings {
 				    	Map<Long,List<Product>> productCategoryMap = new HashMap<Long, List<Product>>();
 				    	
 				    	for(Category category : categories) {
-				    		List<Product> products = category.products;
-				    		Collections.sort(products);
+				    		List<Product> products = category.getActiveProducts();
 				    		productCategoryMap.put(category.id, products);
 				    	}
 				    	
