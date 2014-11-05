@@ -171,4 +171,9 @@ public class Category extends  Model {
 		return false;
 	}
 	
+	public List<Product> getActiveProducts(){
+		return Product.find.where().eq("category_id",this.id).eq("alive", true).order().desc("timeofadd").findList();
+	}
+	
+	
 }
