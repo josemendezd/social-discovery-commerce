@@ -54,13 +54,17 @@ function PBDocInit(ldiv)
 		self.amIfollowing = ko.observable(false);
 		
 		@Html(play.Routes.javascriptRouter("shoppageloader",controllers.routes.javascript.Useract.SaveMySearch,controllers.routes.javascript.Useract.FindthisSearch,controllers.routes.javascript.Application.SearchTotalProductCount));
-		
+		self.stillloading = false;
 		var $container;
 		self.loadProd = function(jsonstring) {			
-			ldiv.display();
+			
+			if(self.stillloading) {
+				return;
+			}
 			var sentsuccess=true;
 			var posting = $.post( "@routes.Application.ProductQuery",jsonstring,"json");
-			
+			ldiv.display();
+			self.stillloading = true;
 			posting.done(function( data ) {								
 				$prodselect=data['prodgrid'];
 				
@@ -93,12 +97,13 @@ function PBDocInit(ldiv)
 						}
 					});	
 				}
-				
+				self.stillloading = false;
 				if(!data['hasmore']){self.fr.page=-1;}		
 			});
 			posting.fail(function( data ) {
 				ldiv.loadcomplete();	
 				sentsuccess=false;
+				self.stillloading = false;
 			});
 			
 			return sentsuccess;						       

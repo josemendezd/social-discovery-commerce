@@ -2,7 +2,9 @@ package controllers;
 
 import static play.data.Form.form;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import javax.imageio.ImageIO;
 import javax.validation.constraints.NotNull;
 
 import models.Blog;
@@ -519,6 +522,22 @@ public class Useract  extends Controller {
 			flash(Application.FLASH_ERROR_KEY,"Unknown File Type!! Please use JPG,PNG");
 			return Useract.addoptions(); 
 		}
+		BufferedImage image;
+		try {
+			image = ImageIO.read(fp.getFile());
+			int ht = image.getHeight();
+			int wd = image.getWidth();
+			
+			if(!(wd > 231 && ht > 230) || (wd > 2*ht || ht > 2*wd)) {
+				flash(Application.FLASH_ERROR_KEY,"Image you seleted does not conform to our specifications.\n"
+						+ "Please make sure image width and height is mininum 230px and image height/width or width/height ratio  not more than 2/1 ");
+				return Useract.addoptions(); 
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		S3File s3f= S3File.createfile(S3Plugin.s3Bucket, DInitial.AMAZON_DIRECTORIES.FOR_TEMP_PRODUCT, allotedname, DInitial.IMAGESTORESIZE.AS_IT_IS.filestate, localUser.id, fp.getFile());
 		fp.getFile().delete();
 		return ok(views.html.Tools.confirm.render("Add "+filename, null, null, s3f.geturlstring(), "USD", 10.00, localUser));
@@ -1629,7 +1648,7 @@ public class Useract  extends Controller {
 		query.setParameter("product_id", product_id);
 		List<SqlRow> rows = query.findList();
 		
-		List<ProductRateDetail> details = new ArrayList<>();
+		List<ProductRateDetail> details = new ArrayList<ProductRateDetail>();
 		Integer maxValue = 0;
 		
 		for( Integer i=1; i <= 5; i++) {

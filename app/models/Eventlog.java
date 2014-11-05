@@ -113,6 +113,40 @@ public class Eventlog extends Model {
 		down.execute();
 	}
 	
+	public static Page<Product> RelevanceFeed(int page, int pageSize) {
+		//List<Long> longs = DInitial.productIds.subList(page*pageSize, ((page*pageSize) < DInitial.productIds.size()) ? pageSize : DInitial.productIds.size());
+		List<Long> pids = DInitial.productIds;
+		String list = pids.toString();
+		list = list.replace("[", "");
+		list = list.replace("]", "");
+		String orderBy = null;
+		for(Long pid : pids){
+			if(orderBy == null){
+				orderBy = "id=" + pid + " DESC ";
+			}
+			orderBy = orderBy + ", id=" + pid+ " DESC ";
+		}
+		String sqlquery = "select  ID , PRODUCTNAME , CURRENCY , PRICETAG , FOUNDER_ID , SITEURL , IMAGE_LOCATION , GENDER , VIEWS , CATEGORY_ID , ALIVE , PSTORE_ID , TIMEOFADD  from product where id in (" + list + ") order by " + orderBy;
+		//System.out.println(sqlquery);
+		RawSql rawSql =	RawSqlBuilder.parse(sqlquery)
+				.columnMapping("ID", "id")
+				.columnMapping("PRODUCTNAME", "productname")
+				.columnMapping("CURRENCY", "Currency")
+				.columnMapping("PRICETAG", "Pricetag")
+				.columnMapping("FOUNDER_ID", "Founder.id")
+				.columnMapping("SITEURL", "siteurl")
+				.columnMapping("IMAGE_LOCATION", "ImageLocation")
+				.columnMapping("GENDER", "gender")
+				.columnMapping("VIEWS", "views")
+				.columnMapping("CATEGORY_ID", "category.id")
+				.columnMapping("ALIVE", "alive")
+				.columnMapping("PSTORE_ID", "pstore.id")
+				.columnMapping("TIMEOFADD", "timeofadd")
+		.create();
+		
+		return Ebean.find(Product.class).setRawSql(rawSql).findPagingList(pageSize).getPage(page);		
+    }
+	
 	public static Page<Product> RelevanceFeed(int page, int pageSize,String filter) {
 		/*
 		RawSql rawSql =	RawSqlBuilder.parse("SELECT  PRODUCTINV_ID FROM EVENTLOG WHERE EVENTTYPE =2 GROUP BY PRODUCTINV_ID ORDER BY" +

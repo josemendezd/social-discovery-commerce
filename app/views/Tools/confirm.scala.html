@@ -25,6 +25,7 @@
     <meta content="" name="keywords" />
     <meta content="" name="description" />
     
+    <script src="@routes.Assets.at("bl/js/jquery.min.js")"></script>
     <script src="@routes.Assets.at("js/custom.js")"></script>
     <script src="@routes.Assets.at("js/knockout-2.3.0.js")"></script>
     <script src="@routes.Assets.at("js/knockout.mapping.js")"></script>    
@@ -35,6 +36,7 @@
     *@
     <script src="@routes.Assets.at("js/global_no_coffee.js")"></script>
     <script src="@routes.Assets.at("bl/js/jquery.tokeninput.js")"></script>
+    <script src="@routes.Assets.at("bl/js/knockout-bootstrap.min.js")"></script>
     <link href="@routes.Assets.at("bl/css/fonts/fonts.css")" rel="stylesheet" type="text/css">
     
     <link href="@routes.Assets.at("css/bootstrap.css")" media="screen" rel="stylesheet" />
@@ -61,7 +63,9 @@
   </head>
 
   <body>
-  
+  <div class="loaderimagediv" style="width: 22% !important;border: 11px solid black;!important">
+  	<b id="loadertext"></b>
+  </div>
   
   <div class="row">
 	<div>
@@ -150,6 +154,11 @@
 				  <div >
 					<input name="labels" id="labels"/>
 				  </div>
+				  <div >
+					<a data-bind="popover: {template: 'addTagTemplate', placement:'bottom'}" >
+					 <i class="icon-share"></i>Add New Tag
+					</a>
+				  </div>
 				</div>
 				
 				<div id="categoryselector">				
@@ -173,7 +182,20 @@
 					
 					
 				</div>
-
+					
+					
+					  
+					
+					
+				  
+				
+				
+				
+				  
+				  
+				  
+				
+				
 				<div class="help-block text-center">
 					<button type="submit" class="btn btn-large btn-info">Add this Product</button>
 				</div>
@@ -186,13 +208,38 @@
   
 
 	
-  
+  <script type="text/html" id="addTagTemplate">
+ 	 <button class="close-tag-popover close pull-right" type="button" data-dismiss="popover">×</button>
+	 
+	 <label class="control-label"  for="tags">Enter Tag :</label>
+	 <div class="controls">
+		<input name="tags" id="tags"/>
+		<a id="add-tag" href="#">Add</a>
+	 </div>
+
+	 
+  </script>
   
   @Templates.su.jready{
   
   $('#labels').tokenInput("/tags/all", {
                 preventDuplicates: true
-            });
+   });
+   
+   $('body').on('click','#add-tag',function(){
+   		$.ajax({
+   			url:"/tags/add",
+   			type:"PUT",
+   			dataType: 'json',
+   			data:{'tags' : $('#tags').val()},
+   			success: function(data){
+   			console.log(data[0]);
+   				$("#labels").tokenInput("add", {id:data[0].id,name:data[0].name});
+   				$(".close-tag-popover").click();
+   			}
+   		});
+   		
+   });
   
   @Html(play.Routes.javascriptRouter("categoryloader",controllers.routes.javascript.Application.RetrieveCategoryList));
   
@@ -282,15 +329,18 @@
 		$("#ajaxform").submit(function(e){
 			var postData = $(this).serializeArray();
 			var formURL = $(this).attr("action");
+			$('.loaderimagediv').show();
 			$.ajax(
 			{
 				url : "/product/create",
 				type: "POST",
 				data : postData,
 				success:function(data, textStatus, jqXHR) {
+					$('.loaderimagediv').hide();
 					parent.document.location.href = "/product/page/"+data;
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
+					$('.loaderimagediv').hide();
 					self.errormessage("Error while Creating Product, Try Again");
 				}
 			});

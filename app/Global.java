@@ -1,17 +1,18 @@
-import java.io.BufferedReader;
+import static play.mvc.Results.badRequest;
+import static play.mvc.Results.internalServerError;
+import static play.mvc.Results.notFound;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.Callable;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import models.Category;
 import models.Contributor;
@@ -30,55 +31,33 @@ import models.SecurityRole;
 import models.Store;
 import models.User;
 import models.UserCollection;
-import models.UserPermission;
-import models.Notifications.SOFollows;
-import models.Notifications.UserSubscriptions;
-
-import com.avaje.ebean.Ebean;
-import com.avaje.ebean.RawSql;
-import com.avaje.ebean.RawSqlBuilder;
-import com.avaje.ebean.SqlUpdate;
-import com.feth.play.module.pa.PlayAuthenticate;
-import com.feth.play.module.pa.PlayAuthenticate.Resolver;
-import com.feth.play.module.pa.exceptions.AccessDeniedException;
-import com.feth.play.module.pa.exceptions.AuthException;
-import com.feth.play.module.pa.providers.AuthProvider;
-import com.feth.play.module.pa.providers.password.UsernamePasswordAuthProvider;
-import com.feth.play.module.pa.user.AuthUser;
-import com.maxmind.geoip2.DatabaseReader;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
-import views.html.spages.Aboutus;
-import controllers.DInitial;
-import controllers.routes;
 import play.Application;
 import play.Configuration;
 import play.GlobalSettings;
 import play.Logger;
-import play.api.Play;
-import play.data.Form;
 import play.libs.Akka;
 import play.libs.F;
 import play.libs.F.Promise;
 import play.mvc.Call;
-import play.mvc.Controller;
-import play.mvc.Http;
-import play.mvc.Result;
+import play.mvc.Http.RequestHeader;
+import play.mvc.SimpleResult;
 import plugins.S3Plugin;
-import providers.MyLoginUsernamePasswordAuthUser;
-import providers.MyUsernamePasswordAuthProvider;
-import providers.MyUsernamePasswordAuthUser;
 import providers.MyUsernamePasswordAuthProvider.MySignup;
-import scala.concurrent.ExecutionContext;
+import providers.MyUsernamePasswordAuthUser;
+import scala.concurrent.duration.Duration;
+import akka.actor.ActorSystem;
 
-import play.*;
-import play.mvc.*;
-import play.mvc.Http.*;
-import play.libs.F.*;
-import static play.mvc.Results.*;
+import com.avaje.ebean.Ebean;
+import com.feth.play.module.pa.PlayAuthenticate;
+import com.feth.play.module.pa.PlayAuthenticate.Resolver;
+import com.feth.play.module.pa.exceptions.AccessDeniedException;
+import com.feth.play.module.pa.exceptions.AuthException;
+import com.maxmind.geoip2.DatabaseReader;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
-
-import play.Logger;
+import controllers.DInitial;
+import controllers.routes;
 //import static play.mvc.Results.notFound;
 
 
@@ -95,6 +74,48 @@ public class Global extends GlobalSettings {
     @Override
 	public void onStart(Application app) {
 		Logger.info("Application has started");	
+		
+		ActorSystem  actorSystem1 = Akka.system();
+        actorSystem1.scheduler().schedule(
+                Duration.create(00, TimeUnit.MILLISECONDS),
+                Duration.create(1, TimeUnit.HOURS),
+                new Runnable() {
+					@Override
+					public void run() {
+						DInitial.productIds = new ArrayList<Long>();
+				    	List<Category> categories = Category.find.all();
+				    	Map<Long,List<Product>> productCategoryMap = new HashMap<Long, List<Product>>();
+				    	
+				    	for(Category category : categories) {
+				    		List<Product> products = category.getActiveProducts();
+				    		productCategoryMap.put(category.id, products);
+				    	}
+				    	
+				    	int j = 0;
+				    	while(true) {
+				    		
+				    		if(DInitial.productIds.size() > 1000 || productCategoryMap.size() == 0) {
+				    			break;
+				    		}
+				    		
+				    		Iterator<Map.Entry<Long,List<Product>>> iter = productCategoryMap.entrySet().iterator();
+				    		
+				    		while (iter.hasNext()) {
+				    			Entry<Long, List<Product>> entry =  iter.next();
+				    			List<Product> products = entry.getValue();
+				    			if(j < products.size()) {
+				    				Product _p = products.get(j);
+				    				DInitial.productIds.add(_p.id);
+				    			} else {
+				    				iter.remove();
+				    			}
+				    		}
+				    		j++;	
+				    	}
+					}
+                }, actorSystem1.dispatcher()
+        );
+		
 		//Logger.info("Application AWS_ACCESS_KEY_2:"+play.Play.application().configuration().getString(AWS_ACCESS_KEY_2) );	
 		//Logger.info("Application AWS_S3_BUCKET:"+play.Play.application().configuration().getString(AWS_S3_BUCKET) );	
 		PlayAuthenticate.setResolver(new Resolver() {
@@ -214,8 +235,8 @@ public class Global extends GlobalSettings {
 			}
 		}
 		
-		if(!Category.categoryExistbyName("Gadget")) {
-            Category.CreateRootCategory("Gadget");
+		if(!Category.categoryExistbyName("Gadgets")) {
+            Category.CreateRootCategory("Gadgets");
 		}
 		
 		if(!Contributor.find.all().isEmpty())

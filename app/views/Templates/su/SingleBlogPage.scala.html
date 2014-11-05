@@ -133,7 +133,7 @@
             <!-- End post-image -->
             
             <!-- Begin post-excerpt -->
-            <div class="post-excerpt" style="height: 500px;">
+            <div class="post-excerpt" style="text-align:justify">
               @Html(blg.content)
             </div>
             
@@ -170,7 +170,7 @@
           
            @if(blg.getImages()!=null){
           <!-- Begin .col-lg-8 images...-->
-          <div id="imgs@{blg.id}" class="col-lg-6 col-md-8 col-sm-12 col-xs-12 col-12" style="margin-bottom: 150px; height: 700px;" data-sticky_column>
+          <div id="imgs@{blg.id}" class="col-lg-6 col-md-8 col-sm-12 col-xs-12 col-12" style="margin-bottom: 150px;" data-sticky_column>
            @for(img <- blg.getImages()) {
            		@if(img.isVideo==false){
            			<img src="@img.getURL()" class="img-responsive" style="padding-bottom: 10px;"/>

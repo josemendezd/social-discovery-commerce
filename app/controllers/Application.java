@@ -9,10 +9,13 @@ import java.net.InetAddress;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import models.Blog;
 import models.BlogComment;
@@ -218,6 +221,9 @@ public class Application extends Controller {
 	    	searchtext=GHelp.FilteredSql(searchtext);
 	    
 		response().setContentType("application/json");
+		if(Integer.parseInt(bindedForm.get("catgid")) == 1 && searchtext.equalsIgnoreCase("") && pricerange == 0) {
+	    	return ok(productjson.render(Eventlog.RelevanceFeed(page, pagesize)));
+	    }
 		switch(sortseq)
 		{
 		case 1:
@@ -1519,12 +1525,12 @@ public static String socialSignUp(String paUrl) {
 		return ok(views.html.Admin.adminPageForManageTags.render());
 	}
 	
-	@Restrict(@Group(Application.ADMIN_ROLE))
+	//@Restrict(@Group(Application.ADMIN_ROLE))
 	public static Result addTags() {
 		DynamicForm form = play.data.Form.form().bindFromRequest();
 		String tags = form.get("tags");
-		Tags.AddTag(tags);
-		return ok();
+		return ok(Json.toJson(Tags.AddTag(tags)));
+		
 	}
 	
 	public static Result getAllTags() {
@@ -1551,5 +1557,5 @@ public static String socialSignUp(String paUrl) {
         //    GET    /*path/    controllers.Application.redirectUntrailed(path: String)
         return movedPermanently("/" + path);
     }	
-	
+    
 }

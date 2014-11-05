@@ -215,14 +215,19 @@
 			        });	
 				}
 				self.loadinitcatg();
-				
+				self.stillloading = false;
 				var $container;
 				self.loadProd = function(jsonstring) {
 					
-					console.log(jsonstring);
-					ldiv.display();
 					var sentsuccess=true;
+					
+					if(self.stillloading) {
+						return;
+					}
+					
 					var posting = $.post( "@routes.Application.ProductQuery",jsonstring,"json");
+					ldiv.display();
+					self.stillloading = true;
 					
 					posting.done(function( data ) {								
 						$prodselect=data['prodgrid'];
@@ -262,13 +267,14 @@
 								}
 							});	
 						}
-						
+						self.stillloading = false;
 						if(!data['hasmore']){self.fr.page=-1;}	
 						
 					});
 					posting.fail(function( data ) {
 						ldiv.loadcomplete();	
 						sentsuccess=false;
+						self.stillloading = false;
 					});
 					
 					return sentsuccess;						       
