@@ -285,7 +285,13 @@ margin-right:5%;
 			  <h2>
 				@productx.productname 
 				<span class="clearfix"></span>
-				<span class="price"><sup>@productx.Currency</sup>@productx.Pricetag</span>
+				<span class="price"><sup>@productx.Currency</sup>
+				 @if(productx.Pricetag != 0) {
+				@productx.Pricetag</span>
+			  	}
+			  	@if(productx.Pricetag == 0) {
+			  	N.A. </span>
+			  	}
 			  </h2>
 			  <!-- Begin tab nav -->
 			  <ul id="myTab" class="nav nav-tabs item-description-nav">
