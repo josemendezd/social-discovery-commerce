@@ -309,7 +309,9 @@ width:70px;height:70px;vertical-align: baseline!important;
             <div class="col-lg-12 col-12 col-md-12 col-sm-12 col-xs-12 col-12">
                <div class="collapse navbar-collapse category-collapse">
                   <ul class="category-nav"  data-bind="foreach: topcatglist">
+                  <!-- ko if: name()!='Gadgets'  -->
                      <li data-bind="css:$root.selectedcategory()==name()?'active':''"><a  class="btn btn-default" data-bind="click:$root.catgclickshort,attr:{href:'@routes.Application.shop'+'/'+encodeURIComponent(name())}"><i class="icon-heart icon-white" data-bind="visible:$index()==0"></i><span data-bind="text:name()=='All'?'Popular':name()"></span></a></li>
+                  <!-- /ko -->
                   </ul>
                </div>
                <div class="clearfix"></div>
