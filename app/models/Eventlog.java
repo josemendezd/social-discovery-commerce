@@ -114,8 +114,8 @@ public class Eventlog extends Model {
 	}
 	
 	public static Page<Product> RelevanceFeed(int page, int pageSize) {
-		//List<Long> longs = DInitial.productIds.subList(page*pageSize, ((page*pageSize) < DInitial.productIds.size()) ? pageSize : DInitial.productIds.size());
-		List<Long> pids = DInitial.productIds;
+		List<Long> pids = DInitial.productIds.subList(page*pageSize, ((page*pageSize) < DInitial.productIds.size()) ? page*pageSize + pageSize : DInitial.productIds.size()-1);
+		//List<Long> pids = DInitial.productIds;
 		String list = pids.toString();
 		list = list.replace("[", "");
 		list = list.replace("]", "");
@@ -144,7 +144,7 @@ public class Eventlog extends Model {
 				.columnMapping("TIMEOFADD", "timeofadd")
 		.create();
 		
-		return Ebean.find(Product.class).setRawSql(rawSql).findPagingList(pageSize).getPage(page);		
+		return Ebean.find(Product.class).setRawSql(rawSql).findPagingList(pageSize-1).getPage(0);		
     }
 	
 	public static Page<Product> RelevanceFeed(int page, int pageSize,String filter) {
