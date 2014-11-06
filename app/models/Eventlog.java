@@ -127,7 +127,7 @@ public class Eventlog extends Model {
 			orderBy = orderBy + ", id=" + pid+ " DESC ";
 		}
 		String sqlquery = "select  ID , PRODUCTNAME , CURRENCY , PRICETAG , FOUNDER_ID , SITEURL , IMAGE_LOCATION , GENDER , VIEWS , CATEGORY_ID , ALIVE , PSTORE_ID , TIMEOFADD  from product where id in (" + list + ") order by " + orderBy;
-		//System.out.println(sqlquery);
+		System.out.println(sqlquery);
 		RawSql rawSql =	RawSqlBuilder.parse(sqlquery)
 				.columnMapping("ID", "id")
 				.columnMapping("PRODUCTNAME", "productname")
