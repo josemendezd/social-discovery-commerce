@@ -1557,5 +1557,5 @@ public static String socialSignUp(String paUrl) {
         //    GET    /*path/    controllers.Application.redirectUntrailed(path: String)
         return movedPermanently("/" + path);
     }	
-    
+	
 }

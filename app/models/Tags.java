@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import play.Logger;
 import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 

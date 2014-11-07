@@ -380,6 +380,8 @@ public class Useract  extends Controller {
 		
 		public String labels;
 		
+		public String cropData;
+		
 		public Category getcategory()
 		{
 			return Category.find.byId(categoryid);
@@ -419,7 +421,7 @@ public class Useract  extends Controller {
 		} catch (AkismetException e) {
 			e.printStackTrace();
 		}
-		Product p=Product.CreateProduct(np.productname, np.currency, np.pricetag, usr, np.capturesite, np.imagelocation, np.getcategory(),true,np.gender,np.description,spam_flag);
+		Product p=Product.CreateProduct(np.productname, np.currency, np.pricetag, usr, np.capturesite, np.imagelocation, np.getcategory(),true,np.gender,np.description,spam_flag,np.cropData);
 		p.ApplyTag(np.labels);
 		
 		if(p!=null)

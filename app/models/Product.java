@@ -115,8 +115,8 @@ public class Product extends  Model implements Comparable<Product> {
 	
 	public void savetocdn(String allotedname,File tempstorage)
 	{
-		File ActualSize=S3File.getimageresized(tempstorage, allotedname,DInitial.IMAGESTORESIZE.AS_IT_IS.filestate, DInitial.IMAGESTORESIZE.AS_IT_IS.Identifier, DInitial.IMAGESTORESIZE.AS_IT_IS.width, DInitial.IMAGESTORESIZE.AS_IT_IS.height),
-				SmallSize=S3File.getimageresized(tempstorage, allotedname, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.filestate, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.Identifier, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.width, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.height);
+		File ActualSize= tempstorage; //S3File.getimageresized(tempstorage, allotedname,DInitial.IMAGESTORESIZE.AS_IT_IS.filestate, DInitial.IMAGESTORESIZE.AS_IT_IS.Identifier, DInitial.IMAGESTORESIZE.AS_IT_IS.width, DInitial.IMAGESTORESIZE.AS_IT_IS.height),
+		File SmallSize=S3File.getimageresized(tempstorage, allotedname, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.filestate, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.Identifier, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.width, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.height);
 		S3File.createfile(S3Plugin.s3Bucket, Product.class.getSimpleName(), allotedname, DInitial.IMAGESTORESIZE.AS_IT_IS.filestate, id, ActualSize);
 		S3File.createfile(S3Plugin.s3Bucket, Product.class.getSimpleName(), allotedname, DInitial.IMAGESTORESIZE.THUMBNAIL_BRICK.filestate, id,SmallSize );
 		ActualSize.delete();
@@ -140,27 +140,30 @@ public class Product extends  Model implements Comparable<Product> {
 	}
 	
 	//Static Modifiers
-	public static Product CreateProduct(String ProductName,String currency,double pricetag,User usr,String SitUrl,String ImgUrl,Category categ,boolean status,long pgender,String description,boolean spam_flag)
-	{
-		Product p=new Product(ProductName, currency, pricetag, usr, SitUrl, ImgUrl, categ, status,description,spam_flag);
+		public static Product CreateProduct(String ProductName,String currency,double pricetag,User usr,String SitUrl,String ImgUrl,Category categ,boolean status,long pgender,String description,boolean spam_flag,String imageJSON)
+		{
+			Product p=new Product(ProductName, currency, pricetag, usr, SitUrl, ImgUrl, categ, status,description,spam_flag);
 
-		try {
-			String allotedname=p.getproductimagename(true);
-			File tempstorage =GHelp.downloadandsaveimage(ImgUrl, allotedname) ;
-			if(tempstorage==null)
-				throw new FileNotFoundException();
-			p.savetocdn(allotedname, tempstorage);
-			tempstorage.delete();
-		} catch (IOException e) {
-			e.printStackTrace();
-			p.delete();
-			Addfailed.Reportfailure(usr, ImgUrl, SitUrl, e.getMessage());
-			return null;
+			try {
+				String allotedname=p.getproductimagename(true);
+				File tempstorage =GHelp.downloadandsaveimage(ImgUrl, allotedname, imageJSON) ;
+				if(tempstorage==null)
+					throw new FileNotFoundException();
+				p.savetocdn(allotedname, tempstorage);
+			    
+				if(tempstorage != null && tempstorage.exists()) {
+			    	tempstorage.delete();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				p.delete();
+				Addfailed.Reportfailure(usr, ImgUrl, SitUrl, e.getMessage());
+				return null;
+			}
+			if(pgender!=0L)
+				SetGender(p, pgender);
+			return p;
 		}
-		if(pgender!=0L)
-			SetGender(p, pgender);
-		return p;
-	}
 	
 	public static void SetGender(Product p,long newgender){p.gender = newgender;p.update();}
 	
