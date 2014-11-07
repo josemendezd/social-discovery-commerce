@@ -26,6 +26,7 @@
     <meta content="" name="description" />
     
     <script src="@routes.Assets.at("bl/js/jquery.min.js")"></script>
+    <script src="@routes.Assets.at("bl/js/bootstrap.min.js")"></script>
     <script src="@routes.Assets.at("js/custom.js")"></script>
     <script src="@routes.Assets.at("js/knockout-2.3.0.js")"></script>
     <script src="@routes.Assets.at("js/knockout.mapping.js")"></script>    
@@ -39,9 +40,12 @@
     <script src="@routes.Assets.at("bl/js/knockout-bootstrap.min.js")"></script>
     <link href="@routes.Assets.at("bl/css/fonts/fonts.css")" rel="stylesheet" type="text/css">
     
-    <link href="@routes.Assets.at("css/bootstrap.css")" media="screen" rel="stylesheet" />
+    <link href="@routes.Assets.at("bl/css/bootstrap.css")" media="screen" rel="stylesheet" />
     <link href="@routes.Assets.at("css/bootstrap-responsive.css")" media="screen" rel="stylesheet" />
     <link href="@routes.Assets.at("bl/css/token-input.css")" rel="stylesheet" type="text/css">
+    <script src="@routes.Assets.at("bl/js/cropper.js")"></script>
+    <link href="@routes.Assets.at("bl/css/cropper.css")" rel="stylesheet"  type="text/css">
+    <link href="@routes.Assets.at("bl/css/crop-avatar.css")" rel="stylesheet"  type="text/css">
     <style>
     body{padding-top: 0px;}
     .text-nav {
@@ -67,13 +71,30 @@
   	<b id="loadertext"></b>
   </div>
   
+  <div name="imageCropping"  id="tab1" style="padding-bottom: 10px">
+  	 <h4>Please, Select the area to crop...</h4>
+	  <div class="bootstrap-modal-cropper" style="width:550px;margin:0 auto;border: 1px solid grey; border-radius: 7px;"><img style="display:none" src="@pil"></div>
+	  <h5>Preview</h5>
+	  <div class="row" style="border: 1px solid grey; border-radius: 7px;">
+	    <div class="avatar-preview preview-lg"></div>
+	    <div class="avatar-preview preview-md"></div>
+	  </div>
+	  <div style="overflow: auto; margin:2px auto;">
+	  	<button class="btn btn-large btn-info pull-right" id="save">Continue</button>
+	  </div>
+  </div>
+  
+  
+  
+  <div id="tab2">
+  <div class="container" id="crop-avatar" style="float:left; width:40%">
+    <!-- Current avatar -->
+    <div  class="avatar-view" id="avatar-view" title="Change the avatar" data-toggle="modal" data-target="#avatar-modal">
+      <img src="@pil" alt="Avatar">
+    </div>
+  </div>
   <div class="row">
 	<div>
-		<div class="pull-left" style="max-width:40%">
-			<div class="thumblimg-large">
-				<img title="@pn" class="logoicon" src="@pil" alt="Image Unavailable"/>
-			</div>
-		</div>
 		<div class="pull-left" style="width:60%;display: inline-block;">
 			<form name="ajaxform" id="ajaxform" class="form-horizontal searchposition" method="POST" data-bind="submit:verifyform">
 				
@@ -85,7 +106,7 @@
 				}else{
 					<input type="hidden" name="productname" value="@pn">
 				}
-				
+				<input type="hidden" class="avatar-data" name="cropData" type="">
 				<div class="control-group">
 				  <div class="controls">
 					<h2 class="textcutoverflow">@pn</h2>
@@ -172,30 +193,14 @@
 						  	</ul>						  	
 					  	</div>
 					  	<div class="text-nav onnextline">
-							<ul class="inline"  data-bind="foreach: catglist,visible:catglist().length > 0">
-						  		<li><a data-bind="click:catgclick,text:name"></a></li>
+							<ul class="inline" style="margin: 0 auto;overflow: hidden;"  data-bind="foreach: catglist,visible:catglist().length > 0">
+						  		<li style="float:left; margin-left: 30px;"><a data-bind="click:catgclick,text:name"></a></li>
 						  	</ul>
 						</div>					  	
 					  						  							
 					  </div>
 					</div>
-					
-					
 				</div>
-					
-					
-					  
-					
-					
-				  
-				
-				
-				
-				  
-				  
-				  
-				
-				
 				<div class="help-block text-center">
 					<button type="submit" class="btn btn-large btn-info">Add this Product</button>
 				</div>
@@ -205,8 +210,7 @@
 		</div>
 	</div>
 </div>
-  
-
+</div>
 	
   <script type="text/html" id="addTagTemplate">
  	 <button class="close-tag-popover close pull-right" type="button" data-dismiss="popover">×</button>
@@ -246,10 +250,10 @@
   function resizecbx()
 	{
 		try{
-		parent.$().cboxresize($( document ).width(),$( document ).height());
+		parent.$().cboxresize(700,$( 'body' ).height());
 		}catch(err){}
 	}
-  
+ 
   resizecbx();
   
   function CategoryView() {	
@@ -357,6 +361,44 @@
 	var thiscategoryview=new CategoryView();
 	
 	ko.applyBindings(thiscategoryview);
+	
+	var $img;
+	$("#tab2").hide();
+	  
+		$(document).ready(function() {
+		   	var $image = $(".bootstrap-modal-cropper img");
+		
+			$image.cropper({
+		        aspectRatio: 1,
+		        minHeight: 231,
+		        maxHeight: 650,
+		        preview: ".avatar-preview",
+		        done: function(data) {
+		             if(!isNaN(data.x)) {
+		        	 	var json = [
+		                    	   '{"x":' + data.x,
+		                       	  '"y":' + data.y,
+		                       	  '"height":' + data.height,
+		                       	  '"width":' + data.width + "}"
+		                	       ].join();
+		
+			         	$('.avatar-data').val(json);
+			         }
+			         $img = $('.avatar-preview.preview-lg').clone();
+			         resizecbx();
+		        },
+			});	
+		    resizecbx();
+		});	  
+	  
+	  $("#save").click(function(){
+			$(".avatar-view").empty().html($img);
+			 $("#tab1").hide();
+			 $("#tab2").show();
+			 resizecbx();
+	 })
+	 
+	
 	
   }
   

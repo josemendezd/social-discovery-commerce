@@ -1,19 +1,19 @@
 package controllers;
 
-import java.net.*;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,34 +21,31 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import javax.activation.MimetypesFileTypeMap;
-import javax.annotation.MatchesPattern;
 import javax.imageio.ImageIO;
-import javax.servlet.http.Part;
-import javax.validation.Constraint;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.URL;
-
-import com.feth.play.module.mail.Mailer;
-
-
-import play.Logger;
-import play.Play;
-import play.data.validation.Constraints.Email;
-import play.data.validation.Constraints.Pattern;
 
 import models.Category;
 import models.SecurityRole;
 import models.User;
 
+import org.hibernate.validator.constraints.URL;
+
+
+
+
+import play.Logger;
+import play.data.validation.Constraints.Email;
 import play.data.validation.Constraints.MaxLength;
 import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Pattern;
 import play.data.validation.Constraints.Required;
 import play.i18n.Messages;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData.FilePart;
-import providers.MyUsernamePasswordAuthProvider.MyIdentity;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.feth.play.module.mail.Mailer;
 
 public class GHelp extends Controller {
 	
@@ -384,6 +381,55 @@ public class GHelp extends Controller {
 		    	tempstorage.delete();
 				return null;
 		    }			
+		} catch (Exception e) {
+			if(tempstorage!=null)
+				tempstorage.delete();
+			e.printStackTrace();
+			return null;
+		}
+		return tempstorage;
+		
+	}
+	
+	
+	public static File downloadandsaveimage(String imagelocation,String allotedname, String imageJSON)
+	{
+		java.net.URL webimagelocation;
+		File tempstorage=null;
+		try {
+			tempstorage = File.createTempFile(allotedname,".jpg");
+			webimagelocation = new java.net.URL(imagelocation);
+			final Map<String, List<String>> headerfield=DInitial.CONTENT_TYPES.getheaderfield(webimagelocation);
+			
+			if(!DInitial.CONTENT_TYPES.isvalidlengthtype(headerfield, DInitial.IMAGE_UPLOAD_FILE_SIZE_LIMIT, DInitial.CONTENT_TYPES.IMAGE_GPJ)
+				&& !DInitial.CONTENT_TYPES.isvalidlengthtype(headerfield, DInitial.IMAGE_UPLOAD_FILE_SIZE_LIMIT, DInitial.CONTENT_TYPES.OCTET_STREAM)
+			) {
+				return null;
+			}
+			
+			ReadableByteChannel uploadedfilechannel= Channels.newChannel(webimagelocation.openStream());
+	        FileChannel savedfilechannel = new FileOutputStream(tempstorage).getChannel();
+	        savedfilechannel.transferFrom(uploadedfilechannel, 0, Long.MAX_VALUE);
+	        savedfilechannel.close();
+			uploadedfilechannel.close();
+			
+			BufferedImage image=ImageIO.read(tempstorage);
+			if (image == null) {
+		    	Logger.debug("Not an image");
+		    	if(tempstorage!=null)
+					tempstorage.delete();
+				return null;
+		    }
+			JsonNode jsonObj = Json.parse(imageJSON);
+			BufferedImage croppedImage = image.getSubimage(jsonObj.get("x").asInt(), 
+					jsonObj.get("y").asInt(), jsonObj.get("width").asInt(), jsonObj.get("height").asInt());
+			
+			int i = imagelocation.lastIndexOf('.');
+			if (i > 0) {
+			    String extension = imagelocation.substring(i+1);
+			    ImageIO.write(croppedImage, extension, tempstorage);
+			}
+						
 		} catch (Exception e) {
 			if(tempstorage!=null)
 				tempstorage.delete();

@@ -191,7 +191,7 @@ public class DInitial {
     		public static final String filestate="full";
     	}
     	public static class 	THUMBNAIL_BRICK{
-    		public static final int Identifier=1,width=231,height=288;
+    		public static final int Identifier=1,width=231,height=231;
     		public static final String filestate="thumb";
     	}
     	public static class 	THUMBNAIL_VERYSMALL{
