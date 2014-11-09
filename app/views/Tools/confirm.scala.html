@@ -374,7 +374,7 @@
 		        maxHeight: 650,
 		        preview: ".avatar-preview",
 		        done: function(data) {
-		             if(!isNaN(data.x)) {
+		             
 		        	 	var json = [
 		                    	   '{"x":' + data.x,
 		                       	  '"y":' + data.y,
@@ -383,7 +383,7 @@
 		                	       ].join();
 		
 			         	$('.avatar-data').val(json);
-			         }
+			         
 			         $img = $('.avatar-preview.preview-lg').clone();
 			         resizecbx();
 		        },
@@ -395,7 +395,7 @@
 			$(".avatar-view").empty().html($img);
 			 $("#tab1").hide();
 			 $("#tab2").show();
-			 resizecbx();
+			 //resizecbx();
 	 })
 	 
 	
