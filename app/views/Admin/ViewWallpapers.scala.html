@@ -19,13 +19,13 @@
 <div class="row-fluid">
     <ul class="thumbnails">
     @for((wp,cntn)<-wallpaperarray.zipWithIndex){
-      <li class="span4">
-        <a class="thumbnail" href="#">        	
-        	<img alt="" src="@wp.getUrl()">
+      <li >
+             	
+        	<img alt="" src="@wp.getUrl()" width="200">
         	<br/>
         	<a href="@routes.Application.RemoveWallpapers(wp.id)" class="btn btn-danger brectangle">Delete</a>
         	<br/>			
-        </a>
+        
       </li>
      }
 	</ul>
@@ -36,19 +36,36 @@
 	  	@form(action = routes.Application.UploadWallpapers, 'enctype -> "multipart/form-data",'class->"form-horizontal") {    
 		    
 			<div class="control-group">  
+			
+
+			
+			
 				<div class="controls text-left"> 
 				 	Upload Image:					
 					<div class="inlinedisplay">
+					
+						
+					
 						<input type="file" id="upload_input" name="picture" class="fileinput-button"  onchange="readName(this);"  />
+
 					</div>		   
 				    <p class="inlinedisplay spacecreater-lateral">                        
 				        <input type="submit" value="Upload" class="lred underline spacecreater-small">
 				    </p> 
+				    
 					<br/>
 					<span class="btn-small">Size Limit: <b>5 MB</b></span><br/>
 					<span class="btn-small">Image Quality: <b>1080p/1600X900</b></span><br/>
 					<div id="fileinformation"  class="borderinvisible span4" style="display:none;margin:0;'"></div>					  
 				</div>  
+				
+			<div class="form-group">	
+			  <label class="col-sm-1 control-label"  for="username">URL:</label>	
+			<div class="col-sm-8">
+						<input type="text" id="wallpaper-url" name="wallpaper-url" class="form-control" placeholder="">
+			</div>
+			</div>	
+				
 			</div>
 		}
 		

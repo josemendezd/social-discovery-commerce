@@ -6,16 +6,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.servlet.http.HttpServletRequest;
 
 import models.Blog;
 import models.BlogComment;
@@ -51,6 +55,8 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
+import play.mvc.Http;
+import play.mvc.Http.Context;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Http.Session;
 import play.mvc.Result;
@@ -98,7 +104,7 @@ import controllers.Useract.PAGE_CONTENT_FORM;
 
 
 public class Application extends Controller {
-
+	public static final String  APP_ENV_VAR = "CURRENT_APPNAME";
 	public static final String FLASH_MESSAGE_KEY = "message";
 	public static final String FLASH_ERROR_KEY = "error";
 	public static final String USER_ROLE = "user";
@@ -117,6 +123,21 @@ public class Application extends Controller {
 			return Useract.MyWatchList();
 		else
 			return Application.shop();
+	}
+	
+	//Method used to find out if user is in homepage.
+	public static String getUrl(){
+		
+		    Object oRequest  = Context.current().request();
+		    		//getCurrentInstance().getExternalContext().getRequest();
+
+		   if(oRequest.toString().equals("GET /"))
+			   return null;
+		   else
+			   return oRequest.toString();
+		   
+		
+		
 	}
 	
 	public static Result home() {return ok(shop.render());}
@@ -1051,12 +1072,17 @@ public static String socialSignUp(String paUrl) {
 	
 	@Restrict(@Group(Application.ADMIN_ROLE))
 	public static Result  UploadWallpapers(){
+		DynamicForm bindedForm = play.data.Form.form().bindFromRequest();
+		String wallpaperUrl = bindedForm.get("wallpaper-url");
 		FilePart fp=request().body().asMultipartFormData().getFile("picture");
 		long count=S3File.findfilelistcount(S3Plugin.s3Bucket, DInitial.WP)+1;
 		String allotedname=GHelp.getimageextension("Wallpaper"+count,fp.getContentType() );
 		File uf=fp.getFile();
 		S3File.createfile(S3Plugin.s3Bucket,DInitial.WP, allotedname, DInitial.IMAGESTORESIZE.AS_IT_IS.filestate, count,uf);
+		S3File.createfile(S3Plugin.s3Bucket,"Cover_URL",wallpaperUrl,"URL" , count,uf);
 		uf.delete();
+		
+		
 		return redirect(routes.Application.GetAllWallpapers());
 	}
 	

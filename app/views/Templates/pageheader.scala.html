@@ -5,7 +5,6 @@
 @import net.tanesha.recaptcha.ReCaptchaFactory
 
 
-
 <nav class="navbar navbar-default navbar-fixed-top cbp-af-header " role="navigation" style="z-index: 1000;">
 <div class="cbp-af-inner">
 <div class="container">
@@ -164,18 +163,21 @@
 <!-- End nav -->
 @AlertMessages()
 	@subjectNotPresent(){
-	<div class="container smartcontainer">
-		<div class="row">
-			<div class="logout blbanner">
-				<div class="message"><span class="bold">@Messages("boozology.headline.message")</span></div>
-				<div class="options">
-					<a class="btn btn-danger brectangle" href="@routes.Application.signup">Join</a>
-					<span class="padding-small"></span>
-					<a class="btn italic btn-warning brectangle" href="@routes.Application.login">Login</a>
+	
+	@if(controllers.Application.getUrl()!=null){
+			<div class="container smartcontainer">
+				<div class="row">
+					<div class="logout blbanner">
+						<div class="message"><span class="bold">@Messages("boozology.headline.message")</span></div>
+						<div class="options">
+							<a class="btn btn-danger brectangle" href="@routes.Application.signup">Join</a>
+							<span class="padding-small"></span>
+							<a class="btn italic btn-warning brectangle" href="@routes.Application.login">Login</a>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-	</div>
+			}
 	}
 	
 	@appendcontentinheader

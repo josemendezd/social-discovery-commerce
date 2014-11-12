@@ -141,9 +141,9 @@ public class S3File extends Model {
     }
     
     public static int findfilelistcount(String bucketname,String filequalifier)
-    {	//Always 3 per week
-    	//return find.where().eq("bucketname", bucketname).eq("filequalifier", filequalifier).findRowCount();
-    	return 3;
+    {	
+    	Logger.info("int of wallpapers: " + find.where().eq("bucketname", bucketname).eq("filequalifier", filequalifier).findRowCount());
+    	return find.where().eq("bucketname", bucketname).eq("filequalifier", filequalifier).findRowCount();
     }
     
     public static S3File createfile(String bucketname,String filequalifier,String filename,String filestate,Long modelref,File file )
