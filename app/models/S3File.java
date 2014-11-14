@@ -22,7 +22,8 @@ import java.util.UUID;
 
 @Entity
 public class S3File extends Model {
-
+	public static final String AWS_S3_BUCKET = "aws.s3.bucket";
+	
     @Id
     public Long id;
 
@@ -153,12 +154,12 @@ public class S3File extends Model {
     	    public static List<S3File> findWallPaperURL(int count)
     	    {	
     	    	//Logger.info("int of wallpapers: " + find.where().eq("bucketname", bucketname).eq("filequalifier", filequalifier).findRowCount());
-    	    	return find.where().eq("bucketname", "com.stag.boozology").eq("filequalifier", "Cover_URL").eq("modelref", count).findList();
+    	    	return find.where().eq("bucketname", play.Play.application().configuration().getString(AWS_S3_BUCKET)   ).eq("filequalifier", "Cover_URL").eq("modelref", count).findList();
     	    }    		
     	    public static List<S3File> findWallPaperButton(int count)
     	    {	
     	    	//Logger.info("int of wallpapers: " + find.where().eq("bucketname", bucketname).eq("filequalifier", filequalifier).findRowCount());
-    	    	return find.where().eq("bucketname", "com.stag.boozology").eq("filequalifier", "Cover_Button").eq("modelref", count).findList();
+    	    	return find.where().eq("bucketname",  play.Play.application().configuration().getString(AWS_S3_BUCKET) ).eq("filequalifier", "Cover_Button").eq("modelref", count).findList();
     	    }   		
     public static S3File createfile(String bucketname,String filequalifier,String filename,String filestate,Long modelref,File file )
     {
