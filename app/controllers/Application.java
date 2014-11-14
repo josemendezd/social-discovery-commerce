@@ -1074,12 +1074,15 @@ public static String socialSignUp(String paUrl) {
 	public static Result  UploadWallpapers(){
 		DynamicForm bindedForm = play.data.Form.form().bindFromRequest();
 		String wallpaperUrl = bindedForm.get("wallpaper-url");
+		String buttonstyle = bindedForm.get("buttonstyle");
+		String buttontext = bindedForm.get("buttontext");
 		FilePart fp=request().body().asMultipartFormData().getFile("picture");
 		long count=S3File.findfilelistcount(S3Plugin.s3Bucket, DInitial.WP)+1;
 		String allotedname=GHelp.getimageextension("Wallpaper"+count,fp.getContentType() );
 		File uf=fp.getFile();
 		S3File.createfile(S3Plugin.s3Bucket,DInitial.WP, allotedname, DInitial.IMAGESTORESIZE.AS_IT_IS.filestate, count,uf);
-		S3File.createfile(S3Plugin.s3Bucket,"Cover_URL",wallpaperUrl,"URL" , count,uf);
+		S3File.createfile(S3Plugin.s3Bucket,"Cover_URL",wallpaperUrl,buttontext , count,uf);
+		S3File.createfile(S3Plugin.s3Bucket,"Cover_Button",buttonstyle,"Style" , count,uf);
 		uf.delete();
 		
 		

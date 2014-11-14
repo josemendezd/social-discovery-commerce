@@ -33,6 +33,75 @@ width:70px;height:70px;vertical-align: baseline!important;
 	@Templates.pageheader(){		
 				
 	}{
+	<!--begin wallpaper code -->
+@defining(S3File.findfilelistcount(plugins.S3Plugin.s3Bucket, DInitial.WP)){totalwallpapers=>
+		@if(totalwallpapers>0){
+			<div class="carousel slide onnextline" id="blhomecarousel">
+			  <ol class="carousel-indicators">
+			  @for(cnt <- 0 until totalwallpapers){ 
+			    <li data-slide-to="@cnt" data-target="#blhomecarousel" class=""></li>
+			  }
+			  </ol>
+			   @* 
+				<div class="full-width text-center" style="position:absolute;margin-top:100px;z-index:1;">
+					<div class="wrapperlikeabsolute">
+						<h1><span class="darkcontent">And Here goes the great Text for the small Story</span></h1>
+						<form class="inline-form nomargin" data-bind="submit:closecarousel">
+							<div class="input input-prepend input input-append">
+								
+								<div class="btn-group">
+					                <button type="button" data-toggle="dropdown" class="btn btn-inverse dropdown-toggle noborder btn-large"  style="padding:15px 10px;"><span data-bind="text:selectedcategory()=='All'?'Category':selectedcategory()">Category</span> <span class="caret"></span></button>
+					                <ul class="dropdown-menu" data-bind="foreach: catglist,visible:catglist().length > 0">
+					                  <li><a data-bind="click:$root.catgclick,text:name"></a></li>
+					                </ul>
+					              
+					                <ul class="dropdown-menu" data-bind="foreach: pcatglist,visible:catglist().length == 0">
+					                	<li><a href="javascript:void(0)" data-bind="visible:$index()==0">No More Subcategory<br/>Select one from below to go back</a></li>
+						        		<li><a class="underline" data-bind="click:$root.pcatgclick,text:name"></a></li>
+						        	</ul>
+						        		                
+				              	</div>
+								<input id="mainbigsearchbox" type="text" placeholder="Search here" class="search-query span6 noborder" style="padding:10px 0;height:30px;font-size:24px;">
+								<button class="btn btn-inverse inlinedisplay noborder noboxshadow btn-large" style="padding:15px 15px;" type="submit">Search</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				@subjectPresent(){
+		       	 @defining(Application.getLocalUser(session())){ presentuser=>
+					<div class="userintro">
+						<ul class="inline">
+							<li><a class="white">@presentuser.name</a></li>
+							<li><img class="usericon" src="@presentuser.getusersimagesmall()"></img></li>
+						</ul>
+					</div>
+					}
+				}
+					*@	
+			  <div class="carousel-inner">
+		  @for((wallpaper,cnt) <- S3File.findfilelist(plugins.S3Plugin.s3Bucket, DInitial.WP).zipWithIndex){
+			    <div class="item @if(cnt==0){active}">
+			     <div style="position:absolute;margin-top:450px;margin-left:100px;z-index:3;">
+			     	<a href="@S3File.findWallPaperURL(cnt+1).get(0).filename" class="btn @S3File.findWallPaperButton(cnt+1).get(0).filename" style="border-radius:0px; -webkit-border-radius:0px; -moz-border-radius:0px;">@S3File.findWallPaperURL(cnt+1).get(0).filestate</a>
+			     </div>		
+			    
+			      <img alt="Welcome to boozology"  src="@wallpaper.getUrl()"  >
+ 					
+			    
+			    </div>
+			    
+		    	 
+			    
+			    }
+			  </div>
+			</div>
+		
+		}
+		
+	
+		
+	}
+			<!-- end of wallpaper code  -->
 	
 			
 	@*	<div class="navbar navbar-inverse spacecreater-vertical-small">

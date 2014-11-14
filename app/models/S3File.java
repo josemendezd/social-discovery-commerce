@@ -76,7 +76,10 @@ public class S3File extends Model {
     	String urlis="http://"+this.bucketname+S3Plugin.baseurl + getActualFileName();
         return new URL(urlis);
     }
-    
+    public String getWallpaperButton()  {
+    	
+        return this.bucketname;
+    }    
     public String geturlstring(){
     	return "http://"+this.bucketname+S3Plugin.baseurl + getActualFileName();
     }
@@ -145,7 +148,18 @@ public class S3File extends Model {
     	Logger.info("int of wallpapers: " + find.where().eq("bucketname", bucketname).eq("filequalifier", filequalifier).findRowCount());
     	return find.where().eq("bucketname", bucketname).eq("filequalifier", filequalifier).findRowCount();
     }
-    
+
+    		
+    	    public static List<S3File> findWallPaperURL(int count)
+    	    {	
+    	    	//Logger.info("int of wallpapers: " + find.where().eq("bucketname", bucketname).eq("filequalifier", filequalifier).findRowCount());
+    	    	return find.where().eq("bucketname", "com.stag.boozology").eq("filequalifier", "Cover_URL").eq("modelref", count).findList();
+    	    }    		
+    	    public static List<S3File> findWallPaperButton(int count)
+    	    {	
+    	    	//Logger.info("int of wallpapers: " + find.where().eq("bucketname", bucketname).eq("filequalifier", filequalifier).findRowCount());
+    	    	return find.where().eq("bucketname", "com.stag.boozology").eq("filequalifier", "Cover_Button").eq("modelref", count).findList();
+    	    }   		
     public static S3File createfile(String bucketname,String filequalifier,String filename,String filestate,Long modelref,File file )
     {
     	S3File sf = S3File.findfile(bucketname, filequalifier, filename, filestate, modelref);

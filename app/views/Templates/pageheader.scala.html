@@ -3,8 +3,6 @@
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 @import net.tanesha.recaptcha.ReCaptcha
 @import net.tanesha.recaptcha.ReCaptchaFactory
-
-
 <nav class="navbar navbar-default navbar-fixed-top cbp-af-header " role="navigation" style="z-index: 1000;">
 <div class="cbp-af-inner">
 <div class="container">
@@ -158,12 +156,10 @@
 </div>
 <!-- End container  -->
 </div>
-
 </nav>
 <!-- End nav -->
 @AlertMessages()
 	@subjectNotPresent(){
-	
 	@if(controllers.Application.getUrl()!=null){
 			<div class="container smartcontainer">
 				<div class="row">
@@ -179,23 +175,18 @@
 			</div>
 			}
 	}
-	
-	@appendcontentinheader
+@appendcontentinheader
 @appendcontentafterheader
-
 @*
 @if(controllers.Carts.cartViewPage()) {
 			@Templates.cartTemplate()
 }
 *@
-
 <script>
 $( ".menu" ).mouseover(function() {
 	$(this).find(".submenu").css("display", "block");
 })
-
 $( ".menu" ).mouseout(function() {
 	$(this).find(".submenu").css("display", "none");
 })
-
 </script>
