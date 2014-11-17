@@ -105,7 +105,7 @@ GET		/product/search						controllers.Application.ProductSearch(id: Long,subcat:
 GET		/collection/search					controllers.Application.CollectionSearch(id: Long,subcat: Int ?= 0,searchtext:String ?= "", pricerange:Int ?= 0, gendercont:Int ?= 0,page:Int ?= 0 ,pagesize:Int ?= 20)
 GET		/store/search						controllers.Application.StoreSearch(id: Long,subcat: Int ?= 0,searchtext:String ?= "", pricerange:Int ?= 0, gendercont:Int ?= 0,page:Int ?= 0 ,pagesize:Int ?= 20)
 GET		/contributor/search					controllers.Application.ContributorSearch(id: Long,subcat: Int ?= 0,searchtext:String ?= "", pricerange:Int ?= 0, gendercont:Int ?= 0,page:Int ?= 0 ,pagesize:Int ?= 20)
-
+POST    /samecategoryproduct				controllers.Application.ProductSimilarCategoryProduct(id: Long)
 GET		/product/getrelated					controllers.Application.ProductGetRelated(id: Long)
 GET		/product/collectionstatus			controllers.Useract.GetProductCollectionStatus(prid: Long)
 POST	/product/postcomment				controllers.Useract.PutcommentonProduct
@@ -154,7 +154,8 @@ GET		/store/claim/:id							controllers.Useract.ClaimStore(id: Long)
 
 #BLOG METHODS
 
-GET		/blog/list									controllers.Application.GetBlogList(page:Int ?= 0 ,pagesize:Int ?= 20)
+GET		/blog/list									controllers.Application.GetBlogList(page:Int ?= 0 ,pagesize:Int ?= 3)
+POST		/blog/pagelist							controllers.Application.GetListBlogPage()
 GET		/blog/page/:id								controllers.Application.GetBlogPage(id: Long)
 GET		/blog/complain/:id							controllers.Application.GetBlogComplainForm(id: Long)
 GET		/blog/tag/:tag								controllers.Application.GetBlogListByTag(tag:String,page:Int ?= 0 ,pagesize:Int ?= 20)

@@ -15,91 +15,104 @@
 }{
 	@pageheader(){
 		@subjectPresent(){
-	<div class="container smartcontainer">
-		@if(controllers.Application.verifyEmail()){
-			<div class="row">
-				<div class="logout blbanner">
-					<div class="message"><span class="bold">Posts are ideas, stories, and facts added by the community. Click on add new post to create your own.</span></div>
-					<div class="options">
-						<div class="option"><a class="btn btn-danger brectangle btn-small" href="@routes.Application.GetAddBlog()">Add New Post</a></div>
+			<div class="container smartcontainer">
+				@if(controllers.Application.verifyEmail()){
+					<div class="row">
+						<div class="logout blbanner">
+							<div class="message"><span class="bold">Posts are ideas, stories, and facts added by the community. Click on add new post to create your own.</span></div>
+							<div class="options">
+								<div class="option"><a class="btn btn-danger brectangle btn-small" href="@routes.Application.GetAddBlog()">Add New Post</a></div>
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-		} else {
-			<div class="row">
-				<div class="logout blbanner">
-					<div class="message"><span class="bold"> Please	verify your Email address </span></div>
-					<div class="options">
-						<div class="option"><a class="btn btn-danger brectangle btn-small" href="@routes.Account.verifyEmail()">Verify my email</a></div>
+				} else {
+					<div class="row">
+						<div class="logout blbanner">
+							<div class="message"><span class="bold"> Please	verify your Email address </span></div>
+							<div class="options">
+								<div class="option"><a class="btn btn-danger brectangle btn-small" href="@routes.Account.verifyEmail()">Verify my email</a></div>
+							</div>
+						</div>
 					</div>
-				</div>
+				}
 			</div>
-		}
-	</div>
 		}
 	}{ }
 	
 }{
 	@pagemaincontent(){
 	
-	@defining(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,Application.getLocalUser(session()))) { isadmin=>
-			
-				
-				@for((blg,cnt) <- blgpg.getList.zipWithIndex){
-					@Templates.su.Singleblog(blg,true,cnt)
-				}
+		@defining(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY,Application.getLocalUser(session()))) { isadmin=>
 			
 			
-			@*
-			<div id="blogpage" class="onnextline majorblogunit">
-			@for((blg,cnt) <- blgpg.getList.zipWithIndex){
-				@Templates.su.Singleblog(blg,true,cnt)
-			}
+			<div id="allblog">
+				<div id="content">
+					@for((blg,cnt) <- blgpg.getList.zipWithIndex){
+						@Templates.su.Singleblog(blg,true,cnt)
+					}
+				</div>
 			</div>
-			*@
+			
 		}
-		@*
-		<div class="minorblogunit textcutoverflow blogsidebar">
-			<div class="accordion" id="accordion2">
-			  <div class="accordion-group">
-			    <div class="accordion-heading">
-			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-			        Archive
-			      </a>
-			    </div>
-			    <div id="collapseOne" class="accordion-body collapse">
-			      <div class="accordion-inner">
-			        <ul class="unstyled text-center">
-			        @for(blg <- Blog.RecentBlogPage(0,40).getList){
-			        	<li class="textcutoverflow"><a href="@routes.Application.GetBlogPage(blg.id)">@blg.title</a></li>
-			        }
-			        </ul>
-			        <a href="#" class="gray underline pull-right">See All</a>
-			      </div>
-			    </div>
-			  </div>
-			  <div class="accordion-group">
-			    <div class="accordion-heading">
-			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-			        Tags
-			      </a>
-			    </div>
-			    <div id="collapseTwo" class="accordion-body collapse">
-			      <div class="accordion-inner">
-			        <ul class="unstyled text-center">
-				        @for(blglb<- BlogLabels.RecentBlogLabels(0,40).getList){
-				        	<li class="textcutoverflow"><a href="#">@blglb.tag</a></li>
-				        }
-			        </ul>
-			        <a href="#" class="gray underline pull-right">See All</a>
-			      </div>
-			    </div>
-			  </div>
-			</div>
-		</div>		
 		
-		*@
-		@Templates.su.jready{ }
+		@Templates.su.jready{ 
+			var BlogView =  {
+				stillloading : false,
+				blogList : ko.observableArray([]),
+				
+				fr : {
+					page:1,
+					ps:3
+				},
+				loadMore : function()
+				{
+					if(this.fr.page!==-1 && this.loadBlog()) {
+				  				this.fr.page++;
+				  	}
+				},
+				
+				loadBlog : function () {
+				    self = this;
+				    var gotsuccess=true;
+				    if(self.stillloading) {
+						return;
+					}
+					var posting = $.post("@routes.Application.GetListBlogPage()",$.param(this.fr),"json");
+					ldiv.display();
+					self.stillloading = true;	
+					posting.done(function( data ) {	
+						ldiv.stillbusy();
+						var theDiv = document.getElementById("content");
+						theDiv.innerHTML = theDiv.innerHTML + data; 						
+						
+						ldiv.loadcomplete();
+						
+						if(self.fr.page == 1 ){
+						}
+						$("[id^=imgs]").niceScroll({styler:"fb",cursorcolor:"#000"});
+						if(data.trim().length == 0){self.fr.page=-1;}	
+						self.stillloading = false;
+					});
+					posting.fail(function( data ) {
+						ldiv.loadcomplete();	
+						self.stillloading = false;
+						gotsuccess=false;
+						$.colorbox.resize();
+					});
+					return gotsuccess;
+				}
+				
+				
+			}
+			
+			@Templates.js.infinitescroll(false){ 
+				console.log("here");
+				BlogView.loadMore();
+			}
+			
+			ko.applyBindings(BlogView ,document.getElementById('allblog'));
+			
+		}
 		
 	}
 }{

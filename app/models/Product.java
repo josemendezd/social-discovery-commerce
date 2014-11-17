@@ -280,6 +280,11 @@ public class Product extends  Model implements Comparable<Product> {
 		return	fp.orderBy("timeofadd desc").findPagingList(pageSize).getPage(page);
     }
 	
+	public static Page<Product> ProductSimilarCategoryProduct(int page, int pageSize,Product prod) {
+        ExpressionList<Product> fp=find.where().eq("alive", true).eq("category.id", prod.category.id).ne("id", prod.id);
+        return	fp.orderBy("timeofadd desc").findPagingList(pageSize).getPage(page);
+    }
+	
 	/*public void ApplyLabel(String labelarray)
     {
     	Ebean.createSqlUpdate("DELETE from product_product_label where product_product_label.product_id = :bid ").setParameter("bid", this.id).execute();

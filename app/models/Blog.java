@@ -165,6 +165,10 @@ public class Blog extends Model {
 	public static Blog findByPermalink(String permalink) {
 		return find.where().eq("permaLink", permalink).findUnique();
 	}
+
+	public static Page<Blog> RecentBlogPage(int page, int ps, Long id) {
+		 return	find.where().ne("id", id).orderBy("postedAt DESC").findPagingList(ps).getPage(page);
+	}
     
     
 }
