@@ -44,9 +44,9 @@ function PBDocInit(ldiv)
 	};	
 	@Templates.js.pbactionjs("singletypesearchcontext"){
 		@if(specificsearch!=null){
-			self.fr=new fms({srt:1, gend:@specificsearch.genlow, prc:@specificsearch.GetPriceIndex(), stext:'@key',catg:0, pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE});	
+			self.fr=new fms({srt:1, gend:@specificsearch.genlow, prc:@specificsearch.GetPriceIndex(), stext:'@key',catg:0, pgn:0,ps:30});	
 		}else{
-			self.fr=new fms({srt:1, gend:0, prc:0, stext:'@key',catg:0, pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE});			
+			self.fr=new fms({srt:1, gend:0, prc:0, stext:'@key',catg:0, pgn:0,ps:30});			
 		}
 		self.totalproductcount=ko.observable(@Product.MatchedProductsCount(GHelp.filterSql(searchkey,0,0,0,"")));
 		self.sfm = ko.observable(self.fr);

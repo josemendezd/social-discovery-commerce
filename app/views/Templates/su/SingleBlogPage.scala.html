@@ -552,6 +552,68 @@
 						}
 					@if(blgcnt>0){
 						ko.applyBindings(new CommentView("@routes.Application.GetBlogComments(blg.id).url"),$('#Blog@{blg.id}')[0]);
+					}
+					<div id="allblog">
+						<div id="content">
+						</div>
+					</div>
+					@Templates.su.jready{ 
+						var BlogView =  {
+							stillloading : false,
+							blogList : ko.observableArray([]),
+							
+							fr : {
+								page:0,
+								ps:3,
+								id:@blg.id
+							},
+							loadMore : function()
+							{
+								if(this.fr.page!==-1 && this.loadBlog()) {
+							  				this.fr.page++;
+							  	}
+							},
+							
+							loadBlog : function () {
+							    self = this;
+							    var gotsuccess=true;
+							    if(self.stillloading) {
+									return;
+								}
+								var posting = $.post("@routes.Application.GetListBlogPage()",$.param(this.fr),"json");
+								ldiv.display();
+								self.stillloading = true;	
+								posting.done(function( data ) {	
+									ldiv.stillbusy();
+									var theDiv = document.getElementById("content");
+									theDiv.innerHTML = theDiv.innerHTML + data; 						
+									
+									ldiv.loadcomplete();
+									
+									if(self.fr.page == 1 ){
+									}
+									$("[id^=imgs]").niceScroll({styler:"fb",cursorcolor:"#000"});
+									if(data.trim().length == 0){self.fr.page=-1;}	
+									self.stillloading = false;
+								});
+								posting.fail(function( data ) {
+									ldiv.loadcomplete();	
+									self.stillloading = false;
+									gotsuccess=false;
+									$.colorbox.resize();
+								});
+								return gotsuccess;
+							}
+							
+							
+						}
+						
+						@Templates.js.infinitescroll(false){ 
+							BlogView.loadMore();
+						}
+						
+						ko.applyBindings(BlogView ,document.getElementById('allblog'));
+						
 					}		
 			}
 		}{

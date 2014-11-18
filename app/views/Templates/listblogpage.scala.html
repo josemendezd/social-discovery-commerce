@@ -1,0 +1,5 @@
+@(blgpg:com.avaje.ebean.Page[Blog])
+
+	@for((blg,cnt) <- blgpg.getList.zipWithIndex){
+		@Templates.su.Singleblog(blg,true,cnt)
+	}	
