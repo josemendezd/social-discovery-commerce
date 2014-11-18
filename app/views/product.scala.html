@@ -495,6 +495,53 @@ margin-right:5%;
 				@theloadmorestyle("collList")
 			</div>			
 		  </div>
+		  
+		  <!-- <div id="iso-container" >
+		  	<div class="isotope-wrap" data-bind="foreach: sameCategoryList, visible: sameCategoryList().length > 0">
+		  		<div class="isotope-item">
+					<div class="product-wrap-custom product-details-custom">
+					    Begin .featured-product 
+					    <div class="featured-product-custom">
+					      <div class="shareprod-custom">
+					        <a class="share_prod" data-bind="popover: {template: 'popoverBindingTemplate'}"><i class="icon-share"></i></a>
+					      </div>
+					      
+					      <div class="cart-shopping">
+					        <a href="javascript:void(0);" data-bind="attr:{href:siteurl}"><i class="icon-shopping-cart icon-shopping-cart-custom"></i></a>
+					      </div>
+					      Begin .info-wrap
+					      <div data-bind="css: lovetext()=='Love' ? 'dropdown info-wrap-custom' : 'dropdown info-wrap-custom active'">
+					        <a href="javascript:void(0);" data-bind="click: $parent.lovestate">
+					        	<i class="icon-heart" data-bind="css:lovetext()=='Love'?'':'bluebackgnd'">
+					        	</i>
+					        	<span class="status" data-bind="text: lovetext()=='Love'?'Like it':'Unlike'"></span>
+					        	<a href="javascript:void(0);" data-toggle="dropdown" role="button"><b class="caret"></b></a>
+					        	<ul role="menu" class="dropdown-menu">
+					              <li><a href="javascript:void(0);" data-bind="click: $parent.wantstate, clickBubble: false,text: wanttext,css:wanttext()=='Want'?'':'tred-custom'">Want</a></li>
+					              <li><a href="javascript:void(0);" data-bind="click: $parent.triedstate, clickBubble: false,text: triedtext(),css:triedtext()=='Tried'?'':'tred-custom'">Tried</a></li>
+					              <li><a href="javascript:void(0);" data-bind="click: $parent.collectstatev2, clickBubble: false">Collect</a></li>
+					            </ul>
+					        </a>
+					        
+					      </div>
+					      	@if(Application.getLocalUser(session()) != null){ <a data-bind="attr:{href:prlink}" class="btn btn-default view-product-custom">View Product</a>}else{ <a class="btn btn-default view-product-custom" data-toggle="modal" href="#signinupModel">View Product</a>}
+					      
+					      End .info-wrap
+					       <div class="product-image" data-bind="style: { backgroundImage: 'url(\'' + pic() + '\')'}"></div>
+					       <img data-bind="attr:{src:pic()}" class="product-image img-responsive"/> 
+					      <div class="desc_prod_custom">
+					        <a data-bind="attr:{href:prlink},text:(name().length > 20 ? name().substring(0, 20) + '..' : name)"></a>
+					        <br>
+					        <p>added by <a data-bind="attr:{href:usrlink,title:discoverer}"><span data-bind="text:(discoverer().length > 10 ? discoverer().substring(0, 10) + '..' : discoverer)"></span></a>  at <span class="price-background" data-bind="text:(store().length > 12 ? store().substring(0, 9)+'..' : store)"></span></p>
+					     
+					      </div>
+					    </div>
+					    <div class="clearfix"></div>
+					  </div>
+					  End .featured-product
+				</div>					
+			</div>
+		  </div> -->
 			
 		  
 		</div>
@@ -729,9 +776,155 @@ margin-right:5%;
 		<div class="onnextline">
 		@productmainbody
 		</div>
+		
+		@Templates.su.panepbko()
+		
 		@helper.javascriptRouter("UserLink")(routes.javascript.Application.ContributorPage,routes.javascript.Useract.Removecomment,routes.javascript.Useract.GetComplainForm)
 		
 		@Templates.su.jready{
+		
+		
+		
+		self.stillloading = true;
+		
+		var $container;
+		
+		var SameCategoryView =  {
+		
+		stillloading : false,
+		prodList : ko.observableArray([]),
+		fr : {
+			page:0,
+			ps:30
+		},
+		loadMore : function()
+		{
+			if(this.fr.page!==-1 && this.loadProd()) {
+		  				this.fr.page++;
+		  	}
+		},
+		
+		lovestate : function(prod,e)
+		{
+		  @subjectPresentOr(){
+		  	 $().apld($(e.target));
+			 $.getJSON('/'+prod.lovetext().toLowerCase()+'/'+prod.id(), function(data)
+				{
+				 ko.mapping.fromJS(data,prod);
+				}
+			 );	
+			 }{$().askforloginorsignup();}					 
+		},
+		 
+		brickinvoked : function(prod)
+		{ 
+			self.highProd(prod);
+			$.colorbox({inline:true,href:'#popproduct'});
+			@subjectPresent(){$.get(prod.prlinkajax(), function(data){$.colorbox({html:data, innerWidth:"840px",top:"10px"});});}	
+		},
+	
+		wantstate : function(prod,e)
+		{
+		  @subjectPresentOr(){
+		  	$().apld($(e.target));
+			 $.getJSON('/'+prod.wanttext().toLowerCase()+'/'+prod.id(), function(data)
+				{
+				 ko.mapping.fromJS(data,prod);
+				}
+			 );
+			 }{$().askforloginorsignup();}						 
+		},
+		 
+		triedstate : function(prod,e)
+		{
+		  @subjectPresentOr(){
+		  	$().apld($(e.target));
+			 $.getJSON('/'+prod.triedtext().toLowerCase()+'/'+prod.id(), function(data)
+						{
+						 ko.mapping.fromJS(data,prod);
+						}
+					 );		
+			}{$().askforloginorsignup();}				 
+		},
+		
+		loadProd : function () {
+		    self = this;
+		    var gotsuccess=true;
+			
+			if(self.stillloading) {
+				return;
+			}
+					
+			var posting = $.post("@routes.Application.ProductSimilarCategoryProduct(productx.id)",$.param(this.fr),"json");
+			ldiv.display();
+			self.stillloading = true;	
+			posting.done(function( data ) {								
+				$prodselect=data['prodgrid'];	
+				var sizeOfItemsBeforeApplyingIsotope = $('.isotope-item').length;
+							
+				$.each($prodselect, 
+					function(prindex, prattr)
+					{
+						self.prodList.push(ko.mapping.fromJS(prattr));
+						ldiv.stillbusy();
+					}
+				);
+				
+				ldiv.loadcomplete();
+				
+				/* Fire event to show isotope view */
+				if(self.fr.page == 1 ){
+					console.log("fr.page == 1");
+					try {
+						$container.isotope('destroy');
+					} catch(e) {}
+					$container = $('.isotope-wrap').isotope({
+						  itemSelector: '.isotope-item',
+						  masonry: {
+					   		columnWidth: 10,
+					        gutterWidth: 10
+					  	  }
+					});
+					
+					console.log($(".isotope-item").find(".product-image"));
+					
+					$(".isotope-item").find(".product-image").load(function(){
+						console.log("ISOTOPE applied");
+			        	$container.isotope();
+			        	console.log("ISOTOPE applied");
+			        });
+				} else {
+					$.each($('.isotope-item'), function(index, elem) {
+						if (index >= sizeOfItemsBeforeApplyingIsotope) {
+							$container.isotope( 'appended', elem );
+							$(elem).find(".product-image").load(function(){
+					        	$container.isotope();
+					        });
+						}
+					});	
+				}
+				
+				self.stillloading = false;
+				if(!data['hasmore']){self.fr.page=-1;}	
+			});
+			posting.fail(function( data ) {
+			    self.stillloading = false;
+				ldiv.loadcomplete();	
+				gotsuccess=false;
+				$.colorbox.resize();
+			});
+			return gotsuccess;
+		}
+	}
+	
+	//var sameCategoryView = new SameCategoryView();
+	ko.applyBindings(SameCategoryView ,document.getElementById('iso-container'));
+				
+			
+		@Templates.js.infinitescroll(false){ 
+			console.log("here");
+			SameCategoryView.loadMore();	
+		}
 		
 		@Templates.js.add_cart_action(productx.id)
 		

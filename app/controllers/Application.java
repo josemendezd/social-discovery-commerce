@@ -82,6 +82,8 @@ import views.html.shop;
 import views.html.signup;
 import views.html.storepage;
 import views.html.userprofile;
+import views.html.Templates.listblogpage;
+import views.html.Templates.json.blogpane;
 import akismet.Akismet;
 import akismet.AkismetComment;
 import akismet.AkismetException;
@@ -240,8 +242,8 @@ public class Application extends Controller {
 	    String searchtext = bindedForm.get("searchtext");//To be passed	
 	    if(searchtext!=null)
 	    	searchtext=GHelp.FilteredSql(searchtext);
-	    
 		response().setContentType("application/json");
+
 		if(Integer.parseInt(bindedForm.get("catgid")) == 1 && searchtext.equalsIgnoreCase("") && pricerange == 0) {
 	    	return ok(productjson.render(Eventlog.RelevanceFeed(page, pagesize)));
 	    }
@@ -507,6 +509,22 @@ public class Application extends Controller {
 			return notFound();
 	}
 	
+	public static Result ProductSimilarCategoryProduct(Long id) {
+		Product p=Product.find.byId(id);
+		DynamicForm bindedForm = play.data.Form.form().bindFromRequest();		
+		
+	    
+	    int page = Integer.parseInt( bindedForm.get("page"));
+	    int ps = Integer.parseInt( bindedForm.get("ps"));
+	    
+	    response().setContentType("application/json");
+	    
+		if(p!=null)//todo 
+			return ok(productjson.render(Product.ProductSimilarCategoryProduct(page, ps, p)));
+		else
+			return notFound();
+	}
+	
 	public static Result  SearchTotalProductCount(String searchtext ,int gendercont ,int pricerange)
 	{
 		ObjectNode collectionnode =play.libs.Json.newObject();
@@ -540,6 +558,19 @@ public class Application extends Controller {
 	public static Result GetBlogList(int page,int pagesize)
 	{
 		return ok( blogpage.render( Blog.RecentBlogPage(page, pagesize)));
+	}
+	
+	public static Result GetListBlogPage()
+	{
+		DynamicForm bindedForm = play.data.Form.form().bindFromRequest();		
+	    int page = Integer.parseInt( bindedForm.get("page"));
+	    int ps = Integer.parseInt( bindedForm.get("ps"));
+	    if( bindedForm.get("id") != null){
+	    	Long id = Long.parseLong( bindedForm.get("id"));
+	    	return ok( listblogpage.render( Blog.RecentBlogPage(page, ps,id)));
+	    }
+	    
+		return ok( listblogpage.render( Blog.RecentBlogPage(page, ps)));
 	}
 	
 	public static Result GetBlogListByTag(String tag,int page,int pagesize)
