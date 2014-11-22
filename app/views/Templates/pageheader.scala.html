@@ -42,62 +42,64 @@
 			<li><a href="@routes.Useract.myfriendsfeed">Friends</a></li>
 			}
 			<li class="menu"><a href="@routes.Application.cshop("Wine")">Wine</a>
-				<ul class="submenu" style="display: none;">
+				@*<ul class="submenu" style="display: none;">
 					<li><a href="@routes.Application.cshop("California")">California</a></li>
 					<li><a href="@routes.Application.cshop("French")">French</a></li>
 					<li><a href="@routes.Application.cshop("Italian")">Italian</a></li>
 					<li><a href="@routes.Application.cshop("Pinot Noir")">Pinot Noir</a></li>
 				</ul>
+				*@
 			</li>
 			<li class="menu"><a href="@routes.Application.cshop("Beer")">Beer</a>
-				<ul class="submenu" style="display: none;">
+				@*<ul class="submenu" style="display: none;">
 					<li><a href="@routes.Application.cshop("IPA")">IPA</a></li>
 					<li><a href="@routes.Application.cshop("Pale Ale")">Pale Ale</a></li>
 					<li><a href="@routes.Application.cshop("Amber")">Amber</a></li>
 					<li><a href="@routes.Application.cshop("Lager")">Lager</a></li>
 				</ul>
+				*@
 			</li>
 			<li class="menu"><a href="@routes.Application.cshop("Spirits")">Spirits</a>
-				<ul class="submenu" style="display: none;">
+				@*<ul class="submenu" style="display: none;">
 					<li><a href="@routes.Application.cshop("Rum")">Rum</a></li>
 					<li><a href="@routes.Application.cshop("Vodka")">Vodka</a></li>
 					<li><a href="@routes.Application.cshop("Tequila")">Tequila</a></li>
 					<li><a href="@routes.Application.cshop("Whisky")">Whiskey</a></li>
-				</ul>
+				</ul>*@
 			</li>
 			<li class="menu"><a href="@routes.Application.cshop("Mixology")">Mixology</a>
-				<ul class="submenu" style="display: none;">
+			@*	<ul class="submenu" style="display: none;">
 					<li><a href="@routes.Application.cshop("Latest Trends")">Latest Trends</a></li>
 					<li><a href="@routes.Application.cshop("Classics")">Classics</a></li>
 					<li><a href="@routes.Application.cshop("Bar Tools")">Bar	Tools</a></li>
 					<li><a href="@routes.Application.cshop("Recipes")">Recipes</a></li>
-				</ul>
+				</ul>*@
 			</li>
 			<li class="menu"><a href="@routes.Application.cshop("Gadgets")">Gadgets</a>
-				<ul class="submenu" style="display: none;">
+			@*	<ul class="submenu" style="display: none;">
 					<li><a href="@routes.Application.cshop("Small Appliances")">Small Appliances</a></li>
 					<li><a href="@routes.Application.cshop("Cutlery")">Cutlery</a></li>
 					<li><a href="@routes.Application.cshop("Storage")">Storage</a></li>
 					<li><a href="@routes.Application.cshop("On the Go")">On the Go</a></li>
-				</ul>
+				</ul>*@
 			</li>
 			<li class="menu"><a href="@routes.Application.cshop("Toys & Trinkets")">Toys & Trinkets</a>
-				<ul class="submenu" style="display: none;">
+			@*	<ul class="submenu" style="display: none;">
 					<li><a href='@routes.Application.cshop("Bar	Sets")'>Bar Sets</a></li>
 					<li><a href="@routes.Application.cshop("Corkscrews")">Corkscrews</a></li>
 					<li><a href="@routes.Application.cshop("Ice Molds")">Ice Molds</a></li>
 					<li><a href="@routes.Application.cshop("Shakers")">Shakers</a></li>
-				</ul>
+				</ul>*@
 			</li>
 			<li class="menu"><a href="@routes.Application.cshop("Glassware")">Glassware</a>
-				<ul class="submenu" style="display: none;">
+			@*	<ul class="submenu" style="display: none;">
 					<li><a href="@routes.Application.cshop("Tumblers")">Tumblers</a></li>
 					<li><a href="@routes.Application.cshop("Wine Glass")">Wine Glasses</a></li>
 					<li><a href="@routes.Application.cshop("Drinkware")">Drinkware</a></li>
 					<li><a href="@routes.Application.cshop("Shot Glass")">Shot glasses</a></li>
-				</ul>
+				</ul>*@
 			</li>
-			<li><a href="@routes.Application.cshop("Fun")">Fun</a></li>
+			@*<li><a href="@routes.Application.cshop("Fun")">Fun</a></li>*@
 	      </ul> 
       </li>
       <li>@subjectPresentOr(){ <a class="fromiframe cboxElement" href="@routes.Useract.addoptions()">Add</a>}{ <a data-toggle="modal" href="#signinupModel">Add</a>}</li>
