@@ -116,7 +116,10 @@ width:70px;height:70px;vertical-align: baseline!important;
 			  <ol class="carousel-indicators">
 			  @for(cnt <- 0 until totalwallpapers){ 
 			    @if(cnt!=0){
-			    <li data-slide-to="@cnt" data-target="#blhomecarousel" class=""></li>
+			    
+			    @defining(cnt-1){nCnt=>
+			    <li data-slide-to="@nCnt" data-target="#blhomecarousel" class=""></li>
+			    }
 			    }
 			  }
 			  </ol>
