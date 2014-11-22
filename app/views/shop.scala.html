@@ -38,6 +38,7 @@ width:70px;height:70px;vertical-align: baseline!important;
 
 	
 	<!--begin wallpaper code -->
+@subjectNotPresent(){
 @defining(S3File.findfilelistcount(plugins.S3Plugin.s3Bucket, DInitial.WP)){totalwallpapers=>
 		@if(totalwallpapers>0){
 			<div class="carousel slide onnextline" id="blhomecarousel">
@@ -105,6 +106,39 @@ width:70px;height:70px;vertical-align: baseline!important;
 	
 		
 	}
+	}<!-- end of subject not present -->
+	
+	
+	@subjectPresent(){
+@defining(S3File.findfilelistcount(plugins.S3Plugin.s3Bucket, DInitial.WP)){totalwallpapers=>
+		@if(totalwallpapers>0){
+			<div class="carousel slide onnextline" id="blhomecarousel">
+			  <ol class="carousel-indicators">
+			  @for(cnt <- 0 until totalwallpapers){ 
+			    @if(cnt!=0){
+			    <li data-slide-to="@cnt" data-target="#blhomecarousel" class=""></li>
+			    }
+			  }
+			  </ol>
+			  <div class="carousel-inner">
+			  @for((wallpaper,cnt) <- S3File.findfilelist(plugins.S3Plugin.s3Bucket, DInitial.WP).zipWithIndex){
+				    @if(cnt!=0){
+						    <div class="item @if(cnt==1){active}">
+						     <div style="position:absolute;margin-top:450px;margin-left:100px;z-index:3;">
+						     	<a href="@S3File.findWallPaperURL(cnt+1).get(0).filename" class="btn @S3File.findWallPaperButton(cnt+1).get(0).filename" style="border-radius:0px; -webkit-border-radius:0px; -moz-border-radius:0px;">@S3File.findWallPaperURL(cnt+1).get(0).filestate</a>
+						     </div>		
+						      <img alt="Welcome to boozology"  src="@wallpaper.getUrl()"  >
+						    </div>  
+			    	 }
+				    }
+			  </div>
+			</div>
+		}	
+	}
+	}<!-- end of subjectpresent -->
+	
+	
+	
 			<!-- end of wallpaper code  -->	
 			
 	@*	<div class="navbar navbar-inverse spacecreater-vertical-small">
