@@ -82,6 +82,7 @@ import views.html.shop;
 import views.html.signup;
 import views.html.storepage;
 import views.html.userprofile;
+import views.html.groupmain;
 import views.html.Templates.listblogpage;
 import views.html.Templates.json.blogpane;
 import akismet.Akismet;
@@ -357,6 +358,17 @@ public class Application extends Controller {
 			return ok(userprofile.render(c,DInitial.USER_RELATION_QUERY.RECENT,session()));
 		return notFound();
 	}
+	//Group main page
+	//Groups 
+	public static Result  GroupMainPage()
+	{Contributor c=null;
+		User u=User.find.byId((long) 1);
+		c=u.contrib;
+			return ok(groupmain.render(c,1,session()));
+		
+	}	
+	
+	
 	public static Result  ContributorSelecttabPage(Long id,int selectedtab,Boolean isajax,Boolean isuser)
 	{
 		Contributor c=null;

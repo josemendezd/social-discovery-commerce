@@ -97,6 +97,15 @@ GET		/contributor/page/:id/:selectedtab	controllers.Application.ContributorSelec
 GET		/search/page/:id					controllers.Application.SearchPage(id: Long,isajax:Boolean?=false)
 
 POST	/product/create						controllers.Useract.CreateProduct
+
+#Groups
+#GET		/groupmain				controllers.Application.GroupMainPage()
+
+
+
+
+
+
 #Category
 GET		/category/list/:id					controllers.Application.RetrieveCategoryList(id: Long)
 
