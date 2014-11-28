@@ -3,7 +3,7 @@ body {
 	font-size:16px;
 	line-height:1.5em;
 	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-	padding-top:113px;
+	padding-top: 113px;
 	
 }
 h1, h2, h3, h4, h5, p, a {
@@ -1971,7 +1971,7 @@ a.navbar-brand{ padding:5px;}
 .blbanner{
 	overflow:auto;
 	background-color:rgb(240, 240, 230);
-	padding:4px 20px;
+	padding:9px 20px;
 	font-size:14px;
 	color:#7a7a7a;
 	font-weight:300;
