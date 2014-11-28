@@ -1,25 +1,13 @@
 package controllers;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.InetAddress;
-import java.net.URLEncoder;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.servlet.http.HttpServletRequest;
 
 import models.Blog;
 import models.BlogComment;
@@ -38,7 +26,6 @@ import models.Tags;
 import models.User;
 import models.UserCollection;
 import models.UserRate;
-import models.Admin.Contactus;
 import models.Admin.Infopage;
 import models.Notifications.SOCommentsPr;
 import models.Notifications.UserSubscriptions;
@@ -55,7 +42,6 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
-import play.mvc.Http;
 import play.mvc.Http.Context;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Http.Session;
@@ -72,6 +58,7 @@ import views.html.blogpage;
 import views.html.collectionpage;
 import views.html.contentpage;
 import views.html.cshop;
+import views.html.groupmain;
 import views.html.login;
 import views.html.logintwitter;
 import views.html.product;
@@ -82,9 +69,7 @@ import views.html.shop;
 import views.html.signup;
 import views.html.storepage;
 import views.html.userprofile;
-import views.html.groupmain;
 import views.html.Templates.listblogpage;
-import views.html.Templates.json.blogpane;
 import akismet.Akismet;
 import akismet.AkismetComment;
 import akismet.AkismetException;
@@ -104,8 +89,7 @@ import com.google.common.base.Strings;
 import controllers.SPages.CONTACTUS;
 import controllers.Useract.BLOG_EDIT_FORM;
 import controllers.Useract.PAGE_CONTENT_FORM;
-
-
+import org.apache.commons.lang.StringEscapeUtils;
 public class Application extends Controller {
 	public static final String  APP_ENV_VAR = "CURRENT_APPNAME";
 	public static final String FLASH_MESSAGE_KEY = "message";
@@ -269,10 +253,13 @@ public class Application extends Controller {
 	
 	public static Result RunSearch(String searchkey,int index)
 	{
-		String searchtext=searchkey;
+		
+		//Logger.info("search key 1:"+searchkey);
+		String searchtext=StringEscapeUtils.escapeJava(searchkey);
 		if(searchtext!=null)
 			searchtext=GHelp.FilteredSql(searchtext);
-		return ok(views.html.search.render(searchtext,index,null));
+	
+		return ok(views.html.search.render(searchkey,index,null));
 	}
 	
 	public static Result KeySearch() 
@@ -1019,7 +1006,7 @@ public class Application extends Controller {
 				if(flash().containsKey(FLASH_ERROR_KEY))
 					return badRequest("{\"Error\":\""+flash().get(Application.FLASH_ERROR_KEY)+"\"}" );			
 			
-			Logger.info(" result:"+r.toString());
+			//Logger.info(" result:"+r.toString());
 			
 			return r;
 		}
@@ -1029,7 +1016,7 @@ public class Application extends Controller {
 	//social sign up
 public static String socialSignUp(String paUrl) {
 	
-		Logger.info("here social signup:"+paUrl);
+		//Logger.info("here social signup:"+paUrl);
 		/*
 		DynamicForm bindedForm = play.data.Form.form().bindFromRequest();
 		

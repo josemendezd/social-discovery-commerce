@@ -1,7 +1,7 @@
 @(searchkey:String,index:Int =0,specificsearch:FSearch=null)
 @import be.objectify.deadbolt.java.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
-
+@import org.apache.commons.lang.StringEscapeUtils.escapeJava
 @productsearch(key:String)={
 <div id="productgrid" class="onnextline">
       <div id="headermessages" class="onnextline">
@@ -239,7 +239,7 @@ function CBDocInit(ldiv)
 	@Templates.pageheader(){
 	<div class="container">
 		<div class="row text-center">
-			<span>Showing search results for: </span><h2>"@searchkey"</h2>
+			<span>Showing search results for: </span><h2>"@escapeJava(searchkey)"</h2>
 		</div>
 	</div>
 			
@@ -256,7 +256,7 @@ function CBDocInit(ldiv)
 					<a class="btn btn-default btn-lg button-margin @if(index==DInitial.SEARCH_USER){active}" href="@routes.Application.RunSearch(searchkey,DInitial.SEARCH_USER)"><b>@Contributor.MatchedUsersCount(searchkey)</b> Users</a>
 					<a class="btn btn-default btn-lg button-margin @if(index==DInitial.SEARCH_COLLECTION){active}" href="@routes.Application.RunSearch(searchkey,DInitial.SEARCH_COLLECTION)"><b>@UserCollection.MatchedCollectionsCount(searchkey)</b> Collections</a>
 					<a class="btn btn-default btn-lg button-margin @if(index==DInitial.SEARCH_STORE){active}" href="@routes.Application.RunSearch(searchkey,DInitial.SEARCH_STORE)"><b>@Store.MatchedStoresCount(searchkey)</b> Stores</a>
-					<a class="btn btn-default btn-lg button-margin @if(index==DInitial.SEARCH_BLOG){active}" href="@routes.Application.RunSearch(searchkey,DInitial.SEARCH_BLOG)"><b>@Blog.SearchbytitleCount(searchkey)</b> BLOGS</a>
+					<a class="btn btn-default btn-lg button-margin @if(index==DInitial.SEARCH_BLOG){active}" href="@routes.Application.RunSearch(searchkey,DInitial.SEARCH_BLOG)"><b>@Blog.SearchbytitleCount(searchkey)</b> Articles</a>
 	            </div>
 				<div class="clearfix padding-small"></div>
 				<div class="onnextline">
