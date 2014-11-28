@@ -6,7 +6,6 @@
 <nav class="navbar navbar-default navbar-fixed-top cbp-af-header " role="navigation" style="z-index: 1000;">
 <div class="cbp-af-inner">
 <div class="container">
-
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
@@ -26,10 +25,6 @@
       </ul>
     </div> 
   </div>
-  
-  
-        
-
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse navbar-ex1-collapse">
   
@@ -103,10 +98,8 @@
 	      </ul> 
       </li>
       <li>@subjectPresentOr(){ <a class="fromiframe cboxElement" href="@routes.Useract.addoptions()">Add</a>}{ <a data-toggle="modal" href="#signinupModel">Add</a>}</li>
-	        
 	        <li><a href="@routes.Application.GetBlogList()">Buzz</a></li>
 	        <li><a href="@routes.Application.discover">Discover</a></li>
-	      	
 	      @subjectPresentOr(){
 	       	 @defining(Application.getLocalUser(session())){ presentuser=>
 	       	 	<li><a href="@routes.Application.ContributorSelecttabPage(presentuser.id,DInitial.USER_RELATION_QUERY.COLLECTIONS)">Collections</a></li>
@@ -139,8 +132,6 @@
       		<li class="sign-up"><a href="@routes.Application.signup">Sign Up</a></li>      		
 	        }
 			@*<li style="display:none;" id="cartCount"><a href="@routes.Carts.cartListIndex()"><i class="icon-shopping-cart h2"></i><span class="padding-small"></span><div class="noti_bubble"></div></a></li>*@
-      
-     
     </ul>
    <div class="pull-right col-lg-3 col-mg-3 col-sm-3 col-xs-12">
     <form action="@routes.Application.RunSearch()" method="get" class="navbar-form navbar-center" role="search" >

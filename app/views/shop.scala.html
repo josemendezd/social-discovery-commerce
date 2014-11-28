@@ -25,19 +25,13 @@ width:70px;height:70px;vertical-align: baseline!important;
 </style>
 <script src="@routes.Assets.at("bl/js/typeahead.min.js")"></script>
 }
-
-
 @Templates.MasterTemplate(){
 	@Templates.pagehead(" Boozology - Discover, learn and talk about drinks "){@ps}
 }{
 	@Templates.pageheader(){		
 				
-	}{
-	
-	
-
-	
-	<!--begin wallpaper code -->
+	}{	
+	<!--begin wallpaper/jumbotron code -->
 @subjectNotPresent(){
 @defining(S3File.findfilelistcount(plugins.S3Plugin.s3Bucket, DInitial.WP)){totalwallpapers=>
 		@if(totalwallpapers>0){
@@ -89,7 +83,7 @@ width:70px;height:70px;vertical-align: baseline!important;
 			     <div style="position:absolute;margin-top:450px;margin-left:100px;z-index:3;">
 			     	<a href="@S3File.findWallPaperURL(cnt+1).get(0).filename" class="btn @S3File.findWallPaperButton(cnt+1).get(0).filename" style="border-radius:0px; -webkit-border-radius:0px; -moz-border-radius:0px;">@S3File.findWallPaperURL(cnt+1).get(0).filestate</a>
 			     </div>		
-			    
+			   
 			      <img alt="Welcome to boozology"  src="@wallpaper.getUrl()" class="img-responsive"  >
  					
 			    
