@@ -44,7 +44,7 @@
 						<div class="carousel-inner">
 						@for((imgsrc,cnt)<-images.zipWithIndex){
 							<div id="capturedimagediv@cnt" class="item">				  
-								<img id="capturedimage@cnt" class="imgnature" onclick="location.href = jsRoutes.controllers.Application.ShowGrabbed('@imgsrc',10.00,'USD', @if(productname!=null){'@productname'}else{ 'undefined' },'@storeurl').absoluteURL()" src="@imgsrc">					
+								<img id="capturedimage@cnt" class="imgnature" onclick="location.href = jsRoutes.controllers.Application.ShowGrabbed('@imgsrc',0.00,'USD', @if(productname!=null){'@productname'}else{ 'undefined' },'@storeurl').absoluteURL()" src="@imgsrc">					
 							</div>
 						  }						  
 						</div>

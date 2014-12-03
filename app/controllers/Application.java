@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,7 +99,8 @@ public class Application extends Controller {
 	public static final String ADMIN_ROLE = "admin";
 	public static final String MODERATOR_ROLE = "moderator";
 	public static final String EMAIL_VERIFICATION_FAIL = "email";
-	
+	public static final String AWS_S3_BUCKET = "aws.s3.bucket";
+	public static final String BASE_URL_FORMAT = "base.url.format";
 	public static final String WebAddress=play.Play.application().configuration().getString("site.address");
 	public static final String Captchaprivate=play.Play.application().configuration().getString("site.captcha.private");
 	public static final String Captchapublic=play.Play.application().configuration().getString("site.captcha.public");
@@ -766,9 +768,19 @@ public class Application extends Controller {
 	}
 	
 	@Restrict(@Group(Application.USER_ROLE))
+	public static Result addNewProfileImage() {
+		Logger.info("add new profile image.");
+		return ok(views.html.Tools.addprofileimage.render());
+	}
+	
+	@Restrict(@Group(Application.USER_ROLE))
 	public static Result setprofileimage() {
+		
+		String url = "http://" + play.Play.application().configuration().getString(AWS_S3_BUCKET) + play.Play.application().configuration().getString(BASE_URL_FORMAT);
+
 		User localUser=getLocalUser(session());
 		FilePart fp=request().body().asMultipartFormData().getFile("picture");
+		
 		String allotedname=localUser.getusersimagename(true);//;
 		if(fp.getFile().length()>DInitial.IMAGE_UPLOAD_FILE_SIZE_LIMIT)
 		{
@@ -780,9 +792,57 @@ public class Application extends Controller {
 			flash(FLASH_ERROR_KEY,"Unknown File Type!! Please use JPG,PNG");
 			return redirect(routes.Application.showprofileimage()); 
 		}
-		localUser.savetocdn(allotedname, fp.getFile());
+		//Here the user will be asked to crop the image and create a perfect square
+		// ---- -- -- ------- ------------------------------------------------------------
+		//String recievedparams=String.format("imageurl %s,price %f,Currency %s,tittle %s,pageurl %s", imageurl,price,currency,title,pageurl);
+		localUser.savetocdn("Temp"+allotedname, fp.getFile());
+		fp.getFile().delete();
+		Logger.info("setprofileimage  allotedname"+allotedname);
+		return ok(views.html.Tools.confirmprofile.render("Boozology Grab it!","Set Profile Image",allotedname,url+"User/full_Temp"+allotedname,"USD",(Double)10.00,Application.getLocalUser(session())));
+		//return ok(views.html.Tools.confirmprofile.render());
+		
+	//	Logger.info("setprofileimage  allotedname set profile image");
+		
+		//return ok(views.html.Tools.confirmprofile.render());
+	//	return ok(views.html.Tools.addproduct.render());
+		
+		
+		///---------------------------------------------------------------------------
+	/*
 		fp.getFile().delete();
 		localUser.setimage(allotedname);
+		return redirect(routes.Application.profile());//redirect(routes.Application.showprofileimage());
+		*/
+	}
+	
+	public static Result saveprofileimage() throws FileNotFoundException{
+		String url = "http://" + play.Play.application().configuration().getString(AWS_S3_BUCKET) + play.Play.application().configuration().getString(BASE_URL_FORMAT);
+
+		User localUser=getLocalUser(session());
+		String allotedname=localUser.getusersimagename(true);
+	Logger.info("saveprofileimage  application ");
+		localUser.setimage(allotedname);
+		
+		com.feth.play.module.pa.controllers.Authenticate.noCache(response());
+		DynamicForm formcontents=play.data.Form.form().bindFromRequest();
+	//	String Isajax= formcontents.get("isajax");
+	//	String Redirect_to=formcontents.get("redirecturi");
+	//	String emailid = formcontents.get("email");		
+		
+		String	cropdata=formcontents.get("cropData");
+		Logger.info("crop data"+cropdata);
+		File tempstorage =GHelp.downloadandsaveimage(url+"User/full_Temp"+allotedname,allotedname , cropdata) ;
+		if(tempstorage==null)
+			throw new FileNotFoundException();
+		localUser.savetocdn(allotedname, tempstorage);
+	    
+		if(tempstorage != null && tempstorage.exists()) {
+	    	tempstorage.delete();
+		}		
+		//final Form<Useract.NEW_PRODUCT> filledForm = play.data.Form.form(Useract.NEW_PRODUCT.class).bindFromRequest();
+		//localUser.savetocdn(allotedname, fp.getFile());
+		//fp.getFile().delete();
+		Logger.info("saveprofileimage  allotedname: "+allotedname+" cropdata: "+ cropdata);
 		return redirect(routes.Application.profile());//redirect(routes.Application.showprofileimage());
 	}
 	

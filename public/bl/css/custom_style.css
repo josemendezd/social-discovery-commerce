@@ -1,4 +1,25 @@
 @CHARSET "ISO-8859-1";
+div.img-div{
+    height:200px;
+    width:200px;
+    overflow:hidden;
+    border-radius:50%;
+}
+
+.img-div img{
+    -webkit-transform:translate(-50%);
+    margin-left:100px;
+}
+
+.circle-image{
+    width:200px;
+    height:200px;
+    border-radius:50%;
+    background-image:url("http://placekitten.com/g/200/400");
+    display:block;
+    background-position-y:25% 
+}
+
 .product-wrap-custom {
 	border-bottom: 1px solid #979797;
 	 margin-bottom: 10px; 

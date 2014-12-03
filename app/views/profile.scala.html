@@ -132,22 +132,26 @@ margin: 0 4px 0 0 !important;
 			<div class="profileeditpane">
 				<div class="text-left">
 					<div class="form-horizontal">
+					
 						@*
 						<iframe class="profileiframestyle" src="@routes.Application.showprofileimage">
 							
 						</iframe>
 						*@
 						@form(action = routes.Application.setprofileimage, 'enctype -> "multipart/form-data",'class->"form-horizontal") { 
-						<div class="form-group">  
+							
+						<div class="form-group"> 
+						 
 								<label class="col-sm-2 control-label" for="biography">User Image:</label>  
 								<div class="col-sm-10"> 
 									<img class="thumblimgsmall" src="@localUser.getusersimage()" alt="@localUser.name">
 									<div class="clearfix"></div>					
-									<input type="file" id="upload_input" name="picture" class="fileinput-button"/>
+									<!-- <input type="file" id="upload_input" name="picture" class="fileinput-button"/>
 									<div class="clearfix"></div>		   
 								    <span class="help-block btn-sm">Size Limit: <b>2 MB</b></span>
 								    <div class="clearfix"></div>
-									<input type="submit" value="Upload" class="btn btn-default"> 
+									<input type="submit" value="Upload" class="btn btn-default fromiframe "> --> 
+							 <a class="fromiframe " href="@routes.Application.addNewProfileImage()">Change Profile Photo</a>
 								</div>  
 							</div>
 						}

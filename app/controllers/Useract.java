@@ -459,6 +459,8 @@ public class Useract  extends Controller {
 		if(!Boolean.valueOf(localUser.user.emailValidated)){
 			flash().put(Application.EMAIL_VERIFICATION_FAIL, "You must verify your email before you can comment");
 		}
+		
+		Logger.info("inside add product options");
 		return ok(views.html.Tools.addproduct.render());
 	
 	}

@@ -30,6 +30,8 @@ GET     /grab/BookMarkToolFromWalkthrough   controllers.Application.BookMarkTool
 GET     /user/profile               		controllers.Application.profile
 GET		/user/profile/picture				controllers.Application.showprofileimage
 POST	/user/profile/picture				controllers.Application.setprofileimage
+GET  	/user/profile/picture/edit          controllers.Application.addNewProfileImage
+POST	/user/profile/picturesave			controllers.Application.saveprofileimage
 POST	/user/profile/edit					controllers.Application.setmyprofile
 
 GET     /login                      		controllers.Application.login
