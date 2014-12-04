@@ -168,6 +168,7 @@
 				 <div class="clearfix"></div>
 	            <ul id="myTab" class="nav nav-tabs">
 	               @*<li class="@isactive(DInitial.USER_RELATION_QUERY.RECENT)"><a data-toggle="tab" href="#recent"><span data-bind="text:$().shortnumber(0)"></span><br>Recent</a></li>*@
+	               <li class="@isactive(DInitial.USER_RELATION_QUERY.RECENT)"><a data-toggle="tab" href="#recent"><span data-bind=""></span><br>About</a></li>
 	               <li class="@isactive(DInitial.USER_RELATION_QUERY.LOVES)"><a data-bind="click:loveloader" data-toggle="tab" href="#profileproductdivisions"><span data-bind="text:$().shortnumber(@userx.Liked.size)"></span><br>Loves</a></li>
 	               <li class="@isactive(DInitial.USER_RELATION_QUERY.WANTS)"><a data-bind="click:wantloader" data-toggle="tab" href="#profileproductdivisions"><span data-bind="text:$().shortnumber(@userx.Wanted.size)"></span><br>Wants</a></li>
 	               <li class="@isactive(DInitial.USER_RELATION_QUERY.TRIED)"><a data-bind="click:triedloader" data-toggle="tab" href="#profileproductdivisions"><span data-bind="text:$().shortnumber(@userx.Owned.size)"></span><br>Tried</a></li>
@@ -179,23 +180,40 @@
 	            </ul>
             </div>
             <div id="myTabContent" class="tab-content">
-            @*
+            <!-- about starts -->
                <div class="tab-pane fade in @isactive(DInitial.USER_RELATION_QUERY.RECENT) recent" id="recent">
                   <!-- Begin activity -->
                   <div class="activity">
                      <!-- Comment-post -->
                      <div class="comment-post">
-                        <div class="user-thumb">
-                           <img src="images/activity-thumb.png" class="img-responsive" alt="">
-                        </div>
                         <div class="comment">
-                           <h4><a href="#">John Doe</a> commented on <a href="#">Product X</a></h4>
-                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                           <ul class="comment-act">
+                       @if(userx.user.firstName != null && userx.user.lastName != null ){
+                        <h3>@userx.user.firstName @userx.user.lastName</h3>
+						}else{
+                           <h3>@userx.user.name</h3>
+                           }
+                           <small>@userx.user.website</small>
+                           @if( userx.user.biography != null){
+                           <p>@userx.user.biography</p>
+                           }else{
+                           <p>Complete your profile</p>
+		                           @subjectPresent(){
+			                           @if(Application.getContributor(session).id==userx.user.id){
+			                           		<p><small>Welcome home, @userx.user.name You have not updated your profile yet. Here's how to edit <a href="/user/profile" >your profile.</a></small></p>
+			                           }else{
+			                           		<p><small>@userx.user.name has not updated his/her profile yet. Here's how to edit <a href="/user/profile" >your profile.</a></small></p>
+			                           }
+		                           }
+		                           @subjectNotPresent(){
+		                           <p><small>@userx.user.name has not updated his/her profile yet. </small></p>
+		                           }
+           					}
+                          <!--  <ul class="comment-act">
                               <li><a href="#"><i class="icon-comments-alt"> </i>See Comment</a></li>
                               <li><a href="#"><i class="icon-reply"> </i>Reply to comment</a></li>
                               <li><a href="#"><i class="icon-user"> </i>Follow</a></li>
                            </ul>
+                            -->
                            <div class="clearfix"></div>
                         </div>
                         <div class="clearfix"></div>
@@ -203,101 +221,9 @@
                      <!-- End comment-post -->
                   </div>
                   <!-- End activity -->
-                  <!-- Begin activity -->
-                  <div class="activity">
-                     <!-- Comment-post -->
-                     <div class="comment-post">
-                        <div class="user-thumb">
-                           <img src="images/activity-thumb.png" class="img-responsive" alt="">
-                        </div>
-                        <div class="comment">
-                           <h4><a href="#">John Doe</a> commented on <a href="#">Product X</a></h4>
-                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                           <ul class="comment-act">
-                              <li><a href="#"><i class="icon-comments-alt"> </i>See Comment</a></li>
-                              <li><a href="#"><i class="icon-reply"> </i>Reply to comment</a></li>
-                              <li><a href="#"><i class="icon-user"> </i>Follow</a></li>
-                           </ul>
-                           <div class="clearfix"></div>
-                        </div>
-                        <div class="clearfix"></div>
-                     </div>
-                     <!-- End comment-post -->
-                  </div>
-                  <!-- End activity -->
-                  <!-- Begin activity -->
-                  <div class="activity">
-                     <p><a href="#">John Doesnt</a> started following <a href="#">Brother Joe</a></p>
-                  </div>
-                  <!-- End acitvity -->
-                  <!-- Begin activity -->
-                  <div class="activity">
-                     <!-- Comment-post -->
-                     <div class="comment-post">
-                        <div class="user-thumb">
-                           <img src="images/activity-thumb.png" class="img-responsive" alt="">
-                        </div>
-                        <div class="comment">
-                           <h4><a href="#">John Doe</a> commented on <a href="#">Product X</a></h4>
-                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                           <ul class="comment-act">
-                              <li><a href="#"><i class="icon-comments-alt"> </i>See Comment</a></li>
-                              <li><a href="#"><i class="icon-reply"> </i>Reply to comment</a></li>
-                              <li><a href="#"><i class="icon-user"> </i>Follow</a></li>
-                           </ul>
-                           <div class="clearfix"></div>
-                        </div>
-                        <div class="clearfix"></div>
-                     </div>
-                     <!-- End comment-post -->
-                  </div>
-                  <!-- End activity -->
-                  <!-- Begin activity -->
-                  <div class="activity">
-                     <!-- Comment-post -->
-                     <div class="comment-post">
-                        <div class="user-thumb">
-                           <img src="images/activity-thumb.png" class="img-responsive" alt="">
-                        </div>
-                        <div class="comment">
-                           <h4><a href="#">John Doe</a> commented on <a href="#">Product X</a></h4>
-                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                           <ul class="comment-act">
-                              <li><a href="#"><i class="icon-comments-alt"> </i>See Comment</a></li>
-                              <li><a href="#"><i class="icon-reply"> </i>Reply to comment</a></li>
-                              <li><a href="#"><i class="icon-user"> </i>Follow</a></li>
-                           </ul>
-                           <div class="clearfix"></div>
-                        </div>
-                        <div class="clearfix"></div>
-                     </div>
-                     <!-- End comment-post -->
-                  </div>
-                  <!-- End activity -->
-                  <!-- Begin activity -->
-                  <div class="activity">
-                     <!-- Comment-post -->
-                     <div class="comment-post">
-                        <div class="user-thumb">
-                           <img src="images/activity-thumb.png" class="img-responsive" alt="">
-                        </div>
-                        <div class="comment">
-                           <h4><a href="#">John Doe</a> commented on <a href="#">Product X</a></h4>
-                           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                           <ul class="comment-act">
-                              <li><a href="#"><i class="icon-comments-alt"> </i>See Comment</a></li>
-                              <li><a href="#"><i class="icon-reply"> </i>Reply to comment</a></li>
-                              <li><a href="#"><i class="icon-user"> </i>Follow</a></li>
-                           </ul>
-                           <div class="clearfix"></div>
-                        </div>
-                        <div class="clearfix"></div>
-                     </div>
-                     <!-- End comment-post -->
-                  </div>
-                  <!-- End activity -->
+                  
                </div>
-            *@   
+            <!-- about ends --> 
                <div class="tab-pane fade in @isactive(DInitial.USER_RELATION_QUERY.LOVES) @isactive(DInitial.USER_RELATION_QUERY.WANTS) @isactive(DInitial.USER_RELATION_QUERY.TRIED)" id="profileproductdivisions">
                   <div class="row">
                   	 <div class="sort hidden-xs hidden-sm">
