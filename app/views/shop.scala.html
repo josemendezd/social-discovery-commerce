@@ -38,7 +38,7 @@ width:70px;height:70px;vertical-align: baseline!important;
 			<div class="carousel slide onnextline" id="blhomecarousel">
 			  <ol class="carousel-indicators">
 			  @for(cnt <- 0 until totalwallpapers){ 
-			    <li data-slide-to="@cnt" data-target="#blhomecarousel" class=""></li>
+			 @*   <li data-slide-to="@cnt" data-target="#blhomecarousel" class=""></li>*@
 			  }
 			  </ol>
 			   @* 
@@ -80,7 +80,7 @@ width:70px;height:70px;vertical-align: baseline!important;
 			  <div class="carousel-inner">
 		  @for((wallpaper,cnt) <- S3File.findfilelist(plugins.S3Plugin.s3Bucket, DInitial.WP).zipWithIndex){
 			    <div class="item @if(cnt==0){active}">
-			     <div style="position:absolute;margin-top:450px;margin-left:100px;z-index:3;">
+			     <div style="position:absolute;margin-top:400px;margin-left:100px;z-index:3;">
 			     	<a href="@S3File.findWallPaperURL(cnt+1).get(0).filename" class="btn @S3File.findWallPaperButton(cnt+1).get(0).filename" style="border-radius:0px; -webkit-border-radius:0px; -moz-border-radius:0px;">@S3File.findWallPaperURL(cnt+1).get(0).filestate</a>
 			     </div>		
 			   
