@@ -1,0 +1,284 @@
+@(categoryselected:Long)
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
+@ps={
+<style>
+.topseclusion{padding-top:20px;}
+</style>
+
+}
+
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Collections @Boozology"){@ps}
+}{
+	@Templates.pageheader(){		
+				
+	}{
+	
+	 }
+	
+}{
+	@Templates.pagemaincontent(){	
+		 <div class="container">
+         <div class="row">
+         <div class="clearfix topseclusion"></div>
+            <div class="col-lg-12 col-12 col-md-12 col-sm-12 col-xs-12 col-12">
+
+               <!-- Begin .category-title -->
+               <div class="category-title">
+                  <h4>
+                  	<ul class="list-inline"  data-bind="foreach: pcatglist,visible:pcatglist().length > 0">
+		        		<li><a href="javascript:void(0)" data-bind="click:$root.pcatgclick,text:name"></a></li>
+		        		<span class="divider">/</span>
+		        	</ul>
+                  </h4>
+                  <div class="sort hidden-xs hidden-sm">
+                  	<form id="fastsearch" class="form-inline" action="json" data-bind="with: sfm ,submit:function(){return false;}"  role="form">
+                     <select data-bind="options: [1,2,3],optionsText: function(item) {ao=['Relevance','Newest','Most Loved'];return 'Sort By '+ ao[item-1];}, value: sortseq"></select>
+		             <select data-bind="options: [0,1,2,3,4,5],optionsText: function(item) {ao=['Any (Price Range)','$0 - $50','$51 - $500','$501 - $1000','$1001 - $10000','$10001 - Above'];return ao[item];}, value: pricerange"></select>             
+		             <div class="form-group">
+	                    <input data-bind="value: searchtext"  type="text" class="form-control" placeholder="Search by typing a keyword ">
+	                 </div>
+                    </form>
+                  </div>
+                  <div class="clearfix"></div>
+               </div>
+               <!-- End .category-title -->
+               
+               @Templates.su.panepbkocollection()
+               
+            </div>
+         </div>
+      </div>
+      
+	
+	      
+		@Templates.su.jready{
+			var pxBDocInit= PBDocInit(ldiv);
+			
+				
+			@Templates.js.infinitescroll(){ }
+			
+			$('.carousel').carousel({
+				interval: 6000
+			});
+			@Html(play.Routes.javascriptRouter("querycomplete",controllers.routes.javascript.Application.QuerySuggestion))
+			
+			@*
+			var typeaheadtimeout,mbsb=$('#mainbigsearchbox'),typeaheadsuggestionarr=[];
+			mbsb.typeahead({
+			    source: function (query, process) {
+			    	var firstrun=false;
+			    	if(query.length==1){typeaheadsuggestionarr=[];firstrun=true;}
+			    	if (typeaheadtimeout||firstrun) {
+		                clearTimeout(typeaheadtimeout);                
+		                var n = $.getJSON(querycomplete.controllers.Application.QuerySuggestion(query,pxBDocInit.fr.catgid()).absoluteURL());
+		                n.done(function (n) {
+		                	typeaheadsuggestionarr = n["answer"];
+		                });
+		        	}
+			    	typeaheadtimeout = setTimeout(function(){ }, 300);
+			    	return typeaheadsuggestionarr;
+			    },
+			    minLength: 1,
+			    items: 8
+			});
+			
+		*@
+		
+		}
+		<script>
+		function PBDocInit()
+		{
+			function fms(ifs)
+			{
+				var self=this;
+				self.sortseq=ko.observable(ifs.srt);
+				self.gendercont=ko.observable(ifs.gend);
+				self.pricerange=ko.observable(ifs.prc);
+				self.searchtext=ko.observable(ifs.stext);
+				self.page=ifs.pgn; 
+				self.catgid=ko.observable(ifs.catg);
+				self.pagesize=ifs.ps;
+			};
+			
+			@Templates.js.pbactionjs("boozologybody"){	
+				
+				@if(ctx.args.containsKey("q")) {
+				  self.fr=new fms({srt:1, gend:0, prc:0, stext:'@ctx.args.get("q")',catg:@Category.root().id, pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE});
+				} else { 
+				  self.fr=new fms({srt:1, gend:0, prc:0, stext:'',catg:@Category.root().id, pgn:0,ps:@DInitial.GENERIC_PAGE_SIZE});
+				}
+				
+				self.sfm = ko.observable(self.fr);
+				self.catglist = ko.observableArray([]);
+				self.topcatglist = ko.observableArray([]);
+				self.pcatglist = ko.observableArray([ko.mapping.fromJS(	@Html(Category.ChildJSON(0)))]);
+				self.selectedcategory=ko.observable('@Category.root().cname');
+				self.amIfollowing = ko.observable(false);
+				
+				@Html(play.Routes.javascriptRouter("shoppageloader",controllers.routes.javascript.Application.RetrieveCategoryList,controllers.routes.javascript.Useract.SaveMySearch,controllers.routes.javascript.Useract.FindthisSearch));
+				
+				self.catgclick=function(ctg)
+				{
+					self.sfm().catgid(ctg.id());			
+					var srvrp=$().setresponse({url:shoppageloader.controllers.Application.RetrieveCategoryList(ctg.id()).absoluteURL(),failans:false,successnode:"child"});
+				    if(srvrp===false){ return false; }
+				    self.pcatglist.push(ctg);
+				    self.selectedcategory(ctg.name());
+				    self.catglist.removeAll();
+				 	$.each(srvrp,function(clcindex, clcattr){self.catglist.push(ko.mapping.fromJS(clcattr));});
+				 	return true;
+				}
+				
+				self.catgclickshort=function(ctg){
+					var $indx=1,$leng=self.pcatglist().length;
+					if($indx>0 && $leng>0)
+						self.pcatglist.splice($indx, $leng-$indx);
+					if(!ctg.pid())
+						self.pcatglist.splice(0, $leng);
+					self.catgclick(ctg);
+				}		
+				
+				self.pcatgclick=function(ctg)
+				{
+					if(self.catgclick(ctg))
+					{
+						$indx=self.pcatglist.indexOf(ctg)+1;
+						$leng=self.pcatglist().length;
+						if($indx>0 && $leng>0)
+							self.pcatglist.splice($indx, $leng-$indx);
+					}
+				}
+				
+				self.loadinitcatg=function()
+				{
+					var inctglist=[@Html(Category.ChildJSON(Category.root().id))];
+					$.each(inctglist,function(clcindex, clcattr){
+						self.catglist.push(ko.mapping.fromJS(clcattr));
+					});
+					
+					self.topcatglist(self.catglist().slice(0));
+					var root=self.pcatglist()[0]
+					if(root)
+						self.topcatglist.unshift(root);
+					
+					var ctgiden=@categoryselected;
+			        ko.utils.arrayForEach(self.topcatglist(), function(ctgry) {
+			            if(ctgiden==ctgry.id())
+			            	self.catgclickshort(ctgry);
+			        });	
+				}
+				self.loadinitcatg();
+				self.stillloading = false;
+				var $container;
+				self.loadProd = function(jsonstring) {
+					
+					var sentsuccess=true;
+					
+					if(self.stillloading) {
+						return;
+					}
+					
+					var posting = $.post( "@routes.Application.ProductQuery",jsonstring,"json");
+					ldiv.display();
+					self.stillloading = true;
+					
+					posting.done(function( data ) {								
+						$prodselect=data['prodgrid'];
+						var sizeOfItemsBeforeApplyingIsotope = $('.isotope-item').length;
+						$.each($prodselect,function(prindex, prattr){
+							self.prodList.push(ko.mapping.fromJS(prattr));
+							ldiv.stillbusy();
+						});
+						ldiv.loadcomplete();
+						
+						/* Fire event to show isotope view */
+						if(self.fr.page == 1 ){
+							try {
+								$container.isotope('destroy');
+							} catch(e) {}
+							$container = $('.isotope-wrap').isotope({
+								  itemSelector: '.isotope-item',
+								  masonry: {
+							   		columnWidth: 10,
+							        gutterWidth: 10
+							  	  }
+							});
+							
+							$(".isotope-item").find(".product-image").load(function(){
+					        	$container.isotope();
+					        	$($(this).parents(".isotope-item")).mouseleave(function(){
+					        		$(this).find('.dropdown').removeClass('open');
+					      		});
+					        });
+						} else {
+							$.each($('.isotope-item'), function(index, elem) {
+								if (index >= sizeOfItemsBeforeApplyingIsotope) {
+									$container.isotope( 'appended', elem );
+									$(elem).find(".product-image").load(function(){
+							        	$container.isotope();
+							        });
+								}
+							});	
+						}
+						self.stillloading = false;
+						if(!data['hasmore']){self.fr.page=-1;}	
+						
+					});
+					posting.fail(function( data ) {
+						ldiv.loadcomplete();	
+						sentsuccess=false;
+						self.stillloading = false;
+					});
+					
+					return sentsuccess;						       
+				};
+				 
+				self.loadMore = function()
+				{
+					if(self.fr.page!==-1 && self.loadProd($.param(self.fr)))
+		  				self.fr.page++;
+				}
+				
+				self.updateFollowing = function()
+				{
+					@subjectPresentOr(){
+						self.amIfollowing($().setresponse({url:shoppageloader.controllers.Useract.SaveMySearch(self.fr.searchtext() ,self.fr.gendercont() ,self.fr.pricerange()).absoluteURL(),failans:false}));
+						}{$().askforloginorsignup();}					    
+				}
+				
+				self.updateAmIFollowing = function()
+				{
+					@subjectPresent(){
+					self.amIfollowing($().setresponse({url:shoppageloader.controllers.Useract.FindthisSearch(self.fr.searchtext() ,self.fr.gendercont() ,self.fr.pricerange()).absoluteURL(),failans:false}));
+					}
+				}
+				
+				self.closecarousel =function(){self.fr.searchtext($('#mainbigsearchbox').val());@*$('#blhomecarousel').hide('slow');*@}
+				 
+				self.pform=ko.computed(function() {	
+					
+			  			self.fr.page=0;
+			  			self.prodList.removeAll();
+		      				if(self.loadProd($.param(self.fr)))
+			  				self.fr.page++;
+		      			if(self.fr.searchtext().length>0)
+		      				{
+		      					self.updateAmIFollowing();
+		      				}
+			  			
+						}).extend({ throttle: 200 });
+			}
+			return thisshopview;
+		}
+		</script>
+		
+	}
+}{
+	@Templates.pagefooter(){ }
+}	
+			
+

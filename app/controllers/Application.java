@@ -59,6 +59,7 @@ import views.html.blogpage;
 import views.html.collectionpage;
 import views.html.contentpage;
 import views.html.cshop;
+import views.html.ccollection;
 import views.html.groupmain;
 import views.html.login;
 import views.html.logintwitter;
@@ -173,6 +174,12 @@ public class Application extends Controller {
 	public static Result shop() {
 		return ok(cshop.render(Category.root().id));
 	}
+	
+	public static Result collections() {
+		return ok(ccollection.render(Category.root().id));
+	}
+		
+	
 	
 	public static Result cshop(String category) {
 		String categorydecoded="Not Found";

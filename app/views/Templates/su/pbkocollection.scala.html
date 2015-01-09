@@ -1,0 +1,45 @@
+@(extracontent:Html=Html(" "),defaultsize:Int =3)
+
+<div class="isotope-item">
+  <div class="product-wrap-custom product-details-custom">
+    <!-- Begin .featured-product --> 
+    <div class="featured-product-custom">
+      <div class="shareprod-custom">
+        <a class="share_prod" data-bind="popover: {template: 'popoverBindingTemplate'}"><i class="icon-share"></i></a>
+      </div>
+      
+      <div class="cart-shopping">
+        <a href="javascript:void(0);" data-bind="attr:{href:siteurl}"><i class="icon-shopping-cart icon-shopping-cart-custom"></i></a>
+      </div>
+      <!-- Begin .info-wrap -->
+      <div data-bind="css: lovetext()=='Love' ? 'dropdown info-wrap-custom' : 'dropdown info-wrap-custom active'">
+        <a href="javascript:void(0);" data-bind="click: $parent.lovestate">
+        	<i class="icon-heart" data-bind="css:lovetext()=='Love'?'':'bluebackgnd'">
+        	</i>
+        	<span class="status" data-bind="text: lovetext()=='Love'?'Like it':'Unlike'"></span>
+        	<a href="javascript:void(0);" data-toggle="dropdown" role="button"><b class="caret"></b></a>
+        	<ul role="menu" class="dropdown-menu">
+              <li><a href="javascript:void(0);" data-bind="click: $parent.wantstate, clickBubble: false,text: wanttext,css:wanttext()=='Want'?'':'tred-custom'">Want</a></li>
+              <li><a href="javascript:void(0);" data-bind="click: $parent.triedstate, clickBubble: false,text: triedtext(),css:triedtext()=='Tried'?'':'tred-custom'">Tried</a></li>
+              <li><a href="javascript:void(0);" data-bind="click: $parent.collectstatev2, clickBubble: false">Collect</a></li>
+            </ul>
+        </a>
+        
+      </div>
+      	@if(Application.getLocalUser(session()) != null){ <a data-bind="attr:{href:prlink}" class="btn btn-default view-product-custom">View Product</a>}else{ <a class="btn btn-default view-product-custom" data-toggle="modal" href="#signinupModel">View Product</a>}
+      
+      <!-- End .info-wrap -->
+       <!-- <div class="product-image" data-bind="style: { backgroundImage: 'url(\'' + pic() + '\')'}"></div> -->
+       <img data-bind="attr:{src:pic()}" class="product-image img-responsive thumbnail"/> 
+      <div class="desc_prod_custom">
+        <a data-bind="attr:{href:prlink},text:(name().length > 20 ? name().substring(0, 20) + '..' : name)"></a>
+        <br>
+        <p>added by <a data-bind="attr:{href:usrlink,title:discoverer}"><span data-bind="text:(discoverer().length > 10 ? discoverer().substring(0, 10) + '..' : discoverer)"></span></a>  at <span class="price-background" data-bind="text:(store().length > 12 ? store().substring(0, 9)+'..' : store)"></span></p>
+     
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <!-- End .featured-product -->
+</div> 
+

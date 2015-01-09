@@ -98,6 +98,9 @@ GET		/contributor/page/:id				controllers.Application.ContributorPage(id: Long,i
 GET		/contributor/page/:id/:selectedtab	controllers.Application.ContributorSelecttabPage(id: Long,selectedtab:Int,isajax:Boolean?=false,isuser:Boolean?=false)
 GET		/search/page/:id					controllers.Application.SearchPage(id: Long,isajax:Boolean?=false)
 
+
+
+
 POST	/product/create						controllers.Useract.CreateProduct
 
 #Groups
@@ -143,6 +146,10 @@ GET		/getcollections/:prid				controllers.Useract.GetCollections(prid: Long)
 GET		/follow								controllers.Useract.FollowAct(actioncontxt:Int,obid: Long)
 
 GET		/user/promote/:conid/:role			controllers.Application.ChangeUserRole(conid: Long,role:String)
+
+
+#Collections
+#GET		/collections				        controllers.Application.collections
 
 GET		/user/collection/json/:pageno				controllers.Useract.UserCollectionList(pageno: Int)
 POST	/user/collection/create						controllers.Useract.CreateCollection
