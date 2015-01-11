@@ -311,9 +311,12 @@ public class Contributor extends  Model {
 	
 	public static Page<Contributor> GetTopInfluencers(int page, int pageSize,Contributor c)
 	{
-		String querystring="SELECT contributor.id FROM contributor";//TODO: Add right query
-		RawSql rawSql =	RawSqlBuilder.parse(querystring).columnMapping("contributor.id", "id").create();
-    	return find.setRawSql(rawSql).findPagingList(pageSize).getPage(page);
+		String querystring="select distinct contributor.id from contributor , likedproduct where contributor.id = likedproduct.contributor_id";// contributors that liked at least one product.
+		RawSql rawSql =	RawSqlBuilder.unparsed(querystring).columnMapping("contributor.id", "id").create();
+    	
+	//	Logger.info(String.format("sql - - - -" + rawSql.getSql().toString() ));
+		
+		return find.setRawSql(rawSql).findPagingList(pageSize).getPage(page);
 	}
 	
 	public static List<Contributor> GetSocialFriends(String provider,String listedids)
@@ -321,10 +324,10 @@ public class Contributor extends  Model {
 		String querystring="SELECT contributor.id FROM users, contributor, linked_account WHERE  users.active = true AND contributor.user_id = users.id AND   linked_account.user_id = users.id AND   linked_account.provider_user_id in ("+listedids+") AND   linked_account.provider_key = '"+provider+"'   ; ";//TODO: Add right query
 	//	String querystring="SELECT contributor.id FROM users, contributor, linked_account WHERE  users.active = true AND contributor.user_id = users.id AND   linked_account.user_id = users.id 
 	
-		Logger.info(String.format(" - - querystring:"+ querystring + " - "));
+	//	Logger.info(String.format(" - - querystring:"+ querystring + " - "));
 		RawSql rawSql =	RawSqlBuilder.parse(querystring).columnMapping("contributor.id", "id").create();
 		
-		Logger.info(String.format(" - - rawSql:"+ rawSql + " - - "));
+	//	Logger.info(String.format(" - - rawSql:"+ rawSql + " - - "));
     	return find.setRawSql(rawSql).findList();
 	}
 	
