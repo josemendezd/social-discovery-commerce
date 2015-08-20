@@ -130,7 +130,11 @@ public class Application extends Controller {
 		
 	}
 	
-	public static Result home() {return ok(shop.render());}
+	//public static Result home() {return ok(shop.render());}
+	
+	public static Result home() {return ok( blogpage.render( Blog.RecentBlogPage(0, 5)));}
+
+	//( Blog.RecentBlogPage(page, pagesize)))
 	
 	public static Result discover() {
 		DynamicForm bindedForm = play.data.Form.form().bindFromRequest();		
