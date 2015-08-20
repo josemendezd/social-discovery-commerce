@@ -30,7 +30,7 @@
   
     <ul class="nav navbar-nav navbar-right">
       <li>	
-	     <a data-toggle="dropdown" href="@routes.Application.shop()">Browse<b class="caret"></b></a>
+	     <a data-toggle="dropdown" href="@routes.Application.shop()">Products<b class="caret"></b></a>
 	     <ul class="dropdown-menu">
 			<li><a href="@routes.Application.cshop("All")">Popular</a></li>
 			@subjectPresent(){
@@ -98,7 +98,7 @@
 	      </ul> 
       </li>
       <li>@subjectPresentOr(){ <a class="fromiframe cboxElement" href="@routes.Useract.addoptions()">Add</a>}{ <a data-toggle="modal" href="#signinupModel">Add</a>}</li>
-	        <li><a href="@routes.Application.GetBlogList()">Buzz</a></li>
+	        <li><a href="@routes.Application.GetBlogList()">Posts</a></li>
 	        <li><a href="@routes.Application.discover">Discover</a></li>
 	      @subjectPresentOr(){
 	       	 @defining(Application.getLocalUser(session())){ presentuser=>
