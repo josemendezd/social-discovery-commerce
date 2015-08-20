@@ -1,4 +1,4 @@
-@(title: String="Boozology")(appendcontent: Html)
+@(titleHead: String)(appendcontent: Html)
 @import be.objectify.deadbolt.java.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 @import net.tanesha.recaptcha.ReCaptcha
@@ -13,7 +13,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="@controllers.HomePageImages.imagePathFavicon()">
 
-    <title>@title</title>
+    <title>@titleHead</title>
 	<link href="@routes.Assets.at("bl/css/fonts/fonts.css")" rel="stylesheet" type="text/css">
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" type="text/css" href="@routes.Assets.at("bl/css/bigvideo.css")">
