@@ -132,7 +132,7 @@ public class Application extends Controller {
 	
 	//public static Result home() {return ok(shop.render());}
 	
-	public static Result home() {return ok( blogpage.render( Blog.RecentBlogPage(0, 5)));}
+	public static Result home() {return ok( blogpage.render( Blog.RecentBlogPage(0, 3)));}
 
 	//( Blog.RecentBlogPage(page, pagesize)))
 	
