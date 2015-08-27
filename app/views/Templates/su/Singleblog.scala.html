@@ -82,7 +82,10 @@
              <!-- Begin .title-wrap -->
             <div class="title-wrap">
               <h3>
-                <a title="@blg.title" href="@routes.Application.GetBlogPage(blg.id)">@blg.title</a>
+                <a title="@blg.title" href="@routes.Useract.getBlogByPermalink(blg.permaLink)">@blg.title aqui</a>
+                
+                
+                
                 <meta property="og:title" content="@blg.title"/>
               </h3>
             </div>
@@ -100,7 +103,7 @@
               @Html(blg.content)
             </div>
            <!--  <a href="javascript:void(0);" class="readmore-js-toggle">Read More</a> -->
-            <a href="@routes.Application.GetBlogPage(blg.id)" >Read More</a> 
+            <a href="@routes.Useract.getBlogByPermalink(blg.permaLink)" >Read More</a> 
             <meta property="og:description" content="@blg.content"/>
             <!-- End post-excerpt -->
             
