@@ -592,6 +592,8 @@ public class Application extends Controller {
 	
 	public static Result GetBlogPage(Long id)
 	{
+		
+		//Logger.info("GetBlogPage +++++++++");
 		//is blog liked by current user
 		Boolean likedByMe = false;
 		//is local user creator of blog
@@ -609,14 +611,17 @@ public class Application extends Controller {
 				}
 				likedByMe = BlogLikes.blogLikedByMe(b, localContributor);
 				
-				Document doc=Jsoup.parse(b.content);
-				b.htmlLessContent = doc.text().substring(0, doc.text().length() < 200 ? doc.text().length() : 200);
+
 				/*if(likedByMe)
 					//Logger.debug("Blog is liked by me");
 */			}
 			if(!Application.verifyEmail()) {
 				flash().put(Application.EMAIL_VERIFICATION_FAIL, "You must verify your email before you can comment");
 			}
+			Document doc=Jsoup.parse(b.content);
+			b.htmlLessContent = doc.text().substring(0, doc.text().length() < 200 ? doc.text().length() : 200);
+			
+			//Logger.info("b.htmlLessContent:"+b.htmlLessContent);
 			return ok(views.html.Templates.su.SingleBlogPage.render(b,false,0,editor,likedByMe));
 		}
 		else
@@ -1422,11 +1427,12 @@ public static String socialSignUp(String paUrl) {
 			}
 			likedByMe = BlogLikes.blogLikedByMe(blog, localContributor);
 			
-			Document doc=Jsoup.parse(blog.content);
-			blog.htmlLessContent = doc.text().substring(0, doc.text().length() < 200 ? doc.text().length() : 200);
+
 			/*if(likedByMe)
 				//Logger.debug("Blog is liked by me");
 */			}
+		Document doc=Jsoup.parse(blog.content);
+		blog.htmlLessContent = doc.text().substring(0, doc.text().length() < 200 ? doc.text().length() : 200);
 		return ok(views.html.Templates.su.SingleBlogPage.render(blog,false,0,editor,likedByMe));
 	}
 	@Restrict(@Group(Application.ADMIN_ROLE))
