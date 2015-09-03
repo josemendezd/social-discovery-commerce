@@ -9,7 +9,7 @@
 		<meta property="og:description" content="@blg.htmlLessContent"/>
 		<meta property="og:url" content="@routes.Useract.getBlogByPermalink(blg.permaLink).absoluteURL()"/>
 		<meta property="og:updated_time" content="@blg.postedAt.getTime()"/>
-		<meta name="description" content="@blg.htmlLessContent"">
+		<meta name="description" content="@blg.htmlLessContent">
     	<meta name="author" content="@blg.author.user.name">
 		@for(img <- blg.getImages()) {
 			@if(img.isVideo==false){
