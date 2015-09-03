@@ -72,7 +72,7 @@
                 </li>
                 <li style="font-size: 12px;">Posted on</li>
                 <li class="date" style="font-size: 12px;">@blg.postedAt</li>
-                <li class="comm-meta" style="font-size: 12px;"><a href="#blog_comment_@{blg.id}">@BlogComment.CommentCount(blg)</a> comments</li>
+                @*<li class="comm-meta" style="font-size: 12px;"><a href="#blog_comment_@{blg.id}">@BlogComment.CommentCount(blg)</a> comments</li>*@
                 
                 
               </ul>
@@ -180,7 +180,7 @@
           <div id="imgs@{blg.id}" class="col-lg-6 col-md-8 col-sm-12 col-xs-12 col-12" style="margin-bottom: 150px;" data-sticky_column>
            @for(img <- blg.getImages()) {
            		@if(img.isVideo==false){
-           			<img src="@img.getURL()" class="img-responsive" style="padding-bottom: 10px;"/>
+           			<img src="@img.getURL()" class="img-responsive" style="padding-bottom: 10px;" alt="@blg.title"/>
            		}else{
            			<div class="wrapper">
 						 <div class="videocontent">
