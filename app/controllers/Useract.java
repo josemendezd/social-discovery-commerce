@@ -1705,7 +1705,7 @@ public class Useract  extends Controller {
 		
 		//Moved the method out of the if to allow creation of the description in all cases
 		Document doc=Jsoup.parse(blog.content);
-		blog.htmlLessContent = doc.text().substring(0, doc.text().length() < 200 ? doc.text().length() : 200);
+		blog.htmlLessContent = doc.text().substring(0, doc.text().length() < 150 ? doc.text().length() : 1500);
 		//Logger.info("htmllesscontent:"+blog.htmlLessContent);
 		return ok(views.html.Templates.su.SingleBlogPage.render(blog,false,0,editor,likedByMe));
 	}

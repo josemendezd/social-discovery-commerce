@@ -619,7 +619,7 @@ public class Application extends Controller {
 				flash().put(Application.EMAIL_VERIFICATION_FAIL, "You must verify your email before you can comment");
 			}
 			Document doc=Jsoup.parse(b.content);
-			b.htmlLessContent = doc.text().substring(0, doc.text().length() < 200 ? doc.text().length() : 200);
+			b.htmlLessContent = doc.text().substring(0, doc.text().length() < 150 ? doc.text().length() : 150);
 			
 			//Logger.info("b.htmlLessContent:"+b.htmlLessContent);
 			return ok(views.html.Templates.su.SingleBlogPage.render(b,false,0,editor,likedByMe));
@@ -1432,7 +1432,7 @@ public static String socialSignUp(String paUrl) {
 				//Logger.debug("Blog is liked by me");
 */			}
 		Document doc=Jsoup.parse(blog.content);
-		blog.htmlLessContent = doc.text().substring(0, doc.text().length() < 200 ? doc.text().length() : 200);
+		blog.htmlLessContent = doc.text().substring(0, doc.text().length() < 150 ? doc.text().length() : 150);
 		return ok(views.html.Templates.su.SingleBlogPage.render(blog,false,0,editor,likedByMe));
 	}
 	@Restrict(@Group(Application.ADMIN_ROLE))
