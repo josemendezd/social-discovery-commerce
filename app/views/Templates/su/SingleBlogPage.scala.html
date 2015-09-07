@@ -40,6 +40,7 @@
 
     <!-- Begin .container -->
     <div class="container blog" >
+    <div class='shareaholic-canvas' data-app='share_buttons' data-app-id='20647418'></div>
       <!-- Begin .row -->
       <div class="row" data-sticky_parent>
 		
@@ -81,12 +82,16 @@
               		<!-- like/dislike buttons -->
               	<div class="pull-left">
               			
-              				<button id="likeBtn" type="button" style="@if(likedByMe==true){display:none;}width:70px;" class="btn btn-danger btn-xs" onclick="likearticle()">Like</button>
+              			
+              				@*<button id="likeBtn" type="button" style="@if(likedByMe==true){display:none;}width:70px;" class="btn btn-danger btn-xs" onclick="likearticle()">Like</button>
               				<button id="dislikeBtn" type="button" style="@if(likedByMe==false){display:none;}width:70px;" class="btn btn-xs" onclick="dislikearticle()">Dislike</button>
               			
-                		@*<button type="button" class="btn btn-primary" onclick="likearticle()">+</button>
+                		<button type="button" class="btn btn-primary" onclick="likearticle()">+</button>
                 		<button type="button" class="btn btn-danger" onclick="dislikearticle()">-</button>*@
                 	</div>
+                	
+                	<div class='shareaholic-canvas' data-app='share_buttons' data-app-id='20647596'></div>
+                @*	
               <!-- Begin .social -->
               <ul class="social" style="margin-bottom: 15px;">
                 <li><a  href="#"  title="Share on Facebook" 
@@ -102,6 +107,7 @@
               <div class="clearfix">
               </div>
               <!-- End .social -->
+              *@
             </div>
             <!-- end .box -->
             
