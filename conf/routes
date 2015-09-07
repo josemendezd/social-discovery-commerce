@@ -173,7 +173,7 @@ GET		/store/claim/:id							controllers.Useract.ClaimStore(id: Long)
 #BLOG METHODS
 
 GET		/blog/list									controllers.Application.GetBlogList(page:Int ?= 0 ,pagesize:Int ?= 3)
-POST		/blog/pagelist							controllers.Application.GetListBlogPage()
+POST	/blog/pagelist								controllers.Application.GetListBlogPage()
 GET		/blog/page/:id								controllers.Application.GetBlogPage(id: Long)
 GET		/blog/complain/:id							controllers.Application.GetBlogComplainForm(id: Long)
 GET		/blog/tag/:tag								controllers.Application.GetBlogListByTag(tag:String,page:Int ?= 0 ,pagesize:Int ?= 20)
