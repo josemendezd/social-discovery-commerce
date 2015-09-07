@@ -336,3 +336,5 @@ GET		/tags/all									controllers.Application.getAllTags()
 PUT		/tags/delete								controllers.Application.deleteTag()
 #sitemap
 GET   /sitemap.xml    controllers.Assets.at(path="/public", file = "sitemap.xml")
+#robots
+GET   /robots.txt    controllers.Assets.at(path="/public", file = "robots.txt")
