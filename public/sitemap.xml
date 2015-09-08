@@ -1,258 +1,379 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--Created using XmlSitemapGenerator.org - Free HTML, RSS and XML sitemap generator-->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>http://www.boozology.com/</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/sp/aboutus</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/shop</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/sp/contactus</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/sp/helpme</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/shop/All</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/shop/Beer</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/shop/Wine</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/shop/Spirits</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/shop/Mixology</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/shop/Gadgets</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/shop/Glassware</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/shop/Toys &amp;amp; Trinkets</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/blog/list</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/signup</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/contributor/page/381</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/blog/page/701</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/blog/page/681</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/contributor/page/301</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/contributor/page/61</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/blog/page/661</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/blog/page/621</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/blog/page/641</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/login</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=French</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=California</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Pinot Noir</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Italian</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?c=Wine</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Pale Ale</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=IPA</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Amber</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?c=Beer</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Lager</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Rum</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Vodka</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Tequila</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Whiskey</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?c=Spirits</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Latest Trends</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Classics</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Bar Tools</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Recipes</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?c=Mixology</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Small Appliances</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Cutlery</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Storage</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=On the go</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?c=Gadgets</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Ice Molds</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Bar sets</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Corkscrews</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?c=Toys &amp; Trinkets</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Shakers</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Tumblers</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Wine Glasses</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Shot Glasses</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?q=Drinkware</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/discover?c=Glassware</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/sp/community</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/sp/terms</loc>
-    <changefreq>Daily</changefreq>
-  </url>
-  <url>
-    <loc>http://www.boozology.com/sp/privacyandcookiepolicy</loc>
-    <changefreq>Daily</changefreq>
-  </url>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+<url>
+  <loc>http://www.boozology.com/</loc>
+  <changefreq>daily</changefreq>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/sp/aboutus</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/sp/contactus</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/sp/helpme</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/shop</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/shop/All</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/shop/Wine</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/shop/Beer</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/shop/Spirits</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/shop/Mixology</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/shop/Gadgets</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/shop/Toys%20&amp;%20Trinkets</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/shop/Glassware</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/list</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/contributor/page/381</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/wild-turkey-review</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/contributor/page/301</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/whiskeys-of-the-world</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/contributor/page/61</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/best-cheap-wine</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/mai-tai-cocktail-recipe</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/how-to-taste-wine</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/maine-beer-company</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/what-is-tequila-made-from</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/sobieski-vodka-review</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/best-beer-books</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/spring-fling</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/different-brands-of-tequila</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/my-fav-5-cocktails</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/flying-monkeys-beer-review</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/world-without-booze</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/tequila-and-aging</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/popular-brands-of-rum</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/mimosa-cocktail-recipe</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/whiskey-legs</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/fireball-whiskey-review</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/types-of-rum</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/thanks-giving-drinks</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/pappy-van-winkle-bourbon</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/long-island-iced-tea-cocktail-recipe</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/flavored-spiced-rums</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/bellini-cocktail</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/new-york-best-bars-clubs</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/old-fashioned-cocktail</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/how-to-make-a-doomed-beer-taste-better</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/moscow-mule</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/beer-ingredients</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/enjoying-whiskey</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/rums-from-the-caribbean</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/angels-envy</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/tequila-regions</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/beer-glassware</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/how-rum-is-made</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/how-to-taste-beer</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/wines-of-the-world</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/get-in-the-zone-nightlife-preparation-guide</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/mighty-black-russian</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/storing-wine</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/between-the-sheets-cocktail</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/types-of-wine-glasses</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/blog/storing-beer</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/beer-101-serving-beer</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/four-roses-of-bourbon</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/beer-101-different-types-of-beer</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/more-to-singapore-sling-than-just-pretty-girls</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/party-hard-with-boilermaker</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/the-boozology-of-beer</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/michelada-for-beer</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/apples-to-apples-my-love-affair-with-hard-apple-cider</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/the-red-carpet</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/wide-open-for-cheap-beer</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/sp/community</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/sp/terms</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://www.boozology.com/sp/privacyandcookiepolicy</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
 </urlset>
-<!--<guid value="52aa24f3-d442-446a-ae42-4bd7c0df07b4" />-->
-<!--Created using XmlSitemapGenerator.org - Free HTML, RSS and XML sitemap generator-->
