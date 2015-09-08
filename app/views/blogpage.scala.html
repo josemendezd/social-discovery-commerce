@@ -2,7 +2,17 @@
 @import be.objectify.deadbolt.java.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 @import Templates._
-
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta property="og:title" content="Boozology Recent Posts"/>
+		<meta property="og:type" content="website"/>
+		<meta property="og:description" content="Learn, discover and share beer, wine, and spirits, the world's best site for all things booze!"/>
+		<meta property="og:url" content="http://www.boozology.com/"/>
+		<meta property="og:updated_time" content="@Calendar.getInstance().getTime()"/>
+		<meta name="description" content="Learn, discover and share beer, wine, and spirits, the world's best site for all things booze!">
+    	<meta name="author" content="Boozology Team">
+ 
+	</head>
 @pst={
 <link href="@routes.Assets.at("css/blog.css")"  rel='stylesheet' type='text/css' />
 <script src="@routes.Assets.at("js/sticky-kit.min.js")"></script>  
