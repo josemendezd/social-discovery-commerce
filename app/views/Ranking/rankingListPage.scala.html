@@ -20,8 +20,11 @@
 	@Templates.pagemaincontent(){
 		<div class="container">
 			<div class="row" data-sticky_parent>
-				<div class="col-lg-8 col-8 col-md-8 col-xs-8 col-sm-8" data-sticky_column>
+				<div class="col-lg-4 col-4 col-md-4 col-xs-4 col-sm-4" data-sticky_column>
 					<h3 class="text-success"  style="color: #a80418"><b>Ranking Lists</b></h3>
+				</div>
+				<div class="col-lg-4 col-4 col-md-4 col-xs-4 col-sm-4" data-sticky_column>
+					<div id="showErrorMessage" class="text-success"  style="color: #ff0000;margin-top: 20px;margin-bottom: 10px;"></div>
 				</div>
 				<div class="col-lg-4 col-4 col-md-4 col-xs-4 col-sm-4" data-sticky_column>
 					
@@ -130,16 +133,18 @@
 						console.log(response);
 						setTimeout(function() {
 							$(".loaderimagediv").hide();
-						}, 2000);
+						}, 200);
 						window.location.href= "/ranking/products/" + response.id;
 					}).fail(function(error) {
 						$(".loaderimagediv").hide();
+						$("#showErrorMessage").text("failed to create rankList");
 						//alert(error);
 					});
 		    	}
 		    	
 		    };
 		    self.initRankingListView = function() {
+		    	$("#showErrorMessage").empty();
 		    	$.getJSON("/getRankingList", self.paging, function(data) {
 					console.log(data);
 					if (data.length == 0) {

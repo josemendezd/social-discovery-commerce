@@ -258,7 +258,7 @@ public class RankingModuleController extends Controller {
     	Long  prodId = Long.parseLong(dynaForm.get("productId"));
     	Long listId = Long.parseLong(dynaForm.get("listId"));
     	
-    	RankingListProduct listProduct = Ebean.find(RankingListProduct.class).where().eq("rankingList.id", listId).where().eq("product.id", prodId).findUnique();
+    	RankingListProduct listProduct = Ebean.find(RankingListProduct.class).where().and(Expr.eq("rankingList.id", listId), Expr.eq("product.id", prodId)).findUnique();
     	listProduct.delete();
     	return ok("");
     }

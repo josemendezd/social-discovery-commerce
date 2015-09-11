@@ -362,3 +362,4 @@ POST	/remove-featured-list/:listId				controllers.RankingModuleController.remove
 GET		/adminSingleListPage/:listId				controllers.RankingModuleController.renderAdminSingleListPage(listId: Long)
 GET		/getRankingProducts							controllers.RankingModuleController.getRankingProducts()
 POST	/averageRating-product						controllers.RankingModuleController.averageRatingofProduct()
+POST 	/delete-ranking-list-product				controllers.RankingModuleController.removeProdFromRankingList()

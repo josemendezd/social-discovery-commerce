@@ -45,10 +45,19 @@
 					</div>
 				</form>
 			</div>
+			<div class="col-lg-12 col-12 col-md-12 col-xs-12 col-sm-12"  style="padding-left: 10%;">
+					<div id="no-search-rankingList" class="text-success"  style="color: #a80418"></div>
+					<div id="failure-search-rankingList" class="text-success"  style="color: #ff0000"></div>
+			</div>
 			<div class="col-sm-12" data-bind="visible: rankingLists().length > 0" style="padding-left: 9%;">
-				<div class="col-lg-12 col-sm-12">
+				<div class="col-lg-3 col-sm-3">
 						<h4 class="text-success"  style="color: #a80418"><b>Results</b></h4>
 				</div>
+				<div class="col-lg-4 col-4 col-md-4 col-xs-4 col-sm-4" data-sticky_column>
+					<div id="addRemoveListErrorMessage" class="text-success"  style="color: #ff0000;margin-top: 20px;margin-bottom: 10px;"></div>
+				</div>
+			</div> 
+			<div data-bind="visible: rankingLists().length > 0" style="padding-left: 9%;">	
 				<div class="col-sm-12" style="overflow:auto">
 					<div style="clear: none;" data-bind="template: { name: 'rankinglist-template', foreach: rankingLists}"></div>	
 				</div>
@@ -59,11 +68,16 @@
 	@Templates.su.jready {
 		
 		var SimpleListModel = function() {
+			$("#no-search-rankingList").empty();
+			$("#failure-search-rankingList").empty();
+			$("#addRemoveListErrorMessage").empty();
 			self = this;
 		    self.rankingLists = ko.observableArray([]);
 		    self.searchText = "";
 		    
 		    self.fetchRankingList = function() {
+		    	$("#no-search-rankingList").empty();
+				$("#failure-search-rankingList").empty();
 		    	$(".loaderimagediv").show();
 		    	var jsonString = {
 		    		searchTxt: self.searchText
@@ -76,16 +90,23 @@
 						$(".loaderimagediv").hide();
 					}, 200);
 					console.log(data.prodgrid);
+					if(data.length == 0){
+						$("#no-search-rankingList").text("No ranking list found.");
+					}
 					self.rankingLists(data);
 				});
 				
 				posting.fail(function( data ) {
+					$("#failure-search-rankingList").text("Failed to search ranking list.");
 					$(".loaderimagediv").hide();
-					alert(data);	
+					//alert(data);	
 				});
 		    }
 		    
 		    self.deleteRankingList = function(e) {
+			    $("#no-search-rankingList").empty();
+		    	$("#addRemoveListErrorMessage").empty();
+		    	$("#failure-search-rankingList").empty();
 		    	$(".loaderimagediv").show();
 		    	console.log("deleteRankingList");
 		    	console.log(e);
@@ -103,24 +124,30 @@
 			    	var _posting = $.get( "@routes.RankingModuleController.searchRankingListByCriteria", jsonString, "json");
 					
 					_posting.done(function( data ) {
+						if(data.length == 0){
+							$("#no-search-rankingList").text("No ranking list found.");
+						}
 						self.rankingLists(data);
 					});
 					
 					_posting.fail(function( data ) {	
-						alert(data);
+						$("#failure-search-rankingList").text("Failed to search ranking list.");
+						//alert(data);
 					});
 					
 				});
 				
 				posting.fail(function( data ) {	
+					$("#addRemoveListErrorMessage").text("Failed to delete ranking list.");
 					$(".loaderimagediv").hide();
-					alert(data);
+					//alert(data);
 				});
 		    	
 		    	
 		    };
 		    
 		    self.removeFeaturedRankingList = function(e) {
+		    	$("#addRemoveListErrorMessage").empty();
 		    	$(".loaderimagediv").show();
 		    	console.log("removeFeaturedRankingList");
 				$.post('/remove-featured-list/' + e.id, {}, function() {
@@ -130,12 +157,14 @@
 					}, 200);
 					self.fetchRankingList();
 				}).fail(function(error) {
+					$("#addRemoveListErrorMessage").text("Failed to remove from featured list.");
 					$(".loaderimagediv").hide();
 					alert(error);
 				});		    	
 		    };
 		    
 		    self.addFeaturedRankingList = function(e) {
+		    	$("#addRemoveListErrorMessage").empty();
 		    	console.log("addFeaturedRankingList");
 		    	$(".loaderimagediv").show();		    	
 				$.post('/add-featured-list/' + e.id, {}, function() {
@@ -145,6 +174,7 @@
 					}, 200);
 					self.fetchRankingList();
 				}).fail(function(error) {
+						$("#addRemoveListErrorMessage").text("Failed to add in featured list.");
 						$(".loaderimagediv").hide();
 						alert(error);
 				});
