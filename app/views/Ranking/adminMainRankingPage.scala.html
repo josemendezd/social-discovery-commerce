@@ -1,0 +1,176 @@
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import helper._
+
+@pst={
+
+}
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Ranking List @Boozology"){@pst}
+}{
+	@Templates.pageheader(){
+		<style>
+    	.error {
+    		color: #000000
+    	}
+    </style>		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent() {
+		
+			<div id="iso-container" class="col-lg-12 col-sm-12" style="padding-left: 9%;">
+				<div class="col-lg-12 col-sm-12">
+					<h4 class="text-success"  style="color: #a80418"><b>Admin Main Ranking Page</b></h4>
+				</div>
+			</div>
+			<div id="iso-container" class="col-lg-12 col-sm-12" style="padding-left: 9%;">
+				<div class="col-lg-12 col-sm-12">
+					<h4 class="text-success"  style="color: #a80418"><b>Select Featured Lists</b></h4>
+				</div>
+			</div>
+			<div class="col-sm-12 col-lg-12" style="overflow:auto;padding-left: 10%;">
+				<form>
+					<div class="col-sm-8">
+						<div class="input-group col-lg-4 col-mg-4 col-sm-4 col-xs-4" style="color: #a80418">
+							Search By List Name:
+						</div>
+						<div class="input-group col-lg-5 col-mg-5 col-sm-5 col-xs-5">
+							<input type="text" name="searchTxt" id="searchTxt" class="form-control" placeholder="Search" data-bind="value: searchText" value="">
+							<span class="input-group-btn">
+								<button  name="search" data-bind="click: fetchRankingList" class="btn btn-default"><i class="icon-search"></i></button>
+						    </span>				
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-sm-12" data-bind="visible: rankingLists().length > 0" style="padding-left: 9%;">
+				<div class="col-lg-12 col-sm-12">
+						<h4 class="text-success"  style="color: #a80418"><b>Results</b></h4>
+				</div>
+				<div class="col-sm-12" style="overflow:auto">
+					<div style="clear: none;" data-bind="template: { name: 'rankinglist-template', foreach: rankingLists}"></div>	
+				</div>
+			</div>
+			
+	
+	}
+	@Templates.su.jready {
+		
+		var SimpleListModel = function() {
+			self = this;
+		    self.rankingLists = ko.observableArray([]);
+		    self.searchText = "";
+		    
+		    self.fetchRankingList = function() {
+		    	$(".loaderimagediv").show();
+		    	var jsonString = {
+		    		searchTxt: self.searchText
+		    	};
+		    	
+		    	var posting = $.get( "@routes.RankingModuleController.searchRankingListByCriteria", jsonString, "json");
+				
+				posting.done(function( data ) {
+					setTimeout(function() {
+						$(".loaderimagediv").hide();
+					}, 200);
+					console.log(data.prodgrid);
+					self.rankingLists(data);
+				});
+				
+				posting.fail(function( data ) {
+					$(".loaderimagediv").hide();
+					alert(data);	
+				});
+		    }
+		    
+		    self.deleteRankingList = function(e) {
+		    	$(".loaderimagediv").show();
+		    	console.log("deleteRankingList");
+		    	console.log(e);
+		    	
+		    	var posting = $.post( "/delete-ranking-list/" + e.id, {}, "json");
+		    	
+		    	posting.done(function( _data ) {
+						setTimeout(function() {
+							$(".loaderimagediv").hide();
+						}, 200);
+					var jsonString = {
+			    		searchTxt: self.searchText
+			    	};
+			    	
+			    	var _posting = $.get( "@routes.RankingModuleController.searchRankingListByCriteria", jsonString, "json");
+					
+					_posting.done(function( data ) {
+						self.rankingLists(data);
+					});
+					
+					_posting.fail(function( data ) {	
+						alert(data);
+					});
+					
+				});
+				
+				posting.fail(function( data ) {	
+					$(".loaderimagediv").hide();
+					alert(data);
+				});
+		    	
+		    	
+		    };
+		    
+		    self.removeFeaturedRankingList = function(e) {
+		    	$(".loaderimagediv").show();
+		    	console.log("removeFeaturedRankingList");
+				$.post('/remove-featured-list/' + e.id, {}, function() {
+				}).done(function(response) {
+					setTimeout(function() {
+						$(".loaderimagediv").hide();
+					}, 200);
+					self.fetchRankingList();
+				}).fail(function(error) {
+					$(".loaderimagediv").hide();
+					alert(error);
+				});		    	
+		    };
+		    
+		    self.addFeaturedRankingList = function(e) {
+		    	console.log("addFeaturedRankingList");
+		    	$(".loaderimagediv").show();		    	
+				$.post('/add-featured-list/' + e.id, {}, function() {
+				}).done(function(response) {
+					setTimeout(function() {
+						$(".loaderimagediv").hide();
+					}, 200);
+					self.fetchRankingList();
+				}).fail(function(error) {
+						$(".loaderimagediv").hide();
+						alert(error);
+				});
+					
+		    }
+		    
+		};
+	 
+	 	var viewModel = new SimpleListModel();
+		ko.applyBindings(viewModel);
+	}
+
+	<script type="text/html" id="rankinglist-template">
+	<div style="clear: both;padding-top: 1%;" class="col-sm-12 col-lg-12">
+			<div class="col-lg-3 col-mg-3 col-sm-3 col-xs-3" data-bind="text: name" style="display:inline-block;color: #a80418;"></div>
+			<div data-bind="text: id" style="display: none"></div>
+			<a class="col-lg-3 col-mg-3 col-sm-3 col-xs-3" style="cursor: pointer,display:inline-block;" data-bind="visible: !isFeaturedList, click: $parent.addFeaturedRankingList">Add</a>
+			<a class="col-lg-3 col-mg-3 col-sm-3 col-xs-3" style="cursor: pointer,display:inline-block;" data-bind="visible: isFeaturedList, click: $parent.removeFeaturedRankingList">Remove</a>
+			<a class="col-lg-3 col-mg-3 col-sm-3 col-xs-3" style="cursor: pointer,display:inline-block;" data-bind="click: $parent.deleteRankingList">Delete List</a>
+	</div>
+	</script>
+	
+}{
+	@Templates.pagefooter(){ 
+	
+	
+	
+	}
+}	

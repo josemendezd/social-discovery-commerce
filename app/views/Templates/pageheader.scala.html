@@ -103,6 +103,9 @@
 	      @subjectPresentOr(){
 	       	 @defining(Application.getLocalUser(session())){ presentuser=>
 	       	 	<li><a href="@routes.Application.ContributorSelecttabPage(presentuser.id,DInitial.USER_RELATION_QUERY.COLLECTIONS)">Collections</a></li>
+	       	 	
+	       	 	
+	       	 	
       <li>
       @if(presentuser.firstName != null) {
       		@if(presentuser.firstName.length() > 7) {
@@ -123,6 +126,7 @@
 				    <!-- <li><a href="/find_people">Find People</a></li>-->
 				    <li><a href="@routes.Application.BookMarkTool()">Buy Later Button</a></li>
 				    <!-- <li><a href="@routes.Application.GetContentPage("Extras")">Extras</a></li>-->
+				    <li><a href="@routes.RankingModuleController.renderRankingList()">Ranking System</a></li>
 				    <li><a href="@com.feth.play.module.pa.controllers.routes.Authenticate.logout()"><i class="icon-off icon-white"></i>Sign out</a></li>
 				  </ul>
 				</li>      

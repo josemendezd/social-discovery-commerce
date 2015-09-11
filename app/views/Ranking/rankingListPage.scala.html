@@ -1,0 +1,215 @@
+
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import helper._
+
+@pst={}
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Ranking List @Boozology"){@pst}
+}{
+	@Templates.pageheader(){
+		<style>
+    	.error {
+    		color: #000000
+    	}
+    </style>		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent(){
+		<div class="container">
+			<div class="row" data-sticky_parent>
+				<div class="col-lg-8 col-8 col-md-8 col-xs-8 col-sm-8" data-sticky_column>
+					<h3 class="text-success"  style="color: #a80418"><b>Ranking Lists</b></h3>
+				</div>
+				<div class="col-lg-4 col-4 col-md-4 col-xs-4 col-sm-4" data-sticky_column>
+					
+						<h3 class="text-link"><a style="color: #a80418" href="@routes.RankingModuleController.renderAdminMainRankingPage">Admin</a></h3>
+					
+					<h3 class="text-link"><a data-toggle="modal" data-target="#createRankingList" style="color: #a80418" href="#">Create Ranking List</a></h3>
+				</div>
+			</div>
+		</div>
+		<div id="iso-container" class="col-lg-12" style="padding-left: 9%;" data-bind="visible: featuredrankingList().length > 0">
+				<div class="col-lg-12 col-12 col-md-12 col-xs-12 col-sm-12" data-sticky_column>
+					<h4 class="text-success"  style="color: #a80418"><b>Featured</b></h4>
+				</div>
+				<div data-bind="template: { name: 'rankingList-template', foreach: featuredrankingList }" style="overflow:auto"></div>
+				<hr style="border: 2px solid #000;">
+		</div>
+		<div  data-bind="visible: rankingList().length > 0" class="col-lg-12" style="padding-left: 9%;">
+				<div class="col-lg-12 col-12 col-md-12 col-xs-12 col-sm-12" data-sticky_column>
+					<h4 class="text-success"  style="color: #a80418"><b>Recent</b></h4>
+				</div>
+				<div data-bind="template: { name: 'rankingList-template', foreach: rankingList }" style="overflow:auto"></div>
+		</div>
+			<br>
+		
+		<div class="modal fade" id="createRankingList" tabindex="-1" role="dialog" aria-labelledby="createRankingListLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <!-- <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel" style="color: #a80418">Create New Ranking List</h4>
+		      </div> -->
+		      <form id="createList" action="@routes.RankingModuleController.doCreate()" method="POST" class="form-horizontal ng-pristine ng-valid">
+			      <div class="modal-body">
+			      		<h3 class="text-success" style="color: #a80418">
+							<b>Create New Ranking List</b>
+						</h3>
+						<!-- <div id="legend">
+			              <legend class=""><b>Create New Ranking List</b></legend>
+			            </div> -->
+					    <div class="form-group">
+					    	<label class="col-sm-3 control-label textColor" for="username">List Name</label>
+					    	<div class="col-sm-9">
+								<div>
+									<input required type="text" id="listName" name="listName" class="form-control" value="" placeholder="Enter List Name">
+								</div>
+							</div>
+					    </div>
+					    
+					    <div class="form-group">
+					    	<label class="col-sm-3 control-label textColor" for="username">Description</label>
+					    	<div class="col-sm-9">
+								<div>
+									<textarea required type="text" id="description" name="description" class="form-control" value="" placeholder=""></textarea>
+								</div>
+							</div>
+					    </div>
+					    
+					    <div class="form-group">
+					    	<label class="col-sm-3 control-label textColor" for="username">Tags</label>
+					    	<div class="col-sm-9">
+								<div>
+									<input required type="text" id="tags" name="tags" class="form-control" value="" placeholder="">
+								</div>
+							</div>
+					    </div>
+					    <div class="form-group">
+						  <div class="col-sm-offset-5 col-sm-12">
+							<button type="button" class="btn btn-primary" data-bind="click: onSubmit">Save</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button> 
+						  </div>
+						</div>
+			      </div>
+			      <!-- <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			      </div> -->
+		      </form>
+		    </div>
+		  </div>
+		</div>
+			
+	}
+	@Templates.su.jready {
+		
+		var SimpleListModel = function() {
+			self = this;
+		    self.rankingList = ko.observableArray([]);
+		   	self.featuredrankingList = ko.observableArray([]);
+		    
+		    self.paging = {
+	    		pageSize: 2,
+	    		pageNo: 0
+	    	}
+				
+		    self.onSubmit = function() {
+		    	if ($("#createList").valid()) {
+		    	    $(".loaderimagediv").show();
+			    	var postData = {
+			    		listName: $("#listName").val(),
+			    		description: $("#description").val(),
+			    		tags: $("#tags").val() 
+			    	};
+			    	
+					$.post('/ranking-list/doCreate', postData, function() {
+					}).done(function(response) {
+						$("#createRankingList").modal('hide');
+						console.log(response);
+						setTimeout(function() {
+							$(".loaderimagediv").hide();
+						}, 2000);
+						window.location.href= "/ranking/products/" + response.id;
+					}).fail(function(error) {
+						$(".loaderimagediv").hide();
+						//alert(error);
+					});
+		    	}
+		    	
+		    };
+		    self.initRankingListView = function() {
+		    	$.getJSON("/getRankingList", self.paging, function(data) {
+					console.log(data);
+					if (data.length == 0) {
+						self.paging.pageNo = -1;
+					} else {
+						$.each(data, function (index, tr) {
+					    	self.rankingList.push(tr);
+					    });	    
+						self.paging.pageNo = self.paging.pageNo + 1;
+					}
+				});
+		    }.bind(this);  // Ensure that "this" is always this view model
+		    
+		    self.initFeaturedRankingListView = function() {
+				$.getJSON("/getFeaturedRankingList", function(data) {
+					console.log(data);
+					self.featuredrankingList(data);
+				});
+		    }.bind(this);  // Ensure that "this" is always this view model
+		    
+		    self.renderProductDetails = function() {
+		    	console.log();
+		    }
+		};
+	 
+	 	var viewModel = new SimpleListModel();
+		ko.applyBindings(viewModel);
+		viewModel.initRankingListView();
+		viewModel.initFeaturedRankingListView();
+		
+		$(window).scroll(function () {
+		  	if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+		  	console.log($(window).scrollTop());
+			console.log($(document).height() - $(window).height());
+				if (viewModel.paging.pageNo != -1) {
+					viewModel.initRankingListView();
+				}
+			}
+		});
+
+	}
+	<script type="text/html" id="rankingList-template">
+	<div style="padding-left: 3%;padding-top: 2%;" class="col-sm-6 col-lg-6">
+    	<div style="height: 50px;" data-bind="template: { name: 'product-template', foreach: rankingListViews}"></div>
+    	<div class="caption">
+			<a data-bind="attr: {href: '/listSinglePageView/'+id}"><span data-bind="text: name"></span></a>
+		</div>
+		<div>
+			<div data-bind="text: totalNoOfProducts" style="float:left;color: #a80418"></div>
+			<div data-bind="text: totalNoOfVotes" style="padding-left: 10%;color: #a80418"></div>
+		</div>
+	</div>
+	</script>
+	
+	<script type="text/html" id="product-template">
+			<a style="display:inline-block;" data-bind="attr: {href: '/listSinglePageView/'+$parent.id, title: productUrl}">
+				<img data-bind="attr: {src: productUrl}" height="40" width="40"></img>
+			</a>
+    	<!--<a href="#" data-bind="click: $parent.renderProductDetails, attr: {title: productName, alt: productName}" class="thumbnail">
+      		<img data-bind="attr: {src: productName}" ></img>
+    	</a>
+		<div data-bind="text: prodName"></div>
+		<div data-bind="text: votes"></div>-->	
+	</script>
+	
+	
+}{
+	@Templates.pagefooter(){ 
+	
+	
+	
+	}
+}	

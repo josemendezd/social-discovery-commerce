@@ -291,6 +291,27 @@ create table product (
   constraint pk_product primary key (id))
 ;
 
+create table ranking_list_master (
+  id                        bigint not null,
+  name                      varchar(255),
+  description               varchar(255),
+  total_no_of_votes         bigint,
+  tags                      varchar(255),
+  user_id                   bigint,
+  featured_list             varchar(255),
+  created_date              timestamp not null,
+  constraint pk_ranking_list_master primary key (id))
+;
+
+create table ranking_list_product (
+  id                        bigint not null,
+  rankingListId             bigint,
+  product_id                bigint,
+  total_votes               bigint,
+  user_id                   bigint,
+  constraint pk_ranking_list_product primary key (id))
+;
+
 create table reportabuse (
   id                        bigint not null,
   author_id                 bigint,
@@ -386,7 +407,7 @@ create table token_action (
   type                      varchar(2),
   created                   timestamp,
   expires                   timestamp,
-  constraint ck_token_action_type check (type in ('EV','PR','EE')),
+  constraint ck_token_action_type check (type in ('EE','PR','EV')),
   constraint uq_token_action_token unique (token),
   constraint pk_token_action primary key (id))
 ;
@@ -612,6 +633,10 @@ create sequence linked_account_seq;
 
 create sequence product_seq;
 
+create sequence ranking_list_master_seq;
+
+create sequence ranking_list_product_seq;
+
 create sequence reportabuse_seq;
 
 create sequence s3file_seq;
@@ -708,46 +733,50 @@ alter table product add constraint fk_product_category_29 foreign key (category_
 create index ix_product_category_29 on product (category_id);
 alter table product add constraint fk_product_pstore_30 foreign key (pstore_id) references store (id);
 create index ix_product_pstore_30 on product (pstore_id);
-alter table reportabuse add constraint fk_reportabuse_author_31 foreign key (author_id) references contributor (id);
-create index ix_reportabuse_author_31 on reportabuse (author_id);
-alter table socommentsco add constraint fk_socommentsco_commenter_32 foreign key (commenter_id) references contributor (id);
-create index ix_socommentsco_commenter_32 on socommentsco (commenter_id);
-alter table socommentsco add constraint fk_socommentsco_collection_33 foreign key (collection_id) references user_collection (id);
-create index ix_socommentsco_collection_33 on socommentsco (collection_id);
-alter table socommentsco add constraint fk_socommentsco_comment_34 foreign key (comment_id) references collection_comment (id);
-create index ix_socommentsco_comment_34 on socommentsco (comment_id);
-alter table socommentspr add constraint fk_socommentspr_commenter_35 foreign key (commenter_id) references contributor (id);
-create index ix_socommentspr_commenter_35 on socommentspr (commenter_id);
-alter table socommentspr add constraint fk_socommentspr_product_36 foreign key (product_id) references product (id);
-create index ix_socommentspr_product_36 on socommentspr (product_id);
-alter table socommentspr add constraint fk_socommentspr_comment_37 foreign key (comment_id) references comment (id);
-create index ix_socommentspr_comment_37 on socommentspr (comment_id);
-alter table sofollows add constraint fk_sofollows_follower_38 foreign key (follower_id) references contributor (id);
-create index ix_sofollows_follower_38 on sofollows (follower_id);
-alter table sofollows add constraint fk_sofollows_leader_39 foreign key (leader_id) references contributor (id);
-create index ix_sofollows_leader_39 on sofollows (leader_id);
-alter table sorecommends add constraint fk_sorecommends_recommender_40 foreign key (recommender_id) references contributor (id);
-create index ix_sorecommends_recommender_40 on sorecommends (recommender_id);
-alter table sorecommends add constraint fk_sorecommends_leader_41 foreign key (leader_id) references contributor (id);
-create index ix_sorecommends_leader_41 on sorecommends (leader_id);
-alter table sorecommends add constraint fk_sorecommends_product_42 foreign key (product_id) references product (id);
-create index ix_sorecommends_product_42 on sorecommends (product_id);
-alter table sosuggestsco add constraint fk_sosuggestsco_suggester_43 foreign key (suggester_id) references contributor (id);
-create index ix_sosuggestsco_suggester_43 on sosuggestsco (suggester_id);
-alter table sosuggestsco add constraint fk_sosuggestsco_product_44 foreign key (product_id) references product (id);
-create index ix_sosuggestsco_product_44 on sosuggestsco (product_id);
-alter table sosuggestsco add constraint fk_sosuggestsco_collection_45 foreign key (collection_id) references user_collection (id);
-create index ix_sosuggestsco_collection_45 on sosuggestsco (collection_id);
-alter table token_action add constraint fk_token_action_targetUser_46 foreign key (target_user_id) references users (id);
-create index ix_token_action_targetUser_46 on token_action (target_user_id);
-alter table user_address add constraint fk_user_address_user_47 foreign key (user_id) references users (id);
-create index ix_user_address_user_47 on user_address (user_id);
-alter table user_collection add constraint fk_user_collection_contributo_48 foreign key (contributor_id) references contributor (id);
-create index ix_user_collection_contributo_48 on user_collection (contributor_id);
-alter table userinfo add constraint fk_userinfo_loginuser_49 foreign key (loginuser_id) references users (id);
-create index ix_userinfo_loginuser_49 on userinfo (loginuser_id);
-alter table usersubscriptions add constraint fk_usersubscriptions_subscrib_50 foreign key (subscriber_id) references contributor (id);
-create index ix_usersubscriptions_subscrib_50 on usersubscriptions (subscriber_id);
+alter table ranking_list_product add constraint fk_ranking_list_product_ranki_31 foreign key (rankingListId) references ranking_list_master (id);
+create index ix_ranking_list_product_ranki_31 on ranking_list_product (rankingListId);
+alter table ranking_list_product add constraint fk_ranking_list_product_produ_32 foreign key (product_id) references product (id);
+create index ix_ranking_list_product_produ_32 on ranking_list_product (product_id);
+alter table reportabuse add constraint fk_reportabuse_author_33 foreign key (author_id) references contributor (id);
+create index ix_reportabuse_author_33 on reportabuse (author_id);
+alter table socommentsco add constraint fk_socommentsco_commenter_34 foreign key (commenter_id) references contributor (id);
+create index ix_socommentsco_commenter_34 on socommentsco (commenter_id);
+alter table socommentsco add constraint fk_socommentsco_collection_35 foreign key (collection_id) references user_collection (id);
+create index ix_socommentsco_collection_35 on socommentsco (collection_id);
+alter table socommentsco add constraint fk_socommentsco_comment_36 foreign key (comment_id) references collection_comment (id);
+create index ix_socommentsco_comment_36 on socommentsco (comment_id);
+alter table socommentspr add constraint fk_socommentspr_commenter_37 foreign key (commenter_id) references contributor (id);
+create index ix_socommentspr_commenter_37 on socommentspr (commenter_id);
+alter table socommentspr add constraint fk_socommentspr_product_38 foreign key (product_id) references product (id);
+create index ix_socommentspr_product_38 on socommentspr (product_id);
+alter table socommentspr add constraint fk_socommentspr_comment_39 foreign key (comment_id) references comment (id);
+create index ix_socommentspr_comment_39 on socommentspr (comment_id);
+alter table sofollows add constraint fk_sofollows_follower_40 foreign key (follower_id) references contributor (id);
+create index ix_sofollows_follower_40 on sofollows (follower_id);
+alter table sofollows add constraint fk_sofollows_leader_41 foreign key (leader_id) references contributor (id);
+create index ix_sofollows_leader_41 on sofollows (leader_id);
+alter table sorecommends add constraint fk_sorecommends_recommender_42 foreign key (recommender_id) references contributor (id);
+create index ix_sorecommends_recommender_42 on sorecommends (recommender_id);
+alter table sorecommends add constraint fk_sorecommends_leader_43 foreign key (leader_id) references contributor (id);
+create index ix_sorecommends_leader_43 on sorecommends (leader_id);
+alter table sorecommends add constraint fk_sorecommends_product_44 foreign key (product_id) references product (id);
+create index ix_sorecommends_product_44 on sorecommends (product_id);
+alter table sosuggestsco add constraint fk_sosuggestsco_suggester_45 foreign key (suggester_id) references contributor (id);
+create index ix_sosuggestsco_suggester_45 on sosuggestsco (suggester_id);
+alter table sosuggestsco add constraint fk_sosuggestsco_product_46 foreign key (product_id) references product (id);
+create index ix_sosuggestsco_product_46 on sosuggestsco (product_id);
+alter table sosuggestsco add constraint fk_sosuggestsco_collection_47 foreign key (collection_id) references user_collection (id);
+create index ix_sosuggestsco_collection_47 on sosuggestsco (collection_id);
+alter table token_action add constraint fk_token_action_targetUser_48 foreign key (target_user_id) references users (id);
+create index ix_token_action_targetUser_48 on token_action (target_user_id);
+alter table user_address add constraint fk_user_address_user_49 foreign key (user_id) references users (id);
+create index ix_user_address_user_49 on user_address (user_id);
+alter table user_collection add constraint fk_user_collection_contributo_50 foreign key (contributor_id) references contributor (id);
+create index ix_user_collection_contributo_50 on user_collection (contributor_id);
+alter table userinfo add constraint fk_userinfo_loginuser_51 foreign key (loginuser_id) references users (id);
+create index ix_userinfo_loginuser_51 on userinfo (loginuser_id);
+alter table usersubscriptions add constraint fk_usersubscriptions_subscrib_52 foreign key (subscriber_id) references contributor (id);
+create index ix_usersubscriptions_subscrib_52 on usersubscriptions (subscriber_id);
 
 
 
@@ -881,6 +910,10 @@ drop table if exists user_collection_product cascade;
 
 drop table if exists product_tags cascade;
 
+drop table if exists ranking_list_master cascade;
+
+drop table if exists ranking_list_product cascade;
+
 drop table if exists reportabuse cascade;
 
 drop table if exists s3file cascade;
@@ -990,6 +1023,10 @@ drop sequence if exists kvproperty_seq;
 drop sequence if exists linked_account_seq;
 
 drop sequence if exists product_seq;
+
+drop sequence if exists ranking_list_master_seq;
+
+drop sequence if exists ranking_list_product_seq;
 
 drop sequence if exists reportabuse_seq;
 
