@@ -1,4 +1,4 @@
-
+@import play.api.Play
 @import be.objectify.deadbolt.java.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 @import helper._
@@ -114,7 +114,7 @@
 		   	self.featuredrankingList = ko.observableArray([]);
 		    
 		    self.paging = {
-	    		pageSize: 2,
+	    		pageSize: @Play.current.configuration.getString("pageSize"),
 	    		pageNo: 0
 	    	}
 				

@@ -1,4 +1,5 @@
 @(listId: Long)
+@import play.api.Play
 @import be.objectify.deadbolt.java.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 @import helper._
@@ -62,7 +63,7 @@
 		    self.listProducts = ko.observableArray([]);
 		    
 		    self.paging = {
-	    		pageSize: 10,
+	    		pageSize: @Play.current.configuration.getString("pageSize"),
 	    		pageNo: 0
 	    	}
 	    	
@@ -105,7 +106,8 @@
 				}).done(function(response) {
 					setTimeout(function() {
 						$(".loaderimagediv").hide();
-					}, 500);
+					}, 50);
+					self.paging.pageNo = 0;
 					$.getJSON("/getRankingListProducts/@listId", self.paging, function(data) {
 					self.listProducts(data);
 				});

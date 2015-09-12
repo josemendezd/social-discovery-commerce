@@ -1,8 +1,6 @@
 package controllers;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import models.Eventlog;
@@ -26,8 +24,6 @@ import be.objectify.deadbolt.java.actions.Restrict;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.Page;
-import com.avaje.ebean.RawSql;
-import com.avaje.ebean.RawSqlBuilder;
 import com.avaje.ebean.SqlRow;
 import com.avaje.ebean.annotation.Transactional;
 
@@ -257,10 +253,15 @@ public class RankingModuleController extends Controller {
     	final DynamicForm dynaForm = play.data.Form.form().bindFromRequest();
     	Long  prodId = Long.parseLong(dynaForm.get("productId"));
     	Long listId = Long.parseLong(dynaForm.get("listId"));
+    	Long id = Long.parseLong(dynaForm.get("id"));
     	
-    	RankingListProduct listProduct = Ebean.find(RankingListProduct.class).where().and(Expr.eq("rankingList.id", listId), Expr.eq("product.id", prodId)).findUnique();
+    	/*RankingListProduct listProduct = 
+    			Ebean.find(RankingListProduct.class).where().and(Expr.eq("rankingList.id", listId), Expr.eq("product.id", prodId)).findUnique();*/
+    	RankingListProduct listProduct = RankingListProduct.find.byId(id); 
+    			
     	listProduct.delete();
-    	return ok("");
+    	String _response = "Product from List deleted successfully!";
+    	return ok(Json.toJson(_response));
     }
     
     @Restrict(@Group(Application.USER_ROLE))
@@ -284,6 +285,7 @@ public class RankingModuleController extends Controller {
 		for(RankingListProduct row: _listProducts) {
 			RankingListProductVM pVm = new RankingListProductVM();
 			pVm.listId = listId;
+			pVm.id = row.id;
 			pVm.totalVotes = row.totalVotes;
 			pVm.productId = row.product.id;
 			pVm.productName = row.product.productname;

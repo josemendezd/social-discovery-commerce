@@ -1,4 +1,5 @@
 @(listId: Long, listName: String)
+@import play.api.Play
 @import be.objectify.deadbolt.java.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 @import helper._
@@ -66,12 +67,14 @@
 		var SimpleListModel = function() {
 			self = this;
 		    self.productLists = ko.observableArray([]);
+		    
 		    self.paging = {
-	    		pageSize: 2,
+	    		pageSize: @Play.current.configuration.getString("pageSize"),
 	    		pageNo: 0
 	    	}
 
 		    self.init = function() {
+		    debugger;
 		    	$("#votingandAvgratingErrorMessage").empty();
 		    	
 		    	var posting = $.get( "@routes.RankingModuleController.getRankingListProducts(listId)", self.paging, "json");
@@ -91,15 +94,6 @@
 				});
 		    }
 		    
-		    self.increaseVoteCount = function(e) { 
-		    	//todo - update the votes count in ranking_list_product table.
-		    }
-		    
-		    self.updateAverageRating = function(e) {
-		     //todo - update the product rating in user_rate table for selected product.
-		     //todo - create new record if does not exists.
-		    }
-		    
 		    self.avgRating_changed = function(e){
 			    $("#votingandAvgratingErrorMessage").empty();
 				console.log("avgRating_changed");
@@ -114,13 +108,13 @@
 				}).done(function(response) {
 					setTimeout(function() {
 						$(".loaderimagediv").hide();
-					}, 2000);
+					}, 20);
 				}).fail(function(error) {
 					$("#votingandAvgratingErrorMessage").text("Failed to update Average rating");
 				    //alert(error);
 					setTimeout(function() {
 						$(".loaderimagediv").hide();
-					}, 2000);
+					}, 20);
 				}); 
 			}
 		    
@@ -155,16 +149,22 @@
 		    	
 		    	var jsonString = {
 		    		listId: @listId,
-		    		productId: e.productId
+		    		productId: e.productId,
+		    		id: e.id
 		    	}
-		    	var posting = $.post( "/delete-ranking-list-product", jsonString, "json",function() {
-				}).done(function(response) {
+		    	var posting = $.post( "/removeProdFromList", jsonString, "json");
+		    	posting.done(function(response) {
+		    		debugger;
 					self.paging.pageNo = 0;
-			    	self.init();				
+			    	
+					self.productLists([]);
+					self.init();				
 					setTimeout(function() {
 						$(".loaderimagediv").hide();
-					}, 200);
-				}).fail(function(error) {
+					}, 20);					
+				})
+				
+				posting.fail(function(error) {
 					$("#votingandAvgratingErrorMessage").text("Failed to remove from List");
 					setTimeout(function() {
 						$(".loaderimagediv").hide();
