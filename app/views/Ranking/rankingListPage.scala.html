@@ -176,7 +176,7 @@
 		viewModel.initFeaturedRankingListView();
 		
 		$(window).scroll(function () {
-		  	if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+		  	if ($(window).scrollTop() >= $(document).height() - (window.innerHeight + 700)) {
 		  	console.log($(window).scrollTop());
 			console.log($(document).height() - $(window).height());
 				if (viewModel.paging.pageNo != -1) {

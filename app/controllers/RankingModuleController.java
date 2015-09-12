@@ -251,13 +251,22 @@ public class RankingModuleController extends Controller {
     @Transactional
     public static Result removeProdFromRankingList() {
     	final DynamicForm dynaForm = play.data.Form.form().bindFromRequest();
+    	Long id = Long.parseLong(dynaForm.get("id"));
+    	RankingListProduct listProduct = RankingListProduct.find.byId(id); 
+    			
+    	listProduct.delete();
+    	String _response = "Product from List deleted successfully!";
+    	return ok(Json.toJson(_response));
+    }
+    
+    @Transactional
+    public static Result removeProductFromRankingList() {
+    	final DynamicForm dynaForm = play.data.Form.form().bindFromRequest();
     	Long  prodId = Long.parseLong(dynaForm.get("productId"));
     	Long listId = Long.parseLong(dynaForm.get("listId"));
-    	Long id = Long.parseLong(dynaForm.get("id"));
     	
-    	/*RankingListProduct listProduct = 
-    			Ebean.find(RankingListProduct.class).where().and(Expr.eq("rankingList.id", listId), Expr.eq("product.id", prodId)).findUnique();*/
-    	RankingListProduct listProduct = RankingListProduct.find.byId(id); 
+    	RankingListProduct listProduct = 
+    			Ebean.find(RankingListProduct.class).where().and(Expr.eq("rankingList.id", listId), Expr.eq("product.id", prodId)).findUnique();
     			
     	listProduct.delete();
     	String _response = "Product from List deleted successfully!";

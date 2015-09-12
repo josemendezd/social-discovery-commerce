@@ -188,7 +188,7 @@
 		    		votes: 0
 		    	};
 		    	
-				$.post('/removeProdFromList', postData, function() {
+				$.post('/delete-ranking-list-product', postData, function() {
 				}).done(function(response) {
 					setTimeout(function() {
 						$(".loaderimagediv").hide();
@@ -206,7 +206,7 @@
 		viewModel.init();
 		
 		$(window).scroll(function () {
-		  	if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+		  	if ($(window).scrollTop() >= $(document).height() - (window.innerHeight + 700)) {
 				if (viewModel.paging.pageNo != -1) {
 					viewModel.fetchProducts();
 				}
