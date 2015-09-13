@@ -186,8 +186,6 @@ public class RankingModuleController extends Controller {
     			}
     		}
     		rankingList.add(listVm);
-    		System.out.println(listVm.rankingListViews);
-        	System.out.println(listVm.rankingListViews.size());
     	}
 
     	return ok(Json.toJson(rankingList));
