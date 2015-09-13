@@ -29,9 +29,9 @@
 					</div>
 				</div>
 				<div class="col-lg-4 col-4 col-md-4 col-xs-4 col-sm-4" style="text-align: right">
-					
+					@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY, Application.getLocalUser(session()))) {
 						<div><a href="@routes.RankingModuleController.renderAdminSingleListPage(listId)" style="color: #a80418">Admin</a></div>
-					
+					}
 					<div><a style="color: #a80418" href="@routes.RankingModuleController.addEditProductToListPage(listId)">Add products To this List</a></div>
 				</div>
 			</div>

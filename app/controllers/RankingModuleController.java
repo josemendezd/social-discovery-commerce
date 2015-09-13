@@ -355,7 +355,7 @@ public class RankingModuleController extends Controller {
     	return ok("");
     }
     
-    //@Restrict(@Group(Application.ADMIN_ROLE))
+    @Restrict(@Group(Application.ADMIN_ROLE))
     public static Result renderAdminMainRankingPage() {
     	return ok(views.html.Ranking.adminMainRankingPage.render());	
     }
@@ -415,7 +415,7 @@ public class RankingModuleController extends Controller {
 		return ok("List deleted successfully!");
 	}
 
-    //@Restrict(@Group(Application.ADMIN_ROLE))
+    @Restrict(@Group(Application.ADMIN_ROLE))
     public static Result renderAdminSingleListPage(Long listId) { 
     	RankingListMaster rankingList = RankingListMaster.find.byId(listId);
     	return ok(views.html.Ranking.adminSingleListPage.render(listId, rankingList.name));

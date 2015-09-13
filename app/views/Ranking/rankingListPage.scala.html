@@ -27,9 +27,9 @@
 					<div id="showErrorMessage" class="text-success"  style="color: #ff0000;margin-top: 20px;margin-bottom: 10px;"></div>
 				</div>
 				<div class="col-lg-4 col-4 col-md-4 col-xs-4 col-sm-4" data-sticky_column>
-					
+					@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY, Application.getLocalUser(session()))) {
 						<h3 class="text-link"><a style="color: #a80418" href="@routes.RankingModuleController.renderAdminMainRankingPage">Admin</a></h3>
-					
+					}
 					<h3 class="text-link"><a data-toggle="modal" data-target="#createRankingList" style="color: #a80418" href="#">Create Ranking List</a></h3>
 				</div>
 			</div>
