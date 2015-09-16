@@ -56,11 +56,10 @@
                 </li>
                 <li style="font-size: 12px;">Posted on</li>
                 <li class="date" style="font-size: 12px;">@blg.postedAt</li>
-                @*<li class="comm-meta" style="font-size: 12px;"><a href="#blog_comment_@{blg.id}">@BlogComment.CommentCount(blg)</a> comments</li>*@
+                <li class="comm-meta" style="font-size: 12px;"><a href="#blog_comment_@{blg.id}">@BlogComment.CommentCount(blg)</a> comments</li>
               </ul>
                <div class="clearfix">
               		</div>
- 
               <!-- Begin .social -->
               <ul class="social" style="margin-bottom: 15px;">
                 <li><a  href="#"  title="Share on Facebook" 
@@ -76,7 +75,6 @@
               <div class="clearfix">
               </div>
               <!-- End .social -->
-              
             </div>
             <!-- end .box -->
             
@@ -84,10 +82,7 @@
              <!-- Begin .title-wrap -->
             <div class="title-wrap">
               <h3>
-                <a title="@blg.title" href="@routes.Useract.getBlogByPermalink(blg.permaLink)">@blg.title</a>
-                
-                
-                
+                <a title="@blg.title" href="@routes.Application.GetBlogPage(blg.id)">@blg.title</a>
                 <meta property="og:title" content="@blg.title"/>
               </h3>
             </div>
@@ -105,8 +100,8 @@
               @Html(blg.content)
             </div>
            <!--  <a href="javascript:void(0);" class="readmore-js-toggle">Read More</a> -->
-            <a href="@routes.Useract.getBlogByPermalink(blg.permaLink)" >Read More</a> 
-            <meta property="og:description" content="@blg.htmlLessContent"/>
+            <a href="@routes.Application.GetBlogPage(blg.id)" >Read More</a> 
+            <meta property="og:description" content="@blg.content"/>
             <!-- End post-excerpt -->
             
             @*

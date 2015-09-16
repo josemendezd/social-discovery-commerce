@@ -1,0 +1,172 @@
+@(listId: Long)
+@import play.api.Play
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import helper._
+
+@pst={
+
+}
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Single List Page @Boozology"){@pst}
+}{
+	@Templates.pageheader(){
+		<style>
+    	.error {
+    		color: #000000
+    	}
+    </style>		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent() {
+		
+		<div class="container">
+			<div class="row" style="padding-top: 5px;">
+				<div class="col-lg-8 col-8 col-md-8 col-xs-8 col-sm-8" >
+					<div class="col-sm-12 col-lg-12" data-bind="text: listName" style="color: #a80418; font-size:28px;">
+					</div>
+				</div>
+				<div class="col-lg-4 col-4 col-md-4 col-xs-4 col-sm-4" style="text-align: right">
+					@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY, Application.getLocalUser(session()))) {
+						<div><a href="@routes.RankingModuleController.renderAdminSingleListPage(listId)" style="color: #a80418">Admin</a></div>
+					}
+					<div><a style="color: #a80418" href="@routes.RankingModuleController.addEditProductToListPage(listId)">Add products To this List</a></div>
+				</div>
+			</div>
+			<div class="row" style="padding-top: 5px;color: #a80418;padding-left: 3%;">
+				<label  style="float:left"><b>Description :</b>&nbsp;&nbsp;</label>
+				<div data-bind="text: description">
+				</div>
+			</div>
+			<hr style="border: 2px solid #000;">
+			<div data-bind="visible: listProducts().length == 0">
+				<div class="col-lg-12 col-12 col-md-12 col-xs-12 col-sm-12" data-sticky_column>
+					<h4 class="text-success"  style="color: #a80418">No products found.</h4>
+				</div>
+			</div>
+			<div class="col-lg-12 col-12 col-md-12 col-xs-12 col-sm-12">
+					<div id="failure-voteup" class="text-success"  style="color: #ff0000"></div>
+			</div>
+			<div id="contents" style="padding-left: 3%;">
+				<div data-bind="template: { name: 'productList-template', foreach: listProducts }"></div>
+			</div>
+		</div>
+	}
+	@Templates.su.jready {
+		
+		var SimpleListModel = function() {
+			self = this;
+		    self.listName = ko.observable("");
+		    self.description = ko.observable("");
+		    self.listProducts = ko.observableArray([]);
+		    
+		    self.paging = {
+	    		pageSize: @Play.current.configuration.getString("pageSize"),
+	    		pageNo: 0
+	    	}
+	    	
+		    self.fetchListProducts = function() {
+		    	$.getJSON("/getRankingListProducts/@listId", self.paging, function(data) {
+	
+					if (data.length == 0) {
+						self.paging.pageNo = -1;
+					} else {
+						$.each(data, function (index, tr) {
+					    	self.listProducts.push(tr);
+					    });	    
+						self.paging.pageNo = self.paging.pageNo + 1;
+					}
+				});
+		    }
+		    self.init = function() {
+		    	$("#failure-voteup").empty();
+				$.getJSON("/getRankingListById/@listId", function(data) {
+					self.listName(data.name);
+					self.description(data.description); 
+				});
+				
+				self.fetchListProducts();	
+				
+		    }.bind(this);  // Ensure that "this" is always this view model
+		    
+		    self.voteForProduct = function(e) {
+		    	$("#failure-voteup").empty();
+		    	$(".loaderimagediv").show();
+		    	console.log(e);
+		    	console.log("Vote Product");
+		    	
+		    	var postData = {
+		    		productId: e.productId,
+		    		listId: @listId
+		    	};
+		    	
+				$.post('/vote-list-product', postData, function() {
+				}).done(function(response) {
+					setTimeout(function() {
+						$(".loaderimagediv").hide();
+					}, 50);
+					self.paging.pageNo = 0;
+					$.getJSON("/getRankingListProducts/@listId", self.paging, function(data) {
+					self.listProducts(data);
+				});
+				}).fail(function(error) {
+				    //alert(error);
+				    $("#failure-voteup").text("Failed to update Vote-Up");
+					setTimeout(function() {
+						$(".loaderimagediv").hide();
+					}, 500);
+				});
+					
+		    }
+		    
+		    self.removeProduct = function() {
+		    	console.log("Remove Product");
+		    }
+		};
+	 
+	 	var viewModel = new SimpleListModel();
+		ko.applyBindings(viewModel);
+		viewModel.init();
+		
+		$(window).scroll(function () {
+		  	if ($(window).scrollTop() >= $(document).height() - (window.innerHeight + 700)) {
+		  	console.log($(window).scrollTop());
+			console.log($(document).height() - $(window).height());
+				if (viewModel.paging.pageNo != -1) {
+					viewModel.fetchListProducts();
+				}
+			}
+		});
+		
+	}
+
+	<!-- to show for only admin user put require html text between
+	@if(GHelp.VerifyACL(DInitial.CURRENT_ACL.ADMINISTRATOR_ONLY, Application.getLocalUser(session()))) {
+	}
+	 -->
+	<script type="text/html" id="productList-template">
+	<div style="clear: none;overflow: hidden;padding-top: 1%;" class="col-sm-12 col-lg-12">
+			<div data-bind="text: $index() + 1" style="display:inline-block;color: #a80418" class="col-lg-1 col-mg-1 col-sm-1 col-xs-1"></div>		
+			<div style="display:inline-block;" class="col-lg-1 col-mg-1 col-sm-1 col-xs-1">
+				<img data-bind="attr: {src: productUrl}" height="50" width="50"></img>
+			</div>
+			<div style="display:inline-block;color: #a80418" class="col-lg-2 col-mg-2 col-sm-2 col-xs-2">
+				<div data-bind="text: productName" style="display:inline-block;color: #a80418"></div>
+				<div class="star-rating rating-xs rating-active">
+						<div class="rating-container rating-gly-star" data-content="">
+						<div class="rating-stars " data-content="" data-bind="style: { width: avgRating*20 + '%' }" >
+				</div></div></div>
+			</div>
+			<div class="col-lg-2 col-mg-2 col-sm-2 col-xs-2" style="display:inline-block;color: #a80418">
+							<div style="float:left">Score:</div><div data-bind="text: totalVotes"></div>
+			</div>	
+			<a style="display:inline-block;cursor: pointer" data-bind="click: $parent.voteForProduct" class="col-lg-3 col-mg-3 col-sm-3 col-xs-3">Vote Up</a>
+	</div>
+	</script>
+	
+}{
+	@Templates.pagefooter(){ 
+	}
+}	

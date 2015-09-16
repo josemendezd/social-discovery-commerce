@@ -7,10 +7,9 @@
 		<meta property="og:title" content="@blg.title"/>
 		<meta property="og:type" content="article"/>
 		<meta property="og:description" content="@blg.htmlLessContent"/>
-		<meta property="og:url" content="@routes.Useract.getBlogByPermalink(blg.permaLink).absoluteURL()"/>
+		<meta property="og:url" content="@routes.Application.GetBlogPage(blg.id).absoluteURL()"/>
 		<meta property="og:updated_time" content="@blg.postedAt.getTime()"/>
-		<meta name="description" content="@blg.htmlLessContent">
-    	<meta name="author" content="@blg.author.user.name">
+		
 		@for(img <- blg.getImages()) {
 			@if(img.isVideo==false){
 				<meta property="og:image" content="@img.getURL()"/>			
@@ -40,7 +39,6 @@
 
     <!-- Begin .container -->
     <div class="container blog" >
-    <div class='shareaholic-canvas' data-app='share_buttons' data-app-id='20647418'></div>
       <!-- Begin .row -->
       <div class="row" data-sticky_parent>
 		
@@ -73,7 +71,7 @@
                 </li>
                 <li style="font-size: 12px;">Posted on</li>
                 <li class="date" style="font-size: 12px;">@blg.postedAt</li>
-                @*<li class="comm-meta" style="font-size: 12px;"><a href="#blog_comment_@{blg.id}">@BlogComment.CommentCount(blg)</a> comments</li>*@
+                <li class="comm-meta" style="font-size: 12px;"><a href="#blog_comment_@{blg.id}">@BlogComment.CommentCount(blg)</a> comments</li>
                 
                 
               </ul>
@@ -82,21 +80,17 @@
               		<!-- like/dislike buttons -->
               	<div class="pull-left">
               			
-              			
-              				@*<button id="likeBtn" type="button" style="@if(likedByMe==true){display:none;}width:70px;" class="btn btn-danger btn-xs" onclick="likearticle()">Like</button>
+              				<button id="likeBtn" type="button" style="@if(likedByMe==true){display:none;}width:70px;" class="btn btn-danger btn-xs" onclick="likearticle()">Like</button>
               				<button id="dislikeBtn" type="button" style="@if(likedByMe==false){display:none;}width:70px;" class="btn btn-xs" onclick="dislikearticle()">Dislike</button>
               			
-                		<button type="button" class="btn btn-primary" onclick="likearticle()">+</button>
+                		@*<button type="button" class="btn btn-primary" onclick="likearticle()">+</button>
                 		<button type="button" class="btn btn-danger" onclick="dislikearticle()">-</button>*@
                 	</div>
-                	
-                	<div class='shareaholic-canvas' data-app='share_buttons' data-app-id='20647596'></div>
-                @*	
               <!-- Begin .social -->
               <ul class="social" style="margin-bottom: 15px;">
                 <li><a  href="#"  title="Share on Facebook" 
 											onclick="window.open(
-													'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('@routes.Useract.getBlogByPermalink(blg.permaLink).absoluteURL(request())'),
+													'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('@routes.Application.GetBlogPage(blg.id).absoluteURL(request())'),
 															'facebook-share-dialog',
 															'width=626,height=436');return false;"><i class="icon-facebook"></i></a></li>
                 <li><a title="Share on Twitter" href="https://twitter.com/intent/tweet?text=Has%20Read%20%20@helper.urlEncode(routes.Application.GetBlogPage(blg.id).absoluteURL(request()))"
@@ -107,7 +101,6 @@
               <div class="clearfix">
               </div>
               <!-- End .social -->
-              *@
             </div>
             <!-- end .box -->
             
@@ -126,9 +119,9 @@
             
              <!-- Begin .title-wrap -->
             <div class="title-wrap">
-              <h1>
-                <a title="@blg.title" href="@routes.Useract.getBlogByPermalink(blg.permaLink)">@blg.title</a>
-              </h1>
+              <h3>
+                <a title="@blg.title" href="@routes.Application.GetBlogPage(blg.id)">@blg.title</a>
+              </h3>
             </div>
             <!-- End .title-wrap -->
             @*
@@ -149,7 +142,7 @@
             
             <!-- Begin .comments-wrap -->
             <!-- fb comments ini -->
-            <div class="fb-comments" data-href="@routes.Useract.getBlogByPermalink(blg.permaLink).absoluteURL()" data-numposts="5" data-width="100%"></div>
+            <div class="fb-comments" data-href="@routes.Application.GetBlogPage(blg.id).absoluteURL()" data-numposts="5" data-width="100%"></div>
             <!-- fb comments end -->
            
            @*
@@ -186,7 +179,7 @@
           <div id="imgs@{blg.id}" class="col-lg-6 col-md-8 col-sm-12 col-xs-12 col-12" style="margin-bottom: 150px;" data-sticky_column>
            @for(img <- blg.getImages()) {
            		@if(img.isVideo==false){
-           			<img src="@img.getURL()" class="img-responsive" style="padding-bottom: 10px;" alt="@blg.title"/>
+           			<img src="@img.getURL()" class="img-responsive" style="padding-bottom: 10px;"/>
            		}else{
            			<div class="wrapper">
 						 <div class="videocontent">
@@ -232,7 +225,7 @@
 @*	
 		<div class="post" id="Blog@{blg.id}">
 			<h2 class="title">
-				<a title="@blg.title" href="@routes.Useract.getBlogByPermalink(blg.permaLink)">
+				<a title="@blg.title" href="@routes.Application.GetBlogPage(blg.id)">
 				@blg.title
 				</a>
 			</h2>@if(isadmin){ <a class="gray btn-small" href="@routes.Application.GetEditBlog(blg.id)"><i class="icon-edit"></i>Edit this</a>} @if(isadmin && !isgrouped){ <a class="blogdeletebutton gray btn-small underline" href="javascript:void(0);" data-link="@routes.Useract.RemoveBlog(blg.id)"><i class="icon-remove"></i>Delete</a> }
@@ -335,7 +328,7 @@
 	      <div class="accordion-inner">
 	        <ul class="unstyled text-center">
 	        @for(blg <- Blog.RecentBlogPage(0,40).getList){
-	        	<li class="textcutoverflow"><a href="@routes.Useract.getBlogByPermalink(blg.permaLink)">@blg.title</a></li>
+	        	<li class="textcutoverflow"><a href="@routes.Application.GetBlogPage(blg.id)">@blg.title</a></li>
 	        }
 	        </ul>
 	        <a href="#" class="gray underline pull-right">See All</a>

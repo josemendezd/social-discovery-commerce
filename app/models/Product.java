@@ -95,6 +95,9 @@ public class Product extends  Model implements Comparable<Product> {
 	
 	public static Model.Finder<Long,Product> find = new Finder<Long, Product>(Long.class, Product.class);
 	
+	public Product() {
+		
+	}
 	public Product(String ProductName,String currency,double pricetag,User usr,String SitUrl,String ImgUrl,Category categ,boolean status,String description, boolean spam_flag)
 	{
 		this.productname=ProductName;

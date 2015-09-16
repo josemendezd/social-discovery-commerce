@@ -1681,7 +1681,6 @@ public class Useract  extends Controller {
 	}
 	
 	public static Result getBlogByPermalink(String permalink) {
-		//Logger.info("get by permalink +++++++++++++++++++");
 		Blog blog = Blog.findByPermalink(permalink);
 		if(blog == null) {
 			return badRequest();
@@ -1697,16 +1696,12 @@ public class Useract  extends Controller {
 				editor = true;
 			}
 			likedByMe = BlogLikes.blogLikedByMe(blog, localContributor);
-		//	Logger.info("localContributor !=null");
-
+			
+			Document doc=Jsoup.parse(blog.content);
+			blog.htmlLessContent = doc.text().substring(0, doc.text().length() < 200 ? doc.text().length() : 200);
 			/*if(likedByMe)
 				//Logger.debug("Blog is liked by me");
 */			}
-		
-		//Moved the method out of the if to allow creation of the description in all cases
-		Document doc=Jsoup.parse(blog.content);
-		blog.htmlLessContent = doc.text().substring(0, doc.text().length() < 150 ? doc.text().length() : 150);
-		//Logger.info("htmllesscontent:"+blog.htmlLessContent);
 		return ok(views.html.Templates.su.SingleBlogPage.render(blog,false,0,editor,likedByMe));
 	}
 	

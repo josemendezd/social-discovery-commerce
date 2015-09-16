@@ -1,0 +1,236 @@
+@(listId: Long, listName: String)
+@import play.api.Play
+@import be.objectify.deadbolt.java.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+@import helper._
+
+@pst={
+
+}
+
+@Templates.MasterTemplate(){
+	@Templates.pagehead("Ranking List @Boozology"){@pst}
+}{
+	@Templates.pageheader(){
+		<style>
+    	.error {
+    		color: #000000
+    	}
+    </style>		
+	}{ }
+	
+}{
+	@Templates.pagemaincontent() {
+		
+			<div id="iso-container" class="col-lg-12 col-sm-12" style="padding-left: 9%;">
+				<div class="col-lg-12 col-sm-12">
+					<h4 class="text-success"  style="color: #a80418"><b>Add Products To List</b></h4>
+				</div>
+			</div>
+			<div id="iso-container" class="col-lg-12 col-sm-12" style="padding-left: 9%;">
+				<div class="col-lg-12 col-sm-12">
+					<h4 class="text-success"  style="color: #a80418"><b>@listName</b></h4>
+				</div>
+			</div>
+			<div class="col-sm-12 col-lg-12" style="overflow:auto;padding-left: 9%;">
+				<form>
+					<div class="col-sm-6">
+						<label style="color: #a80418;float: left;"><h4><b>Categories</b></h4></label>
+						<div class="col-lg-8 col-mg-8 col-sm-8 col-xs-8" style="padding-left: 20%;">
+							<select class="form-control" data-bind="options: categories, value: selectCategory, optionsValue: function(item) { return item.catId;}, optionsText: function(item) { return item.catName;}, optionsCaption: 'All'" style="color: rgb(177, 82, 82);"></select>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="input-group col-lg-2 col-mg-2 col-sm-2 col-xs-2">
+						</div>
+						<div class="input-group col-lg-5 col-mg-5 col-sm-5 col-xs-5">
+							<input type="text" name="searchTxt" id="searchTxt" class="form-control" placeholder="Search" data-bind="value: searchText" value="">
+							<span class="input-group-btn">
+								<button  name="search" data-bind="click: fetchProductsToAdd" class="btn btn-default"><i class="icon-search"></i></button>
+						    </span>				
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-lg-12 col-12 col-md-12 col-xs-12 col-sm-12"  style="padding-left: 10%;">
+					<div id="no-search-product" class="text-success"  style="color: #a80418"></div>
+					<div id="failure-search-product" class="text-success"  style="color: #ff0000"></div>
+			</div>
+			<div class="col-sm-12" data-bind="visible: searchProducts().length > 0" style="padding-left: 9%;">
+				<div class="col-lg-4 col-sm-4">
+						<h4 class="text-success"  style="color: #a80418"><b>Results</b></h4>
+				</div>
+				<div class="col-lg-4 col-4 col-md-4 col-xs-4 col-sm-4" data-sticky_column>
+					<div id="addRemoveProductErrorMessage" class="text-success"  style="color: #ff0000;margin-top: 20px;margin-bottom: 10px;"></div>
+				</div>
+			</div>
+			
+			<div class="col-sm-12">
+				<div style="clear: none;padding-bottom: 8%;" data-bind="template: { name: 'productrender-template', foreach: searchProducts}"></div>	
+			</div>
+		
+	}
+	@Templates.su.jready {
+		
+		var SimpleListModel = function() {
+			self = this;
+		    self.categories = ko.observableArray([]);
+		    self.searchProducts = ko.observableArray();
+		    self.selectCategory = 0;
+		    self.searchText = "";
+		    
+		    self.paging = {
+	    		pageSize: @Play.current.configuration.getString("pageSize"),
+	    		pageNo: 0
+	    	}
+	    	
+		    self.init = function() {
+		    	$("#no-search-product").empty();
+				$("#failure-search-product").empty();
+				$("#addRemoveProductErrorMessage").empty();
+				
+				$.getJSON("/getTopCategories", function(data) {
+					console.log(data);
+					self.categories(data);
+				});
+		    }.bind(this);  // Ensure that "this" is always this view model
+		    
+		    
+		    self.fetchProductsToAdd = function(e) {
+		    	self.paging.pageNo = 0;
+		    	self.searchProducts([]);
+		    	self.fetchProducts();
+		    }
+		    
+		    self.fetchProducts = function() {
+		    	$("#no-search-product").empty();
+				$("#failure-search-product").empty();
+		    	//debugger;
+		    	var link = window.location.href.split("/");
+		    	var id = link[link.length - 1];
+		    	console.log(id);
+		    	$(".loaderimagediv").show();
+		    	console.log(self.searchText);
+		    	console.log(self.selectCategory);
+		    	if (self.selectCategory == undefined) {
+		    		self.selectCategory = 0;
+		    	}
+		    	var jsonString = {
+		    		'sortseq':1, 'gendercont':0, 'pricerange':0, 'searchtext': self.searchText, 'page': self.paging.pageNo, 'catgid':self.selectCategory, 'pagesize':self.paging.pageSize, 'listId':id
+		    	};
+		    	
+		    	var posting = $.get( "@routes.RankingModuleController.getRankingProducts", jsonString, "json");
+					
+				posting.done(function( data ) {
+					setTimeout(function() {
+						$(".loaderimagediv").hide();
+					}, 500);
+					console.log(data);	
+					//self.searchProducts(data);
+					
+					
+					if (data.length == 0) {
+						$("#no-search-product").text("No products found.");
+						self.paging.pageNo = -1;
+					} else {
+						$.each(data, function (index, tr) {
+					    	self.searchProducts.push(tr);
+					    });	    
+						self.paging.pageNo = self.paging.pageNo + 1;
+					}
+					
+				});
+				
+				posting.fail(function( data ) {
+					//alert(data);
+					$("#failure-search-product").text("Failed to load Product");	
+					$(".loaderimagediv").hide();
+				});
+		    }
+		    
+		    self.addProduct = function(e) {
+		    	$("#addRemoveProductErrorMessage").empty();
+		    	$(".loaderimagediv").show();
+		    	console.log(e);
+		    	var jsonInput = {
+		    	}
+		    	
+		    	console.log("Add Product");
+		    	
+		    	var postData = {
+		    		productId: e.id,
+		    		listId: @listId,
+		    		votes: 0
+		    	};
+		    	
+				$.post('/addProdToList', postData, function() {
+				}).done(function(response) {
+					setTimeout(function() {
+						$(".loaderimagediv").hide();
+					}, 500);
+					self.fetchProductsToAdd();
+				}).fail(function(error) {
+						$("#addRemoveProductErrorMessage").text("Failed to add product");
+						$(".loaderimagediv").hide();
+				});
+					
+		    }
+		    
+		    self.removeProduct = function(e) {
+		    	$("#addRemoveProductErrorMessage").empty();
+				$(".loaderimagediv").show();
+		    	console.log(e);
+		    	console.log("Remove Product");
+		    	
+		    	var postData = {
+		    		productId: e.id,
+		    		listId: @listId,
+		    		votes: 0
+		    	};
+		    	
+				$.post('/delete-ranking-list-product', postData, function() {
+				}).done(function(response) {
+					setTimeout(function() {
+						$(".loaderimagediv").hide();
+					}, 500);
+					self.fetchProductsToAdd();
+				}).fail(function(error) {
+						$("#addRemoveProductErrorMessage").text("Failed to remove product.");
+						$(".loaderimagediv").hide();
+				});
+		    }
+		};
+	 
+	 	var viewModel = new SimpleListModel();
+		ko.applyBindings(viewModel);
+		viewModel.init();
+		
+		$(window).scroll(function () {
+		  	if ($(window).scrollTop() >= $(document).height() - (window.innerHeight + 700)) {
+				if (viewModel.paging.pageNo != -1) {
+					viewModel.fetchProducts();
+				}
+			}
+		});
+		
+	}
+
+	<script type="text/html" id="productrender-template">
+	<div style="clear: both;padding-left: 9%;padding-top: 1%;" class="col-sm-12 col-lg-12">		
+			<div style="display:inline-block;" class="col-lg-2 col-mg-2 col-sm-2 col-xs-2">
+				<img data-bind="attr: {src: productUrl}" height="100" width="100"></img>
+			</div>
+			<div class="col-lg-3 col-mg-3 col-sm-3 col-xs-3" data-bind="text: productName" style="display:inline-block;line-height: 100px;color: #a80418;"></div>
+			<div data-bind="text: id" style="display: none"></div>
+			<a class="col-lg-3 col-mg-3 col-sm-3 col-xs-3" style="display:inline-block;line-height: 100px;cursor: pointer" data-bind="click: $parent.addProduct,visible:!isVisible">Add Product</a>
+			<a class="col-lg-3 col-mg-3 col-sm-3 col-xs-3" style="display:inline-block;line-height: 100px;cursor: pointer" data-bind="click: $parent.removeProduct,visible:isVisible">Remove Product</a>
+	</div>
+	</script>
+	
+}{
+	@Templates.pagefooter(){ 
+	
+	
+	
+	}
+}	
